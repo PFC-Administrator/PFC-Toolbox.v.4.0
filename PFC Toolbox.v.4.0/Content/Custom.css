@@ -1,0 +1,11 @@
+﻿/* Export button tweak */
+.floatRight {
+    padding-left: 10px;
+    position: relative;
+    float: right;
+}
+
+/* Footer totals tweak*/
+th {
+    white-space: nowrap;
+}

@@ -1,0 +1,19 @@
+﻿
+@{
+    ViewBag.Title = "Logs";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Logs</h2>
+
+<p>
+    @Html.ActionLink("Purchase Log", "CreatePurchases", "Logs")
+</p>
+
+<p>
+    @Html.ActionLink("Writeoffs Log", "CreateWriteoffs", "Logs")
+</p>
+
+<p>
+    @Html.ActionLink("Expiration Log", "CreateExpirations", "Logs")
+</p>

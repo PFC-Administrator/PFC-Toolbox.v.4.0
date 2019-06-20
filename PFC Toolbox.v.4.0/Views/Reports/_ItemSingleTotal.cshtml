@@ -1,0 +1,208 @@
+﻿@{
+    ViewBag.Title = "Item Single Total";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    @model List<PFC_Toolbox.v._4._0.Models.ItemSingleTotalModel>
+
+    var startDate = Request["startDate"];
+    var endDate = Request["endDate"];
+}
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.4/css/buttons.dataTables.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.2.7/css/select.dataTables.min.css" />
+<link rel="stylesheet" type="text/css" href="https://editor.datatables.net/extensions/Editor/css/editor.dataTables.min.css" />
+<link rel="stylesheet" type="text/css" href="~/Content/Custom.css" />
+
+<h2 style="float:left;">Item Single Total</h2>
+<h2 style="float:right;">@(ViewBag.Store)</h2>
+<hr style="clear:both" />
+<h4>@startDate &nbsp;&nbsp; to &nbsp;&nbsp; @endDate</h4>
+
+<div>
+    <fieldset title="Item Results">
+        <table id="results" class="display text-nowrap" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Item Code</th>
+                    <th>Subdepartment</th>
+                    <th>Brand</th>
+                    <th>Description</th>
+                    <th>Size</th>
+                    <th>Weight</th>
+                    <th>Total Sales</th>
+                    <th>Units</th>
+                    @* For testing footer callback total row
+                        <th class="sum">Weight</th>
+                        <th class="sum">Total Sales</th>
+                        <th class="sum">Units</th>*@
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.ItemCode)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Subdept)</td>
+                            <td>@Html.DisplayFor(modelItem => item.ItemBrand)</td>
+                            <td>@Html.DisplayFor(modelItem => item.ItemDescription)</td>
+                            <td>@Html.DisplayFor(modelItem => item.ItemSize)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SalesQuantity)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SalesAmount)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SalesUnits)</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th style="text-align:center">Total:</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </tfoot>
+            @* For testing footer callback totals row
+                <tfoot>
+                <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>Totals: </th>
+                <th></th>
+                <th></th>
+                <th></th>
+                </tr>
+                </tfoot>*@
+        </table>
+    </fieldset>
+</div>
+
+<br />
+
+<div>
+    <fieldset title="Report Totals">
+        <table id="report totals" class="display text-nowrap" style="width:25%">
+            <thead>
+                <tr>
+                    <th>Total Weight</th>
+                    <th>Total Sales</th>
+                    <th>Total Units</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@String.Format("{0}", ViewBag.TotalQuantity)</td>
+                    <td>@String.Format("{0:C}", ViewBag.TotalAmount)</td>
+                    <td>@String.Format("{0}", ViewBag.TotalUnits)</td>
+                </tr>
+            </tbody>
+        </table>
+    </fieldset>
+</div>
+
+@section scripts{
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.4/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/select/1.2.7/js/dataTables.select.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
+    <script src="~/Content/Editor-1.8.1/js/dataTables.editor.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#results').DataTable({
+                // EXPORT BUTTON SECTION
+                dom: '<"floatRight"B><"clear">',
+                buttons: [{
+                    extend: 'collection',
+                    text: 'Export',
+                    autoClose: true,
+                    buttons: [
+                        'copy',
+                        'excel',
+                        'csv',
+                        'pdf',
+                        'print'
+                    ]
+                }],
+                ordering: false,
+
+                // FOOTER TOTALS SECTION
+                "footerCallback": function (row, data, start, end, display) {
+                    var api = this.api(), data;
+                    // Remove the formatting to get integer data for summation
+                    var intVal = function (i) {
+                        return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '') * 1 :
+                            typeof i === 'number' ?
+                                i : 0;
+                    };
+
+                    // TOTAL WEIGHT
+                    pageTotalWeight = api
+                        .column(5, { page: 'current' })
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    // Update footer
+                    $(api.column(5).footer()).html(
+                        pageTotalWeight
+                    );
+
+                    // TOTAL SALES
+                    pageTotalSales = api
+                        .column(6, { page: 'current' })
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    // Update footer
+                    $(api.column(6).footer()).html(
+                        '$' + pageTotalSales
+                    );
+
+                    // TOTAL UNITS
+                    pageTotalUnits = api
+                        .column(7, { page: 'current' })
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    // Update footer
+                    $(api.column(7).footer()).html(
+                        pageTotalUnits
+                    );
+
+                    @* For testing footer callback totals row
+                        api.columns('.sum', { page: 'current' }).every(function () {
+                        var sum = this
+                            .data()
+                            .reduce(function (a, b) {
+                                return intVal(a) + intVal(b);
+                            }, 0);
+
+                        this.footer().innerHTML = sum;
+                    });*@
+                }
+            });
+        });
+    </script>
+}

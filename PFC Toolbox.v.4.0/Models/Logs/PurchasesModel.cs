@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace PFC_Toolbox.v._4._0.Models
+{
+    public class PurchasesModel
+    {
+        public string invoicenumber { get; set; }
+
+        public string purchasedate { get; set; }
+
+        public string purchaseamount { get; set; }
+
+        public string purchasereconciled { get; set; }
+
+        public string purchasememo { get; set; }
+    }
+}

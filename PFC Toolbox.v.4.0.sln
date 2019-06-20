@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28306.52
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PFC Toolbox.v.4.0", "PFC Toolbox.v.4.0\PFC Toolbox.v.4.0.csproj", "{332DFF07-67C6-49F9-B3E7-CF2A2D35B96C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{332DFF07-67C6-49F9-B3E7-CF2A2D35B96C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{332DFF07-67C6-49F9-B3E7-CF2A2D35B96C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{332DFF07-67C6-49F9-B3E7-CF2A2D35B96C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{332DFF07-67C6-49F9-B3E7-CF2A2D35B96C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {826ACCFD-A3E8-45EB-AE47-BCF0DDEDAE8C}
+	EndGlobalSection
+EndGlobal

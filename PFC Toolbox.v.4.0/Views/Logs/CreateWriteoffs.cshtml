@@ -1,0 +1,155 @@
+﻿@{
+    ViewBag.Title = "Writeoffs";
+}
+
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+        <title>Writeoffs</title>
+
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.4/css/buttons.dataTables.min.css" />
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.2.7/css/select.dataTables.min.css" />
+        <link rel="stylesheet" type="text/css" href="https://editor.datatables.net/extensions/Editor/css/editor.dataTables.min.css" />
+
+    </head>
+    <body class="dataTables">
+        <div class="container">
+
+            <h2 style="float:left;">Writeoffs</h2>
+            <hr style="clear:both" />
+
+            <br />
+
+            <table id="Writeoffs" class="display text-nowrap compact" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Total Price</th>
+                        <th>Date</th>
+                        <th>Location</th>
+                        <th>Subdepartment</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+            </table>
+
+        </div>
+    </body>
+</html>
+
+@section scripts{
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.4/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/select/1.2.7/js/dataTables.select.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
+    <script src="~/Content/Editor-1.8.1/js/dataTables.editor.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
+
+    <script>
+        var editor;
+        $(document).ready(function () {
+
+            $.fn.dataTable.moment('M/D/YYYY');
+
+            var editor = new $.fn.dataTable.Editor({
+                ajax: '/api/Writeoffs',
+                table: '#Writeoffs',
+                //idSrc: 'writeoffID',
+                fields: [
+                    {
+                        "label": "Code:",
+                        "name": "Writeoffs.writeoffcode"
+                    },
+                    {
+                        "label": "Item Name:",
+                        "name": "Writeoffs.writeoffitemname"
+                    },
+                    {
+                        "label": "Quantity:",
+                        "name": "Writeoffs.writeoffquantity"
+                    },
+                    {
+                        "label": "Unit Price:",
+                        "name": "Writeoffs.writeoffunitprice"
+                    },
+                    {
+                        "label": "Total Price:",
+                        "name": "Writeoffs.writeofftotalprice"
+                    },
+                    {
+                        "label": "UserName:",
+                        "name": "Writeoffs.writeoffusername"
+                    },
+                    {
+                        "label": "Date:",
+                        "name": "Writeoffs.writeoffdatetime",
+                        "type": "datetime",
+                        "def": function () { return new Date(); },
+                        "format": 'M/D/YYYY'
+                    },
+                    {
+                        "label": "Location:",
+                        "name": "Writeoffs.locationID",
+                        "type": "select",
+                        "placeholder": "Select a location"
+                    },
+                    {
+                        "label": "Subdepartment:",
+                        "name": "Writeoffs.subdepartmentID",
+                        "type": "select",
+                        "placeholder": "Select a subdepartment",
+                    },
+                    {
+                        "label": "Notes:",
+                        "name": "Writeoffs.writeoffmemo"
+                    }
+                ]
+            });
+
+            var table = $('#Writeoffs').DataTable({
+                paging: true,
+                deferRender: true,
+                ajax: '/api/Writeoffs',
+                columns: [
+                    {
+                        "data": "Writeoffs.writeoffitemname"
+                    },
+                    {
+                        "data": "Writeoffs.writeofftotalprice",
+                        "render": $.fn.dataTable.render.number(',', '.', 2, '$')  
+                    },
+                    {
+                        "data": "Writeoffs.writeoffdatetime"
+                    },
+                    {
+                        "data": "Locations.locationname"
+                    },
+                    {
+                        "data": "Subdepartments.subdepartmentname"
+                    },
+                    {
+                        "data": "Writeoffs.writeoffmemo"
+                    }
+                ],
+                select: true,
+                dom: '<"floatRight"B><"clear">lfrtip',
+                order: [[2, "desc"]],
+                buttons: [
+                    { extend: 'create', editor: editor },
+                    { extend: 'edit', editor: editor },
+                    { extend: 'remove', editor: editor }
+                ]
+            });
+        });
+
+    </script>
+}

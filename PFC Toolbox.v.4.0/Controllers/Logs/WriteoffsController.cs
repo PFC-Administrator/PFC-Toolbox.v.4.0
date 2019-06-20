@@ -1,0 +1,88 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Net.Http.Formatting;
+using System.Web;
+using System.Web.Http;
+using DataTables;
+using PFC_Toolbox.v._4._0.Models;
+
+namespace PFC_Toolbox.v._4._0.Controllers
+{
+    public class WriteoffsController : ApiController
+    {
+        [Route("api/Writeoffs")]
+        [HttpGet]
+        [HttpPost]
+        public IHttpActionResult Writeoffs()
+        {
+            var request = HttpContext.Current.Request;
+            var settings = Properties.Settings.Default;
+
+            using (var db = new Database(settings.DbType, settings.DbConnection1))
+            {
+                var response = new Editor(db, "Writeoffs", "writeoffID")
+                    .Model<WriteoffsModel>()
+                    .Field(new Field("Writeoffs.writeoffID")
+                        .Validator(Validation.NotEmpty())
+                    )
+                    .Field(new Field("Writeoffs.writeoffcode")
+                    )
+                    .Field(new Field("Writeoffs.writeoffitemname")
+                        .Validator(Validation.NotEmpty())
+                    )
+                    .Field(new Field("Writeoffs.writeoffquantity")
+                        .Validator(Validation.NotEmpty())
+                        .Validator(Validation.Numeric())
+                    )
+                    .Field(new Field("Writeoffs.writeoffunitprice")
+                        .Validator(Validation.NotEmpty())
+                        .Validator(Validation.Numeric())
+                    )
+                    .Field(new Field("Writeoffs.writeofftotalprice")
+                        .Validator(Validation.NotEmpty())
+                        .Validator(Validation.Numeric())
+                    )
+                    .Field(new Field("Writeoffs.writeoffusername")
+                        .Validator(Validation.NotEmpty())
+                    )
+                    .Field(new Field("Writeoffs.writeoffdatetime")
+                        .Validator(Validation.NotEmpty())
+                            .Validator(Validation.DateFormat("M/d/yyyy"))
+                            .GetFormatter(Format.DateTime("M/d/yyyy", "M/d/yyyy"))
+                            .SetFormatter(Format.DateTime("M/d/yyyy", "M/d/yyyy"))
+                    )
+                    .Field(new Field("Writeoffs.locationID")
+                        .Options(new Options()
+                            .Table("Locations")
+                            .Value("locationID")
+                            .Label("locationName"))
+                        .Validator(Validation.NotEmpty())
+                    )
+                    .Field(new Field("Locations.locationname")
+                        .Validator(Validation.NotEmpty())
+                    )
+                    .Field(new Field("Subdepartments.subdepartmentname")
+                        .Validator(Validation.NotEmpty())
+                    )
+                    .Field(new Field("Writeoffs.subdepartmentID")
+                        .Options(new Options()
+                            .Table("Subdepartments")
+                            .Value("subdepartmentID")
+                            .Label("subdepartmentName"))
+                        .Validator(Validation.NotEmpty())
+                    )
+                    .Field(new Field("Writeoffs.writeoffmemo")
+                    )
+                    .LeftJoin("Locations", "Locations.locationID", "=", "Writeoffs.locationID"
+                    )
+                    .LeftJoin("Subdepartments", "Subdepartments.subdepartmentID", "=", "Writeoffs.subdepartmentID"
+                    )
+                    .Where(q => q.Where("Writeoffs.writeoffdatetime", "DATEADD(year, -1, GETDATE())", ">=", false))
+                     .Process(request)
+                    .Data();
+
+                return Json(response);
+            }
+        }
+    }
+}

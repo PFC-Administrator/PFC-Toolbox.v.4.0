@@ -1,0 +1,300 @@
+﻿@{
+    ViewBag.Title = "Contribution to Margin by Subdepartment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    @model List<PFC_Toolbox.v._4._0.Models.CTMSubdepartmentModel>
+
+    var startDate = Request["startDate"];
+    var endDate = Request["endDate"];
+}
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.4/css/buttons.dataTables.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.2.7/css/select.dataTables.min.css" />
+<link rel="stylesheet" type="text/css" href="https://editor.datatables.net/extensions/Editor/css/editor.dataTables.min.css" />
+<link rel="stylesheet" type="text/css" href="~/Content/Custom.css" />
+
+<h2 style="float:left;">Contribution to Margin by Subdepartment</h2>
+<h2 style="float:right;">@(ViewBag.Store)</h2>
+<hr style="clear:both" />
+<h3>@(ViewBag.SdpCode) - @(ViewBag.SdpDesc)</h3>
+<h4>@startDate &nbsp;&nbsp; to &nbsp;&nbsp; @endDate</h4>
+
+<br />
+
+<div>
+    <fieldset title="Item Results">
+        <table id="results" class="display text-nowrap compact" style="width:100%">
+            <thead>
+                <tr>
+                    <th class="all">Item Code</th>
+                    <th class="all">Brand</th>
+                    <th class="all">Description</th>
+                    <th class="all">Weight</th>
+                    <th class="all">Quantity</th>
+                    <th class="all">Total Sales</th>
+                    <th class="all">Retail</th>
+                    <th class="all">Cost</th>
+                    <th class="none">Vendor ID</th>
+                    <th class="none">Reorder</th>
+                    <th class="all">% of Sales</th>
+                    <th class="all">Applied Margin</th>
+                    <th class="all">CTM</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.ItemCode)</td>
+                            <td>@Html.DisplayFor(modelItem => item.ItemBrand)</td>
+                            <td>@Html.DisplayFor(modelItem => item.ItemDescription)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SalesWeight)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SalesQuantity)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SalesAmount)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SalesRetail)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SalesCost)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SalesVendorID)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SalesReorder)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SalesPercent)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SalesAppliedMargin)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SalesCTM)</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th style="text-align:center">Total:</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+    </fieldset>
+</div>
+
+<br />
+
+<div>
+    <fieldset title="Report Totals">
+        <table id="report totals" class="display text-nowrap" style="width:25%">
+            <thead>
+                <tr>
+                    <th>Total Weight</th>
+                    <th>Total Sales</th>
+                    <th>Total Units</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@String.Format("{0}", ViewBag.TotalWeight)</td>
+                    <td>@String.Format("{0:C}", ViewBag.TotalAmount)</td>
+                    <td>@String.Format("{0}", ViewBag.TotalUnits)</td>
+                </tr>
+            </tbody>
+        </table>
+    </fieldset>
+</div>
+
+@section scripts{
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.4/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/select/1.2.7/js/dataTables.select.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
+    <script src="~/Content/Editor-1.8.1/js/dataTables.editor.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
+
+    @* Creates a useable javascript variable from razrview viewbag variable *@
+
+    <script> var viewBagTotalAmount = @(ViewBag.TotalAmount); </script>
+
+    <script type="text/javascript">
+        var editor;
+
+        $(document).ready(function () {
+            editor = new $.fn.dataTable.Editor({
+                table: "#results",
+                idSrc: 'ItemCode',
+                fields: [{
+                    label: "Item Code:",
+                    name: "ItemCode"
+                }, {
+                    label: "Brand:",
+                    name: "ItemBrand"
+                }, {
+                    label: "Description:",
+                    name: "ItemDescription"
+                }, {
+                    label: "Weight:",
+                    name: "SalesWeight"
+                }, {
+                    label: "Quantity:",
+                    name: "SalesQuantity"
+                }, {
+                    label: "Total Sales:",
+                    name: "SalesAmount"
+                }, {
+                    label: "Retail:",
+                    name: "SalesRetail",
+                }, {
+                    label: "Cost:",
+                    name: "SalesCost"
+                }, {
+                    label: "Vendor ID:",
+                    name: "SalesVendorID"
+                }, {
+                    label: "Reorder Code:",
+                    name: "SalesReorder"
+                }, {
+                    label: "% of Sales:",
+                    name: "SalesPercent"
+                }, {
+                    label: "Applied Margin:",
+                    name: "SalesAppliedMargin"
+                }, {
+                    label: "CTM:",
+                    name: "SalesCTM"
+                }]
+            });
+
+            // Calculates new applied margin on cost change
+            editor.field('SalesCost').input().on('keypress', function () {
+                editor.field('SalesAppliedMargin').val(((1 - (this.value / editor.field('SalesRetail').val().replace(/[\$,]/g, ''))) * 100).toFixed(2) + '%');
+                editor.field('SalesCTM').val((((editor.field('SalesAmount').val().replace(/[\$,]/g, '') - (editor.field('SalesQuantity').val().replace(/[\$,]/g, '') * editor.field('SalesCost').val().replace(/[\$,]/g, ''))) / viewBagTotalAmount) * 100).toFixed(2) + '%');
+            });
+
+
+            // Calculates new applied margin and CTM on retail change
+            editor.field('SalesRetail').input().on('keypress', function () {
+                editor.field('SalesAppliedMargin').val(((1 - (editor.field('SalesCost').val().replace(/[\$,]/g, '') / this.value)) * 100).toFixed(2) + '%');
+                editor.field('SalesCTM').val((((editor.field('SalesAmount').val().replace(/[\$,]/g, '') - (editor.field('SalesQuantity').val().replace(/[\$,]/g, '') * editor.field('SalesCost').val().replace(/[\$,]/g, ''))) / viewBagTotalAmount) * 100).toFixed(2) + '%');
+            });
+
+
+            // Activate an inline edit on click of a table cell
+            $('#results').on('click', 'tbody td.editable', function (e) {
+                editor.inline(this);
+            });
+
+            $('#results').DataTable({
+                responsive: true,
+
+                columns: [
+                    { data: "ItemCode", width: '110px' },
+                    { data: "ItemBrand" },
+                    { data: "ItemDescription" },
+                    { data: "SalesWeight", width: '50px' },
+                    { data: "SalesQuantity", width: '60px' },
+                    { data: "SalesAmount", width: '80px' },
+                    { data: "SalesRetail", className: 'editable', width: '60px', render: $.fn.dataTable.render.number(',', '.', 2, '$')  },
+                    { data: "SalesCost", className: 'editable', width: '60px', render: $.fn.dataTable.render.number(',', '.', 2, '$') },
+                    { data: "SalesVendorID", className: 'editable', width: '60px' },
+                    { data: "SalesReorder", className: 'editable', width: '60px' },
+                    { data: "SalesPercent", width: '80px' },
+                    { data: "SalesAppliedMargin", width: '110px' },
+                    { data: "SalesCTM", width: '50px' }
+                ],
+
+                select: true,
+
+                // EXPORT BUTTON SECTION
+                dom: '<"floatRight"B><"clear">lfrtip',
+                buttons: [{
+                    extend: 'collection',
+                    text: 'Export',
+                    autoClose: true,
+                    buttons: [
+                        'copy',
+                        'excel',
+                        'csv',
+                        'pdf',
+                        'print'
+                    ]
+                }],
+
+                    // FOOTER TOTALS SECTION
+                    "footerCallback": function (row, data, start, end, display) {
+                        var api = this.api(), data;
+                        // Remove the formatting to get integer data for summation
+                        var intVal = function (i) {
+                            return typeof i === 'string' ?
+                                i.replace(/[\$,]/g, '') * 1 :
+                                typeof i === 'number' ?
+                                    i : 0;
+                        };
+
+                        // TOTAL WEIGHT
+                        pageTotalWeight = api
+                            .column(3, { page: 'current' })
+                            .data()
+                            .reduce(function (a, b) {
+                                return intVal(a) + intVal(b);
+                            }, 0);
+
+                        // Update footer
+                        $(api.column(3).footer()).html(
+                            Math.round(pageTotalWeight * 100) / 100
+                        );
+
+                        // TOTAL SALES
+                        pageTotalSales = api
+                            .column(4, { page: 'current' })
+                            .data()
+                            .reduce(function (a, b) {
+                                return intVal(a) + intVal(b);
+                            }, 0);
+
+                        // Update footer
+                        $(api.column(4).footer()).html(
+                            Math.round(pageTotalSales * 100) / 100
+                        );
+
+                        // TOTAL UNITS
+                        pageTotalUnits = api
+                            .column(5, { page: 'current' })
+                            .data()
+                            .reduce(function (a, b) {
+                                return intVal(a) + intVal(b);
+                            }, 0);
+
+                        // Update footer
+                        $(api.column(5).footer()).html(
+                            '$' + Math.round(pageTotalUnits * 100) / 100
+                        );
+
+                        @* For testing footer callback totals row
+                        api.columns('.sum', { page: 'current' }).every(function () {
+                            var sum = this
+                                .data()
+                                .reduce(function (a, b) {
+                                    return intVal(a) + intVal(b);
+                                }, 0);
+
+                            this.footer().innerHTML = sum;
+                        });*@
+                }
+        });
+        });
+
+
+    </script>
+}
