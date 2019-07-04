@@ -303,7 +303,7 @@
             // Display cost info when cost button is clicked
             $(document).on('click', '#cost', function () {
                 if (counter == 0) {
-                    editor.field('SMSVendors.F27').show();
+                    editor.field('ProductUpdates.COST_TAB_F27').show();
                     editor.field('ProductUpdates.COST_TAB_F26').show();
                     editor.field('ProductUpdates.PRICE_TAB_F49').show();
                     editor.field('ProductUpdates.COST_TAB_F19').show();
@@ -311,7 +311,7 @@
                     counter = 1
                     //alert(counter);
                 } else {
-                    editor.field('SMSVendors.F27').hide();
+                    editor.field('ProductUpdates.COST_TAB_F27').hide();
                     editor.field('ProductUpdates.COST_TAB_F26').hide();
                     editor.field('ProductUpdates.PRICE_TAB_F49').hide();
                     editor.field('ProductUpdates.COST_TAB_F19').hide();
