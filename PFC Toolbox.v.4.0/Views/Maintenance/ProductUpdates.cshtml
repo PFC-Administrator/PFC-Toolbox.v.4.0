@@ -164,8 +164,7 @@
                         name: "ProductUpdates.POS_TAB_F79",
                         type: "checkbox",
                         options: [
-                            { label: "", "value": "True" }//,
-                            //{ label: "No", "value": "False" }
+                            { label: "", "value": "True" }
                         ],
                         separator: "|",
                         unselectedValue: "False"
@@ -174,8 +173,7 @@
                         name: "ProductUpdates.POS_TAB_F80",
                         type: "checkbox",
                         options: [
-                            { label: "", "value": "True" }//,
-                            //{ label: "No", "value": "False" }
+                            { label: "", "value": "True" }
                         ],
                         separator: "|",
                         unselectedValue: "False"
@@ -184,8 +182,7 @@
                         name: "ProductUpdates.POS_TAB_F81",
                         type: "checkbox",
                         options: [
-                            { label: "", "value": "True" }//,
-                            //{ label: "No", "value": "False" }
+                            { label: "", "value": "True" }
                         ],
                         separator: "|",
                         unselectedValue: "False"
@@ -210,6 +207,7 @@
                         label: "Created by:",
                         name: "ProductUpdates.createdby",
                         type: "readonly",
+                        type: "hidden",
                         def: "@(User.GetCreatedBy())"
                     }, {
                         label: "Date created:",
@@ -350,7 +348,7 @@
                 dom: '<"floatRight"B><"clear">lfrtip',
                 order: [[11, "desc"], [1, "asc"]],
                 buttons: [
-                    { extend: 'create', editor: editor, formButtons:
+                    { text: 'Update An Existing Product', title: 'Update An Existing Product', extend: 'create', editor: editor, formButtons:
                             [ 'Create', { text: 'Cancel', action: function () { this.close(); }}]},
                     { extend: 'edit', editor: editor },
                     { text: 'Show Completed Today', action: function (e, dt, node, config) { table.column(1).search('^4 - Completed$', true, false).draw() } },
