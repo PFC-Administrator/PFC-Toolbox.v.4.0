@@ -19,9 +19,57 @@
     <div class="container">
 
         <h1>
-            List of Product Updates
+            Product Maintenance
         </h1>
         <br />
+        <div id="customForm">
+            <fieldset class="name">
+                <legend>Request Information</legend>
+                <editor-field name="ProductUpdates.requesttypeID"></editor-field>
+                <editor-field name="ProductUpdates.locationID"></editor-field>
+                <editor-field name="ProductUpdates.F01"></editor-field>
+                <editor-field name="ProductUpdates.ismettlerrequired"></editor-field>
+                <editor-field name="ProductUpdates.price_tab_f30"></editor-field>
+            </fieldset>
+            <fieldset class="hr">
+                <legend>Product Information</legend>
+                <editor-field name="ProductUpdates.OBJ_TAB_F155"></editor-field>
+                <editor-field name="ProductUpdates.OBJ_TAB_F29"></editor-field>
+                <editor-field name="ProductUpdates.OBJ_TAB_F22"></editor-field>
+                <editor-field name="ProductUpdates.OBJ_TAB_F255"></editor-field>
+                <editor-field name="ProductUpdates.POS_TAB_F04"></editor-field>
+                <editor-field name="ProductUpdates.OBJ_TAB_F17"></editor-field>
+                <editor-field name="ProductUpdates.OBJ_TAB_F18"></editor-field>
+                <editor-field name="ProductUpdates.OBJ_TAB_F16"></editor-field>
+                <editor-field name="ProductUpdates.LIKE_TAB_F122"></editor-field>
+            </fieldset>
+            <fieldset class="hr">
+                <legend>Cost Information</legend>
+                <editor-field name="ProductUpdates.COST_TAB_F27"></editor-field>
+                <editor-field name="ProductUpdates.COST_TAB_F26"></editor-field>
+                <editor-field name="ProductUpdates.PRICE_TAB_F49"></editor-field>
+                <editor-field name="ProductUpdates.COST_TAB_F19"></editor-field>
+                <editor-field name="ProductUpdates.COST_TAB_F38"></editor-field>
+            </fieldset>
+            <fieldset class="office">
+                <legend>TPR Settings</legend>
+                <editor-field name="ProductUpdates.promotprstartdate"></editor-field>
+                <editor-field name="ProductUpdates.promotprenddate"></editor-field>
+                <editor-field name="ProductUpdates.promotprprice"></editor-field>
+            </fieldset>
+            <fieldset class="office">
+                <legend>Signage</legend>
+                <editor-field name="ProductUpdates.labelID"></editor-field>
+                <editor-field name="ProductUpdates.signID"></editor-field>
+            </fieldset>
+            <fieldset class="office">
+                <legend>Point of Sale Settings</legend>
+                <editor-field name="ProductUpdates.POS_TAB_F79"></editor-field>
+                <editor-field name="ProductUpdates.POS_TAB_F80"></editor-field>
+                <editor-field name="ProductUpdates.POS_TAB_F81"></editor-field>
+            </fieldset>
+        </div>
+
         <table id="ProductUpdates" class="display text-nowrap compact" style="width:100%">
             <thead>
                 <tr>
@@ -40,8 +88,8 @@
                 </tr>
             </thead>
         </table>
-
     </div>
+
 </body>
 </html>
 
@@ -62,12 +110,13 @@
 
     <script>
 
+        var editorNP;
         var editor;
         $(document).ready(function () {
 
             $.fn.dataTable.moment('M/D/YYYY');
 
-            var editor = new $.fn.dataTable.Editor({
+            var editorNP = new $.fn.dataTable.Editor({
                 ajax: '/api/ProductUpdates',
                 table: '#ProductUpdates',
                 fields: [
@@ -93,6 +142,23 @@
                     }, {
                         label: "Retail Price",
                         name: "ProductUpdates.price_tab_f30"
+                    }, {
+                        label: "Vendor:",
+                        name: "ProductUpdates.COST_TAB_F27",
+                        type: "select",
+                        placeholder: "Select a vendor"
+                    }, {
+                        label: "Reorder code:",
+                        name: "ProductUpdates.COST_TAB_F26"
+                    }, {
+                        label: "Retail margin:",
+                        name: "ProductUpdates.PRICE_TAB_F49"
+                    }, {
+                        label: "Items per case:",
+                        name: "ProductUpdates.COST_TAB_F19"
+                    }, {
+                        label: "Case cost:",
+                        name: "ProductUpdates.COST_TAB_F38"
                     }, {
                         label: "TPR Start",
                         name: "ProductUpdates.promotprstartdate",
@@ -187,6 +253,61 @@
                         separator: "|",
                         unselectedValue: "False"
                     },{
+                        label: "Created by:",
+                        name: "ProductUpdates.createdby",
+                        type: "readonly",
+                        type: "hidden",
+                        def: "@(User.GetCreatedBy())"
+                    }, {
+                        label: "Date created:",
+                        name: "ProductUpdates.datecreated",
+                        type: "datetime",
+                        type: "hidden",
+                        def: function () {
+                            var today = new Date().getMonth() + 1
+                                + "/" + new Date().getDate()
+                                + "/" + new Date().getFullYear()
+                                + " " + new Date().getHours()
+                                + ":" + new Date().getMinutes()
+                                + ":" + new Date().getSeconds(); return today },
+                        format: 'M/D/YYYY'
+                    },{
+                        label: "Status:",
+                        name: "ProductUpdates.productstatusID",
+                        type: "hidden",
+                        def: "3"
+                    }
+                ]
+            });
+
+            var editor = new $.fn.dataTable.Editor({
+                ajax: '/api/ProductUpdates',
+                table: '#ProductUpdates',
+                template: '#customForm',
+                fields: [
+                    {
+                        label: "Product Update Type",
+                        name: "ProductUpdates.requesttypeID",
+                        type: "select",
+                        placeholder: "Select a request type"
+                    }, {
+                        label: "Location:",
+                        name: "ProductUpdates.locationID",
+                        type: "select",
+                        placeholder: "Select a location"
+                    }, {
+                        label: "UPC/PLU",
+                        name: "ProductUpdates.F01"
+                    }, {
+                        label: "Mettler Product:",
+                        name: "ProductUpdates.ismettlerrequired",
+                        type: "select",
+                        options: ["Yes", "No"],
+                        placeholder: "Select an option"
+                    }, {
+                        label: "Retail Price",
+                        name: "ProductUpdates.price_tab_f30"
+                    },{
                         label: "Vendor:",
                         name: "ProductUpdates.COST_TAB_F27",
                         type: "select",
@@ -203,6 +324,99 @@
                     }, {
                         label: "Case cost:",
                         name: "ProductUpdates.COST_TAB_F38"
+                    }, {
+                        label: "TPR Start",
+                        name: "ProductUpdates.promotprstartdate",
+                        type: "datetime",
+                        format: 'M/d/YYYY'
+                    }, {
+                        label: "TPR End",
+                        name: "ProductUpdates.promotprenddate",
+                        type: "datetime",
+                        format: 'M/d/YYYY'
+                    }, {
+                        label: "TPR Price",
+                        name: "ProductUpdates.promotprprice"
+                    }, {
+                        label: "Shelf Tag:",
+                        name: "ProductUpdates.labelID",
+                        type: "select",
+                        placeholder: "Select a label size"
+                    }, {
+                        label: "Sign:",
+                        name: "ProductUpdates.signID",
+                        type: "select",
+                        placeholder: "Select a sign size"
+                    }, {
+                        label: "Brand:",
+                        name: "ProductUpdates.OBJ_TAB_F155",
+                        type: "select",
+                        placeholder: "Select a brand"
+                    }, {
+                        label: "Receipt Description:",
+                        name: "ProductUpdates.OBJ_TAB_F29"
+                    }, {
+                        label: "Size:",
+                        name: "ProductUpdates.OBJ_TAB_F22"
+                    }, {
+                        label: "Sign Description:",
+                        name: "ProductUpdates.OBJ_TAB_F255"
+                    }, {
+                        label: "Subdepartment:",
+                        name: "ProductUpdates.POS_TAB_F04",
+                        type: "select",
+                        placeholder: "Select a subdepartment"
+                    }, {
+                        label: "Category:",
+                        name: "ProductUpdates.OBJ_TAB_F17",
+                        optionsPair: {
+                            label: 'F1023',
+                            value: 'F17'
+                        },
+                        type: "select",
+                        placeholder: "Select a category"
+                    }, {
+                        label: "Report:",
+                        name: "ProductUpdates.OBJ_TAB_F18",
+                        type: "select",
+                        placeholder: "Select a report"
+                    }, {
+                        label: "Family button:",
+                        name: "ProductUpdates.OBJ_TAB_F16",
+                        type: "select",
+                        placeholder: "Select a family button"
+                    }, {
+                        label: "Like:",
+                        name: "ProductUpdates.LIKE_TAB_F122",
+                        type: "select",
+                        placeholder: "Select a like code"
+                    }, {
+                        label: "SNAP:",
+                        name: "ProductUpdates.POS_TAB_F79",
+                        type: "checkbox",
+                        options: [
+                            { label: "", "value": "True" }
+                        ],
+                        separator: "|",
+                        unselectedValue: "False"
+                    }, {
+                        label: "Scalable:",
+                        name: "ProductUpdates.POS_TAB_F80",
+                        type: "checkbox",
+                        options: [
+                            { label: "", "value": "True" }
+                        ],
+                        separator: "|",
+                        unselectedValue: "False"
+                    }, {
+                        label: "Taxable:",
+                        name: "ProductUpdates.POS_TAB_F81",
+                        type: "checkbox",
+                        options: [
+                            { label: "", "value": "True" }
+                        ],
+                        separator: "|",
+                        unselectedValue: "False"
                     },{
                         label: "Created by:",
                         name: "ProductUpdates.createdby",
@@ -348,9 +562,10 @@
                 dom: '<"floatRight"B><"clear">lfrtip',
                 order: [[11, "desc"], [1, "asc"]],
                 buttons: [
+                    { text: 'New Product', tite:'New Product', extend:'create', editor:editorNP},
                     { text: 'Update An Existing Product', title: 'Update An Existing Product', extend: 'create', editor: editor, formButtons:
-                            [ 'Create', { text: 'Cancel', action: function () { this.close(); }}]},
-                    { extend: 'edit', editor: editor },
+                        ['Create', { text: 'Cancel', action: function () { this.close(); } }]},
+                    { text: 'Edit', extend:'edit', editor:editor},
                     { text: 'Show Completed Today', action: function (e, dt, node, config) { table.column(1).search('^4 - Completed$', true, false).draw() } },
                     { text: 'Show Default View', action: function (e, dt, node, config) { table.column(1).search('^3 - Manager Review Completed$', true, false).draw() } },
                     { text: 'Show All', action: function (e, dt, node, config) { table.column(1).search('3 - Manager Review Completed$|^4 - Completed$', true, false).column(11).order( 'desc' ).draw() } }
