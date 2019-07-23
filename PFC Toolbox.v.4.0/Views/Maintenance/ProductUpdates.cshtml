@@ -62,12 +62,13 @@
 
     <script>
 
+        var editorNP;
         var editor;
         $(document).ready(function () {
 
-            $.fn.dataTable.moment('M/D/YYYY');
+            $.fn.dataTable.moment( 'M/D/YYYY hh:mm:ss A' );
 
-            var editor = new $.fn.dataTable.Editor({
+            var editorNP = new $.fn.dataTable.Editor({
                 ajax: '/api/ProductUpdates',
                 table: '#ProductUpdates',
                 fields: [
@@ -94,15 +95,32 @@
                         label: "Retail Price",
                         name: "ProductUpdates.price_tab_f30"
                     }, {
+                        label: "Vendor:",
+                        name: "ProductUpdates.COST_TAB_F27",
+                        type: "select",
+                        placeholder: "Select a vendor"
+                    }, {
+                        label: "Reorder code:",
+                        name: "ProductUpdates.COST_TAB_F26"
+                    }, {
+                        label: "Retail margin:",
+                        name: "ProductUpdates.PRICE_TAB_F49"
+                    }, {
+                        label: "Items per case:",
+                        name: "ProductUpdates.COST_TAB_F19"
+                    }, {
+                        label: "Case cost:",
+                        name: "ProductUpdates.COST_TAB_F38"
+                    }, {
                         label: "TPR Start",
                         name: "ProductUpdates.promotprstartdate",
-                        type: "datetime",
-                        format: 'M/d/YYYY'
+                        //type: "datetime",
+                        //format: 'M/d/YYYY'
                     }, {
                         label: "TPR End",
                         name: "ProductUpdates.promotprenddate",
-                        type: "datetime",
-                        format: 'M/d/YYYY'
+                        //type: "datetime",
+                        //format: 'M/d/YYYY'
                     }, {
                         label: "TPR Price",
                         name: "ProductUpdates.promotprprice"
@@ -187,6 +205,61 @@
                         separator: "|",
                         unselectedValue: "False"
                     },{
+                        label: "Created by:",
+                        name: "ProductUpdates.createdby",
+                        type: "readonly",
+                        type: "hidden",
+                        def: "@(User.GetCreatedBy())"
+                    }, {
+                        label: "Date created:",
+                        name: "ProductUpdates.datecreated",
+                        //type: "date",
+                        type: "hidden",
+                        def: function () {
+                            var today = new Date().getMonth() + 1
+                                + "/" + new Date().getDate()
+                                + "/" + new Date().getFullYear()
+                                + " " + new Date().getHours()
+                                + ":" + new Date().getMinutes()
+                                + ":" + new Date().getSeconds(); return today },
+                        //format: 'M/D/YYYY'
+                    },{
+                        label: "Status:",
+                        name: "ProductUpdates.productstatusID",
+                        type: "hidden",
+                        def: "3"
+                    }
+                ]
+            });
+
+            var editor = new $.fn.dataTable.Editor({
+                ajax: '/api/ProductUpdates',
+                table: '#ProductUpdates',
+                template: '#customForm',
+                fields: [
+                    {
+                        label: "Product Update Type",
+                        name: "ProductUpdates.requesttypeID",
+                        type: "select",
+                        placeholder: "Select a request type"
+                    }, {
+                        label: "Location:",
+                        name: "ProductUpdates.locationID",
+                        type: "select",
+                        placeholder: "Select a location"
+                    }, {
+                        label: "UPC/PLU",
+                        name: "ProductUpdates.F01"
+                    }, {
+                        label: "Mettler Product:",
+                        name: "ProductUpdates.ismettlerrequired",
+                        type: "select",
+                        options: ["Yes", "No"],
+                        placeholder: "Select an option"
+                    }, {
+                        label: "Retail Price",
+                        name: "ProductUpdates.price_tab_f30"
+                    },{
                         label: "Vendor:",
                         name: "ProductUpdates.COST_TAB_F27",
                         type: "select",
@@ -203,6 +276,99 @@
                     }, {
                         label: "Case cost:",
                         name: "ProductUpdates.COST_TAB_F38"
+                    }, {
+                        label: "TPR Start",
+                        name: "ProductUpdates.promotprstartdate",
+                        //type: "datetime",
+                        //format: 'M/d/YYYY'
+                    }, {
+                        label: "TPR End",
+                        name: "ProductUpdates.promotprenddate",
+                        //type: "datetime",
+                        //format: 'M/d/YYYY'
+                    }, {
+                        label: "TPR Price",
+                        name: "ProductUpdates.promotprprice"
+                    }, {
+                        label: "Shelf Tag:",
+                        name: "ProductUpdates.labelID",
+                        type: "select",
+                        placeholder: "Select a label size"
+                    }, {
+                        label: "Sign:",
+                        name: "ProductUpdates.signID",
+                        type: "select",
+                        placeholder: "Select a sign size"
+                    }, {
+                        label: "Brand:",
+                        name: "ProductUpdates.OBJ_TAB_F155",
+                        type: "select",
+                        placeholder: "Select a brand"
+                    }, {
+                        label: "Receipt Description:",
+                        name: "ProductUpdates.OBJ_TAB_F29"
+                    }, {
+                        label: "Size:",
+                        name: "ProductUpdates.OBJ_TAB_F22"
+                    }, {
+                        label: "Sign Description:",
+                        name: "ProductUpdates.OBJ_TAB_F255"
+                    }, {
+                        label: "Subdepartment:",
+                        name: "ProductUpdates.POS_TAB_F04",
+                        type: "select",
+                        placeholder: "Select a subdepartment"
+                    }, {
+                        label: "Category:",
+                        name: "ProductUpdates.OBJ_TAB_F17",
+                        optionsPair: {
+                            label: 'F1023',
+                            value: 'F17'
+                        },
+                        type: "select",
+                        placeholder: "Select a category"
+                    }, {
+                        label: "Report:",
+                        name: "ProductUpdates.OBJ_TAB_F18",
+                        type: "select",
+                        placeholder: "Select a report"
+                    }, {
+                        label: "Family button:",
+                        name: "ProductUpdates.OBJ_TAB_F16",
+                        type: "select",
+                        placeholder: "Select a family button"
+                    }, {
+                        label: "Like:",
+                        name: "ProductUpdates.LIKE_TAB_F122",
+                        type: "select",
+                        placeholder: "Select a like code"
+                    }, {
+                        label: "SNAP:",
+                        name: "ProductUpdates.POS_TAB_F79",
+                        type: "checkbox",
+                        options: [
+                            { label: "", "value": "True" }
+                        ],
+                        separator: "|",
+                        unselectedValue: "False"
+                    }, {
+                        label: "Scalable:",
+                        name: "ProductUpdates.POS_TAB_F80",
+                        type: "checkbox",
+                        options: [
+                            { label: "", "value": "True" }
+                        ],
+                        separator: "|",
+                        unselectedValue: "False"
+                    }, {
+                        label: "Taxable:",
+                        name: "ProductUpdates.POS_TAB_F81",
+                        type: "checkbox",
+                        options: [
+                            { label: "", "value": "True" }
+                        ],
+                        separator: "|",
+                        unselectedValue: "False"
                     },{
                         label: "Created by:",
                         name: "ProductUpdates.createdby",
@@ -212,7 +378,7 @@
                     }, {
                         label: "Date created:",
                         name: "ProductUpdates.datecreated",
-                        type: "datetime",
+                        //type: "datetime",
                         type: "hidden",
                         def: function () {
                             var today = new Date().getMonth() + 1
@@ -221,7 +387,7 @@
                                 + " " + new Date().getHours()
                                 + ":" + new Date().getMinutes()
                                 + ":" + new Date().getSeconds(); return today },
-                        format: 'M/D/YYYY'
+                        //format: 'M/D/YYYY'
                     },{
                         label: "Status:",
                         name: "ProductUpdates.productstatusID",
@@ -342,7 +508,10 @@
                     { "data": "ProductUpdates.promotprprice" },
                     { "data": "ProductUpdates.price_tab_f30" },
                     { "data": "ProductUpdates.createdby" },
-                    { "data": "ProductUpdates.datecreated" }
+                    { "data": "ProductUpdates.datecreated", "render": function (value) {
+                            if (value === null) return "";
+                            return window.moment(value).format('M/D/YYYY hh:mm:ss A');
+                    } }
                 ],
                 select: true,
                 dom: '<"floatRight"B><"clear">lfrtip',
