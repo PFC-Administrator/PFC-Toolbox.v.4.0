@@ -562,9 +562,20 @@
                 dom: '<"floatRight"B><"clear">lfrtip',
                 order: [[11, "desc"], [1, "asc"]],
                 buttons: [
-                    { text: 'New Product', tite:'New Product', extend:'create', editor:editorNP},
-                    { text: 'Update An Existing Product', title: 'Update An Existing Product', extend: 'create', editor: editor, formButtons:
-                        ['Create', { text: 'Cancel', action: function () { this.close(); } }]},
+                    { text: 'New Product', tite: 'New Product', extend: 'create', editor: editorNP },
+                    {
+                        text: 'Update An Existing Product', title: 'Update An Existing Product', extend: 'create', editor: editor,
+                        formButtons:
+                            [
+                                { text: 'Cancel', action: function () { this.close(); } },
+                                'Create',
+                                { text: 'Submit Another', action: function () { this.submit(); editor.create(); } },
+                                { text: 'Clear', action: function () { fields = editor.displayed(); for (field in fields) { editor.field(fields[field]).val(''); }; } },
+                                //{ text: 'Copy Details from Previous Item', action: function () { var values = editor.edit(table.row(11, { search: '6/11/2019 2:18:35 PM' }), false).val(); console.log(values); editor.create({}).set(values); } }, ]
+                                { text: 'Copy Details from Previous Item', action: function () { var values = editor.edit(table.row( ':last', { order: 'index' }), false).val(); editor.create({}).set(values); } }, ]
+                                //{ text: 'Copy Details from Previous Item', action: function () { console.log( table.row(table.column(11).search('7/4/2019 1:37:32 PM', true, false).draw()).data() ); } }, ]
+                                //{ text: 'Copy Details from Previous Item', action: function () { console.log(table.row(':last', { order: 'applied' }).data()); } }, ]
+                    },
                     { text: 'Edit', extend:'edit', editor:editor},
                     { text: 'Show Completed Today', action: function (e, dt, node, config) { table.column(1).search('^4 - Completed$', true, false).draw() } },
                     { text: 'Show Default View', action: function (e, dt, node, config) { table.column(1).search('^3 - Manager Review Completed$', true, false).draw() } },
