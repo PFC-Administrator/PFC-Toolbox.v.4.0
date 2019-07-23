@@ -463,25 +463,45 @@
 
             });
 
-            var counter = 0;
+            var costCounter = 0;
             // Display cost info when cost button is clicked
             $(document).on('click', '#cost', function () {
-                if (counter == 0) {
+                if (costCounter == 0) {
                     editor.field('ProductUpdates.COST_TAB_F27').show();
                     editor.field('ProductUpdates.COST_TAB_F26').show();
                     editor.field('ProductUpdates.PRICE_TAB_F49').show();
                     editor.field('ProductUpdates.COST_TAB_F19').show();
                     editor.field('ProductUpdates.COST_TAB_F38').show();
-                    counter = 1
-                    //alert(counter);
+                    costCounter = 1
+                    //alert(costCounter);
                 } else {
                     editor.field('ProductUpdates.COST_TAB_F27').hide();
                     editor.field('ProductUpdates.COST_TAB_F26').hide();
                     editor.field('ProductUpdates.PRICE_TAB_F49').hide();
                     editor.field('ProductUpdates.COST_TAB_F19').hide();
                     editor.field('ProductUpdates.COST_TAB_F38').hide();
-                    counter = 0
-                    //alert(counter);
+                    costCounter = 0
+                    //alert(costCounter);
+                }
+            });
+
+            $(document).on('click', '#calculate', function () { editor.field('ProductUpdates.price_tab_f30').val(10 / 2) })
+
+            var srpCounter = 0;
+            // Display cost info when cost button is clicked
+            $(document).on('click', '#srpcalculator', function () {
+                if (srpCounter == 0) {
+                    editor.field('ProductUpdates.COST_TAB_F19').show();
+                    editor.field('ProductUpdates.COST_TAB_F38').show();
+                    editor.field('ProductUpdates.PRICE_TAB_F49').show();
+                    srpCounter = 1
+                    //alert(srpCounter);
+                } else {
+                    editor.field('ProductUpdates.COST_TAB_F19').hide();
+                    editor.field('ProductUpdates.COST_TAB_F38').hide();
+                    editor.field('ProductUpdates.PRICE_TAB_F49').hide();
+                    srpCounter = 0
+                    //alert(srpCounter);
                 }
             });
 
@@ -539,6 +559,14 @@
 
             $('<button id="cost" style="position:absolute;top:20%;right:12.5%">Cost</button>').insertAfter(
                 editor.field('ProductUpdates.price_tab_f30').input()
+            );
+
+            $('<button id="srpcalculator" style="position:absolute;top:20%;right:5%">SRP</button>').insertAfter(
+                editor.field('ProductUpdates.price_tab_f30').input()
+            );
+
+            $('<button id="calculate" style="position:absolute;top:20%;right:8%">Calculate</button>').insertAfter(
+                editor.field('ProductUpdates.COST_TAB_F38').input()
             );
         });
     </script>
