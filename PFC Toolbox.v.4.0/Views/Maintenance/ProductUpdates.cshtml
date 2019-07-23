@@ -114,7 +114,7 @@
         var editor;
         $(document).ready(function () {
 
-            $.fn.dataTable.moment('M/D/YYYY');
+            $.fn.dataTable.moment( 'M/D/YYYY hh:mm:ss A' );
 
             var editorNP = new $.fn.dataTable.Editor({
                 ajax: '/api/ProductUpdates',
@@ -162,13 +162,13 @@
                     }, {
                         label: "TPR Start",
                         name: "ProductUpdates.promotprstartdate",
-                        type: "datetime",
-                        format: 'M/d/YYYY'
+                        //type: "datetime",
+                        //format: 'M/d/YYYY'
                     }, {
                         label: "TPR End",
                         name: "ProductUpdates.promotprenddate",
-                        type: "datetime",
-                        format: 'M/d/YYYY'
+                        //type: "datetime",
+                        //format: 'M/d/YYYY'
                     }, {
                         label: "TPR Price",
                         name: "ProductUpdates.promotprprice"
@@ -261,7 +261,7 @@
                     }, {
                         label: "Date created:",
                         name: "ProductUpdates.datecreated",
-                        type: "datetime",
+                        //type: "date",
                         type: "hidden",
                         def: function () {
                             var today = new Date().getMonth() + 1
@@ -270,7 +270,7 @@
                                 + " " + new Date().getHours()
                                 + ":" + new Date().getMinutes()
                                 + ":" + new Date().getSeconds(); return today },
-                        format: 'M/D/YYYY'
+                        //format: 'M/D/YYYY'
                     },{
                         label: "Status:",
                         name: "ProductUpdates.productstatusID",
@@ -327,13 +327,13 @@
                     }, {
                         label: "TPR Start",
                         name: "ProductUpdates.promotprstartdate",
-                        type: "datetime",
-                        format: 'M/d/YYYY'
+                        //type: "datetime",
+                        //format: 'M/d/YYYY'
                     }, {
                         label: "TPR End",
                         name: "ProductUpdates.promotprenddate",
-                        type: "datetime",
-                        format: 'M/d/YYYY'
+                        //type: "datetime",
+                        //format: 'M/d/YYYY'
                     }, {
                         label: "TPR Price",
                         name: "ProductUpdates.promotprprice"
@@ -426,7 +426,7 @@
                     }, {
                         label: "Date created:",
                         name: "ProductUpdates.datecreated",
-                        type: "datetime",
+                        //type: "datetime",
                         type: "hidden",
                         def: function () {
                             var today = new Date().getMonth() + 1
@@ -435,7 +435,7 @@
                                 + " " + new Date().getHours()
                                 + ":" + new Date().getMinutes()
                                 + ":" + new Date().getSeconds(); return today },
-                        format: 'M/D/YYYY'
+                        //format: 'M/D/YYYY'
                     },{
                         label: "Status:",
                         name: "ProductUpdates.productstatusID",
@@ -556,7 +556,10 @@
                     { "data": "ProductUpdates.promotprprice" },
                     { "data": "ProductUpdates.price_tab_f30" },
                     { "data": "ProductUpdates.createdby" },
-                    { "data": "ProductUpdates.datecreated" }
+                    { "data": "ProductUpdates.datecreated", "render": function (value) {
+                            if (value === null) return "";
+                            return window.moment(value).format('M/D/YYYY hh:mm:ss A');
+                    } }
                 ],
                 select: true,
                 dom: '<"floatRight"B><"clear">lfrtip',
@@ -571,8 +574,8 @@
                                 'Create',
                                 { text: 'Submit Another', action: function () { this.submit(); editor.create(); } },
                                 { text: 'Clear', action: function () { fields = editor.displayed(); for (field in fields) { editor.field(fields[field]).val(''); }; } },
-                                //{ text: 'Copy Details from Previous Item', action: function () { var values = editor.edit(table.row(11, { search: '6/11/2019 2:18:35 PM' }), false).val(); console.log(values); editor.create({}).set(values); } }, ]
                                 { text: 'Copy Details from Previous Item', action: function () { var values = editor.edit(table.row( ':last', { order: 'index' }), false).val(); editor.create({}).set(values); } }, ]
+                                //{ text: 'Copy Details from Previous Item', action: function () { var values = editor.edit(table.row(11, { search: '6/11/2019 2:18:35 PM' }), false).val(); console.log(values); editor.create({}).set(values); } }, ]
                                 //{ text: 'Copy Details from Previous Item', action: function () { console.log( table.row(table.column(11).search('7/4/2019 1:37:32 PM', true, false).draw()).data() ); } }, ]
                                 //{ text: 'Copy Details from Previous Item', action: function () { console.log(table.row(':last', { order: 'applied' }).data()); } }, ]
                     },
