@@ -232,6 +232,9 @@
                 ]
             });
 
+            
+
+
             var editor = new $.fn.dataTable.Editor({
                 ajax: '/api/ProductUpdates',
                 table: '#ProductUpdates',
@@ -485,13 +488,16 @@
                 }
             });
 
+            
             $(document).on('click', '#calculate', function () {
                 var srp;
                 var costPerCase = editor.field('ProductUpdates.COST_TAB_F38').val();
                 var itemsPerCase = editor.field('ProductUpdates.COST_TAB_F19').val();
                 var targetMargin = editor.field('ProductUpdates.PRICE_TAB_F49').val();
 
-                srp = Math.round(((costPerCase / itemsPerCase) / (1 - (targetMargin / 100)) - .01) * 100) / 100;
+                
+
+                srp = ((Math.round(((costPerCase / itemsPerCase) / (1 - (targetMargin / 100))) * 10) / 10) - .01);
 
                 editor.field('ProductUpdates.price_tab_f30').val(srp)
             })
