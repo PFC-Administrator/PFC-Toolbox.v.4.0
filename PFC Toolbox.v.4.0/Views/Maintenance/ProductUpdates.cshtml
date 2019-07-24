@@ -227,15 +227,30 @@
                         name: "ProductUpdates.AdditionalRequestNotes",
                         type:"textarea"
                     },{
+                        label: "Mettler PLU:",
+                        name: "ProductUpdates.ScalePLU"
+                    },{
+                        label: "Item Type:",
+                        name: "ProductUpdates.ScaleItemTypeID",
+                        type: "select",
+                        placeholder: "Select an option",
+                        options: [
+                            { label: "Price per pound", value: "1" },
+                            { label: "Standard pack", value: "2"}
+                        ]
+                    },{
+                        label: "Tare / Net Weight:",
+                        name: "ProductUpdates.TareNetWeight"
+                    },{
+                        label: "Shelf Life:",
+                        name: "ProductUpdates.ShelfLife"
+                    },{
                         label: "Ingredients:",
                         name: "ProductUpdates.IngredientList",
                         type:"textarea"
                     }
                 ]
             });
-
-            
-
 
             var editor = new $.fn.dataTable.Editor({
                 ajax: '/api/ProductUpdates',
@@ -396,6 +411,24 @@
                         name: "ProductUpdates.AdditionalRequestNotes",
                         type:"textarea"
                     },{
+                        label: "Mettler PLU:",
+                        name: "ProductUpdates.ScalePLU"
+                    },{
+                        label: "Item Type:",
+                        name: "ProductUpdates.ScaleItemTypeID",
+                        type: "select",
+                        placeholder: "Select an option",
+                        options: [
+                            { label: "Price per pound", value: "1" },
+                            { label: "Standard pack", value: "2"}
+                        ]
+                    },{
+                        label: "Tare / Net Weight:",
+                        name: "ProductUpdates.TareNetWeight"
+                    },{
+                        label: "Shelf Life:",
+                        name: "ProductUpdates.ShelfLife"
+                    },{
                         label: "Ingredients:",
                         name: "ProductUpdates.IngredientList",
                         type:"textarea"
@@ -460,14 +493,24 @@
             // Hides Mettler Ingredients unless Yes to Mettler Product option is select
             editor.field('ProductUpdates.ismettlerrequired').input().on('change', function () {
                 if (editor.field('ProductUpdates.ismettlerrequired').val() == 'Yes') {
+
+                    editor.field('ProductUpdates.ScalePLU').show();
+                    editor.field('ProductUpdates.ScaleItemTypeID').show();
+                    editor.field('ProductUpdates.TareNetWeight').show();
+                    editor.field('ProductUpdates.ShelfLife').show();
                     editor.field('ProductUpdates.IngredientList').show();
                 } else {
+                    editor.field('ProductUpdates.ScalePLU').hide();
+                    editor.field('ProductUpdates.ScaleItemTypeID').hide();
+                    editor.field('ProductUpdates.TareNetWeight').hide();
+                    editor.field('ProductUpdates.ShelfLife').hide();
                     editor.field('ProductUpdates.IngredientList').hide();
                 }
             });
 
             // Cascading select fields
             editor.dependent('ProductUpdates.POS_TAB_F04', '/api/Categories');
+            editorNP.dependent('ProductUpdates.POS_TAB_F04', '/api/Categories');
 
             // Hides cost info on load
             editor.field('ProductUpdates.POS_TAB_F04').input().on('change', function () {
@@ -531,6 +574,17 @@
                 editor.field('ProductUpdates.price_tab_f30').val(srp)
             })
 
+            // Get New PLU
+            $(document).on('click', '#getplu', function () {
+                alert(editor.field('ProductUpdates.POS_TAB_F04').val());
+
+                //if (editor.field('ProductUpdates.POS_TAB_F04').val() == "") {
+                    //alert('Please select a subdepartment!');
+                //}
+
+                
+            })
+
             var table = $('#ProductUpdates').DataTable({
                 // This is the default view showing uncompleted requests
                 initComplete: function (e, dt, node, config) { table.column(1).search('^3 - Manager Review Completed$', true, false).draw() },
@@ -583,7 +637,7 @@
                 ]
             });
 
-            // Form buttons
+            // Update An Existing Product Form buttons
             $('<button id="cost" style="position:absolute;top:20%;right:12.5%">Cost</button>').insertAfter(
                 editor.field('ProductUpdates.price_tab_f30').input()
             );
@@ -594,6 +648,23 @@
 
             $('<button id="calculate" style="position:absolute;top:20%;right:8%">Calculate</button>').insertAfter(
                 editor.field('ProductUpdates.COST_TAB_F38').input()
+            );
+
+            // New Product Form Buttons
+            $('<button id="getplu" style="position:absolute;top:20%;right:5%">Get New PLU</button>').insertAfter(
+                editorNP.field('ProductUpdates.F01').input()
+            );
+
+            $('<button id="cost" style="position:absolute;top:20%;right:12.5%">Cost</button>').insertAfter(
+                editorNP.field('ProductUpdates.price_tab_f30').input()
+            );
+
+            $('<button id="srpcalculator" style="position:absolute;top:20%;right:5%">SRP</button>').insertAfter(
+                editorNP.field('ProductUpdates.price_tab_f30').input()
+            );
+
+            $('<button id="calculate" style="position:absolute;top:20%;right:8%">Calculate</button>').insertAfter(
+                editorNP.field('ProductUpdates.COST_TAB_F38').input()
             );
         });
     </script>
