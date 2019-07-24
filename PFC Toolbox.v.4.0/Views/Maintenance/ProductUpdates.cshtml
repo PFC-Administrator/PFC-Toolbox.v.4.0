@@ -113,14 +113,10 @@
                         name: "ProductUpdates.COST_TAB_F38"
                     }, {
                         label: "TPR Start",
-                        name: "ProductUpdates.promotprstartdate",
-                        //type: "datetime",
-                        //format: 'M/d/YYYY'
+                        name: "ProductUpdates.promotprstartdate"
                     }, {
                         label: "TPR End",
-                        name: "ProductUpdates.promotprenddate",
-                        //type: "datetime",
-                        //format: 'M/d/YYYY'
+                        name: "ProductUpdates.promotprenddate"
                     }, {
                         label: "TPR Price",
                         name: "ProductUpdates.promotprprice"
@@ -213,7 +209,6 @@
                     }, {
                         label: "Date created:",
                         name: "ProductUpdates.datecreated",
-                        //type: "date",
                         type: "hidden",
                         def: function () {
                             var today = new Date().getMonth() + 1
@@ -221,13 +216,20 @@
                                 + "/" + new Date().getFullYear()
                                 + " " + new Date().getHours()
                                 + ":" + new Date().getMinutes()
-                                + ":" + new Date().getSeconds(); return today },
-                        //format: 'M/D/YYYY'
+                                + ":" + new Date().getSeconds(); return today }
                     },{
                         label: "Status:",
                         name: "ProductUpdates.productstatusID",
                         type: "hidden",
                         def: "3"
+                    },{
+                        label: "Notes:",
+                        name: "ProductUpdates.AdditionalRequestNotes",
+                        type:"textarea"
+                    },{
+                        label: "Ingredients:",
+                        name: "ProductUpdates.IngredientList",
+                        type:"textarea"
                     }
                 ]
             });
@@ -280,14 +282,10 @@
                         name: "ProductUpdates.COST_TAB_F38"
                     }, {
                         label: "TPR Start",
-                        name: "ProductUpdates.promotprstartdate",
-                        //type: "datetime",
-                        //format: 'M/d/YYYY'
+                        name: "ProductUpdates.promotprstartdate"
                     }, {
                         label: "TPR End",
-                        name: "ProductUpdates.promotprenddate",
-                        //type: "datetime",
-                        //format: 'M/d/YYYY'
+                        name: "ProductUpdates.promotprenddate"
                     }, {
                         label: "TPR Price",
                         name: "ProductUpdates.promotprprice"
@@ -380,7 +378,6 @@
                     }, {
                         label: "Date created:",
                         name: "ProductUpdates.datecreated",
-                        //type: "datetime",
                         type: "hidden",
                         def: function () {
                             var today = new Date().getMonth() + 1
@@ -388,13 +385,20 @@
                                 + "/" + new Date().getFullYear()
                                 + " " + new Date().getHours()
                                 + ":" + new Date().getMinutes()
-                                + ":" + new Date().getSeconds(); return today },
-                        //format: 'M/D/YYYY'
+                                + ":" + new Date().getSeconds(); return today }
                     },{
                         label: "Status:",
                         name: "ProductUpdates.productstatusID",
                         type: "hidden",
                         def: "3"
+                    },{
+                        label: "Notes:",
+                        name: "ProductUpdates.AdditionalRequestNotes",
+                        type:"textarea"
+                    },{
+                        label: "Ingredients:",
+                        name: "ProductUpdates.IngredientList",
+                        type:"textarea"
                     }
                 ]
             });
@@ -453,6 +457,15 @@
                 }
             });
 
+            // Hides Mettler Ingredients unless Yes to Mettler Product option is select
+            editor.field('ProductUpdates.ismettlerrequired').input().on('change', function () {
+                if (editor.field('ProductUpdates.ismettlerrequired').val() == 'Yes') {
+                    editor.field('ProductUpdates.IngredientList').show();
+                } else {
+                    editor.field('ProductUpdates.IngredientList').hide();
+                }
+            });
+
             // Cascading select fields
             editor.dependent('ProductUpdates.POS_TAB_F04', '/api/Categories');
 
@@ -488,22 +501,8 @@
                 }
             });
 
-            
-            $(document).on('click', '#calculate', function () {
-                var srp;
-                var costPerCase = editor.field('ProductUpdates.COST_TAB_F38').val();
-                var itemsPerCase = editor.field('ProductUpdates.COST_TAB_F19').val();
-                var targetMargin = editor.field('ProductUpdates.PRICE_TAB_F49').val();
-
-                
-
-                srp = ((Math.round(((costPerCase / itemsPerCase) / (1 - (targetMargin / 100))) * 10) / 10) - .01);
-
-                editor.field('ProductUpdates.price_tab_f30').val(srp)
-            })
-
             var srpCounter = 0;
-            // Display cost info when cost button is clicked
+            // Display SRP calculator info when cost button is clicked
             $(document).on('click', '#srpcalculator', function () {
                 if (srpCounter == 0) {
                     editor.field('ProductUpdates.COST_TAB_F19').show();
@@ -519,6 +518,18 @@
                     //alert(srpCounter);
                 }
             });
+
+            // SRP Calculator
+            $(document).on('click', '#calculate', function () {
+                var srp;
+                var costPerCase = editor.field('ProductUpdates.COST_TAB_F38').val();
+                var itemsPerCase = editor.field('ProductUpdates.COST_TAB_F19').val();
+                var targetMargin = editor.field('ProductUpdates.PRICE_TAB_F49').val();
+
+                srp = ((Math.round(((costPerCase / itemsPerCase) / (1 - (targetMargin / 100))) * 10) / 10) - .01);
+
+                editor.field('ProductUpdates.price_tab_f30').val(srp)
+            })
 
             var table = $('#ProductUpdates').DataTable({
                 // This is the default view showing uncompleted requests
@@ -572,6 +583,7 @@
                 ]
             });
 
+            // Form buttons
             $('<button id="cost" style="position:absolute;top:20%;right:12.5%">Cost</button>').insertAfter(
                 editor.field('ProductUpdates.price_tab_f30').input()
             );

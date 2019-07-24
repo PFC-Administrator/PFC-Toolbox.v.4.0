@@ -157,6 +157,12 @@ namespace PFC_Toolbox.v._4._0.Controllers
                     .Field(new Field("ProductUpdates.COST_TAB_F38")
                         .SetFormatter(Format.IfEmpty(null))
                     )
+                    .Field(new Field("ProductUpdates.IngredientList")
+                        .SetFormatter(Format.IfEmpty(null))
+                    )
+                    .Field(new Field("ProductUpdates.AdditionalRequestNotes")
+                        .SetFormatter(Format.IfEmpty(null))
+                    )
                     .LeftJoin("Locations", "Locations.locationID", "=", "ProductUpdates.locationID"
                     )
                     .LeftJoin("RequestTypes", "RequestTypes.requesttypeID", "=", "ProductUpdates.requesttypeID"
