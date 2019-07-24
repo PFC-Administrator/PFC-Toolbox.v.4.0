@@ -576,12 +576,13 @@
 
             // Get New PLU
             $(document).on('click', '#getplu', function () {
-                alert(editor.field('ProductUpdates.POS_TAB_F04').val());
-
-                //if (editor.field('ProductUpdates.POS_TAB_F04').val() == "") {
-                    //alert('Please select a subdepartment!');
-                //}
-
+                if (!editorNP.field('ProductUpdates.POS_TAB_F04').val()) {
+                    alert('Please select a subdepartment!');
+                } else if (!editorNP.field('ProductUpdates.ismettlerrequired').val()) {
+                    alert('Select yes or no to Mettler Product!');
+                } else {
+                    alert('Nice!');
+                }
                 
             })
 
