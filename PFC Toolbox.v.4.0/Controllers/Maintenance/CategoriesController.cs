@@ -59,7 +59,6 @@ namespace PFC_Toolbox.v._4._0.Controllers
                             new Dictionary<string, dynamic>() { { "F1943", request.Params["values[ProductUpdates.POS_TAB_F04]"] } }
                         );
                 
-                    
                         dynamic result = new ExpandoObject();
                         result.options = new ExpandoObject();
                         IDictionary<string, object> d = result.options;

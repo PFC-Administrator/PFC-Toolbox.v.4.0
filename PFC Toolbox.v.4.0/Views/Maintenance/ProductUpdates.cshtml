@@ -19,7 +19,7 @@
     <div class="container">
 
         <h1>
-            List of Product Updates
+            Product Maintenance
         </h1>
         <br />
         <table id="ProductUpdates" class="display text-nowrap compact" style="width:100%">
@@ -577,13 +577,40 @@
             // Get New PLU
             $(document).on('click', '#getplu', function () {
                 if (!editorNP.field('ProductUpdates.POS_TAB_F04').val()) {
+
+                    $.ajax({
+                        url: "api/GetNewPLU",
+                        type: "GET",
+                        success: function (result) {
+                            console.log(result)
+                        },
+                        error: function (error) {
+                            console.log(`Error ${error}`)
+                        }
+                    })
+
                     alert('Please select a subdepartment!');
                 } else if (!editorNP.field('ProductUpdates.ismettlerrequired').val()) {
                     alert('Select yes or no to Mettler Product!');
+                } else if (editorNP.field('ProductUpdates.ismettlerrequired').val() == 'Yes') { 
+                    alert("You've chosen to generate a Mettler PLU!");
+
+                    //Begin the process of selecting an open Mettler PLU from SMS.
+                    for ($i = 80000; $i < 80005; $i++) {
+                        console.log('002'+$i+'00000');
+                    }
+
+                } else if (editorNP.field('ProductUpdates.ismettlerrequired').val() == 'No') { 
+                    alert("You've chosen to generate a POS PLU!");
+
+                    //Begin the process of selecting an open POS PLU from SMS.
+                    for ($i = 80000; $i < 80005; $i++) {
+                        console.log($i);
+                    }
+
                 } else {
-                    alert('Nice!');
+                    alert('Nice');
                 }
-                
             })
 
             var table = $('#ProductUpdates').DataTable({
