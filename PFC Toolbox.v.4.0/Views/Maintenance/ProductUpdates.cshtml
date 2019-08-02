@@ -46,6 +46,7 @@
 </html>
 
 @section scripts{
+    <script type="text/javascript" charset="utf-8" src=" https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.4/js/dataTables.buttons.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
@@ -61,6 +62,9 @@
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
 
     <script>
+
+        // Function to pad numbers with 0's
+        function pad(number, width = 3, z = 0) { return (String(z).repeat(width) + String(number)).slice(String(number).length) }
 
         var editorNP;
         var editor;
@@ -574,39 +578,153 @@
                 editor.field('ProductUpdates.price_tab_f30').val(srp)
             })
 
+            /*
+            switch (editorNP.field('ProductUpdates.POS_TAB_F04').val()) {
+                case 1: startRange = 80000; endRange = 89999;
+                    break;
+                case 2: startRange = 30000; endRange = 36999;
+                    break;
+                case 3: startRange = 30000; endRange = 36999;
+                    break;
+                case 4: startRange = 30000; endRange = 36999;
+                    break;
+                case 5: startRange = 30000; endRange = 36999;
+                    break;
+                case 6: startRange = 60000; endRange = 69999;
+                    break;
+                case 7: startRange = 37000; endRange = 37999;
+                    break;
+                case 9: startRange = 30000; endRange = 36999;
+                    break;
+                case 10: startRange = 50000; endRange = 59999;
+                    break;
+                case 11: startRange = 10000; endRange = 19999;
+                    break;
+                case 12: startRange = 50000; endRange = 59999;
+                    break;
+                case 14: startRange = 10000; endRange = 19999;
+                    break;
+                case 15: startRange = 50000; endRange = 59999;
+                    break;
+                case 16: startRange = 30000; endRange = 36999;
+                    break;
+                case 17: startRange = 90000; endRange = 99999;
+                    break;
+                case 18: startRange = 40000; endRange = 49999;
+                    break;
+                case 19: startRange = 10000; endRange = 19999;
+                    break;
+                case 21: startRange = 80000; endRange = 89999;
+                    break;
+                case 22: startRange = 80000; endRange = 89999;
+                    break;
+                case 24: startRange = 30000; endRange = 36999;
+                    break;
+                case 25: startRange = 80000; endRange = 89999;
+                    break;
+                case 28: startRange = 14000; endRange = 19999;
+                    break;
+                case 29: startRange = 14000; endRange = 19999;
+                    break;
+                case 30: startRange = 14000; endRange = 19999;
+                    break;
+                case 31: startRange = 14000; endRange = 19999;
+                    break;
+                case 33: startRange = 14000; endRange = 19999;
+                    break;
+                case 34: startRange = 14000; endRange = 19999;
+                    break;
+                case 35: startRange = 80000; endRange = 89999;
+                    break;
+                case 41: startRange = 20000; endRange = 29999;
+                    break;
+                case 51: startRange = 37000; endRange = 37999;
+                    break;
+                case 52: startRange = 37000; endRange = 37999;
+                    break;
+                case 53: startRange = 20000; endRange = 29999;
+                    break;
+                case 54: startRange = 20000; endRange = 29999;
+                    break;
+                case 55: startRange = 20000; endRange = 29999;
+                    break;
+            }*/
+
+
+             
+
             // Get New PLU
             $(document).on('click', '#getplu', function () {
                 if (!editorNP.field('ProductUpdates.POS_TAB_F04').val()) {
 
-                    $.ajax({
-                        url: "api/GetNewPLU",
-                        type: "GET",
-                        success: function (result) {
-                            console.log(result)
-                        },
-                        error: function (error) {
-                            console.log(`Error ${error}`)
-                        }
-                    })
+                    // Will be set dynamically by subdepartment choice, used for testing at the moment.
+                    var startRange = 30000;
+                    var endRange = 39999;
 
+                    // Pads the startRange and endRange to 13 digits with 0's for the AJAX request.
+                    var startUPC = pad(startRange, 13);
+                    var endUPC = pad(endRange, 13);
+
+
+                    function GetNewPLU(callback) {
+                        $.ajax({
+                            url: "api/GetNewPLU",
+                            type: "GET",
+                            dataType: "json",
+                            data: { 'startUPC': startUPC, 'endUPC': endUPC },
+                            success: callback,
+                            error: function (error) {
+                                console.log(`Error ${error}`)
+                            }
+                        });
+                    }
+
+                    function SetNewPLU() {
+                        var used = [];
+                        GetNewPLU(function (data) {
+                            $.each(data.data, function (i, UPCs) {
+                                used.push( UPCs.OBJ_TAB.F01 );
+                            })
+                        });
+
+                        // Generates array of all numbers between range.
+                        var range = [];
+                        for ($i = startRange; $i < endRange; $i++) {
+                                range.push('00000000' + $i);
+                        }
+                        
+                        // Uses Lodash to compare the possible numbers in the range to what's used in SMS.
+                        var unused = _.difference(range,used);
+                        
+                        //console.log(range);
+                        //console.log(used);
+                        console.log(unused);
+                        // Alerts the users of what PLU to use.
+                        //success = unused[0];
+                        //alert("Use this PLU: " + success);
+                    }
+
+                    SetNewPLU();
                     alert('Please select a subdepartment!');
                 } else if (!editorNP.field('ProductUpdates.ismettlerrequired').val()) {
                     alert('Select yes or no to Mettler Product!');
-                } else if (editorNP.field('ProductUpdates.ismettlerrequired').val() == 'Yes') { 
+                } else if (editorNP.field('ProductUpdates.ismettlerrequired').val() == 'Yes') {
                     alert("You've chosen to generate a Mettler PLU!");
 
-                    //Begin the process of selecting an open Mettler PLU from SMS.
+                    /*//Begin the process of selecting an open Mettler PLU from SMS.
                     for ($i = 80000; $i < 80005; $i++) {
-                        console.log('002'+$i+'00000');
-                    }
+                        console.log('002' + $i + '00000');
+                    }*/
 
-                } else if (editorNP.field('ProductUpdates.ismettlerrequired').val() == 'No') { 
+
+                } else if (editorNP.field('ProductUpdates.ismettlerrequired').val() == 'No') {
                     alert("You've chosen to generate a POS PLU!");
 
-                    //Begin the process of selecting an open POS PLU from SMS.
+                    /*//Begin the process of selecting an open POS PLU from SMS.
                     for ($i = 80000; $i < 80005; $i++) {
                         console.log($i);
-                    }
+                    }*/
+
 
                 } else {
                     alert('Nice');
