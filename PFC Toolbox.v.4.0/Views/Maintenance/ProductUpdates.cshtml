@@ -665,11 +665,13 @@
                     var startUPC = pad(startRange, 13);
                     var endUPC = pad(endRange, 13);
 
-
+                    // AJAX request function to get all used UPC's within in range of numbers.
                     function GetNewPLU(callback) {
                         $.ajax({
                             url: "api/GetNewPLU",
                             type: "GET",
+                            // async: false is deprecated, need to find a way to use promises. ***
+                            async: false,
                             dataType: "json",
                             data: { 'startUPC': startUPC, 'endUPC': endUPC },
                             success: callback,
@@ -680,31 +682,29 @@
                     }
 
                     function SetNewPLU() {
+
+                        // Executes GetNewPLU AJAX request function
                         var used = [];
                         GetNewPLU(function (data) {
-                            $.each(data.data, function (i, UPCs) {
-                                used.push( UPCs.OBJ_TAB.F01 );
-                            })
+                            for ($i = 0; $i < data.data.length; $i++) {
+                                used.push( data.data[$i].OBJ_TAB.F01 );
+                            }
                         });
 
-                        // Generates array of all numbers between range.
                         var range = [];
+                        // Generates array of all numbers between range.
                         for ($i = startRange; $i < endRange; $i++) {
-                                range.push('00000000' + $i);
-                        }
-                        
-                        // Uses Lodash to compare the possible numbers in the range to what's used in SMS.
-                        var unused = _.difference(range,used);
-                        
-                        //console.log(range);
-                        //console.log(used);
-                        console.log(unused);
-                        // Alerts the users of what PLU to use.
-                        //success = unused[0];
-                        //alert("Use this PLU: " + success);
+                                range.push( '00000000' + $i );
+                        };
+
+                        var unused = _.difference(range, used);
+
+                        console.log(unused[0]);
                     }
 
                     SetNewPLU();
+
+                    //var unused = used.filter(function (n) { return !this.has(n), new Set(data) });
                     alert('Please select a subdepartment!');
                 } else if (!editorNP.field('ProductUpdates.ismettlerrequired').val()) {
                     alert('Select yes or no to Mettler Product!');
