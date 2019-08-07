@@ -589,38 +589,6 @@
 
                     // Gathers subdepartment code
                     var subdepartment = editorNP.field('ProductUpdates.POS_TAB_F04').val();
-                    /*
-                    // Sends AJAX request with subdepartment code as parameter to gather lower and upper bounds of UPC range.
-                    function GetSubdepartmentBounds() {
-                        return $.ajax({
-                            url: "api/GetSubdepartmentBounds",
-                            type: "GET",
-                            dataType: "json",
-                            data: { 'subdepartment': subdepartment },
-                            error: function (error) {
-                                console.log(`Error ${error}`);
-                            }
-                        });
-                    };
-                    
-                    for ($i = 0; $i < data.data.length; $i++) {
-                        lowerBound = (data.data[$i].SMSSubdepartments.lowerBound);
-                        upperBound = (data.data[$i].SMSSubdepartments.upperBound);
-                    };
-                    
-                    // Sends AJAX request with lower and upper bounds of UPC range as parameters to gather all used UPCs within that range.
-                    function GetNewPLU() {
-                        return $.ajax({
-                            url: "api/GetNewPLU",
-                            type: "GET",
-                            dataType: "json",
-                            data: { 'lowerBound': lowerBound, 'upperBound': upperBound },
-                            error: function (error) {
-                                console.log(`Error ${error}`);
-                            }
-                        });
-                    };
-                    */
 
                     var GetSubdepartmentBounds = $.ajax({
                         url: "api/GetSubdepartmentBounds",
@@ -633,12 +601,9 @@
                     }),
                         GetUsedUPCs = GetSubdepartmentBounds.then(function (data) {
                             for ($i = 0; $i < data.data.length; $i++) {
-                                var lowerBound = (data.data[$i].SMSSubdepartments.lowerBound);
-                                var upperBound = (data.data[$i].SMSSubdepartments.upperBound);
+                                var lowerBound = pad((data.data[$i].SMSSubdepartments.lowerBound),13);
+                                var upperBound = pad((data.data[$i].SMSSubdepartments.upperBound), 13);
                             };
-
-                                lowerBound = '002' + lowerBound + '00000'
-                                upperBound = '002' + upperBound + '00000'
 
                             return $.ajax({
                                 url: "api/GetNewPLU",
@@ -676,107 +641,162 @@
                 } else if (editorNP.field('ProductUpdates.ismettlerrequired').val() == 'No') {
                     alert("You've chosen to generate a POS PLU!");
 
-                    // Will be set dynamically by subdepartment choice, used for testing at the moment.
-                    switch (editorNP.field('ProductUpdates.POS_TAB_F04').val()) {
-                        case 1: startRange = 80000; endRange = 89999;
-                            break;
-                        case 2: startRange = 30000; endRange = 36999;
-                            break;
-                        case 3: startRange = 30000; endRange = 36999;
-                            break;
-                        case 4: startRange = 30000; endRange = 36999;
-                            break;
-                        case 5: startRange = 30000; endRange = 36999;
-                            break;
-                        case 6: startRange = 60000; endRange = 69999;
-                            break;
-                        case 7: startRange = 37000; endRange = 37999;
-                            break;
-                        case 9: startRange = 30000; endRange = 36999;
-                            break;
-                        case 10: startRange = 50000; endRange = 59999;
-                            break;
-                        case 11: startRange = 10000; endRange = 19999;
-                            break;
-                        case 12: startRange = 50000; endRange = 59999;
-                            break;
-                        case 14: startRange = 10000; endRange = 19999;
-                            break;
-                        case 15: startRange = 50000; endRange = 59999;
-                            break;
-                        case 16: startRange = 30000; endRange = 36999;
-                            break;
-                        case 17: startRange = 90000; endRange = 99999;
-                            break;
-                        case 18: startRange = 40000; endRange = 49999;
-                            break;
-                        case 19: startRange = 10000; endRange = 19999;
-                            break;
-                        case 21: startRange = 80000; endRange = 89999;
-                            break;
-                        case 22: startRange = 80000; endRange = 89999;
-                            break;
-                        case 24: startRange = 30000; endRange = 36999;
-                            break;
-                        case 25: startRange = 80000; endRange = 89999;
-                            break;
-                        case 28: startRange = 14000; endRange = 19999;
-                            break;
-                        case 29: startRange = 14000; endRange = 19999;
-                            break;
-                        case 30: startRange = 14000; endRange = 19999;
-                            break;
-                        case 31: startRange = 14000; endRange = 19999;
-                            break;
-                        case 33: startRange = 14000; endRange = 19999;
-                            break;
-                        case 34: startRange = 14000; endRange = 19999;
-                            break;
-                        case 35: startRange = 80000; endRange = 89999;
-                            break;
-                        case 41: startRange = 20000; endRange = 29999;
-                            break;
-                        case 51: startRange = 37000; endRange = 37999;
-                            break;
-                        case 52: startRange = 37000; endRange = 37999;
-                            break;
-                        case 53: startRange = 20000; endRange = 29999;
-                            break;
-                        case 54: startRange = 20000; endRange = 29999;
-                            break;
-                        case 55: startRange = 20000; endRange = 29999;
-                            break;
-                    }
+                    // Gathers subdepartment code
+                    var subdepartment = editorNP.field('ProductUpdates.POS_TAB_F04').val();
 
-                    // Pads the startRange and endRange to 13 digits with 0's for the AJAX request.
-                    var startUPC = pad(startRange, 13);
-                    var endUPC = pad(endRange, 13);
+                    var GetSubdepartmentBounds = $.ajax({
+                        url: "api/GetSubdepartmentBounds",
+                        type: "GET",
+                        dataType: "json",
+                        data: { 'subdepartment': subdepartment },
+                        error: function (error) {
+                            console.log(`Error ${error}`);
+                        }
+                    }),
+                        GetUsedUPCs = GetSubdepartmentBounds.then(function (data) {
+                            for ($i = 0; $i < data.data.length; $i++) {
+                                var lowerBound = pad((data.data[$i].SMSSubdepartments.lowerBound), 13);
+                                var upperBound = pad((data.data[$i].SMSSubdepartments.upperBound), 13);
+                            };
 
-                    function GetNewPLU() {
-                        return $.ajax({
+                            // Pads the startRange and endRange to 13 digits with 0's for the AJAX request.
+                            lowerBound = lowerBound;
+                            upperBound = upperBound;
+
+                            return $.ajax({
                                 url: "api/GetNewPLU",
                                 type: "GET",
                                 dataType: "json",
-                                data: { 'startUPC': startUPC, 'endUPC': endUPC }
+                                data: { 'lowerBound': lowerBound, 'upperBound': upperBound },
+                                error: function (error) {
+                                    console.log(`Error ${error}`);
+                                }
+                            });
                         });
-                    };
 
-                    GetNewPLU().done(function (data) {
+                    GetUsedUPCs.done(function (data) {
                         var used = [];
                         for ($i = 0; $i < data.data.length; $i++) {
-                                used.push( data.data[$i].OBJ_TAB.F01 );
+                            used.push(data.data[$i].OBJ_TAB.F01);
                         }
 
                         // Generates array of all numbers between range.
                         var range = [];
-                        for ($i = startRange; $i < endRange; $i++) {
-                                range.push( '00000000' + $i );
+                        for ($i = lowerBound; $i < upperBound; $i++) {
+                            range.push('00000000' + $i);
                         };
 
                         var unused = _.difference(range, used);
-                        
-                        editorNP.field('ProductUpdates.F01').val(unused[0]);
+
+                        console.log(used);
+                        console.log(range);
+                        console.log(unused);
+
+                        //editorNP.field('ProductUpdates.F01').val(unused[0]);
+                    
                     });
+
+                    //// Will be set dynamically by subdepartment choice, used for testing at the moment.
+                    //switch (editorNP.field('ProductUpdates.POS_TAB_F04').val()) {
+                    //    case 1: startRange = 80000; endRange = 89999;
+                    //        break;
+                    //    case 2: startRange = 30000; endRange = 36999;
+                    //        break;
+                    //    case 3: startRange = 30000; endRange = 36999;
+                    //        break;
+                    //    case 4: startRange = 30000; endRange = 36999;
+                    //        break;
+                    //    case 5: startRange = 30000; endRange = 36999;
+                    //        break;
+                    //    case 6: startRange = 60000; endRange = 69999;
+                    //        break;
+                    //    case 7: startRange = 37000; endRange = 37999;
+                    //        break;
+                    //    case 9: startRange = 30000; endRange = 36999;
+                    //        break;
+                    //    case 10: startRange = 50000; endRange = 59999;
+                    //        break;
+                    //    case 11: startRange = 10000; endRange = 19999;
+                    //        break;
+                    //    case 12: startRange = 50000; endRange = 59999;
+                    //        break;
+                    //    case 14: startRange = 10000; endRange = 19999;
+                    //        break;
+                    //    case 15: startRange = 50000; endRange = 59999;
+                    //        break;
+                    //    case 16: startRange = 30000; endRange = 36999;
+                    //        break;
+                    //    case 17: startRange = 90000; endRange = 99999;
+                    //        break;
+                    //    case 18: startRange = 40000; endRange = 49999;
+                    //        break;
+                    //    case 19: startRange = 10000; endRange = 19999;
+                    //        break;
+                    //    case 21: startRange = 80000; endRange = 89999;
+                    //        break;
+                    //    case 22: startRange = 80000; endRange = 89999;
+                    //        break;
+                    //    case 24: startRange = 30000; endRange = 36999;
+                    //        break;
+                    //    case 25: startRange = 80000; endRange = 89999;
+                    //        break;
+                    //    case 28: startRange = 14000; endRange = 19999;
+                    //        break;
+                    //    case 29: startRange = 14000; endRange = 19999;
+                    //        break;
+                    //    case 30: startRange = 14000; endRange = 19999;
+                    //        break;
+                    //    case 31: startRange = 14000; endRange = 19999;
+                    //        break;
+                    //    case 33: startRange = 14000; endRange = 19999;
+                    //        break;
+                    //    case 34: startRange = 14000; endRange = 19999;
+                    //        break;
+                    //    case 35: startRange = 80000; endRange = 89999;
+                    //        break;
+                    //    case 41: startRange = 20000; endRange = 29999;
+                    //        break;
+                    //    case 51: startRange = 37000; endRange = 37999;
+                    //        break;
+                    //    case 52: startRange = 37000; endRange = 37999;
+                    //        break;
+                    //    case 53: startRange = 20000; endRange = 29999;
+                    //        break;
+                    //    case 54: startRange = 20000; endRange = 29999;
+                    //        break;
+                    //    case 55: startRange = 20000; endRange = 29999;
+                    //        break;
+                    //}
+
+                    //// Pads the startRange and endRange to 13 digits with 0's for the AJAX request.
+                    //var startUPC = pad(startRange, 13);
+                    //var endUPC = pad(endRange, 13);
+
+                    //function GetNewPLU() {
+                    //    return $.ajax({
+                    //            url: "api/GetNewPLU",
+                    //            type: "GET",
+                    //            dataType: "json",
+                    //            data: { 'startUPC': startUPC, 'endUPC': endUPC }
+                    //    });
+                    //};
+
+                    //GetNewPLU().done(function (data) {
+                    //    var used = [];
+                    //    for ($i = 0; $i < data.data.length; $i++) {
+                    //            used.push( data.data[$i].OBJ_TAB.F01 );
+                    //    }
+
+                    //    // Generates array of all numbers between range.
+                    //    var range = [];
+                    //    for ($i = startRange; $i < endRange; $i++) {
+                    //            range.push( '00000000' + $i );
+                    //    };
+
+                    //    var unused = _.difference(range, used);
+                        
+                    //    editorNP.field('ProductUpdates.F01').val(unused[0]);
+                    //});
 
                 } else {
                     alert('Nice');
