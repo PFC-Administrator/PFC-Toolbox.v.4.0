@@ -19,7 +19,7 @@
     <div class="container">
 
         <h1>
-            List of Product Updates
+            Product Maintenance
         </h1>
         <br />
         <table id="ProductUpdates" class="display text-nowrap compact" style="width:100%">
@@ -46,6 +46,7 @@
 </html>
 
 @section scripts{
+    <script type="text/javascript" charset="utf-8" src=" https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.4/js/dataTables.buttons.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
@@ -62,12 +63,16 @@
 
     <script>
 
+        // Function to pad numbers with 0's
+        function pad(number, width = 3, z = 0) { return (String(z).repeat(width) + String(number)).slice(String(number).length) }
+
+        var editorNP;
         var editor;
         $(document).ready(function () {
 
-            $.fn.dataTable.moment('M/D/YYYY');
+            $.fn.dataTable.moment( 'M/D/YYYY hh:mm:ss A' );
 
-            var editor = new $.fn.dataTable.Editor({
+            var editorNP = new $.fn.dataTable.Editor({
                 ajax: '/api/ProductUpdates',
                 table: '#ProductUpdates',
                 fields: [
@@ -94,15 +99,28 @@
                         label: "Retail Price",
                         name: "ProductUpdates.price_tab_f30"
                     }, {
+                        label: "Vendor:",
+                        name: "ProductUpdates.COST_TAB_F27",
+                        type: "select",
+                        placeholder: "Select a vendor"
+                    }, {
+                        label: "Reorder code:",
+                        name: "ProductUpdates.COST_TAB_F26"
+                    }, {
+                        label: "Retail margin:",
+                        name: "ProductUpdates.PRICE_TAB_F49"
+                    }, {
+                        label: "Items per case:",
+                        name: "ProductUpdates.COST_TAB_F19"
+                    }, {
+                        label: "Case cost:",
+                        name: "ProductUpdates.COST_TAB_F38"
+                    }, {
                         label: "TPR Start",
-                        name: "ProductUpdates.promotprstartdate",
-                        type: "datetime",
-                        format: 'M/d/YYYY'
+                        name: "ProductUpdates.promotprstartdate"
                     }, {
                         label: "TPR End",
-                        name: "ProductUpdates.promotprenddate",
-                        type: "datetime",
-                        format: 'M/d/YYYY'
+                        name: "ProductUpdates.promotprenddate"
                     }, {
                         label: "TPR Price",
                         name: "ProductUpdates.promotprprice"
@@ -187,6 +205,84 @@
                         separator: "|",
                         unselectedValue: "False"
                     },{
+                        label: "Created by:",
+                        name: "ProductUpdates.createdby",
+                        type: "readonly",
+                        type: "hidden",
+                        def: "@(User.GetCreatedBy())"
+                    }, {
+                        label: "Date created:",
+                        name: "ProductUpdates.datecreated",
+                        type: "hidden",
+                        def: function () {
+                            var today = new Date().getMonth() + 1
+                                + "/" + new Date().getDate()
+                                + "/" + new Date().getFullYear()
+                                + " " + new Date().getHours()
+                                + ":" + new Date().getMinutes()
+                                + ":" + new Date().getSeconds(); return today }
+                    },{
+                        label: "Status:",
+                        name: "ProductUpdates.productstatusID",
+                        type: "hidden",
+                        def: "3"
+                    },{
+                        label: "Notes:",
+                        name: "ProductUpdates.AdditionalRequestNotes",
+                        type:"textarea"
+                    },{
+                        label: "Mettler PLU:",
+                        name: "ProductUpdates.ScalePLU"
+                    },{
+                        label: "Item Type:",
+                        name: "ProductUpdates.ScaleItemTypeID",
+                        type: "select",
+                        placeholder: "Select an option",
+                        options: [
+                            { label: "Price per pound", value: "1" },
+                            { label: "Standard pack", value: "2"}
+                        ]
+                    },{
+                        label: "Tare / Net Weight:",
+                        name: "ProductUpdates.TareNetWeight"
+                    },{
+                        label: "Shelf Life:",
+                        name: "ProductUpdates.ShelfLife"
+                    },{
+                        label: "Ingredients:",
+                        name: "ProductUpdates.IngredientList",
+                        type:"textarea"
+                    }
+                ]
+            });
+
+            var editor = new $.fn.dataTable.Editor({
+                ajax: '/api/ProductUpdates',
+                table: '#ProductUpdates',
+                fields: [
+                    {
+                        label: "Product Update Type",
+                        name: "ProductUpdates.requesttypeID",
+                        type: "select",
+                        placeholder: "Select a request type"
+                    }, {
+                        label: "Location:",
+                        name: "ProductUpdates.locationID",
+                        type: "select",
+                        placeholder: "Select a location"
+                    }, {
+                        label: "UPC/PLU",
+                        name: "ProductUpdates.F01"
+                    }, {
+                        label: "Mettler Product:",
+                        name: "ProductUpdates.ismettlerrequired",
+                        type: "select",
+                        options: ["Yes", "No"],
+                        placeholder: "Select an option"
+                    }, {
+                        label: "Retail Price",
+                        name: "ProductUpdates.price_tab_f30"
+                    },{
                         label: "Vendor:",
                         name: "ProductUpdates.COST_TAB_F27",
                         type: "select",
@@ -203,6 +299,95 @@
                     }, {
                         label: "Case cost:",
                         name: "ProductUpdates.COST_TAB_F38"
+                    }, {
+                        label: "TPR Start",
+                        name: "ProductUpdates.promotprstartdate"
+                    }, {
+                        label: "TPR End",
+                        name: "ProductUpdates.promotprenddate"
+                    }, {
+                        label: "TPR Price",
+                        name: "ProductUpdates.promotprprice"
+                    }, {
+                        label: "Shelf Tag:",
+                        name: "ProductUpdates.labelID",
+                        type: "select",
+                        placeholder: "Select a label size"
+                    }, {
+                        label: "Sign:",
+                        name: "ProductUpdates.signID",
+                        type: "select",
+                        placeholder: "Select a sign size"
+                    }, {
+                        label: "Brand:",
+                        name: "ProductUpdates.OBJ_TAB_F155",
+                        type: "select",
+                        placeholder: "Select a brand"
+                    }, {
+                        label: "Receipt Description:",
+                        name: "ProductUpdates.OBJ_TAB_F29"
+                    }, {
+                        label: "Size:",
+                        name: "ProductUpdates.OBJ_TAB_F22"
+                    }, {
+                        label: "Sign Description:",
+                        name: "ProductUpdates.OBJ_TAB_F255"
+                    }, {
+                        label: "Subdepartment:",
+                        name: "ProductUpdates.POS_TAB_F04",
+                        type: "select",
+                        placeholder: "Select a subdepartment"
+                    }, {
+                        label: "Category:",
+                        name: "ProductUpdates.OBJ_TAB_F17",
+                        optionsPair: {
+                            label: 'F1023',
+                            value: 'F17'
+                        },
+                        type: "select",
+                        placeholder: "Select a category"
+                    }, {
+                        label: "Report:",
+                        name: "ProductUpdates.OBJ_TAB_F18",
+                        type: "select",
+                        placeholder: "Select a report"
+                    }, {
+                        label: "Family button:",
+                        name: "ProductUpdates.OBJ_TAB_F16",
+                        type: "select",
+                        placeholder: "Select a family button"
+                    }, {
+                        label: "Like:",
+                        name: "ProductUpdates.LIKE_TAB_F122",
+                        type: "select",
+                        placeholder: "Select a like code"
+                    }, {
+                        label: "SNAP:",
+                        name: "ProductUpdates.POS_TAB_F79",
+                        type: "checkbox",
+                        options: [
+                            { label: "", "value": "True" }
+                        ],
+                        separator: "|",
+                        unselectedValue: "False"
+                    }, {
+                        label: "Scalable:",
+                        name: "ProductUpdates.POS_TAB_F80",
+                        type: "checkbox",
+                        options: [
+                            { label: "", "value": "True" }
+                        ],
+                        separator: "|",
+                        unselectedValue: "False"
+                    }, {
+                        label: "Taxable:",
+                        name: "ProductUpdates.POS_TAB_F81",
+                        type: "checkbox",
+                        options: [
+                            { label: "", "value": "True" }
+                        ],
+                        separator: "|",
+                        unselectedValue: "False"
                     },{
                         label: "Created by:",
                         name: "ProductUpdates.createdby",
@@ -212,7 +397,6 @@
                     }, {
                         label: "Date created:",
                         name: "ProductUpdates.datecreated",
-                        type: "datetime",
                         type: "hidden",
                         def: function () {
                             var today = new Date().getMonth() + 1
@@ -220,13 +404,38 @@
                                 + "/" + new Date().getFullYear()
                                 + " " + new Date().getHours()
                                 + ":" + new Date().getMinutes()
-                                + ":" + new Date().getSeconds(); return today },
-                        format: 'M/D/YYYY'
+                                + ":" + new Date().getSeconds(); return today }
                     },{
                         label: "Status:",
                         name: "ProductUpdates.productstatusID",
                         type: "hidden",
                         def: "3"
+                    },{
+                        label: "Notes:",
+                        name: "ProductUpdates.AdditionalRequestNotes",
+                        type:"textarea"
+                    },{
+                        label: "Mettler PLU:",
+                        name: "ProductUpdates.ScalePLU"
+                    },{
+                        label: "Item Type:",
+                        name: "ProductUpdates.ScaleItemTypeID",
+                        type: "select",
+                        placeholder: "Select an option",
+                        options: [
+                            { label: "Price per pound", value: "1" },
+                            { label: "Standard pack", value: "2"}
+                        ]
+                    },{
+                        label: "Tare / Net Weight:",
+                        name: "ProductUpdates.TareNetWeight"
+                    },{
+                        label: "Shelf Life:",
+                        name: "ProductUpdates.ShelfLife"
+                    },{
+                        label: "Ingredients:",
+                        name: "ProductUpdates.IngredientList",
+                        type:"textarea"
                     }
                 ]
             });
@@ -285,8 +494,27 @@
                 }
             });
 
+            // Hides Mettler Ingredients unless Yes to Mettler Product option is select
+            editor.field('ProductUpdates.ismettlerrequired').input().on('change', function () {
+                if (editor.field('ProductUpdates.ismettlerrequired').val() == 'Yes') {
+
+                    editor.field('ProductUpdates.ScalePLU').show();
+                    editor.field('ProductUpdates.ScaleItemTypeID').show();
+                    editor.field('ProductUpdates.TareNetWeight').show();
+                    editor.field('ProductUpdates.ShelfLife').show();
+                    editor.field('ProductUpdates.IngredientList').show();
+                } else {
+                    editor.field('ProductUpdates.ScalePLU').hide();
+                    editor.field('ProductUpdates.ScaleItemTypeID').hide();
+                    editor.field('ProductUpdates.TareNetWeight').hide();
+                    editor.field('ProductUpdates.ShelfLife').hide();
+                    editor.field('ProductUpdates.IngredientList').hide();
+                }
+            });
+
             // Cascading select fields
             editor.dependent('ProductUpdates.POS_TAB_F04', '/api/Categories');
+            editorNP.dependent('ProductUpdates.POS_TAB_F04', '/api/Categories');
 
             // Hides cost info on load
             editor.field('ProductUpdates.POS_TAB_F04').input().on('change', function () {
@@ -295,31 +523,214 @@
                     editor.field('ProductUpdates.PRICE_TAB_F49').hide();
                     editor.field('ProductUpdates.COST_TAB_F19').hide();
                     editor.field('ProductUpdates.COST_TAB_F38').hide();
-                
+
             });
 
-            var counter = 0;
+            var costCounter = 0;
             // Display cost info when cost button is clicked
             $(document).on('click', '#cost', function () {
-                if (counter == 0) {
+                if (costCounter == 0) {
                     editor.field('ProductUpdates.COST_TAB_F27').show();
                     editor.field('ProductUpdates.COST_TAB_F26').show();
                     editor.field('ProductUpdates.PRICE_TAB_F49').show();
                     editor.field('ProductUpdates.COST_TAB_F19').show();
                     editor.field('ProductUpdates.COST_TAB_F38').show();
-                    counter = 1
-                    //alert(counter);
+                    costCounter = 1
+                    //alert(costCounter);
                 } else {
                     editor.field('ProductUpdates.COST_TAB_F27').hide();
                     editor.field('ProductUpdates.COST_TAB_F26').hide();
                     editor.field('ProductUpdates.PRICE_TAB_F49').hide();
                     editor.field('ProductUpdates.COST_TAB_F19').hide();
                     editor.field('ProductUpdates.COST_TAB_F38').hide();
-                    counter = 0
-                    //alert(counter);
+                    costCounter = 0
+                    //alert(costCounter);
                 }
             });
-            
+
+            var srpCounter = 0;
+            // Display SRP calculator info when cost button is clicked
+            $(document).on('click', '#srpcalculator', function () {
+                if (srpCounter == 0) {
+                    editor.field('ProductUpdates.COST_TAB_F19').show();
+                    editor.field('ProductUpdates.COST_TAB_F38').show();
+                    editor.field('ProductUpdates.PRICE_TAB_F49').show();
+                    srpCounter = 1
+                    //alert(srpCounter);
+                } else {
+                    editor.field('ProductUpdates.COST_TAB_F19').hide();
+                    editor.field('ProductUpdates.COST_TAB_F38').hide();
+                    editor.field('ProductUpdates.PRICE_TAB_F49').hide();
+                    srpCounter = 0
+                    //alert(srpCounter);
+                }
+            });
+
+            // SRP Calculator
+            $(document).on('click', '#calculate', function () {
+                var srp;
+                var costPerCase = editor.field('ProductUpdates.COST_TAB_F38').val();
+                var itemsPerCase = editor.field('ProductUpdates.COST_TAB_F19').val();
+                var targetMargin = editor.field('ProductUpdates.PRICE_TAB_F49').val();
+
+                srp = ((Math.round(((costPerCase / itemsPerCase) / (1 - (targetMargin / 100))) * 10) / 10) - .01);
+
+                editor.field('ProductUpdates.price_tab_f30').val(srp)
+            })
+
+            /*
+            switch (editorNP.field('ProductUpdates.POS_TAB_F04').val()) {
+                case 1: startRange = 80000; endRange = 89999;
+                    break;
+                case 2: startRange = 30000; endRange = 36999;
+                    break;
+                case 3: startRange = 30000; endRange = 36999;
+                    break;
+                case 4: startRange = 30000; endRange = 36999;
+                    break;
+                case 5: startRange = 30000; endRange = 36999;
+                    break;
+                case 6: startRange = 60000; endRange = 69999;
+                    break;
+                case 7: startRange = 37000; endRange = 37999;
+                    break;
+                case 9: startRange = 30000; endRange = 36999;
+                    break;
+                case 10: startRange = 50000; endRange = 59999;
+                    break;
+                case 11: startRange = 10000; endRange = 19999;
+                    break;
+                case 12: startRange = 50000; endRange = 59999;
+                    break;
+                case 14: startRange = 10000; endRange = 19999;
+                    break;
+                case 15: startRange = 50000; endRange = 59999;
+                    break;
+                case 16: startRange = 30000; endRange = 36999;
+                    break;
+                case 17: startRange = 90000; endRange = 99999;
+                    break;
+                case 18: startRange = 40000; endRange = 49999;
+                    break;
+                case 19: startRange = 10000; endRange = 19999;
+                    break;
+                case 21: startRange = 80000; endRange = 89999;
+                    break;
+                case 22: startRange = 80000; endRange = 89999;
+                    break;
+                case 24: startRange = 30000; endRange = 36999;
+                    break;
+                case 25: startRange = 80000; endRange = 89999;
+                    break;
+                case 28: startRange = 14000; endRange = 19999;
+                    break;
+                case 29: startRange = 14000; endRange = 19999;
+                    break;
+                case 30: startRange = 14000; endRange = 19999;
+                    break;
+                case 31: startRange = 14000; endRange = 19999;
+                    break;
+                case 33: startRange = 14000; endRange = 19999;
+                    break;
+                case 34: startRange = 14000; endRange = 19999;
+                    break;
+                case 35: startRange = 80000; endRange = 89999;
+                    break;
+                case 41: startRange = 20000; endRange = 29999;
+                    break;
+                case 51: startRange = 37000; endRange = 37999;
+                    break;
+                case 52: startRange = 37000; endRange = 37999;
+                    break;
+                case 53: startRange = 20000; endRange = 29999;
+                    break;
+                case 54: startRange = 20000; endRange = 29999;
+                    break;
+                case 55: startRange = 20000; endRange = 29999;
+                    break;
+            }*/
+
+
+             
+
+            // Get New PLU
+            $(document).on('click', '#getplu', function () {
+                if (!editorNP.field('ProductUpdates.POS_TAB_F04').val()) {
+
+                    // Will be set dynamically by subdepartment choice, used for testing at the moment.
+                    var startRange = 30000;
+                    var endRange = 39999;
+
+                    // Pads the startRange and endRange to 13 digits with 0's for the AJAX request.
+                    var startUPC = pad(startRange, 13);
+                    var endUPC = pad(endRange, 13);
+
+
+                    function GetNewPLU(callback) {
+                        $.ajax({
+                            url: "api/GetNewPLU",
+                            type: "GET",
+                            dataType: "json",
+                            data: { 'startUPC': startUPC, 'endUPC': endUPC },
+                            success: callback,
+                            error: function (error) {
+                                console.log(`Error ${error}`)
+                            }
+                        });
+                    }
+
+                    function SetNewPLU() {
+                        var used = [];
+                        GetNewPLU(function (data) {
+                            $.each(data.data, function (i, UPCs) {
+                                used.push( UPCs.OBJ_TAB.F01 );
+                            })
+                        });
+
+                        // Generates array of all numbers between range.
+                        var range = [];
+                        for ($i = startRange; $i < endRange; $i++) {
+                                range.push('00000000' + $i);
+                        }
+                        
+                        // Uses Lodash to compare the possible numbers in the range to what's used in SMS.
+                        var unused = _.difference(range,used);
+                        
+                        //console.log(range);
+                        //console.log(used);
+                        console.log(unused);
+                        // Alerts the users of what PLU to use.
+                        //success = unused[0];
+                        //alert("Use this PLU: " + success);
+                    }
+
+                    SetNewPLU();
+                    alert('Please select a subdepartment!');
+                } else if (!editorNP.field('ProductUpdates.ismettlerrequired').val()) {
+                    alert('Select yes or no to Mettler Product!');
+                } else if (editorNP.field('ProductUpdates.ismettlerrequired').val() == 'Yes') {
+                    alert("You've chosen to generate a Mettler PLU!");
+
+                    /*//Begin the process of selecting an open Mettler PLU from SMS.
+                    for ($i = 80000; $i < 80005; $i++) {
+                        console.log('002' + $i + '00000');
+                    }*/
+
+
+                } else if (editorNP.field('ProductUpdates.ismettlerrequired').val() == 'No') {
+                    alert("You've chosen to generate a POS PLU!");
+
+                    /*//Begin the process of selecting an open POS PLU from SMS.
+                    for ($i = 80000; $i < 80005; $i++) {
+                        console.log($i);
+                    }*/
+
+
+                } else {
+                    alert('Nice');
+                }
+            })
+
             var table = $('#ProductUpdates').DataTable({
                 // This is the default view showing uncompleted requests
                 initComplete: function (e, dt, node, config) { table.column(1).search('^3 - Manager Review Completed$', true, false).draw() },
@@ -342,24 +753,66 @@
                     { "data": "ProductUpdates.promotprprice" },
                     { "data": "ProductUpdates.price_tab_f30" },
                     { "data": "ProductUpdates.createdby" },
-                    { "data": "ProductUpdates.datecreated" }
+                    { "data": "ProductUpdates.datecreated", "render": function (value) {
+                            if (value === null) return "";
+                            return window.moment(value).format('M/D/YYYY hh:mm:ss A');
+                    } }
                 ],
                 select: true,
                 dom: '<"floatRight"B><"clear">lfrtip',
                 order: [[11, "desc"], [1, "asc"]],
                 buttons: [
-                    { text: 'Update An Existing Product', title: 'Update An Existing Product', extend: 'create', editor: editor, formButtons:
-                            [ 'Create', { text: 'Cancel', action: function () { this.close(); }}]},
-                    { extend: 'edit', editor: editor },
+                    { text: 'New Product', tite: 'New Product', extend: 'create', editor: editorNP },
+                    {
+                        text: 'Update An Existing Product', title: 'Update An Existing Product', extend: 'create', editor: editor,
+                        formButtons:
+                            [
+                                { text: 'Cancel', action: function () { this.close(); } },
+                                'Create',
+                                { text: 'Submit Another', action: function () { this.submit(); editor.create(); } },
+                                { text: 'Clear', action: function () { fields = editor.displayed(); for (field in fields) { editor.field(fields[field]).val(''); }; } },
+                                { text: 'Copy Details from Previous Item', action: function () { var values = editor.edit(table.row( ':last', { order: 'index' }), false).val(); editor.create({}).set(values); } }, ]
+                                //{ text: 'Copy Details from Previous Item', action: function () { var values = editor.edit(table.row(11, { search: '6/11/2019 2:18:35 PM' }), false).val(); console.log(values); editor.create({}).set(values); } }, ]
+                                //{ text: 'Copy Details from Previous Item', action: function () { console.log( table.row(table.column(11).search('7/4/2019 1:37:32 PM', true, false).draw()).data() ); } }, ]
+                                //{ text: 'Copy Details from Previous Item', action: function () { console.log(table.row(':last', { order: 'applied' }).data()); } }, ]
+                    },
+                    { text: 'Edit', extend:'edit', editor:editor},
                     { text: 'Show Completed Today', action: function (e, dt, node, config) { table.column(1).search('^4 - Completed$', true, false).draw() } },
                     { text: 'Show Default View', action: function (e, dt, node, config) { table.column(1).search('^3 - Manager Review Completed$', true, false).draw() } },
                     { text: 'Show All', action: function (e, dt, node, config) { table.column(1).search('3 - Manager Review Completed$|^4 - Completed$', true, false).column(11).order( 'desc' ).draw() } }
                 ]
             });
 
+            // Update An Existing Product Form buttons
             $('<button id="cost" style="position:absolute;top:20%;right:12.5%">Cost</button>').insertAfter(
                 editor.field('ProductUpdates.price_tab_f30').input()
+            );
+
+            $('<button id="srpcalculator" style="position:absolute;top:20%;right:5%">SRP</button>').insertAfter(
+                editor.field('ProductUpdates.price_tab_f30').input()
+            );
+
+            $('<button id="calculate" style="position:absolute;top:20%;right:8%">Calculate</button>').insertAfter(
+                editor.field('ProductUpdates.COST_TAB_F38').input()
+            );
+
+            // New Product Form Buttons
+            $('<button id="getplu" style="position:absolute;top:20%;right:5%">Get New PLU</button>').insertAfter(
+                editorNP.field('ProductUpdates.F01').input()
+            );
+
+            $('<button id="cost" style="position:absolute;top:20%;right:12.5%">Cost</button>').insertAfter(
+                editorNP.field('ProductUpdates.price_tab_f30').input()
+            );
+
+            $('<button id="srpcalculator" style="position:absolute;top:20%;right:5%">SRP</button>').insertAfter(
+                editorNP.field('ProductUpdates.price_tab_f30').input()
+            );
+
+            $('<button id="calculate" style="position:absolute;top:20%;right:8%">Calculate</button>').insertAfter(
+                editorNP.field('ProductUpdates.COST_TAB_F38').input()
             );
         });
     </script>
 }
+
