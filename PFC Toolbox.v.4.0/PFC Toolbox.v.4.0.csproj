@@ -208,6 +208,7 @@
     <Compile Include="Controllers\Maintenance\PLUController.cs" />
     <Compile Include="Controllers\Maintenance\ProductUpdatesController.cs" />
     <Compile Include="Controllers\Identity\ManageController.cs" />
+    <Compile Include="Controllers\Maintenance\SubdepartmentController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
