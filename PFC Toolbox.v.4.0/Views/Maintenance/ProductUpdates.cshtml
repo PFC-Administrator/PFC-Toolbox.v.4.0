@@ -77,18 +77,15 @@
                 table: '#ProductUpdates',
                 fields: [
                     {
-                        label: "Product Update Type",
                         name: "ProductUpdates.requesttypeID",
-                        type: "select",
-                        placeholder: "Select a request type"
+                        type: "readonly",
+                        type: "hidden",
+                        def: "6"
                     }, {
                         label: "Location:",
                         name: "ProductUpdates.locationID",
                         type: "select",
                         placeholder: "Select a location"
-                    }, {
-                        label: "UPC/PLU",
-                        name: "ProductUpdates.F01"
                     }, {
                         label: "Mettler Product:",
                         name: "ProductUpdates.ismettlerrequired",
@@ -96,45 +93,17 @@
                         options: ["Yes", "No"],
                         placeholder: "Select an option"
                     }, {
-                        label: "Retail Price",
-                        name: "ProductUpdates.price_tab_f30"
-                    }, {
-                        label: "Vendor:",
-                        name: "ProductUpdates.COST_TAB_F27",
-                        type: "select",
-                        placeholder: "Select a vendor"
-                    }, {
-                        label: "Reorder code:",
-                        name: "ProductUpdates.COST_TAB_F26"
-                    }, {
-                        label: "Retail margin:",
-                        name: "ProductUpdates.PRICE_TAB_F49"
-                    }, {
-                        label: "Items per case:",
-                        name: "ProductUpdates.COST_TAB_F19"
-                    }, {
-                        label: "Case cost:",
-                        name: "ProductUpdates.COST_TAB_F38"
-                    }, {
-                        label: "TPR Start",
-                        name: "ProductUpdates.promotprstartdate"
-                    }, {
-                        label: "TPR End",
-                        name: "ProductUpdates.promotprenddate"
-                    }, {
-                        label: "TPR Price",
-                        name: "ProductUpdates.promotprprice"
-                    }, {
                         label: "Shelf Tag:",
                         name: "ProductUpdates.labelID",
                         type: "select",
                         placeholder: "Select a label size"
                     }, {
-                        label: "Sign:",
-                        name: "ProductUpdates.signID",
-                        type: "select",
-                        placeholder: "Select a sign size"
+                        label: "UPC/PLU",
+                        name: "ProductUpdates.F01"
                     }, {
+                        label: "Mettler PLU:",
+                        name: "ProductUpdates.ScalePLU"
+                    },{
                         label: "Brand:",
                         name: "ProductUpdates.OBJ_TAB_F155",
                         type: "select",
@@ -204,7 +173,27 @@
                         ],
                         separator: "|",
                         unselectedValue: "False"
-                    },{
+                    }, {
+                        label: "Retail Price",
+                        name: "ProductUpdates.price_tab_f30"
+                    }, {
+                        label: "Vendor:",
+                        name: "ProductUpdates.COST_TAB_F27",
+                        type: "select",
+                        placeholder: "Select a vendor"
+                    }, {
+                        label: "Reorder code:",
+                        name: "ProductUpdates.COST_TAB_F26"
+                    }, {
+                        label: "Retail margin:",
+                        name: "ProductUpdates.PRICE_TAB_F49"
+                    }, {
+                        label: "Items per case:",
+                        name: "ProductUpdates.COST_TAB_F19"
+                    }, {
+                        label: "Case cost:",
+                        name: "ProductUpdates.COST_TAB_F38"
+                    }, {
                         label: "Created by:",
                         name: "ProductUpdates.createdby",
                         type: "readonly",
@@ -230,9 +219,6 @@
                         label: "Notes:",
                         name: "ProductUpdates.AdditionalRequestNotes",
                         type:"textarea"
-                    },{
-                        label: "Mettler PLU:",
-                        name: "ProductUpdates.ScalePLU"
                     },{
                         label: "Item Type:",
                         name: "ProductUpdates.ScaleItemTypeID",
@@ -512,6 +498,24 @@
                 }
             });
 
+            // Hides Mettler Ingredients unless Yes to Mettler Product option is select
+            editorNP.field('ProductUpdates.ismettlerrequired').input().on('change', function () {
+                if (editorNP.field('ProductUpdates.ismettlerrequired').val() == 'Yes') {
+
+                    editorNP.field('ProductUpdates.ScalePLU').show();
+                    editorNP.field('ProductUpdates.ScaleItemTypeID').show();
+                    editorNP.field('ProductUpdates.TareNetWeight').show();
+                    editorNP.field('ProductUpdates.ShelfLife').show();
+                    editorNP.field('ProductUpdates.IngredientList').show();
+                } else {
+                    editorNP.field('ProductUpdates.ScalePLU').hide();
+                    editorNP.field('ProductUpdates.ScaleItemTypeID').hide();
+                    editorNP.field('ProductUpdates.TareNetWeight').hide();
+                    editorNP.field('ProductUpdates.ShelfLife').hide();
+                    editorNP.field('ProductUpdates.IngredientList').hide();
+                }
+            });
+
             // Cascading select fields
             editor.dependent('ProductUpdates.POS_TAB_F04', '/api/Categories');
             editorNP.dependent('ProductUpdates.POS_TAB_F04', '/api/Categories');
@@ -566,6 +570,38 @@
                 }
             });
 
+            var brandCounter = 0
+
+            // Enter new Brand
+            $(document).on('click', '#newbrand', function () {
+                var newbrand = prompt("Please enter the new brand:");
+                if (newbrand == null || newbrand == "") {
+                    txt = "User cancelled the prompt.";
+                } else {
+
+                    brand = newbrand.toUpperCase();
+                    console.log(brand);
+
+                    function CreateNewBrand() {
+                        $.ajax({
+                            url: "api/CreateNewBrand",
+                            type: "POST",
+                            dataType: "json",
+                            data: {
+                                'data[0][Brands][brand]': brand
+                            },
+                            error: function (error) {
+                                console.log(`Error ${error}`);
+                            }
+                        });
+                    };
+
+                    CreateNewBrand();
+
+                    editorNP.field('ProductUpdates.OBJ_TAB_F155').val(newbrand);
+                }
+            });
+
             // SRP Calculator
             $(document).on('click', '#calculate', function () {
                 var srp;
@@ -576,7 +612,19 @@
                 srp = ((Math.round(((costPerCase / itemsPerCase) / (1 - (targetMargin / 100))) * 10) / 10) - .01);
 
                 editor.field('ProductUpdates.price_tab_f30').val(srp)
-            })
+            });
+
+            // SRP Calculator
+            $(document).on('click', '#calculate', function () {
+                var srp;
+                var costPerCase = editorNP.field('ProductUpdates.COST_TAB_F38').val();
+                var itemsPerCase = editorNP.field('ProductUpdates.COST_TAB_F19').val();
+                var targetMargin = editorNP.field('ProductUpdates.PRICE_TAB_F49').val();
+
+                srp = ((Math.round(((costPerCase / itemsPerCase) / (1 - (targetMargin / 100))) * 10) / 10) - .01);
+
+                editorNP.field('ProductUpdates.price_tab_f30').val(srp)
+            });
 
             // Get New PLU
             $(document).on('click', '#getplu', function () {
@@ -635,8 +683,10 @@
                         };
 
                         var unused = _.difference(range, used);
-
+                        var MPLUUnused = (unused[0]).slice(3, -5);
+                        
                         editorNP.field('ProductUpdates.F01').val(unused[0]);
+                        editorNP.field('ProductUpdates.ScalePLU').val(MPLUUnused);
                     });
 
                 } else if (editorNP.field('ProductUpdates.ismettlerrequired').val() == 'No') {
@@ -720,18 +770,26 @@
                     { "data": "ProductUpdates.promotprprice" },
                     { "data": "ProductUpdates.price_tab_f30" },
                     { "data": "ProductUpdates.createdby" },
-                    { "data": "ProductUpdates.datecreated", "render": function (value) {
+                    {
+                        "data": "ProductUpdates.datecreated", "render": function (value) {
                             if (value === null) return "";
                             return window.moment(value).format('M/D/YYYY hh:mm:ss A');
-                    } }
+                        }
+                    }
                 ],
                 select: true,
                 dom: '<"floatRight"B><"clear">lfrtip',
                 order: [[11, "desc"], [1, "asc"]],
                 buttons: [
-                    { text: 'New Product', tite: 'New Product', extend: 'create', editor: editorNP },
-                    {
-                        text: 'Update An Existing Product', title: 'Update An Existing Product', extend: 'create', editor: editor,
+                    { text: 'New Product', tite: 'New Product', extend: 'create', editor: editorNP,
+                        formButtons:
+                            [
+                                { text: 'Cancel', action: function () { this.close(); } },
+                                'Create',
+                                { text: 'Submit Another', action: function () { this.submit(); editorNP.create(); } },
+                                { text: 'Clear', action: function () { fields = editorNP.displayed(); for (field in fields) { editorNP.field(fields[field]).val(''); }; } },
+                                { text: 'Copy Details from Previous Item', action: function () { var values = editorNP.edit(table.row(':last', { order: 'index' }), false).val(); editorNP.create({}).set(values); } },] },
+                    { text: 'Update An Existing Product', title: 'Update An Existing Product', extend: 'create', editor: editor,
                         formButtons:
                             [
                                 { text: 'Cancel', action: function () { this.close(); } },
@@ -739,9 +797,6 @@
                                 { text: 'Submit Another', action: function () { this.submit(); editor.create(); } },
                                 { text: 'Clear', action: function () { fields = editor.displayed(); for (field in fields) { editor.field(fields[field]).val(''); }; } },
                                 { text: 'Copy Details from Previous Item', action: function () { var values = editor.edit(table.row( ':last', { order: 'index' }), false).val(); editor.create({}).set(values); } }, ]
-                                //{ text: 'Copy Details from Previous Item', action: function () { var values = editor.edit(table.row(11, { search: '6/11/2019 2:18:35 PM' }), false).val(); console.log(values); editor.create({}).set(values); } }, ]
-                                //{ text: 'Copy Details from Previous Item', action: function () { console.log( table.row(table.column(11).search('7/4/2019 1:37:32 PM', true, false).draw()).data() ); } }, ]
-                                //{ text: 'Copy Details from Previous Item', action: function () { console.log(table.row(':last', { order: 'applied' }).data()); } }, ]
                     },
                     { text: 'Edit', extend:'edit', editor:editor},
                     { text: 'Show Completed Today', action: function (e, dt, node, config) { table.column(1).search('^4 - Completed$', true, false).draw() } },
@@ -764,16 +819,12 @@
             );
 
             // New Product Form Buttons
+            $('<button id="newbrand" style="position:absolute;top:20%;right:5%">New Brand</button>').insertAfter(
+                editorNP.field('ProductUpdates.OBJ_TAB_F155').input()
+            );
+
             $('<button id="getplu" style="position:absolute;top:20%;right:5%">Get New PLU</button>').insertAfter(
                 editorNP.field('ProductUpdates.F01').input()
-            );
-
-            $('<button id="cost" style="position:absolute;top:20%;right:12.5%">Cost</button>').insertAfter(
-                editorNP.field('ProductUpdates.price_tab_f30').input()
-            );
-
-            $('<button id="srpcalculator" style="position:absolute;top:20%;right:5%">SRP</button>').insertAfter(
-                editorNP.field('ProductUpdates.price_tab_f30').input()
             );
 
             $('<button id="calculate" style="position:absolute;top:20%;right:8%">Calculate</button>').insertAfter(
