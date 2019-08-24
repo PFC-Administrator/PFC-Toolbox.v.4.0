@@ -595,11 +595,11 @@
                     };
 
                     CreateNewBrand();
-
-                    //editorNP.dependent('ProductUpdates.OBJ_TAB_F155', '/api/CreateNewBrand');
                     editorNP.field('ProductUpdates.OBJ_TAB_F155').val(brand);
                 }
             });
+
+            //editorNP.dependent('ProductUpdates.OBJ_TAB_F155', '/api/CreateNewBrand');
 
             // SRP Calculator
             $(document).on('click', '#calculate', function () {
