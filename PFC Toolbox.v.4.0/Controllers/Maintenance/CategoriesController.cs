@@ -16,38 +16,6 @@ namespace PFC_Toolbox.v._4._0.Controllers
         [HttpPost]
         public IHttpActionResult CategoryOptions()
             {
-            /*       [Route("Maintenance/api/Categories")]
-                           [HttpGet]
-                           [HttpPost]
-                           public IHttpActionResult Categories()
-                           {
-                               //int  F04 = 22;
-                               var request = HttpContext.Current.Request;
-                               var settings = Properties.Settings.Default;
-                               string F04 = request.Params["values[ProductUpdates.POS_TAB_F04]"];
-
-                               using (var db1 = new Database(settings.DbType, settings.DbConnection1))
-                               {
-                                   var response = new Editor(db1, "SMSSubdepartments", "F04")
-                                       //.Field(new Field("SMSSubdepartments.F04")
-                                       //)
-                                       .Field(new Field("SMSCategories.F1023")
-                                       )
-                                       .LeftJoin("SMSCategories", "SMSCategories.F1943", "=", "SMSSubdepartments.F04"
-                                       )
-                                       .Where(q => q.Where("SMSCategories.F1943", "(SELECT F04 WHERE SMSCategories.F1943 = '" + F04 +"')", "=", false)
-                                       )
-                                       .Process(request)
-                                       .Data();
-
-                                       dynamic result = new ExpandoObject();
-                                       result.options = new ExpandoObject();
-                                       result.options.Categories  = response.data;
-
-                                   return Json(result);
-                               }
-                           }*/
-
             var request = HttpContext.Current.Request;
                 var settings = Properties.Settings.Default;
             

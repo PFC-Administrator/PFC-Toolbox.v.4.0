@@ -15,7 +15,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
         [Route("Maintenance/api/CreateNewBrand")]
         [HttpGet]
         [HttpPost]
-        public IHttpActionResult ProductUpdates()
+        public IHttpActionResult ProductUpdates([FromBody] string brand)
         {
             var request = HttpContext.Current.Request;
             var settings = Properties.Settings.Default;
@@ -23,8 +23,9 @@ namespace PFC_Toolbox.v._4._0.Controllers
             using (var db1 = new Database(settings.DbType, settings.DbConnection1))
             {
                 var response = new Editor(db1, "Brands", "Brand")
-                    .Field(new Field("Brand")
+                    .Field(new Field("Brands.Brand")
                     )
+                    .Debug(true)
                      .Process(request)
                     .Data();
 

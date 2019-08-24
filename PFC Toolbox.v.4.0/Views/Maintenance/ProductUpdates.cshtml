@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Product Updates";
+    ViewBag.Title = "Product Maintenance";
 }
 @using PFC_Toolbox.v._4._0.Extensions;
 @using PFC_Toolbox.v._4._0.Models;
@@ -570,8 +570,6 @@
                 }
             });
 
-            var brandCounter = 0
-
             // Enter new Brand
             $(document).on('click', '#newbrand', function () {
                 var newbrand = prompt("Please enter the new brand:");
@@ -580,7 +578,6 @@
                 } else {
 
                     brand = newbrand.toUpperCase();
-                    console.log(brand);
 
                     function CreateNewBrand() {
                         $.ajax({
@@ -588,7 +585,8 @@
                             type: "POST",
                             dataType: "json",
                             data: {
-                                'data[0][Brands][brand]': brand
+                                action: 'create',
+                                'data[0][Brands][Brand]': brand
                             },
                             error: function (error) {
                                 console.log(`Error ${error}`);
@@ -598,7 +596,8 @@
 
                     CreateNewBrand();
 
-                    editorNP.field('ProductUpdates.OBJ_TAB_F155').val(newbrand);
+                    //editorNP.dependent('ProductUpdates.OBJ_TAB_F155', '/api/CreateNewBrand');
+                    editorNP.field('ProductUpdates.OBJ_TAB_F155').val(brand);
                 }
             });
 
@@ -789,7 +788,7 @@
                                 { text: 'Submit Another', action: function () { this.submit(); editorNP.create(); } },
                                 { text: 'Clear', action: function () { fields = editorNP.displayed(); for (field in fields) { editorNP.field(fields[field]).val(''); }; } },
                                 { text: 'Copy Details from Previous Item', action: function () { var values = editorNP.edit(table.row(':last', { order: 'index' }), false).val(); editorNP.create({}).set(values); } },] },
-                    { text: 'Update An Existing Product', title: 'Update An Existing Product', extend: 'create', editor: editor,
+                    { text: 'Update Product', title: 'Update An Existing Product', extend: 'create', editor: editor,
                         formButtons:
                             [
                                 { text: 'Cancel', action: function () { this.close(); } },
