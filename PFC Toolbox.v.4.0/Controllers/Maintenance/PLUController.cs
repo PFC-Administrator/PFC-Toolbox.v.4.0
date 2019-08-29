@@ -26,10 +26,9 @@ namespace PFC_Toolbox.v._4._0.Controllers
                     .Field(new Field("OBJ_TAB.F01")
                     ).Where(q => q.Where("OBJ_TAB.F01", "(SELECT OBJ_TAB.F01 FROM OBJ_TAB WHERE OBJ_TAB.F01 BETWEEN '" + lowerBound + "' AND '" + upperBound + "')", "IN", false))
                      .Process(request)
-                    .Data();
+                     .Data();
 
                 return Json(response);
-
             }
         }
     }

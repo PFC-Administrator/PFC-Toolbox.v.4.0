@@ -46,3 +46,8 @@
     #customForm div.DTE_Field {
         padding: 5px;
     }
+
+td.highlight {
+    font-weight: bold;
+    color: blue;
+}

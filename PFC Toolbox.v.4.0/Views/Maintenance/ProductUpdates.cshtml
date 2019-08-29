@@ -106,6 +106,10 @@
                     },{
                         label: "Brand:",
                         name: "ProductUpdates.OBJ_TAB_F155",
+                        //optionsPair: {
+                            //label: 'Brand',
+                            //value: 'Brand'
+                        //},
                         type: "select",
                         placeholder: "Select a brand"
                     }, {
@@ -570,40 +574,6 @@
                 }
             });
 
-            // Enter new Brand
-            $(document).on('click', '#newbrand', function () {
-                var newbrand = prompt("Please enter the new brand:");
-                if (newbrand == null || newbrand == "") {
-                    txt = "User cancelled the prompt.";
-                } else {
-
-                    brand = newbrand.toUpperCase();
-
-                    function CreateNewBrand() {
-                        $.ajax({
-                            url: "api/CreateNewBrand",
-                            type: "POST",
-                            dataType: "json",
-                            data: {
-                                action: 'create',
-                                'data[0][Brands][Brand]': brand
-                            },
-                            error: function (error) {
-                                console.log(`Error ${error}`);
-                            }
-                        });
-                    };
-
-                    CreateNewBrand();
-
-                    //editorNP.dependent('ProductUpdates.OBJ_TAB_F155', '/Maintenance/api/RefreshBrand');
-
-                    editorNP.field('ProductUpdates.OBJ_TAB_F155').val(brand);
-                }
-            });
-
-            //editorNP.dependent('ProductUpdates.OBJ_TAB_F155', '/api/CreateNewBrand');
-
             // SRP Calculator
             $(document).on('click', '#calculate', function () {
                 var srp;
@@ -626,6 +596,54 @@
                 srp = ((Math.round(((costPerCase / itemsPerCase) / (1 - (targetMargin / 100))) * 10) / 10) - .01);
 
                 editorNP.field('ProductUpdates.price_tab_f30').val(srp)
+            });
+
+            // Enter new Brand
+            $(document).on('click', '#newbrand', function () {
+                var newbrand = prompt("Please enter the new brand:");
+                if (newbrand == null || newbrand == "") {
+                    txt = "User cancelled the prompt.";
+                } else {
+
+                    brand = newbrand.toUpperCase();
+
+                    var CreateNewBrand = $.ajax({
+                        url: "api/CreateNewBrand",
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            action: 'create',
+                            'data[0][Brands][Brand]': brand
+                        },
+                        error: function (error) {
+                            console.log(`Error ${error}`);
+                        }
+                    }),
+                        SetNewBrand = CreateNewBrand.then(function (data) {
+                            return $.ajax({
+                                url: "api/RefreshBrand",
+                                type: "GET",
+                                dataType: "json",
+                                error: function (error) {
+                                    console.log(`Error ${error}`);
+                                }
+                            });
+                        });
+
+                    var optionsA = [];
+                    SetNewBrand.done(function (data) {
+                        var option = {};
+                        for ($i = 0; $i < data.data.length; $i++) {
+                            option.label = data.data[$i].Brands.Brand
+                            option.value = data.data[$i].DT_RowId
+                            optionsA.push(option);
+                            option = {};
+                        };
+                        editorNP.field('ProductUpdates.OBJ_TAB_F155').update(optionsA);
+                    });
+
+                    editorNP.field('ProductUpdates.OBJ_TAB_F155').val("row_" + brand)
+                }
             });
 
             // Get New PLU
@@ -761,7 +779,7 @@
                     url: '/api/ProductUpdates'
                 },
                 columns: [
-                    { "data": "RequestTypes.requestname" },
+                    { "data": "RequestTypes.requestname", render: function (data, type, row) { var color = 'black'; if (data == "New Product") { color = 'green'} return '<span style="color:' + color + '">' + data + '</span>';} },
                     { "data": "Status.productupdatestatus" },
                     { "data": "ProductUpdates.F01", width: '110px' },
                     { "data": "ProductUpdates.OBJ_TAB_F155" },
@@ -806,7 +824,7 @@
                     { text: 'Show All', action: function (e, dt, node, config) { table.column(1).search('3 - Manager Review Completed$|^4 - Completed$', true, false).column(11).order( 'desc' ).draw() } }
                 ]
             });
-
+            
             // Update An Existing Product Form buttons
             $('<button id="cost" style="position:absolute;top:20%;right:12.5%">Cost</button>').insertAfter(
                 editor.field('ProductUpdates.price_tab_f30').input()
