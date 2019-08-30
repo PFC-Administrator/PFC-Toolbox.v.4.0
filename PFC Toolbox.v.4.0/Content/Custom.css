@@ -47,7 +47,6 @@
         padding: 5px;
     }
 
-td.highlight {
-    font-weight: bold;
-    color: blue;
+td.red {
+    background-color: red !important;
 }

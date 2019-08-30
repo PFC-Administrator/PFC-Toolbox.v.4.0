@@ -14,6 +14,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.4/css/buttons.dataTables.min.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.2.7/css/select.dataTables.min.css" />
     <link rel="stylesheet" type="text/css" href="https://editor.datatables.net/extensions/Editor/css/editor.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/Custom.css" />
 </head>
 <body class="dataTables">
     <div class="container">
@@ -779,7 +780,7 @@
                     url: '/api/ProductUpdates'
                 },
                 columns: [
-                    { "data": "RequestTypes.requestname", render: function (data, type, row) { var color = 'black'; if (data == "New Product") { color = 'green'} return '<span style="color:' + color + '">' + data + '</span>';} },
+                    { "data": "RequestTypes.requestname" }, //, render: function (data, type, row) { var color = 'black'; if (data == "New Product") { color = 'green'} return '<span style="color:' + color + '">' + data + '</span>';} },
                     { "data": "Status.productupdatestatus" },
                     { "data": "ProductUpdates.F01", width: '110px' },
                     { "data": "ProductUpdates.OBJ_TAB_F155" },
