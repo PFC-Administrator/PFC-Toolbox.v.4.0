@@ -91,6 +91,8 @@ namespace PFC_Toolbox.v._4._0.Controllers
                     )
                     .Field(new Field("ProductUpdates.POS_TAB_F81")
                     )
+                    .Field(new Field("ProductUpdates.POS_TAB_F178")
+                    )
                     .Field(new Field("ProductUpdates.promotprstartdate")
                         .Validator(Validation.DateFormat("M/d/yyyy"))
                         .GetFormatter(Format.DateTime("M/d/yyyy HH:mm:s", "M/d/yyyy"))
