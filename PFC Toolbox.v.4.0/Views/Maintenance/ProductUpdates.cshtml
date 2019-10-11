@@ -159,7 +159,7 @@
                         unselectedValue: "False"
                     }, {
                         label: "Scalable:",
-                        name: "ProductUpdates.POS_TAB_F80",
+                        name: "ProductUpdates.POS_TAB_F82",
                         type: "checkbox",
                         options: [
                             { label: "", "value": "True" }
@@ -370,7 +370,7 @@
                         unselectedValue: "False"
                     }, {
                         label: "Scalable:",
-                        name: "ProductUpdates.POS_TAB_F80",
+                        name: "ProductUpdates.POS_TAB_F82",
                         type: "checkbox",
                         options: [
                             { label: "", "value": "True" }
@@ -673,7 +673,6 @@
                 } else if (!editorNP.field('ProductUpdates.ismettlerrequired').val()) {
                     alert('Select yes or no to Mettler Product!');
                 } else if (editorNP.field('ProductUpdates.ismettlerrequired').val() == 'Yes') {
-                    //alert("You've chosen to generate a Mettler PLU!");
 
                     // Gathers subdepartment code
                     var subdepartment = editorNP.field('ProductUpdates.POS_TAB_F04').val();
@@ -786,7 +785,7 @@
                     alert('Nice');
                 }
             })
-
+            
             var table = $('#ProductUpdates').DataTable({
                 // This is the default view showing uncompleted requests
                 initComplete: function (e, dt, node, config) { table.column(1).search('^3 - Manager Review Completed$', true, false).draw() },
@@ -840,7 +839,10 @@
                     { text: 'Edit', extend:'edit', editor:editor},
                     { text: 'Show Completed Today', action: function (e, dt, node, config) { table.column(1).search('^4 - Completed$', true, false).draw() } },
                     { text: 'Show Default View', action: function (e, dt, node, config) { table.column(1).search('^3 - Manager Review Completed$', true, false).draw() } },
-                    { text: 'Show All', action: function (e, dt, node, config) { table.column(1).search('3 - Manager Review Completed$|^4 - Completed$', true, false).column(11).order( 'desc' ).draw() } }
+                    { text: 'Show All', action: function (e, dt, node, config) { table.column(1).search('3 - Manager Review Completed$|^4 - Completed$', true, false).column(11).order('desc').draw() } },
+
+                    // Creates an Export New Products button and executes AJAX requests
+                    { text: 'Manage New Products (Export)', action: function () { window.location = 'NewProducts' } }
                 ]
             });
             
