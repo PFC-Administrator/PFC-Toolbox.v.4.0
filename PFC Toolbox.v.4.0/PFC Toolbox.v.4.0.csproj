@@ -206,6 +206,7 @@
     <Compile Include="Controllers\MaintenanceController.cs" />
     <Compile Include="Controllers\Maintenance\CategoriesController.cs" />
     <Compile Include="Controllers\Maintenance\NewBrandController.cs" />
+    <Compile Include="Controllers\Maintenance\NewProductController.cs" />
     <Compile Include="Controllers\Maintenance\PLUController.cs" />
     <Compile Include="Controllers\Maintenance\ProductUpdatesController.cs" />
     <Compile Include="Controllers\Identity\ManageController.cs" />
@@ -366,11 +367,13 @@
     <Content Include="Views\Reports\_CTMSubdepartment.cshtml" />
     <Content Include="Views\Reports\_ItemSingleTotal.cshtml" />
     <Content Include="Views\Reports\_ItemSingleTotalbySubdepartment.cshtml" />
+    <Content Include="Views\Maintenance\NewProducts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Documentation\" />
     <Folder Include="Views\Categories\" />
+    <Folder Include="Views\NewProduct\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

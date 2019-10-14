@@ -87,7 +87,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
                     )
                     .Field(new Field("ProductUpdates.POS_TAB_F79")
                     )
-                    .Field(new Field("ProductUpdates.POS_TAB_F80")
+                    .Field(new Field("ProductUpdates.POS_TAB_F82")
                     )
                     .Field(new Field("ProductUpdates.POS_TAB_F81")
                     )
@@ -193,7 +193,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
                     )
                     .LeftJoin("SMSVendors", "SMSVendors.F27", "=", "ProductUpdates.COST_TAB_F27"
                     )
-                     .Process(request)
+                    .Process(request)
                     .Data();
                  
                 return Json(response);

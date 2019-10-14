@@ -53,5 +53,29 @@ namespace PFC_Toolbox.v._4._0.Properties {
                 return ((string)(this["DbConnection2"]));
             }
         }
+
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Server=192.168.0.30\\SQLEXPRESS;Database=STORESQL;User Id=ncbp;\r\nPasswor" +
+            "d=289iwqw;")]
+        public string DbConnection3
+        {
+            get
+            {
+                return ((string)(this["DbConnection3"]));
+            }
+        }
+
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Server=10.190.30.30\\SQLEXPRESS;Database=STORESQL;User Id=ncbp;\r\nPasswor" +
+            "d=289iwqw;")]
+        public string DbConnection4
+        {
+            get
+            {
+                return ((string)(this["DbConnection4"]));
+            }
+        }
     }
 }

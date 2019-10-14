@@ -16,10 +16,8 @@ namespace PFC_Toolbox.v._4._0.Controllers
         {
             return View();
         }
-
-
+        
 /*******************************************************************************************************************************************************************************************************************/
-
         
         // GET: /Reports/ItemSingleTotal
         public ActionResult ItemSingleTotal()
@@ -29,7 +27,6 @@ namespace PFC_Toolbox.v._4._0.Controllers
 
         public ActionResult GetItemSingleTotal(string location, string UPC, string startDate, string endDate, string store)
         {
-
             store = location.Split(',')[1];
 
             // create local objects
@@ -38,7 +35,6 @@ namespace PFC_Toolbox.v._4._0.Controllers
             ItemSingleTotalModel item = null;
             decimal totalAmount = 0;
             double totalQty = 0, totalUnits = 0;
-
 
             // set query
             string query = "declare @StartDate DateTime "
