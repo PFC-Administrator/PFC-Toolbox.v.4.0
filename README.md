@@ -16,4 +16,7 @@
   <li>Allow accounting to add new vendors themselves</li>
   <li>Send emails to users who have products marked as "more info needed"</li>
   <li>Implementation of Co-op Deals or Bidfile?</li>
+  <li>Sales by brand</li>
+  <li>Sales by description</li>
+  <li>Promotional reports and sales by promotional reports</li>
 </ol>
