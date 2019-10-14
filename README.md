@@ -8,7 +8,7 @@
   <li>Create stored procedures that run periodically to update PFCToolbox SQL tables: AspNetUsers, Brands, SMSCategories, SMSOperators, SMSReports, SMSSubdepartments, SMSVendors with data directly from SMS</li>
 </ol>
   
-## Requests
+## Requests:
 <ol>
   <li>CTM Report for Karla</li>
   <li>Checkbox for completed Invoices</li>
