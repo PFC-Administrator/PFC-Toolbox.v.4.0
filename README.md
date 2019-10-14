@@ -8,10 +8,11 @@
   <li>Create stored procedures that run periodically to update PFCToolbox SQL tables: AspNetUsers, Brands, SMSCategories, SMSOperators, SMSReports, SMSSubdepartments, SMSVendors with data directly from SMS</li>
 </ol>
   
-## Requests:
+## Requests / Ideas:
 <ol>
   <li>CTM Report for Karla</li>
   <li>Checkbox for completed Invoices</li>
+  <li>Limit accessibility to functions by ASP.NET Identity login level</li>
   <li>New Vendor request forms</li>
   <li>Allow accounting to add new vendors themselves</li>
   <li>Send emails to users who have products marked as "more info needed"</li>
