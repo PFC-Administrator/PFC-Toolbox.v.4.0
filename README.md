@@ -21,4 +21,5 @@
   <li>Sales by brand</li>
   <li>Sales by description</li>
   <li>Promotional reports and sales by promotional reports</li>
+  <li>Package price on New Product / Update Uproduct forms</li>
 </ol>
