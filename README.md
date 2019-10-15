@@ -6,11 +6,12 @@
   <li>Convert hardcoded SQL queries to stored procedures</li>
   <li>Remove hardcoded IP addresses</li>
   <li>Create stored procedures that run periodically to update PFCToolbox SQL tables: AspNetUsers, Brands, SMSCategories, SMSOperators, SMSReports, SMSSubdepartments, SMSVendors with data directly from SMS</li>
+  <li>Queue up tags and signage from New Product exports</li>
 </ol>
   
 ## Requests / Ideas:
 <ol>
-  <li>CTM Report for Karla</li>
+  <li>CTM Report</li>
   <li>Checkbox for completed Invoices</li>
   <li>Limit accessibility to functions by ASP.NET Identity login level</li>
   <li>New Vendor request forms</li>
