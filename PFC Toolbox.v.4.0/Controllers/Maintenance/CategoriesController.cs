@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Dynamic;
 using System.Web;
 using System.Web.Http;
@@ -13,9 +14,8 @@ namespace PFC_Toolbox.v._4._0.Controllers
         public IHttpActionResult CategoryOptions()
         {
             var request = HttpContext.Current.Request;
-            var settings = Properties.Settings.Default;
 
-            using (var db = new Database(settings.DbType, settings.DbConnection1))
+            using (var db = new Database("sqlserver", ConfigurationManager.ConnectionStrings["ToolboxConnection"].ConnectionString))
             {
                 var query = db.Select(
                     "SMSCategories",
