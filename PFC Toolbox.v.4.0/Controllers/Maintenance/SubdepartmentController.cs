@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Net.Http.Formatting;
 using System.Web;
 using System.Web.Http;
@@ -18,9 +19,8 @@ namespace PFC_Toolbox.v._4._0.Controllers
         public IHttpActionResult ProductUpdates(string subdepartment)
         {
             var request = HttpContext.Current.Request;
-            var settings = Properties.Settings.Default;
 
-            using (var db1 = new Database(settings.DbType, settings.DbConnection1))
+            using (var db1 = new Database("sqlserver", ConfigurationManager.ConnectionStrings["ToolboxConnection"].ConnectionString))
             {
                 var response = new Editor(db1, "SMSSubdepartments", "F04")
                     .Field(new Field("SMSSubdepartments.lowerBound")

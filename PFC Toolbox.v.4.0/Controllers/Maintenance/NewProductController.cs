@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using System.Data.SqlClient;
+using System.Configuration;
 
 namespace PFC_Toolbox.v._4._0.Controllers
 {
@@ -7,8 +8,10 @@ namespace PFC_Toolbox.v._4._0.Controllers
     {   
         public void CreateNewProduct(string F01, string F155, string F29, string F22, string F255, int F17, int F16, int F18,  string F1000, int F04, string F02, string F79, string F178, string F1120, string F83, string F82, string F81, string F96, int F171, string F123, string F150,  float F30, int F126, float F31,  string F27, string F26, int F19, float F38)
         {
-            SqlConnection con = new SqlConnection();
-            con.ConnectionString = "Data Source=192.168.0.29\\SQLEXPRESS;Database=STORESQL;Trusted_Connection=false;uid=pfcit;pwd=pfcit";
+            SqlConnection con = new SqlConnection
+            {
+                ConnectionString = ConfigurationManager.ConnectionStrings["SMSHostConnection"].ConnectionString
+            };
 
             string query = " DECLARE @F01 varchar(13), @F155 varchar(30), @F29 varchar(60), @F22 varchar(30), @F255 varchar(120), @F17 int, @F16 int, @F18 int; "
                              + " SET @F01 = '" + F01 + "' "

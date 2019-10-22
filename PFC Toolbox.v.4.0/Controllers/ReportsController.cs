@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using PFC_Toolbox.v._4._0.Models;
 using System.Data.SqlClient;
 using DataTables;
+using System.Configuration;
 
 namespace PFC_Toolbox.v._4._0.Controllers
 {
@@ -69,7 +70,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
                                     + " group by SDP.F04, TRS.F01 order by SDP.F04, MAX(OBJ.F155), MAX(OBJ.F29) ";
 
             // open db connection
-            string connect = "Data Source=192.168.0.29\\SQLEXPRESS;Database=STORESQL;Trusted_Connection=false;uid=pfcit;pwd=pfcit";
+            string connect = ConfigurationManager.ConnectionStrings["SMSHostConnection"].ConnectionString;
             using (SqlConnection conn = new SqlConnection(connect))
             {
                 using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -197,7 +198,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
                                     + " group by SDP.F04, TRS.F01 order by SDP.F04, MAX(OBJ.F155), MAX(OBJ.F29) ";
 
             // open db connection
-            string connect = "Data Source=192.168.0.29\\SQLEXPRESS;Database=STORESQL;Trusted_Connection=false;uid=pfcit;pwd=pfcit";
+            string connect = ConfigurationManager.ConnectionStrings["SMSHostConnection"].ConnectionString;
             using (SqlConnection conn = new SqlConnection(connect))
             {
                 using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -375,7 +376,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
                          + " GROUP BY SDP.F04, TRS.F01";
 
             // open db connection
-            string connect = "Data Source=192.168.0.29\\SQLEXPRESS;Database=STORESQL;Trusted_Connection=false;uid=pfcit;pwd=pfcit";
+            string connect = ConfigurationManager.ConnectionStrings["SMSHostConnection"].ConnectionString;
             using (SqlConnection conn = new SqlConnection(connect))
             {
                 using (SqlCommand cmd = new SqlCommand(query, conn))

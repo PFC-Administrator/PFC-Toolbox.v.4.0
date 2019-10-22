@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Net.Http.Formatting;
 using System.Threading.Tasks;
 using System.Web;
@@ -17,9 +18,8 @@ namespace PFC_Toolbox.v._4._0.Controllers
         public IHttpActionResult Purchases()
         {
             var request = HttpContext.Current.Request;
-            var settings = Properties.Settings.Default;
 
-            using (var db = new Database(settings.DbType, settings.DbConnection1))
+            using (var db = new Database("sqlserver", ConfigurationManager.ConnectionStrings["ToolboxConnection"].ConnectionString))
             {
                 var response = new Editor(db, "Purchases", "purchaseID")
                     .Model<PurchasesModel>()
