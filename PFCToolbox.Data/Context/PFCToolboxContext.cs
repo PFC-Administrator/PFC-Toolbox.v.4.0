@@ -5,11 +5,18 @@ using PFCToolbox.Common.Model;
 
 namespace PFCToolbox.Data.Context
 {
-    public partial class PFCToolboxContext : DbContext
+    public class PFCToolboxContext : DbContext
     {
-        public PFCToolboxContext()
-            : base(ConfigurationManager.ConnectionStrings["ToolboxConnection"].ConnectionString)
+        public PFCToolboxContext() // default constructer
+            : this(ConfigurationManager.ConnectionStrings["ToolboxConnection"].ConnectionString)
         {
+
+        }
+
+        protected PFCToolboxContext(string connectionString) // override constructor
+            : base(connectionString)
+        {
+
         }
 
         public DbSet<AspNetRole> AspNetRoles { get; set; }
