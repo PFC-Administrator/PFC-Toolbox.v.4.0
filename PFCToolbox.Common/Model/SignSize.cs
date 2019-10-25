@@ -8,9 +8,9 @@ namespace PFCToolbox.Common.Model
 
     public partial class SignSize : DatabaseEntity
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int SignID { get; set; }
+        //[Key]
+        //[DatabaseGenerated(DatabaseGeneratedOption.None)]
+        //public int SignID { get; set; }
 
         [StringLength(255)]
         public string SignSizes { get; set; }

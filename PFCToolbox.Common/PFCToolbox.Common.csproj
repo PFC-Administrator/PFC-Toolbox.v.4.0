@@ -54,10 +54,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\AspNetRole.cs" />
-    <Compile Include="Model\AspNetUser.cs" />
-    <Compile Include="Model\AspNetUserClaim.cs" />
-    <Compile Include="Model\AspNetUserLogin.cs" />
     <Compile Include="Model\DatabaseEntity.cs" />
     <Compile Include="Model\Expiration.cs" />
     <Compile Include="Model\LabelSize.cs" />

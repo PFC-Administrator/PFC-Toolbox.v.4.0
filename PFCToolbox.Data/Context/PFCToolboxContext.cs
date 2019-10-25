@@ -19,10 +19,6 @@ namespace PFCToolbox.Data.Context
 
         }
 
-        public DbSet<AspNetRole> AspNetRoles { get; set; }
-        public DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
-        public DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
-        public DbSet<AspNetUser> AspNetUsers { get; set; }
         public DbSet<Expiration> Expirations { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<ProductUpdate> ProductUpdates { get; set; }
@@ -41,29 +37,38 @@ namespace PFCToolbox.Data.Context
         
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<AspNetRole>()
-                .HasMany(e => e.AspNetUsers)
-                .WithMany(e => e.AspNetRoles)
-                .Map(m => m.ToTable("AspNetUserRoles").MapLeftKey("RoleId").MapRightKey("UserId"));
-
-            modelBuilder.Entity<AspNetUser>()
-                .HasMany(e => e.AspNetUserClaims)
-                .WithRequired(e => e.AspNetUser)
-                .HasForeignKey(e => e.UserId);
-
-            modelBuilder.Entity<AspNetUser>()
-                .HasMany(e => e.AspNetUserLogins)
-                .WithRequired(e => e.AspNetUser)
-                .HasForeignKey(e => e.UserId);
+            modelBuilder.Entity<LabelSize>()
+                .Property(e => e.ID)
+                .HasColumnName("LabelID")
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
             modelBuilder.Entity<Location>()
                 .HasMany(e => e.Expirations)
                 .WithRequired(e => e.Location)
                 .WillCascadeOnDelete(false);
 
+            modelBuilder.Entity<ProductUpdateStatus>()
+                .Property(e => e.ID)
+                .HasColumnName("ProductStatusID")
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+
+            modelBuilder.Entity<SignSize>()
+                .Property(e => e.ID)
+                .HasColumnName("SignID");
+
+            modelBuilder.Entity<SMSSubdepartment>()
+                .Property(e => e.ID)
+                .HasColumnName("F04")
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+
             modelBuilder.Entity<SMSSubdepartment>()
                 .Property(e => e.F1022)
                 .IsUnicode(false);
+
+            modelBuilder.Entity<SMSCategory>()
+                .Property(e => e.ID)
+                .HasColumnName("F17")
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
             modelBuilder.Entity<SMSCategory>()
                 .Property(e => e.F1023)
@@ -78,11 +83,18 @@ namespace PFCToolbox.Data.Context
                 .IsUnicode(false);
 
             modelBuilder.Entity<SMSReport>()
+                .Property(e => e.ID)
+                .HasColumnName("F18")
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+
+            modelBuilder.Entity<SMSReport>()
                 .Property(e => e.F1024)
                 .IsUnicode(false);
 
             modelBuilder.Entity<SMSVendor>()
-                .Property(e => e.F27)
+                .Property(e => e.ID)
+                .HasColumnName("F27")
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None)
                 .IsUnicode(false);
 
             modelBuilder.Entity<SMSVendor>()

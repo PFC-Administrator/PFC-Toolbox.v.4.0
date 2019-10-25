@@ -8,9 +8,9 @@ namespace PFCToolbox.Common.Model
 
     public partial class LabelSize : DatabaseEntity
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int LabelID { get; set; }
+        //[Key]
+        //[DatabaseGenerated(DatabaseGeneratedOption.None)]
+        //public int LabelID { get; set; }
 
         [StringLength(255)]
         public string LabelSizes { get; set; }

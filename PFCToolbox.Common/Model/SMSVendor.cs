@@ -10,7 +10,7 @@ namespace PFCToolbox.Common.Model
     {
         [Key]
         [StringLength(14)]
-        public string F27 { get; set; }
+        public new string ID { get; set; }
 
         [StringLength(40)]
         public string F334 { get; set; }

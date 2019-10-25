@@ -21,5 +21,17 @@ namespace PFCToolbox.Test.Data
 
             context.Dispose();
         }
+
+        [TestMethod]
+        public void PFCToolbox_GetAllVendors()
+        {
+            var context = new PFCToolboxContext();
+            var results = context.Vendors;
+
+            Assert.IsNotNull(results);
+            Assert.AreNotEqual(0, results.Count());
+
+            context.Dispose();
+        }
     }
 }

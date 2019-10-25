@@ -8,9 +8,9 @@ namespace PFCToolbox.Common.Model
 
     public partial class SMSReport : DatabaseEntity
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int F18 { get; set; }
+        //[Key]
+        //[DatabaseGenerated(DatabaseGeneratedOption.None)]
+        //public int F18 { get; set; }
 
         [StringLength(30)]
         public string F1024 { get; set; }
