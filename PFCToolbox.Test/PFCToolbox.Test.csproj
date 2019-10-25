@@ -29,6 +29,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -54,6 +55,24 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PFC Toolbox.v.4.0\PFC Toolbox.v.4.0.csproj">
+      <Project>{332dff07-67c6-49f9-b3e7-cf2a2d35b96c}</Project>
+      <Name>PFC Toolbox.v.4.0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PFCToolbox.Common\PFCToolbox.Common.csproj">
+      <Project>{24d8627e-3c32-42a6-aea8-cbf16e2dca80}</Project>
+      <Name>PFCToolbox.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PFCToolbox.Data\PFCToolbox.Data.csproj">
+      <Project>{bd59e68e-28c1-4465-ba86-173794d550f9}</Project>
+      <Name>PFCToolbox.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PFCToolbox.Service\PFCToolbox.Service.csproj">
+      <Project>{23dc46dc-16a9-422c-84b5-2d24ed316412}</Project>
+      <Name>PFCToolbox.Service</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
