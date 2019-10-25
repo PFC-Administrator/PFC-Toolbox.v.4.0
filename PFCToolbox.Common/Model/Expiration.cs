@@ -6,7 +6,7 @@ namespace PFCToolbox.Common.Model
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class Expiration : Entity
+    public partial class Expiration : DatabaseEntity
     {
         public int ExpirationID { get; set; }
 

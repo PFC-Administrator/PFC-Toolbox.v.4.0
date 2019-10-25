@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Configuration;
 using System.Data.Entity;
 using PFCToolbox.Common.Model;
 
@@ -6,29 +8,29 @@ namespace PFCToolbox.Data.Context
     public partial class PFCToolboxContext : DbContext
     {
         public PFCToolboxContext()
-            : base("name=ToolboxConnection")
+            : base(ConfigurationManager.ConnectionStrings["ToolboxConnection"].ConnectionString)
         {
         }
 
-        public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
-        public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
-        public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
-        public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
-        public virtual DbSet<Expiration> Expirations { get; set; }
-        public virtual DbSet<Location> Locations { get; set; }
-        public virtual DbSet<ProductUpdate> ProductUpdates { get; set; }
-        public virtual DbSet<ProductUpdateStatus> ProductUpdateStatuses { get; set; }
-        public virtual DbSet<Purchase> Purchases { get; set; }
-        public virtual DbSet<RequestType> RequestTypes { get; set; }
-        public virtual DbSet<SMSSubdepartment> SMSSubdepartments { get; set; }
-        public virtual DbSet<Subdepartment> Subdepartments { get; set; }
-        public virtual DbSet<Vendor> Vendors { get; set; }
-        public virtual DbSet<Writeoff> Writeoffs { get; set; }
-        public virtual DbSet<LabelSize> LabelSizes { get; set; }
-        public virtual DbSet<SignSize> SignSizes { get; set; }
-        public virtual DbSet<SMSCategory> SMSCategories { get; set; }
-        public virtual DbSet<SMSReport> SMSReports { get; set; }
-        public virtual DbSet<SMSVendor> SMSVendors { get; set; }
+        public DbSet<AspNetRole> AspNetRoles { get; set; }
+        public DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
+        public DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
+        public DbSet<AspNetUser> AspNetUsers { get; set; }
+        public DbSet<Expiration> Expirations { get; set; }
+        public DbSet<Location> Locations { get; set; }
+        public DbSet<ProductUpdate> ProductUpdates { get; set; }
+        public DbSet<ProductUpdateStatus> ProductUpdateStatuses { get; set; }
+        public DbSet<Purchase> Purchases { get; set; }
+        public DbSet<RequestType> RequestTypes { get; set; }
+        public DbSet<SMSSubdepartment> SMSSubdepartments { get; set; }
+        public DbSet<Subdepartment> Subdepartments { get; set; }
+        public DbSet<Vendor> Vendors { get; set; }
+        public DbSet<Writeoff> Writeoffs { get; set; }
+        public DbSet<LabelSize> LabelSizes { get; set; }
+        public DbSet<SignSize> SignSizes { get; set; }
+        public DbSet<SMSCategory> SMSCategories { get; set; }
+        public DbSet<SMSReport> SMSReports { get; set; }
+        public DbSet<SMSVendor> SMSVendors { get; set; }
         
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -79,6 +81,10 @@ namespace PFCToolbox.Data.Context
             modelBuilder.Entity<SMSVendor>()
                 .Property(e => e.F334)
                 .IsUnicode(false);
+
+            modelBuilder.Entity<Subdepartment>()
+                .Property(e => e.ID)
+                .HasColumnName("SubdepartmentID");
         }
     }
 }

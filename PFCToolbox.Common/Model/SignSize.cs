@@ -6,7 +6,7 @@ namespace PFCToolbox.Common.Model
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class SignSize : Entity
+    public partial class SignSize : DatabaseEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]

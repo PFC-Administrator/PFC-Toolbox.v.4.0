@@ -6,7 +6,7 @@ namespace PFCToolbox.Common.Model
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class Writeoff : Entity
+    public partial class Writeoff : DatabaseEntity
     {
         public int WriteoffID { get; set; }
 

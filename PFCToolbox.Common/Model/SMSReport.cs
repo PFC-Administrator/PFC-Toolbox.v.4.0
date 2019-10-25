@@ -6,7 +6,7 @@ namespace PFCToolbox.Common.Model
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class SMSReport : Entity
+    public partial class SMSReport : DatabaseEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]

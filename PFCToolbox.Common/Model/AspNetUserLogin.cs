@@ -6,7 +6,7 @@ namespace PFCToolbox.Common.Model
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class AspNetUserLogin : Entity
+    public partial class AspNetUserLogin : DatabaseEntity
     {
         [Key]
         [Column(Order = 0)]

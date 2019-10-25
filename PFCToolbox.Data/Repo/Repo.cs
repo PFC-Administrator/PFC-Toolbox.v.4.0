@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 
 namespace PFCToolbox.Data.Repo
 {
-    public class Repo<T> : IRepo<T> where T : Entity
+    public class Repo<T> : IRepo<T> where T : DatabaseEntity
     {
         private readonly PFCToolboxContext _dbContext;
 

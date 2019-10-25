@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace PFCToolbox.Data.Repo
 {
-    public interface IRepo<T> where T : Entity
+    public interface IRepo<T> where T : DatabaseEntity
     {
         void Delete(T entity);
         T Get(int id);

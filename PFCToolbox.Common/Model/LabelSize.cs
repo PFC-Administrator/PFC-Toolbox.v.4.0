@@ -6,7 +6,7 @@ namespace PFCToolbox.Common.Model
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class LabelSize : Entity
+    public partial class LabelSize : DatabaseEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]

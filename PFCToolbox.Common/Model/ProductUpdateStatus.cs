@@ -7,7 +7,7 @@ namespace PFCToolbox.Common.Model
     using System.Data.Entity.Spatial;
 
     [Table("ProductUpdateStatuses")]
-    public partial class ProductUpdateStatus : Entity
+    public partial class ProductUpdateStatus : DatabaseEntity
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ProductUpdateStatus()

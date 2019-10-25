@@ -6,7 +6,7 @@ namespace PFCToolbox.Common.Model
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class SMSSubdepartment : Entity
+    public partial class SMSSubdepartment : DatabaseEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]

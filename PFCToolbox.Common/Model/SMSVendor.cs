@@ -6,7 +6,7 @@ namespace PFCToolbox.Common.Model
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class SMSVendor : Entity
+    public partial class SMSVendor : DatabaseEntity
     {
         [Key]
         [StringLength(14)]

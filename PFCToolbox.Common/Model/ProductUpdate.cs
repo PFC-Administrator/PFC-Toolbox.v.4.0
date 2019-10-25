@@ -6,7 +6,7 @@ namespace PFCToolbox.Common.Model
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class ProductUpdate : Entity
+    public partial class ProductUpdate : DatabaseEntity
     {
         public int ProductUpdateID { get; set; }
 

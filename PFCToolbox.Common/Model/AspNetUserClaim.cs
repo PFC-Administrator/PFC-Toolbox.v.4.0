@@ -6,7 +6,7 @@ namespace PFCToolbox.Common.Model
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class AspNetUserClaim : Entity
+    public partial class AspNetUserClaim : DatabaseEntity
     {
         public int Id { get; set; }
 

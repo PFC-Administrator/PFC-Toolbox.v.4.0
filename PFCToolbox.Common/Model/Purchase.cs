@@ -7,7 +7,7 @@ namespace PFCToolbox.Common.Model
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class Purchase : Entity
+    public partial class Purchase : DatabaseEntity
     {
         public int PurchaseID { get; set; }
 
