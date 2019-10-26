@@ -20,41 +20,61 @@ namespace PFCToolbox.Data.Context
         }
 
         public DbSet<Expiration> Expirations { get; set; }
+        public DbSet<LabelSize> LabelSizes { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<ProductUpdate> ProductUpdates { get; set; }
         public DbSet<ProductUpdateStatus> ProductUpdateStatuses { get; set; }
         public DbSet<Purchase> Purchases { get; set; }
         public DbSet<RequestType> RequestTypes { get; set; }
-        public DbSet<SMSSubdepartment> SMSSubdepartments { get; set; }
-        public DbSet<Subdepartment> Subdepartments { get; set; }
-        public DbSet<Vendor> Vendors { get; set; }
-        public DbSet<Writeoff> Writeoffs { get; set; }
-        public DbSet<LabelSize> LabelSizes { get; set; }
         public DbSet<SignSize> SignSizes { get; set; }
         public DbSet<SMSCategory> SMSCategories { get; set; }
         public DbSet<SMSReport> SMSReports { get; set; }
+        public DbSet<SMSSubdepartment> SMSSubdepartments { get; set; }
         public DbSet<SMSVendor> SMSVendors { get; set; }
+        public DbSet<Subdepartment> Subdepartments { get; set; }
+        public DbSet<Vendor> Vendors { get; set; }
+        public DbSet<Writeoff> Writeoffs { get; set; }
         
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            // Expiration mappings
+
+            modelBuilder.Entity<Expiration>()
+                .HasRequired(e => e.Location);
+
+            modelBuilder.Entity<Expiration>()
+                .Property(e => e.ID)
+                .HasColumnName("ExpirationID")
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+
+            // LabelSize mappings
+
             modelBuilder.Entity<LabelSize>()
                 .Property(e => e.ID)
                 .HasColumnName("LabelID")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+
+            // Location mappings
 
             modelBuilder.Entity<Location>()
                 .HasMany(e => e.Expirations)
                 .WithRequired(e => e.Location)
                 .WillCascadeOnDelete(false);
 
+            // ProductUpdateStatus mappings
+
             modelBuilder.Entity<ProductUpdateStatus>()
                 .Property(e => e.ID)
                 .HasColumnName("ProductStatusID")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
+            // SignSize mappings
+
             modelBuilder.Entity<SignSize>()
                 .Property(e => e.ID)
                 .HasColumnName("SignID");
+
+            // SMSSubdepartment mappings
 
             modelBuilder.Entity<SMSSubdepartment>()
                 .Property(e => e.ID)
@@ -64,6 +84,8 @@ namespace PFCToolbox.Data.Context
             modelBuilder.Entity<SMSSubdepartment>()
                 .Property(e => e.F1022)
                 .IsUnicode(false);
+
+            // SMSCategory mappings
 
             modelBuilder.Entity<SMSCategory>()
                 .Property(e => e.ID)
@@ -82,6 +104,8 @@ namespace PFCToolbox.Data.Context
                 .Property(e => e.F1022)
                 .IsUnicode(false);
 
+            // SMSReport mappings
+
             modelBuilder.Entity<SMSReport>()
                 .Property(e => e.ID)
                 .HasColumnName("F18")
@@ -90,6 +114,8 @@ namespace PFCToolbox.Data.Context
             modelBuilder.Entity<SMSReport>()
                 .Property(e => e.F1024)
                 .IsUnicode(false);
+
+            // SMSVendor mappings
 
             modelBuilder.Entity<SMSVendor>()
                 .Property(e => e.ID)
@@ -101,9 +127,20 @@ namespace PFCToolbox.Data.Context
                 .Property(e => e.F334)
                 .IsUnicode(false);
 
+            // Subdepartment mappings
+
             modelBuilder.Entity<Subdepartment>()
                 .Property(e => e.ID)
                 .HasColumnName("SubdepartmentID");
+
+            // Vendor mappings
+
+            modelBuilder.Entity<Vendor>()
+                .ToTable("Vendors");
+
+            modelBuilder.Entity<Vendor>()
+                .Property(e => e.ID)
+                .HasColumnName("VendorID");
         }
     }
 }
