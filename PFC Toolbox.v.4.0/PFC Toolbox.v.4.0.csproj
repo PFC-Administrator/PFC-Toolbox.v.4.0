@@ -410,6 +410,14 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PFCToolbox.Common\PFCToolbox.Common.csproj">
+      <Project>{24D8627E-3C32-42A6-AEA8-CBF16E2DCA80}</Project>
+      <Name>PFCToolbox.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PFCToolbox.Data\PFCToolbox.Data.csproj">
+      <Project>{BD59E68E-28C1-4465-BA86-173794D550F9}</Project>
+      <Name>PFCToolbox.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PFCToolbox.Service\PFCToolbox.Service.csproj">
       <Project>{23DC46DC-16A9-422C-84B5-2D24ED316412}</Project>
       <Name>PFCToolbox.Service</Name>

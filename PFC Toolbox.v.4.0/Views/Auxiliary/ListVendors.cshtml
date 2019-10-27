@@ -1,8 +1,19 @@
-﻿
+﻿@using PFCToolbox.Common.ViewModel;
+
+@model VendorList
+
 @{
     ViewBag.Title = "List Vendors";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>All Vendors</h2>
+<h2>List Vendors</h2>
 
+<ul>
+    @foreach (var vendor in Model.Vendors)
+    {
+        <li>
+            @vendor.VendorName
+        </li>
+    }
+</ul>

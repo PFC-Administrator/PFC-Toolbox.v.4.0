@@ -22,5 +22,14 @@ namespace PFC_Toolbox.v._4._0.Controllers
         {
             return View();
         }
+
+        // GET: vendor list
+        [HttpGet]
+        public ActionResult ListVendors()
+        {
+            var model = _auxService.GetListOfVendors();
+
+            return View(model);
+        }
     }
 }

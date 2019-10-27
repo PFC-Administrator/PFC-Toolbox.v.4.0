@@ -1,4 +1,5 @@
 ﻿using PFCToolbox.Common.Model;
+using PFCToolbox.Common.ViewModel;
 using PFCToolbox.Data.Repo;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace PFCToolbox.Service
     {
         //public IEnumerable<Location> GetAllLocations();
         //public IEnumerable<Subdepartment> GetAllSubdepartments();
-        public IEnumerable<Vendor> GetAllVendors();
+        public VendorList GetListOfVendors();
     }
 
     public class AuxiliaryService : IAuxiliaryService
@@ -28,9 +29,16 @@ namespace PFCToolbox.Service
             _vendorRepo = vendRepo;
         }
 
-        public IEnumerable<Vendor> GetAllVendors()
+        public VendorList GetListOfVendors()
         {
-            return _vendorRepo.GetAll();
+            var vendorList = new VendorList
+            {
+                Vendors = _vendorRepo.GetAll()
+                    .OrderBy(v => v.VendorName)
+                    .ToList()
+            };
+
+            return vendorList;
         }
     }
 }

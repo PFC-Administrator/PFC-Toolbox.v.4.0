@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Configuration;
 using System.Data.Entity;
@@ -5,7 +6,13 @@ using PFCToolbox.Common.Model;
 
 namespace PFCToolbox.Data.Context
 {
-    public class PFCToolboxContext : DbContext
+    public interface IPFCToolboxContext : IDisposable
+    {
+        DbSet<T> Set<T>() where T : class;
+        int SaveChanges();
+    }
+
+    public class PFCToolboxContext : DbContext, IPFCToolboxContext
     {
         public PFCToolboxContext() // default constructer
             : this(ConfigurationManager.ConnectionStrings["ToolboxConnection"].ConnectionString)

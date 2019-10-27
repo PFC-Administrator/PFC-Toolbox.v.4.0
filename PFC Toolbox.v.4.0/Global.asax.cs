@@ -1,4 +1,7 @@
-﻿using PFCToolbox.Service;
+﻿using PFCToolbox.Common.Model;
+using PFCToolbox.Data.Context;
+using PFCToolbox.Data.Repo;
+using PFCToolbox.Service;
 using SimpleInjector;
 using SimpleInjector.Integration.Web;
 using SimpleInjector.Integration.Web.Mvc;
@@ -24,7 +27,16 @@ namespace PFC_Toolbox.v._4._0
             var container = new Container();
             container.Options.DefaultScopedLifestyle = new WebRequestLifestyle();
 
+            // register dbContexts
+            container.Register<IPFCToolboxContext, PFCToolboxContext>(Lifestyle.Scoped);
+
+            // register services
             container.Register<IAuxiliaryService, AuxiliaryService>(Lifestyle.Scoped);
+
+            // register repos
+            container.Register<IRepo<Location>, Repo<Location>>(Lifestyle.Scoped);
+            container.Register<IRepo<Subdepartment>, Repo<Subdepartment>>(Lifestyle.Scoped);
+            container.Register<IRepo<Vendor>, Repo<Vendor>>(Lifestyle.Scoped);
 
             container.RegisterMvcControllers(Assembly.GetExecutingAssembly());
 

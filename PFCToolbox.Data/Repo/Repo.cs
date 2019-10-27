@@ -21,9 +21,9 @@ namespace PFCToolbox.Data.Repo
 
     public class Repo<T> : IRepo<T> where T : DatabaseEntity
     {
-        private readonly PFCToolboxContext _dbContext;
+        private readonly IPFCToolboxContext _dbContext;
 
-        public Repo(PFCToolboxContext dbContext)
+        public Repo(IPFCToolboxContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -65,7 +65,10 @@ namespace PFCToolbox.Data.Repo
 
         public void Update(T entity)
         {
-            _dbContext.Entry(entity).State = EntityState.Modified;
+            var entityToUpdate = _dbContext.Set<T>().Find(entity.ID);
+
+            entityToUpdate = entity;
+
             _dbContext.SaveChanges();
         }
 
