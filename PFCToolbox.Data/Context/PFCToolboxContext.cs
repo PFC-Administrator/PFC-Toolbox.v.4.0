@@ -45,7 +45,7 @@ namespace PFCToolbox.Data.Context
             modelBuilder.Entity<Expiration>()
                 .Property(e => e.ID)
                 .HasColumnName("ExpirationID")
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             // LabelSize mappings
 
@@ -57,22 +57,59 @@ namespace PFCToolbox.Data.Context
             // Location mappings
 
             modelBuilder.Entity<Location>()
-                .HasMany(e => e.Expirations)
-                .WithRequired(e => e.Location)
-                .WillCascadeOnDelete(false);
+                .Property(e => e.ID)
+                .HasColumnName("LocationID")
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+
+            // ProductUpdate mappings
+
+            modelBuilder.Entity<ProductUpdate>()
+                .Property(e => e.ID)
+                .HasColumnName("ProductUpdateID")
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+
+            modelBuilder.Entity<ProductUpdate>()
+                .Property(e => e.ProductUpdateStatusDescription)
+                .HasColumnName("ProductUpdateStatus");
+
+            modelBuilder.Entity<ProductUpdate>()
+                .Property(e => e.ProductUpdateStatusID)
+                .HasColumnName("ProductStatusID");
 
             // ProductUpdateStatus mappings
+
+            modelBuilder.Entity<ProductUpdateStatus>()
+                .ToTable("ProductUpdateStatuses");
 
             modelBuilder.Entity<ProductUpdateStatus>()
                 .Property(e => e.ID)
                 .HasColumnName("ProductStatusID")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
+            modelBuilder.Entity<ProductUpdateStatus>()
+                .Property(e => e.ProductUpdateStatusDescription)
+                .HasColumnName("ProductUpdateStatus");
+
+            // Purchase mappings
+
+            modelBuilder.Entity<Purchase>()
+                .Property(e => e.ID)
+                .HasColumnName("PurchaseID")
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+
+            // RequestType mappings
+
+            modelBuilder.Entity<RequestType>()
+                .Property(e => e.ID)
+                .HasColumnName("RequestTypeID")
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+
             // SignSize mappings
 
             modelBuilder.Entity<SignSize>()
                 .Property(e => e.ID)
-                .HasColumnName("SignID");
+                .HasColumnName("SignID")
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
             // SMSSubdepartment mappings
 
@@ -131,16 +168,22 @@ namespace PFCToolbox.Data.Context
 
             modelBuilder.Entity<Subdepartment>()
                 .Property(e => e.ID)
-                .HasColumnName("SubdepartmentID");
+                .HasColumnName("SubdepartmentID")
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             // Vendor mappings
 
             modelBuilder.Entity<Vendor>()
-                .ToTable("Vendors");
-
-            modelBuilder.Entity<Vendor>()
                 .Property(e => e.ID)
-                .HasColumnName("VendorID");
+                .HasColumnName("VendorID")
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+
+            // Writeoff mappings
+
+            modelBuilder.Entity<Writeoff>()
+                .Property(e => e.ID)
+                .HasColumnName("WriteoffID")
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
         }
     }
 }

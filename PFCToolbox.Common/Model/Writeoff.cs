@@ -1,15 +1,10 @@
+using System;
+using System.ComponentModel.DataAnnotations;
+
 namespace PFCToolbox.Common.Model
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
-
     public partial class Writeoff : DatabaseEntity
     {
-        public int WriteoffID { get; set; }
-
         public string WriteoffCode { get; set; }
 
         [Required]
@@ -32,8 +27,8 @@ namespace PFCToolbox.Common.Model
 
         public string WriteoffMemo { get; set; }
 
-        public virtual Location Location { get; set; }
+        public Location Location { get; set; }
 
-        public virtual Subdepartment Subdepartment { get; set; }
+        public Subdepartment Subdepartment { get; set; }
     }
 }

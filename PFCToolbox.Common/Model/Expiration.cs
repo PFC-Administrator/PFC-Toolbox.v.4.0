@@ -1,15 +1,10 @@
+using System;
+using System.ComponentModel.DataAnnotations;
+
 namespace PFCToolbox.Common.Model
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
-
     public partial class Expiration : DatabaseEntity
     {
-        public int ExpirationID { get; set; }
-
         public string ExpirationCode { get; set; }
 
         [Required]
@@ -21,6 +16,6 @@ namespace PFCToolbox.Common.Model
 
         public string ExpirationMemo { get; set; }
 
-        public virtual Location Location { get; set; }
+        public Location Location { get; set; }
     }
 }

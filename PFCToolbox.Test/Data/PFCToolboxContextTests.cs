@@ -3,6 +3,7 @@ using PFCToolbox.Common.Model;
 using PFCToolbox.Data.Context;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -210,10 +211,12 @@ namespace PFCToolbox.Test.Data
             {
                 var result = context.Expirations
                     .Where(v => v.ID.Equals(1))
+                    .Include(v => v.Location)
                     .FirstOrDefault();
 
                 Assert.IsNotNull(result);
-                Assert.AreEqual("Unfi (TC)", result.ExpirationDescription);
+                Assert.AreEqual("test item", result.ExpirationDescription);
+                Assert.AreEqual("La Crosse", result.Location.LocationName);
             }
         }
 
@@ -227,7 +230,7 @@ namespace PFCToolbox.Test.Data
                     .FirstOrDefault();
 
                 Assert.IsNotNull(result);
-                Assert.AreEqual("Unfi (TC)", result.LabelSizes);
+                Assert.AreEqual("1 - Full Regular Price.lbz", result.LabelSizes);
             }
         }
 
@@ -241,7 +244,7 @@ namespace PFCToolbox.Test.Data
                     .FirstOrDefault();
 
                 Assert.IsNotNull(result);
-                Assert.AreEqual("Unfi (TC)", result.LocationName);
+                Assert.AreEqual("La Crosse", result.LocationName);
             }
         }
 
@@ -251,11 +254,17 @@ namespace PFCToolbox.Test.Data
             using (var context = new PFCToolboxContext())
             {
                 var result = context.ProductUpdates
-                    .Where(v => v.ID.Equals(1))
+                    .Where(v => v.ID.Equals(29111))
+                    .Include(x => x.Location)
+                    .Include(x => x.ProductUpdateStatus)
+                    .Include(x => x.RequestType)
                     .FirstOrDefault();
 
                 Assert.IsNotNull(result);
-                Assert.AreEqual("Unfi (TC)", result.F01);
+                Assert.AreEqual("73373907570", result.F01);
+                Assert.AreEqual("Rochester", result.Location.LocationName);
+                Assert.AreEqual("4 - Completed", result.ProductUpdateStatus.ProductUpdateStatusDescription);
+                Assert.AreEqual("Retail pricing, descriptions, etc..", result.RequestType.RequestDescription);
             }
         }
 
@@ -269,7 +278,7 @@ namespace PFCToolbox.Test.Data
                     .FirstOrDefault();
 
                 Assert.IsNotNull(result);
-                Assert.AreEqual("Unfi (TC)", result.ProductUpdateStatus1);
+                Assert.AreEqual("1 - Waiting for Manager Review", result.ProductUpdateStatusDescription);
             }
         }
 
@@ -279,11 +288,17 @@ namespace PFCToolbox.Test.Data
             using (var context = new PFCToolboxContext())
             {
                 var result = context.Purchases
-                    .Where(v => v.ID.Equals(1))
+                    .Where(v => v.ID.Equals(221582))
+                    .Include(x => x.Location)
+                    .Include(x => x.Subdepartment)
+                    .Include(x => x.Vendor)
                     .FirstOrDefault();
 
                 Assert.IsNotNull(result);
-                Assert.AreEqual("Unfi (TC)", result.InvoiceNumber);
+                Assert.AreEqual("19010105", result.InvoiceNumber);
+                Assert.AreEqual("La Crosse", result.Location.LocationName);
+                Assert.AreEqual("03-03 Produce Conv.", result.Subdepartment.SubdepartmentName);
+                Assert.AreEqual("Floating Gardens", result.Vendor.VendorName);
             }
         }
 
@@ -297,7 +312,7 @@ namespace PFCToolbox.Test.Data
                     .FirstOrDefault();
 
                 Assert.IsNotNull(result);
-                Assert.AreEqual("Unfi (TC)", result.RequestName);
+                Assert.AreEqual("Product Info Update", result.RequestName);
             }
         }
 
@@ -311,7 +326,7 @@ namespace PFCToolbox.Test.Data
                     .FirstOrDefault();
 
                 Assert.IsNotNull(result);
-                Assert.AreEqual("Unfi (TC)", result.SignSizes);
+                Assert.AreEqual("On Sale 2UP", result.SignSizes);
             }
         }
 
@@ -325,7 +340,7 @@ namespace PFCToolbox.Test.Data
                     .FirstOrDefault();
 
                 Assert.IsNotNull(result);
-                Assert.AreEqual("Unfi (TC)", result.F1022);
+                Assert.AreEqual("TEST SUBDEPT (no dept)", result.F1022);
             }
         }
 
@@ -339,7 +354,7 @@ namespace PFCToolbox.Test.Data
                     .FirstOrDefault();
 
                 Assert.IsNotNull(result);
-                Assert.AreEqual("Unfi (TC)", result.F1024);
+                Assert.AreEqual("Conventional", result.F1024);
             }
         }
 
@@ -353,7 +368,7 @@ namespace PFCToolbox.Test.Data
                     .FirstOrDefault();
 
                 Assert.IsNotNull(result);
-                Assert.AreEqual("Unfi (TC)", result.F1022);
+                Assert.AreEqual("TAX PREPARED FOODS", result.F1022);
             }
         }
 
@@ -363,11 +378,11 @@ namespace PFCToolbox.Test.Data
             using (var context = new PFCToolboxContext())
             {
                 var result = context.SMSVendors
-                    .Where(v => v.ID.Equals(1))
+                    .Where(v => v.ID.Equals("1316"))
                     .FirstOrDefault();
 
                 Assert.IsNotNull(result);
-                Assert.AreEqual("Unfi (TC)", result.F334);
+                Assert.AreEqual("UNFI TC", result.F334);
             }
         }
 
@@ -381,7 +396,7 @@ namespace PFCToolbox.Test.Data
                     .FirstOrDefault();
 
                 Assert.IsNotNull(result);
-                Assert.AreEqual("Unfi (TC)", result.SubdepartmentName);
+                Assert.AreEqual("01-01 Books & Cards", result.SubdepartmentName);
             }
         }
 
@@ -406,10 +421,14 @@ namespace PFCToolbox.Test.Data
             {
                 var result = context.Writeoffs
                     .Where(v => v.ID.Equals(1))
+                    .Include(x => x.Location)
+                    .Include(x => x.Subdepartment)
                     .FirstOrDefault();
 
                 Assert.IsNotNull(result);
-                Assert.AreEqual("Unfi (TC)", result.WriteoffItemName);
+                Assert.AreEqual("blank item", result.WriteoffItemName);
+                Assert.AreEqual("La Crosse", result.Location.LocationName);
+                Assert.AreEqual("01-01 Books & Cards", result.Subdepartment.SubdepartmentName);
             }
         }
     }

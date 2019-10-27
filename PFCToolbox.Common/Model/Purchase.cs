@@ -1,16 +1,10 @@
+using System;
+using System.ComponentModel.DataAnnotations;
+
 namespace PFCToolbox.Common.Model
 {
-    using PFCToolbox.Common.Model;
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
-
     public partial class Purchase : DatabaseEntity
     {
-        public int PurchaseID { get; set; }
-
         [Required]
         public string InvoiceNumber { get; set; }
 
@@ -28,10 +22,10 @@ namespace PFCToolbox.Common.Model
 
         public string PurchaseMemo { get; set; }
 
-        public virtual Location Location { get; set; }
+        public Location Location { get; set; }
 
-        public virtual Subdepartment Subdepartment { get; set; }
+        public Subdepartment Subdepartment { get; set; }
 
-        public virtual Vendor Vendor { get; set; }
+        public Vendor Vendor { get; set; }
     }
 }
