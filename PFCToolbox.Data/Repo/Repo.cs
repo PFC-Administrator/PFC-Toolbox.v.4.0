@@ -8,6 +8,17 @@ using System.Linq.Expressions;
 
 namespace PFCToolbox.Data.Repo
 {
+    public interface IRepo<T> where T : DatabaseEntity
+    {
+        void Delete(T entity);
+        void DeleteByID(int id);
+        T Get(int id);
+        IEnumerable<T> GetAll();
+        T Insert(T entity);
+        void Update(T entity);
+        IEnumerable<T> Where(Expression<Func<T, bool>> predicate);
+    }
+
     public class Repo<T> : IRepo<T> where T : DatabaseEntity
     {
         private readonly PFCToolboxContext _dbContext;
@@ -23,6 +34,17 @@ namespace PFCToolbox.Data.Repo
             _dbContext.SaveChanges();
         }
 
+        public void DeleteByID(int id)
+        {
+            var itemToDelete = _dbContext.Set<T>()
+                .FirstOrDefault(x => x.ID.Equals(id));
+
+            if (itemToDelete != null)
+            {
+                Delete(itemToDelete);
+            }
+        }
+
         public T Get(int id)
         {
             return _dbContext.Set<T>().Find(id);
@@ -33,10 +55,12 @@ namespace PFCToolbox.Data.Repo
             return _dbContext.Set<T>().AsEnumerable();
         }
 
-        public void Insert(T entity)
+        public T Insert(T entity)
         {
             _dbContext.Set<T>().Add(entity);
             _dbContext.SaveChanges();
+
+            return entity;
         }
 
         public void Update(T entity)
