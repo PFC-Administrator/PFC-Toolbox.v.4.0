@@ -2,11 +2,7 @@
 using PFCToolbox.Common.Model;
 using PFCToolbox.Data.Context;
 using PFCToolbox.Data.Repo;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PFCToolbox.Test.Data
 {
