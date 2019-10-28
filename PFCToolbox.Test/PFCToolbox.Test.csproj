@@ -63,6 +63,10 @@
     <Compile Include="Common\ModelUnitTests.cs" />
     <Compile Include="Data\GenericRepoTests.cs" />
     <Compile Include="Data\PFCToolboxContextTests.cs" />
+    <Compile Include="Mocks\MockLocationRepo.cs" />
+    <Compile Include="Mocks\MockSubdepartmentRepo.cs" />
+    <Compile Include="Mocks\MockVendorRepo.cs" />
+    <Compile Include="Service\AuxiliaryServiceTests.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -89,7 +93,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Service\" />
     <Folder Include="Web\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

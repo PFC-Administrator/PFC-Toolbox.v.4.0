@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace PFCToolbox.Common.ViewModel
 {
-    public class VendorList
+    public class SubdepartmentList
     {
-        public List<Vendor> Vendors;
+        public List<Subdepartment> Subdepartments;
     }
 }

@@ -74,6 +74,8 @@
     <Compile Include="Model\Vendor.cs" />
     <Compile Include="Model\Writeoff.cs" />
     <Compile Include="Specification\Specification.cs" />
+    <Compile Include="ViewModel\LocationList.cs" />
+    <Compile Include="ViewModel\SubdepartmentList.cs" />
     <Compile Include="ViewModel\VendorList.cs" />
   </ItemGroup>
   <ItemGroup />

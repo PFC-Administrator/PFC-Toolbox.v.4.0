@@ -1,18 +1,14 @@
 ﻿using PFCToolbox.Common.Model;
 using PFCToolbox.Common.ViewModel;
 using PFCToolbox.Data.Repo;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PFCToolbox.Service
 {
     public interface IAuxiliaryService
     {
-        //public IEnumerable<Location> GetAllLocations();
-        //public IEnumerable<Subdepartment> GetAllSubdepartments();
+        public LocationList GetListOfLocations();
+        public SubdepartmentList GetListOfSubdepartments();
         public VendorList GetListOfVendors();
     }
 
@@ -27,6 +23,30 @@ namespace PFCToolbox.Service
             _locationRepo = locRepo;
             _subdeptRepo = subRepo;
             _vendorRepo = vendRepo;
+        }
+
+        public LocationList GetListOfLocations()
+        {
+            var locationList = new LocationList
+            {
+                Locations = _locationRepo.GetAll()
+                    .OrderBy(v => v.LocationName)
+                    .ToList()
+            };
+
+            return locationList;
+        }
+
+        public SubdepartmentList GetListOfSubdepartments()
+        {
+            var subdeptList = new SubdepartmentList
+            {
+                Subdepartments = _subdeptRepo.GetAll()
+                    .OrderBy(v => v.SubdepartmentName)
+                    .ToList()
+            };
+
+            return subdeptList;
         }
 
         public VendorList GetListOfVendors()
