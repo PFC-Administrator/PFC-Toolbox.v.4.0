@@ -22,4 +22,5 @@
   <li>Sales by description</li>
   <li>Promotional reports and sales by promotional reports</li>
   <li>Package price on New Product / Update Uproduct forms</li>
+  <li>Multi subdepartment sales reports.</li>
 </ol>
