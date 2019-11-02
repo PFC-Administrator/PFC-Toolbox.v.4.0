@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Web;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using PFC_Toolbox.v._4._0.Models;
 using static PFC_Toolbox.v._4._0.Startup;
@@ -93,14 +85,11 @@ namespace PFC_Toolbox.v._4._0
     {
         public override string HashPassword(string password)
         {
-            //return base.HashPassword(password);
             return password;
         }
 
         public override PasswordVerificationResult VerifyHashedPassword(string hashedPassword, string providedPassword)
         {
-            //return base.VerifyHashedPassword(hashedPassword, providedPassword);
-            //var testHash = Crypto.Sha1.Encrypt(providedPassword);
             return hashedPassword.Equals(providedPassword) ? PasswordVerificationResult.Success : PasswordVerificationResult.Failed;
         }
     }

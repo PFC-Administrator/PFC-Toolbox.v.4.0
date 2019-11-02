@@ -2,7 +2,6 @@
 using Microsoft.Owin;
 using Microsoft.Owin.Security.DataProtection;
 using Owin;
-using PFC_Toolbox.v._4._0.App_Start;
 
 [assembly: OwinStartupAttribute(typeof(PFC_Toolbox.v._4._0.Startup))]
 namespace PFC_Toolbox.v._4._0
@@ -13,8 +12,6 @@ namespace PFC_Toolbox.v._4._0
 
         public void Configuration(IAppBuilder app)
         {
-            //var container = SimpleInjectorInitializer.Initialize(app);
-            //ConfigureAuth(app, container);
             ConfigureAuth(app);
         }
 

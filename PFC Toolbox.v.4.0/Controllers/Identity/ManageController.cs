@@ -19,11 +19,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
         private ApplicationUserManager _userManager;
         private readonly IAuthenticationManager _authManager;
 
-        //        //public ManageController()
-        //        //{
-        //        //}
-
-        public ManageController(ApplicationUserManager userManager, SignInManager<ApplicationUser, string> signInManager, IAuthenticationManager authManager) // TODO: switch to dependency injection
+        public ManageController(ApplicationUserManager userManager, SignInManager<ApplicationUser, string> signInManager, IAuthenticationManager authManager) 
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -31,32 +27,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
 
         }
 
-        //        public ApplicationSignInManager SignInManager
-        //        {
-        //            get
-        //            {
-        //                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
-        //            }
-        //            private set 
-        //            { 
-        //                _signInManager = value; 
-        //            }
-        //        }
-
-        //        public ApplicationUserManager UserManager
-        //        {
-        //            get
-        //            {
-        //                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-        //            }
-        //            private set
-        //            {
-        //                _userManager = value;
-        //            }
-        //        }
-
-        //        //
-        //        // GET: /Manage/Index
+        // GET: /Manage/Index
         public async Task<ActionResult> Index(ManageMessageId? message)
         {
             ViewBag.StatusMessage =

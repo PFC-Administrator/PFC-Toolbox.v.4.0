@@ -1,14 +1,11 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using PFC_Toolbox.v._4._0.Models;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
 
 namespace PFC_Toolbox.v._4._0.Controllers
 {
@@ -19,10 +16,6 @@ namespace PFC_Toolbox.v._4._0.Controllers
         private ApplicationUserManager _userManager;
         private readonly IAuthenticationManager _authManager;
 
-        ////public AccountController()
-        ////{
-        ////}
-
         public AccountController(ApplicationUserManager userManager, SignInManager<ApplicationUser, string> signInManager, IAuthenticationManager authManager) // TODO: switch to dependency injection
         {
             _userManager = userManager;
@@ -30,25 +23,6 @@ namespace PFC_Toolbox.v._4._0.Controllers
             _authManager = authManager;
         }
 
-        //public ApplicationSignInManager SignInManager {
-        //    get {
-        //        return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
-        //    }
-        //    private set {
-        //        _signInManager = value;
-        //    }
-        //}
-
-        //public ApplicationUserManager UserManager {
-        //    get {
-        //        return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-        //    }
-        //    private set {
-        //        _userManager = value;
-        //    }
-        //}
-
-        //
         // GET: /Account/Login
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
