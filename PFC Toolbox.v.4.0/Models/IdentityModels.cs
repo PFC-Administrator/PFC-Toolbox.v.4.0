@@ -24,10 +24,15 @@ namespace PFC_Toolbox.v._4._0.Models
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+        public ApplicationDbContext(string connectionString = "DefaultConnection") : base(connectionString, throwIfV1Schema: false)
         {
+
         }
+
+        //public ApplicationDbContext()
+        //    : base("DefaultConnection", throwIfV1Schema: false)
+        //{
+        //}
 
         public static ApplicationDbContext Create()
         {
