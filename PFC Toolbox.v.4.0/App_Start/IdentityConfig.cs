@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Web;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using PFC_Toolbox.v._4._0.Models;
 using static PFC_Toolbox.v._4._0.Startup;
@@ -39,75 +31,75 @@ namespace PFC_Toolbox.v._4._0
         public ApplicationUserManager(IUserStore<ApplicationUser> store)
             : base(store)
         {
-        }
+            UserValidator =
+             new UserValidator<ApplicationUser>(this)
+             {
+                 AllowOnlyAlphanumericUserNames = false,
+                 RequireUniqueEmail = true
+             };
 
-        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context) 
-        {
-            var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));
-            // Configure validation logic for usernames
-            manager.UserValidator = new UserValidator<ApplicationUser>(manager)
+            PasswordHasher = new CustomPasswordHasher();
+
+            PasswordValidator = new PasswordValidator()
             {
-                AllowOnlyAlphanumericUserNames = false,
-                RequireUniqueEmail = true
+                RequiredLength = 6,
+                RequireNonLetterOrDigit = false,
+                RequireDigit = false,
+                RequireLowercase = false,
+                RequireUppercase = false,
             };
 
-            // This calls a custom password hasher in Startup.cs that stores the password in plain text.
-            manager.PasswordHasher = new ClearPassword();
+            UserLockoutEnabledByDefault = false;
+            //DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(10);
+            //MaxFailedAccessAttemptsBeforeLockout = 10;
 
-            // Configure validation logic for passwords
-            manager.PasswordValidator = new PasswordValidator
-            {
-                RequiredLength = 1,
-                //RequireNonLetterOrDigit = true,
-                RequireDigit = true,
-                //RequireLowercase = true,
-                //RequireUppercase = true,
-            };
-
-            // Configure user lockout defaults
-            manager.UserLockoutEnabledByDefault = true;
-            manager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(5);
-            manager.MaxFailedAccessAttemptsBeforeLockout = 5;
-
-            // Register two factor authentication providers. This application uses Phone and Emails as a step of receiving a code for verifying the user
-            // You can write your own provider and plug it in here.
-            manager.RegisterTwoFactorProvider("Phone Code", new PhoneNumberTokenProvider<ApplicationUser>
+            // plug in your own providers here
+            RegisterTwoFactorProvider("Phone Code", new PhoneNumberTokenProvider<ApplicationUser>
             {
                 MessageFormat = "Your security code is {0}"
             });
-            manager.RegisterTwoFactorProvider("Email Code", new EmailTokenProvider<ApplicationUser>
+
+            RegisterTwoFactorProvider("Email Code", new EmailTokenProvider<ApplicationUser>
             {
                 Subject = "Security Code",
                 BodyFormat = "Your security code is {0}"
             });
-            manager.EmailService = new EmailService();
-            manager.SmsService = new SmsService();
-            var dataProtectionProvider = options.DataProtectionProvider;
+
+            EmailService = new EmailService();
+
+            SmsService = new SmsService();
+
+            var dataProtectionProvider = DataProtectionProvider;
+
             if (dataProtectionProvider != null)
             {
-                manager.UserTokenProvider = 
-                    new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
+                UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(
+                    dataProtectionProvider.Create("ASP.NET Identity"));
             }
-            return manager;
         }
     }
 
-    // Configure the application sign-in manager which is used in this application.
+    // this should be ripped out once the passwords from SMS can be encrypted
+    // or replaced with whatever hash algorithm LOC is using, if that is enabled
+    internal class CustomPasswordHasher : PasswordHasher
+    {
+        public override string HashPassword(string password)
+        {
+            return password;
+        }
+
+        public override PasswordVerificationResult VerifyHashedPassword(string hashedPassword, string providedPassword)
+        {
+            return hashedPassword.Equals(providedPassword) ? PasswordVerificationResult.Success : PasswordVerificationResult.Failed;
+        }
+    }
+
+    //// Configure the application sign-in manager which is used in this application.
     public class ApplicationSignInManager : SignInManager<ApplicationUser, string>
     {
         public ApplicationSignInManager(ApplicationUserManager userManager, IAuthenticationManager authenticationManager)
             : base(userManager, authenticationManager)
         {
-        }
-
-        public override Task<ClaimsIdentity> CreateUserIdentityAsync(ApplicationUser user)
-        {
-            return user.GenerateUserIdentityAsync((ApplicationUserManager)UserManager);
-        }
-
-        public static ApplicationSignInManager Create(IdentityFactoryOptions<ApplicationSignInManager> options, IOwinContext context)
-        {
-            return new ApplicationSignInManager(context.GetUserManager<ApplicationUserManager>(), context.Authentication);
         }
     }
 }
