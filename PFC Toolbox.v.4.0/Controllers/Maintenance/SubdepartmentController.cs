@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Net.Http.Formatting;
+﻿using System.Configuration;
 using System.Web;
 using System.Web.Http;
 using DataTables;
-using Newtonsoft.Json;
-using PFC_Toolbox.v._4._0.Extensions;
-using PFC_Toolbox.v._4._0.Models;
 
 namespace PFC_Toolbox.v._4._0.Controllers
 {
@@ -15,8 +9,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
     {
         [Route("Maintenance/api/GetSubdepartmentBounds")]
         [HttpGet]
-        [HttpPost]
-        public IHttpActionResult ProductUpdates(string subdepartment)
+        public IHttpActionResult ProductUpdates(string F04)
         {
             var request = HttpContext.Current.Request;
 
@@ -24,10 +17,60 @@ namespace PFC_Toolbox.v._4._0.Controllers
             {
                 var response = new Editor(db1, "SMSSubdepartments", "F04")
                     .Field(new Field("SMSSubdepartments.lowerBound")
-                    ).Where(q => q.Where("F04", subdepartment, "="))
+                    ).Where(q => q.Where("F04", F04, "="))
                     .Field(new Field("SMSSubdepartments.upperBound")
-                    ).Where(q => q.Where("F04", subdepartment, "="))
-                     .Process(request)
+                    ).Where(q => q.Where("F04", F04, "="))
+                    .Field(new Field("SMSSubdepartments.F49")
+                    ).Where(q => q.Where("F04", F04, "="))
+                    .Field(new Field("SMSSubdepartments.F78")
+                    ).Where(q => q.Where("F04", F04, "="))
+                    .Field(new Field("SMSSubdepartments.F79")
+                    ).Where(q => q.Where("F04", F04, "="))
+                    .Field(new Field("SMSSubdepartments.F80")
+                    ).Where(q => q.Where("F04", F04, "="))
+                    .Field(new Field("SMSSubdepartments.F81")
+                    ).Where(q => q.Where("F04", F04, "="))
+                    .Field(new Field("SMSSubdepartments.F82")
+                    ).Where(q => q.Where("F04", F04, "="))
+                    .Field(new Field("SMSSubdepartments.F88")
+                    ).Where(q => q.Where("F04", F04, "="))
+                    .Field(new Field("SMSSubdepartments.F96")
+                    ).Where(q => q.Where("F04", F04, "="))
+                    .Field(new Field("SMSSubdepartments.F97")
+                    ).Where(q => q.Where("F04", F04, "="))
+                    .Field(new Field("SMSSubdepartments.F98")
+                    ).Where(q => q.Where("F04", F04, "="))
+                    .Field(new Field("SMSSubdepartments.F99")
+                    ).Where(q => q.Where("F04", F04, "="))
+                    .Field(new Field("SMSSubdepartments.F100")
+                    ).Where(q => q.Where("F04", F04, "="))
+                    .Field(new Field("SMSSubdepartments.F101")
+                    ).Where(q => q.Where("F04", F04, "="))
+                    .Field(new Field("SMSSubdepartments.F104")
+                    ).Where(q => q.Where("F04", F04, "="))
+                    .Field(new Field("SMSSubdepartments.F108")
+                    ).Where(q => q.Where("F04", F04, "="))
+                    .Field(new Field("SMSSubdepartments.F114")
+                    ).Where(q => q.Where("F04", F04, "="))
+                    .Field(new Field("SMSSubdepartments.F115")
+                    ).Where(q => q.Where("F04", F04, "="))
+                    .Field(new Field("SMSSubdepartments.F121")
+                    ).Where(q => q.Where("F04", F04, "="))
+                    .Field(new Field("SMSSubdepartments.F124")
+                    ).Where(q => q.Where("F04", F04, "="))
+                    .Field(new Field("SMSSubdepartments.F150")
+                    ).Where(q => q.Where("F04", F04, "="))
+                    .Field(new Field("SMSSubdepartments.F170")
+                    ).Where(q => q.Where("F04", F04, "="))
+                    .Field(new Field("SMSSubdepartments.F171")
+                    ).Where(q => q.Where("F04", F04, "="))
+                    .Field(new Field("SMSSubdepartments.F172")
+                    ).Where(q => q.Where("F04", F04, "="))
+                    .Field(new Field("SMSSubdepartments.F177")
+                    ).Where(q => q.Where("F04", F04, "="))
+                    .Field(new Field("SMSSubdepartments.F178")
+                    ).Where(q => q.Where("F04", F04, "="))
+                    .Process(request)
                     .Data();
 
                 return Json(response);

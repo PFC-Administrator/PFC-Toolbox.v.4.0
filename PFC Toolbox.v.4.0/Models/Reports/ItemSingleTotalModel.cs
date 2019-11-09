@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.ComponentModel.DataAnnotations;
-using DataTables;
 
 namespace PFC_Toolbox.v._4._0.Models
 {
