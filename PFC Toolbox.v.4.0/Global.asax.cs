@@ -2,8 +2,6 @@
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
-using Owin;
-using PFC_Toolbox.v._4._0.App_Start;
 using PFC_Toolbox.v._4._0.Models;
 using PFCToolbox.Common.Model;
 using PFCToolbox.Data.Context;
