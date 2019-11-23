@@ -299,6 +299,9 @@
                         }
                     }
                 ],
+                "rowCallback": function (row, data, index) {
+                    if (data.RequestTypes.requestname == "New Product") { $(row).find('td:eq(0)').css('background-color', '#E6EDD7'); }
+                },
                 select: true,
                 dom: '<"floatRight"B><"clear">lfrtip',
                 order: [[11, "desc"], [1, "asc"]],
