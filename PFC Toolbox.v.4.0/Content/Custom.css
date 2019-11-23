@@ -5,6 +5,23 @@
     float: right;
 }
 
+/* Edits overall width of Toolbox display*/
+.container {
+    width: 1500px;
+}
+
+.DTE_Body_Content {
+    max-height: 730px !important;
+}
+
+label {
+    margin-top: 4px;
+}
+
+body {
+    margin: 27px;
+}
+
 /* Custom Update An Existing Product Form*/
 #customForm {
     display: flex;
