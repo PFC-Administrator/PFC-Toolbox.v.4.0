@@ -596,26 +596,73 @@
             // SRP Calculator on Product Update form
             $(document).on('click', '#calculate', function () {
                 var srp;
-                var costPerCase = editor.field('ProductUpdates.COST_TAB_F38').val();
-                var itemsPerCase = editor.field('ProductUpdates.COST_TAB_F19').val();
-                var targetMargin = editor.field('ProductUpdates.PRICE_TAB_F49').val();
 
-                srp = ((Math.round(((costPerCase / itemsPerCase) / (1 - (targetMargin / 100))) * 10) / 10) - .01);
+                if (editor.field('ProductUpdates.PRICE_TAB_F49').val() == null || editor.field('ProductUpdates.PRICE_TAB_F49').val() == "")
+                {
+                    alert('Please enter the target margin.');
+                }
+                else
+                {
+                    var targetMargin = editor.field('ProductUpdates.PRICE_TAB_F49').val();
 
-                editor.field('ProductUpdates.price_tab_f30').val(srp)
+                    if (editor.field('ProductUpdates.COST_TAB_F19').val() == null || editor.field('ProductUpdates.COST_TAB_F19').val() == "")
+                    {
+                        alert('Please enter the number of items per case or a 1.');
+                    }
+                    else
+                    {
+                        var itemsPerCase = editor.field('ProductUpdates.COST_TAB_F19').val();
+
+                        if (editor.field('ProductUpdates.COST_TAB_F38').val() == null || editor.field('ProductUpdates.COST_TAB_F38').val() == "")
+                        {
+                            alert('Please enter a cost per case.');
+                        }
+                        else
+                        {
+                            var costPerCase = editor.field('ProductUpdates.COST_TAB_F38').val();
+
+                            srp = ( ( Math.round( ( ( costPerCase / itemsPerCase ) / ( 1 - ( targetMargin / 100 ) ) ) * 10 ) / 10 ) - .01 );
+
+                            editor.field('ProductUpdates.price_tab_f30').val( srp )
+                        }
+                    }
+                }
             });
 
             // SRP Calculator on New Product form
-            $(document).on('click', '#calculate', function () {
+            $(document).on('click', '#calculateNP', function () {
                 var srp;
-                var costPerCase = editorNP.field('ProductUpdates.COST_TAB_F38').val();
-                var itemsPerCase = editorNP.field('ProductUpdates.COST_TAB_F19').val();
-                var targetMargin = editorNP.field('ProductUpdates.PRICE_TAB_F49').val();
 
-                srp = ((Math.round(((costPerCase / itemsPerCase) / (1 - (targetMargin / 100))) * 10) / 10) - .01);
+                if (editorNP.field('ProductUpdates.PRICE_TAB_F49').val() == null || editorNP.field('ProductUpdates.PRICE_TAB_F49').val() == "")
+                {
+                    alert('Please enter the target margin.');
+                }
+                else
+                {
+                    var targetMargin = editorNP.field('ProductUpdates.PRICE_TAB_F49').val();
 
+                    if (editorNP.field('ProductUpdates.COST_TAB_F19').val() == null || editorNP.field('ProductUpdates.COST_TAB_F19').val() == "")
+                    {
+                        alert('Please enter the number of items per case or a 1.');
+                    }
+                    else
+                    {
+                        var itemsPerCase = editorNP.field('ProductUpdates.COST_TAB_F19').val();
 
-                editorNP.field('ProductUpdates.price_tab_f30').val(srp)
+                        if (editorNP.field('ProductUpdates.COST_TAB_F38').val() == null || editorNP.field('ProductUpdates.COST_TAB_F38').val() == "")
+                        {
+                            alert('Please enter a cost per case.');
+                        }
+                        else
+                        {
+                            var costPerCase = editorNP.field('ProductUpdates.COST_TAB_F38').val();
+
+                            srp = ( ( Math.round( ( ( costPerCase / itemsPerCase ) / ( 1 - ( targetMargin / 100 ) ) ) * 10 ) / 10 ) - .01 );
+
+                            editorNP.field('ProductUpdates.price_tab_f30').val( srp )
+                        }
+                    }
+                }
             });
 
             // Enter new Brand on New Product form
@@ -793,15 +840,16 @@
                 //serverSide: true,
                 //paging: true,
                 deferRender: true,
+                "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "All"]],
                 ajax: {
                     url: '/api/ProductUpdates'
                 },
                 columns: [
                     { "data": "RequestTypes.requestname" }, //, render: function (data, type, row) { var color = 'black'; if (data == "New Product") { color = 'green'} return '<span style="color:' + color + '">' + data + '</span>';} },
                     { "data": "Status.productupdatestatus" },
-                    { "data": "ProductUpdates.F01", width: '110px' },
+                    { "data": "ProductUpdates.F01" },
                     { "data": "ProductUpdates.OBJ_TAB_F155" },
-                    { "data": "ProductUpdates.OBJ_TAB_F29" },
+                    { "data": "ProductUpdates.OBJ_TAB_F29", width: '110px'},
                     { "data": "ProductUpdates.OBJ_TAB_F22" },
                     { "data": "ProductUpdates.promotprstartdate" },
                     { "data": "ProductUpdates.promotprenddate" },
@@ -815,6 +863,9 @@
                         }
                     }
                 ],
+                "rowCallback": function (row, data, index) {
+                    if (data.RequestTypes.requestname == "New Product") { $(row).find('td:eq(0)').css('background-color', '#E6EDD7'); }
+                },
                 select: true,
                 dom: '<"floatRight"B><"clear">lfrtip',
                 order: [[11, "desc"], [1, "asc"]],
@@ -868,7 +919,7 @@
                 editorNP.field('ProductUpdates.F01').input()
             );
 
-            $('<button id="calculate" style="position:absolute;top:20%;right:8%">Calculate</button>').insertAfter(
+            $('<button id="calculateNP" style="position:absolute;top:20%;right:8%">Calculate</button>').insertAfter(
                 editorNP.field('ProductUpdates.COST_TAB_F38').input()
             );
         });
