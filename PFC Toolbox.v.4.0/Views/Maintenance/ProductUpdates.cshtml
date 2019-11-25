@@ -715,12 +715,16 @@
 
             // Get New PLU on New Product form
             $(document).on('click', '#getplu', function () {
-                if (!editorNP.field('ProductUpdates.POS_TAB_F04').val()) {
+                if (!editorNP.field('ProductUpdates.POS_TAB_F04').val())
+                {
                     alert('Please select a subdepartment!');
-                } else if (!editorNP.field('ProductUpdates.ismettlerrequired').val()) {
+                }
+                else if (!editorNP.field('ProductUpdates.ismettlerrequired').val())
+                {
                     alert('Select yes or no to Mettler Product!');
-                } else if (editorNP.field('ProductUpdates.ismettlerrequired').val() == 'Yes') {
-
+                }
+                else if (editorNP.field('ProductUpdates.ismettlerrequired').val() == 'Yes')
+                {
                     // Gathers subdepartment code
                     var subdepartment = editorNP.field('ProductUpdates.POS_TAB_F04').val();
 
@@ -728,7 +732,7 @@
                         url: "api/GetSubdepartmentBounds",
                         type: "GET",
                         dataType: "json",
-                        data: { 'subdepartment': subdepartment },
+                        data: { 'F04': subdepartment },
                         error: function (error) {
                             console.log(`Error ${error}`);
                         }
@@ -784,7 +788,7 @@
                         url: "api/GetSubdepartmentBounds",
                         type: "GET",
                         dataType: "json",
-                        data: { 'subdepartment': subdepartment },
+                        data: { 'F04': subdepartment },
                         error: function (error) {
                             console.log(`Error ${error}`);
                         }

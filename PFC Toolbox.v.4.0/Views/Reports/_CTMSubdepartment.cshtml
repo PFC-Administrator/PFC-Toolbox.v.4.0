@@ -176,6 +176,14 @@
                 }]
             });
 
+
+            var editIcon = function (data, type, row) {
+                if (type === 'display text-nowrap compact') {
+                    return data + ' <i class="fa fa-pencil"/>';
+                }
+                return data;
+            };
+
             // Calculates new applied margin on cost change
             editor.field('SalesCost').input().on('keypress', function () {
                 editor.field('SalesAppliedMargin').val(((1 - (this.value / editor.field('SalesRetail').val().replace(/[\$,]/g, ''))) * 100).toFixed(2) + '%');
@@ -205,7 +213,7 @@
                     { data: "SalesWeight", width: '50px' },
                     { data: "SalesQuantity", width: '60px' },
                     { data: "SalesAmount", width: '80px' },
-                    { data: "SalesRetail", className: 'editable', width: '60px', render: $.fn.dataTable.render.number(',', '.', 2, '$')  },
+                    { data: "SalesRetail", className: 'editable', width: '60px', render: $.fn.dataTable.render.number(',', '.', 2, '$'), editIcon },
                     { data: "SalesCost", className: 'editable', width: '60px', render: $.fn.dataTable.render.number(',', '.', 2, '$') },
                     { data: "SalesVendorID", className: 'editable', width: '60px' },
                     { data: "SalesReorder", className: 'editable', width: '60px' },
