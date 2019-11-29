@@ -289,6 +289,7 @@
     <Content Include="Content\Editor-1.8.1\js\editor.jqueryui.min.js" />
     <Content Include="Content\Editor-1.8.1\js\editor.semanticui.js" />
     <Content Include="Content\Editor-1.8.1\js\editor.semanticui.min.js" />
+    <Content Include="Content\PFC_Logo_128px.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -384,6 +385,9 @@
     <Content Include="Views\Maintenance\NewProducts.cshtml" />
     <Content Include="Views\Auxiliary\Index.cshtml" />
     <Content Include="Views\Auxiliary\ListVendors.cshtml" />
+    <Content Include="Views\Maintenance\_Promotion.cshtml" />
+    <Content Include="Views\Maintenance\Promotion.cshtml" />
+    <Content Include="Views\Maintenance\ProductMaintenance.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

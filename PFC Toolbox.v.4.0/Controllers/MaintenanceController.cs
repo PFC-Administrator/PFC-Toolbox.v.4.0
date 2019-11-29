@@ -14,6 +14,12 @@ namespace PFC_Toolbox.v._4._0.Controllers
             return View();
         }
 
+        // GET: /Maintenance/ProductMaintenance
+        public ActionResult ProductMaintenance()
+        {
+            return View();
+        }
+
         // GET: /Maintenance/ProductUpdates
         public ActionResult ProductUpdates()
         {

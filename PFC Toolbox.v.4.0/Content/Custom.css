@@ -5,6 +5,11 @@
     float: right;
 }
 
+h1 {
+    margin-top: -5px;
+}
+
+
 /* Edits overall width of Toolbox display*/
 .container {
     width: 1500px;
