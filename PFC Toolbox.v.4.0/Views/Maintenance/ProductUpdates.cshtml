@@ -10,9 +10,9 @@
 
     <title>Product Maintenance</title>
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.4/css/buttons.dataTables.min.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.2.7/css/select.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css" />
     <link rel="stylesheet" type="text/css" href="https://editor.datatables.net/extensions/Editor/css/editor.dataTables.min.css" />
     <link rel="stylesheet" type="text/css" href="~/Content/Custom.css" />
 </head>
@@ -37,26 +37,25 @@
                     <th>Retail Price</th>
                     <th>Created By</th>
                     <th>Date Created</th>
-                    <th>Location</th>
                 </tr>
             </thead>
         </table>
-
     </div>
 </body>
 </html>
 
 @section scripts{
-    <script type="text/javascript" charset="utf-8" src=" https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.4/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/select/1.2.7/js/dataTables.select.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
     <script src="~/Content/Editor-1.8.1/js/dataTables.editor.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
@@ -66,6 +65,17 @@
 
         // Function to pad numbers with 0's
         function pad(number, width = 3, z = 0) { return (String(z).repeat(width) + String(number)).slice(String(number).length) }
+
+        // Function to get today's date
+        function getDate() {
+            today = new Date().getMonth() + 1
+            + "/" + new Date().getDate()
+            + "/" + new Date().getFullYear()
+            + " " + new Date().getHours()
+            + ":" + new Date().getMinutes()
+            + ":" + new Date().getSeconds()
+            return today;
+        };
 
         var editorPR;
         var editor;
@@ -104,6 +114,11 @@
                 table: '#ProductMaintenance',
                 fields: [
                     {
+                        label: "Status:",
+                        name: "ProductUpdates.productstatusID",
+                        type: "select",
+                        def: "3"
+                    }, {
                         label: "Product Update Type",
                         name: "ProductUpdates.requesttypeID",
                         type: "select",
@@ -125,7 +140,7 @@
                     }, {
                         label: "Retail Price",
                         name: "ProductUpdates.price_tab_f30"
-                    },{
+                    }, {
                         label: "Vendor:",
                         name: "ProductUpdates.COST_TAB_F27",
                         type: "select",
@@ -250,26 +265,31 @@
                         label: "Date created:",
                         name: "ProductUpdates.datecreated",
                         type: "hidden",
-                        def: function () {
-                            var today = new Date().getMonth() + 1
-                                + "/" + new Date().getDate()
-                                + "/" + new Date().getFullYear()
-                                + " " + new Date().getHours()
-                                + ":" + new Date().getMinutes()
-                                + ":" + new Date().getSeconds(); return today }
-                    },{
-                        label: "Status:",
-                        name: "ProductUpdates.productstatusID",
-                        type: "hidden",
-                        def: "3"
-                    },{
+                        def: getDate()
+                    }, {
+                        label: "Date completed:",
+                        name: "ProductUpdates.completeddate",
+                        type: "hidden"
+                    }, {
+                        label: "Completed by:",
+                        name: "ProductUpdates.completedby",
+                        type: "hidden"
+                    }, {
+                        label: "Last updated on:",
+                        name: "ProductUpdates.lastupdatedon",
+                        type: "hidden"
+                    }, {
+                        label: "Last updated by:",
+                        name: "ProductUpdates.lastupdatedby",
+                        type: "hidden"
+                    }, {
                         label: "Notes:",
                         name: "ProductUpdates.AdditionalRequestNotes",
                         type:"textarea"
-                    },{
+                    }, {
                         label: "Mettler PLU:",
                         name: "ProductUpdates.ScalePLU"
-                    },{
+                    }, {
                         label: "Item Type:",
                         name: "ProductUpdates.ScaleItemTypeID",
                         type: "select",
@@ -278,13 +298,13 @@
                             { label: "Price per pound", value: "1" },
                             { label: "Standard pack", value: "2"}
                         ]
-                    },{
+                    }, {
                         label: "Tare / Net Weight:",
                         name: "ProductUpdates.TareNetWeight"
-                    },{
+                    }, {
                         label: "Shelf Life:",
                         name: "ProductUpdates.ShelfLife"
-                    },{
+                    }, {
                         label: "Ingredients:",
                         name: "ProductUpdates.IngredientList",
                         type:"textarea"
@@ -292,50 +312,20 @@
                 ]
             });
 
-            // Hides signs unless a promotional request type is selected on Product Update form
+            // Hides TPR related fields unless a promotional request type is selected on Product Update form
             editor.field('ProductUpdates.requesttypeID').input().on('change', function () {
                 if (editor.field('ProductUpdates.requesttypeID').val() == '2' || editor.field('ProductUpdates.requesttypeID').val() == '3' || editor.field('ProductUpdates.requesttypeID').val() == '4' || editor.field('ProductUpdates.requesttypeID').val() == '5' || editor.field('ProductUpdates.requesttypeID').val() == '7' || editor.field('ProductUpdates.requesttypeID').val() == '8' || editor.field('ProductUpdates.requesttypeID').val() == '9')
                 {
                     editor.field('ProductUpdates.signID').show();
-                }
-                else
-                {
-                    editor.field('ProductUpdates.signID').hide();
-                }
-            });
-
-            // Hides TPR fields unless a promotional request type is selected on Product Update form
-            editor.field('ProductUpdates.requesttypeID').input().on('change', function () {
-                if (editor.field('ProductUpdates.requesttypeID').val() == '2' || editor.field('ProductUpdates.requesttypeID').val() == '3' || editor.field('ProductUpdates.requesttypeID').val() == '4' || editor.field('ProductUpdates.requesttypeID').val() == '5' || editor.field('ProductUpdates.requesttypeID').val() == '7' || editor.field('ProductUpdates.requesttypeID').val() == '8' || editor.field('ProductUpdates.requesttypeID').val() == '9')
-                {
                     editor.field('ProductUpdates.promotprstartdate').show();
-                }
-                else
-                {
-                    editor.field('ProductUpdates.promotprstartdate').hide();
-                }
-            });
-
-            // Hides TPR fields unless a promotional request type is selected on Product Update form
-            editor.field('ProductUpdates.requesttypeID').input().on('change', function () {
-                if (editor.field('ProductUpdates.requesttypeID').val() == '2' || editor.field('ProductUpdates.requesttypeID').val() == '3' || editor.field('ProductUpdates.requesttypeID').val() == '4' || editor.field('ProductUpdates.requesttypeID').val() == '5' || editor.field('ProductUpdates.requesttypeID').val() == '7' || editor.field('ProductUpdates.requesttypeID').val() == '8' || editor.field('ProductUpdates.requesttypeID').val() == '9')
-                {
                     editor.field('ProductUpdates.promotprenddate').show();
-                }
-                else
-                {
-                    editor.field('ProductUpdates.promotprenddate').hide();
-                }
-            });
-
-            // Hides TPR fields unless a promotional request type is selected on Product Update form
-            editor.field('ProductUpdates.requesttypeID').input().on('change', function () {
-                if (editor.field('ProductUpdates.requesttypeID').val() == '2' || editor.field('ProductUpdates.requesttypeID').val() == '3' || editor.field('ProductUpdates.requesttypeID').val() == '4' || editor.field('ProductUpdates.requesttypeID').val() == '5' || editor.field('ProductUpdates.requesttypeID').val() == '7' || editor.field('ProductUpdates.requesttypeID').val() == '8' || editor.field('ProductUpdates.requesttypeID').val() == '9')
-                {
                     editor.field('ProductUpdates.promotprprice').show();
                 }
                 else
                 {
+                    editor.field('ProductUpdates.signID').hide();
+                    editor.field('ProductUpdates.promotprstartdate').hide();
+                    editor.field('ProductUpdates.promotprenddate').hide();
                     editor.field('ProductUpdates.promotprprice').hide();
                 }
             });
@@ -351,7 +341,7 @@
                     editor.field('ProductUpdates.OBJ_TAB_F16').hide();
                 }
             });
-            
+
             // Hides Like code unless Produce is selected on Product Update form
             editor.field('ProductUpdates.POS_TAB_F04').input().on('change', function () {
                 if (editor.field('ProductUpdates.POS_TAB_F04').val() == '6' || editor.field('ProductUpdates.POS_TAB_F04').val() == '17' || editor.field('ProductUpdates.POS_TAB_F04').val() == '3')
@@ -396,7 +386,6 @@
                     editor.field('ProductUpdates.PRICE_TAB_F49').hide();
                     editor.field('ProductUpdates.COST_TAB_F19').hide();
                     editor.field('ProductUpdates.COST_TAB_F38').hide();
-
             });
 
             var costCounter = 0;
@@ -410,7 +399,6 @@
                     editor.field('ProductUpdates.COST_TAB_F19').show();
                     editor.field('ProductUpdates.COST_TAB_F38').show();
                     costCounter = 1
-                    //alert(costCounter);
                 }
                 else
                 {
@@ -420,7 +408,6 @@
                     editor.field('ProductUpdates.COST_TAB_F19').hide();
                     editor.field('ProductUpdates.COST_TAB_F38').hide();
                     costCounter = 0
-                    //alert(costCounter);
                 }
             });
 
@@ -433,7 +420,6 @@
                     editor.field('ProductUpdates.COST_TAB_F38').show();
                     editor.field('ProductUpdates.PRICE_TAB_F49').show();
                     srpCounter = 1
-                    //alert(srpCounter);
                 }
                 else
                 {
@@ -441,7 +427,6 @@
                     editor.field('ProductUpdates.COST_TAB_F38').hide();
                     editor.field('ProductUpdates.PRICE_TAB_F49').hide();
                     srpCounter = 0
-                    //alert(srpCounter);
                 }
             });
 
@@ -480,7 +465,30 @@
                     }
                 }
             });
-           
+
+            // Activate an inline edit on click of a table cell that has the className attribute "editable" set to it.
+            $('#ProductMaintenance').on('click', 'tbody td.editable', function (e) {
+                editor.inline(this, {
+                    onBlur: 'submit'
+                });
+            });
+
+            // Set completed date and completed by upon record completion.
+            editor.field('ProductUpdates.productstatusID').input().on('change', function () {
+                if (editor.field('ProductUpdates.productstatusID').val() == '4' && editor.field('ProductUpdates.completeddate').val() == null && editor.field('ProductUpdates.completedby').val() == null) {
+                    editor.field('ProductUpdates.completeddate').val(getDate());
+                    editor.field('ProductUpdates.completedby').val("@(User.GetCreatedBy())");
+                }
+            });
+
+            // Update last updated on and last updated by any time a record is edited.
+            // Entire record is resubmitted, so the onchange listener could be applied to any field.
+            editor.field('ProductUpdates.productstatusID').input().on('change', function () {
+                editor.field('ProductUpdates.lastupdatedon').val(getDate());
+                editor.field('ProductUpdates.lastupdatedby').val("@(User.GetCreatedBy())");
+            });
+
+            // Create the DataTables table
             var table = $('#ProductMaintenance').DataTable({
                 // This is the default view showing uncompleted requests
                 initComplete: function (e, dt, node, config) {
@@ -491,13 +499,13 @@
                 //serverSide: true,
                 //paging: true,
                 deferRender: true,
-                "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "All"]],
+                lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "All"]],
                 ajax: {
                     url: '/api/ProductUpdates'
                 },
                 columns: [
                     { "data": "RequestTypes.requestname" },
-                    { "data": "Status.productupdatestatus" },
+                    { "data": "Status.productupdatestatus", className: "editable", editField: "ProductUpdates.productstatusID" },
                     { "data": "ProductUpdates.F01" },
                     { "data": "ProductUpdates.OBJ_TAB_F155" },
                     { "data": "ProductUpdates.OBJ_TAB_F29", width: '110px'},
@@ -513,22 +521,22 @@
                             return window.moment(value).format('M/D/YYYY hh:mm:ss A');
                         }
                     },
+                    { "data": "ProductUpdates.completeddate", visible: false },
                     { "data": "ProductUpdates.locationID", visible: false }
                 ],
-                "rowCallback": function (row, data, index) {
+                rowCallback: function (row, data, index) {
                     if (data.RequestTypes.requestname == "New Product") { $(row).find('td:eq(0)').css('background-color', '#E6EDD7'); }
                 },
                 select: true,
                 dom: '<"floatRight"B><"clear">lfrtip',
                 order: [[11, "desc"], [1, "asc"]],
                 buttons: [
-                    { text: 'Promotion Report', title: 'Update An Existing Product', extend: 'create', editor: editorPR,
+                    { text: 'Promotion Report', formTitle: 'Run Promotion Report', extend: 'create', editor: editorPR,
                         formButtons:
                             [{
                                 text: 'Run Report',
                                 action: function (e, dt, node, config) {
-                                    // Hides signs unless a promotional request type is selected on Product Update form
-                                    switch ( editorPR.field('ProductUpdates.requesttypeID').val() )
+                                    switch (editorPR.field('ProductUpdates.requesttypeID').val())
                                     {
                                         case 1:
                                             var promo = "Product Info Update";
@@ -566,31 +574,52 @@
                                     var startDate = editorPR.field('ProductUpdates.promotprstartdate').val();
                                     var endDate = editorPR.field('ProductUpdates.promotprenddate').val();
 
-                                    table.column(0).search('^' + promo + '$', true, false)
-                                         .column(6).search('^' + startDate + '$', true, false)
-                                         .column(7).search('^' + endDate + '$', true, false)
-                                         .column(12).search('^' + locale + '$', true, false).draw()
+                                    table.search('')
+                                        .columns().search('')
+                                        .column(0).search('^' + promo + '$', true, false)
+                                        .column(6).search('^' + startDate + '$', true, false)
+                                        .column(7).search('^' + endDate + '$', true, false)
+                                        .column(12).search('^' + locale + '$', true, false).draw()
                                     this.close();
                                 }
                             }]
 
                     },
-                    { text: 'Edit', extend:'edit', editor:editor},
-                    { text: 'Show Completed Today', action: function (e, dt, node, config) { table.column(1).search('^4 - Completed$', true, false).draw() } },
+                    {
+                        text: 'Edit', formTitle: 'Edit entry', extend: 'edit', editor: editor,
+                        formButtons:
+                            [
+                                {
+                                    text: 'Update', action: function () {
+                                        editor.field('ProductUpdates.lastupdatedon').val(getDate());
+                                        editor.field('ProductUpdates.lastupdatedby').val("@(User.GetCreatedBy())");
+                                        this.submit();
+                                    }
+                                }
+                            ]
+                    },
+                    {
+                        text: 'Show Completed Today', action: function (e, dt, node, config) {
+                            table.search('')
+                                .columns().search('')
+                                .column(1).search('^4 - Completed$', true, false)
+                                .column(12).search(new Date().getMonth() + 1 + "/" + new Date().getDate() + "/" + new Date().getFullYear(), true, false).draw()
+                        }
+                    },
                     {
                         text: 'Show Default View', action: function (e, dt, node, config) {
-                            table.column(0).search('', true, false)
-                                 .column(6).search('', true, false)
-                                 .column(7).search('', true, false)
-                                 .column(12).search('', true, false)
-                                 .column(0).search('^((?!(New Product)).)*$', true, false)
-                                 .column(1).search('^((?!(4 - Completed)).)*$', true, false).draw();
+                            table.search('')
+                                .columns().search('')
+                                .column(0).search('^((?!(New Product)).)*$', true, false)
+                                .column(1).search('^((?!(4 - Completed)).)*$', true, false).draw();
                         }
                     },
                     {
                         text: 'Show All', action: function (e, dt, node, config) {
-                            table.column(1).search('3 - Manager Review Completed$|^4 - Completed$', true, false)
-                                 .column(11).order('desc').draw()
+                            table.search('')
+                                .columns().search('')
+                                .column(0).search('^((?!(New Product)).)*$', true, false)
+                                .column(1).search('^1 - Waiting for Manager Review$|^2 - More Info Needed$|^3 - Manager Review Completed$|^4 - Completed$', true, false).column(11).order('desc').draw()
                         }
                     },
                     {
@@ -603,19 +632,23 @@
                             'print'
                         ]
                     },
+
+                    // Redirects user back to main Product Maintenance page
                     { text: 'Back', action: function () { window.location = 'ProductMaintenance' } }
                 ]
             });
 
-            // Update An Existing Product Form buttons
+            // Update An Existing Product Form: Cost button
             $('<button id="cost" style="position:absolute;top:20%;right:12.5%">Cost</button>').insertAfter(
                 editor.field('ProductUpdates.price_tab_f30').input()
             );
 
+            // Update An Existing Product Form: SRP button
             $('<button id="srpcalculator" style="position:absolute;top:20%;right:5%">SRP</button>').insertAfter(
                 editor.field('ProductUpdates.price_tab_f30').input()
             );
 
+            // Update An Existing Product Form: Calculate button
             $('<button id="calculate" style="position:absolute;top:20%;right:8%">Calculate</button>').insertAfter(
                 editor.field('ProductUpdates.COST_TAB_F38').input()
             );

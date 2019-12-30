@@ -10,9 +10,9 @@
 
     <title>New Products</title>
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.4/css/buttons.dataTables.min.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.2.7/css/select.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css" />
     <link rel="stylesheet" type="text/css" href="https://editor.datatables.net/extensions/Editor/css/editor.dataTables.min.css" />
     <link rel="stylesheet" type="text/css" href="~/Content/Custom.css" />
 </head>
@@ -39,22 +39,22 @@
                 </tr>
             </thead>
         </table>
-
     </div>
 </body>
 </html>
 
 @section scripts{
-    <script type="text/javascript" charset="utf-8" src=" https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.4/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/select/1.2.7/js/dataTables.select.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
     <script src="~/Content/Editor-1.8.1/js/dataTables.editor.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
@@ -65,7 +65,17 @@
         // Function to pad numbers with 0's
         function pad(number, width = 3, z = 0) { return (String(z).repeat(width) + String(number)).slice(String(number).length) }
 
-        var editorNP;
+        // Function to get today's date
+        function getDate() {
+            today = new Date().getMonth() + 1
+            + "/" + new Date().getDate()
+            + "/" + new Date().getFullYear()
+            + " " + new Date().getHours()
+            + ":" + new Date().getMinutes()
+            + ":" + new Date().getSeconds()
+            return today;
+        };
+
         var editor;
         $(document).ready(function () {
 
@@ -223,26 +233,36 @@
                         label: "Date created:",
                         name: "ProductUpdates.datecreated",
                         type: "hidden",
-                        def: function () {
-                            var today = new Date().getMonth() + 1
-                                + "/" + new Date().getDate()
-                                + "/" + new Date().getFullYear()
-                                + " " + new Date().getHours()
-                                + ":" + new Date().getMinutes()
-                                + ":" + new Date().getSeconds(); return today }
-                    },{
+                        def: getDate()
+                    }, {
+                        label: "Date completed:",
+                        name: "ProductUpdates.completeddate",
+                        type: "hidden"
+                    }, {
+                        label: "Completed by:",
+                        name: "ProductUpdates.completedby",
+                        type: "hidden"
+                    }, {
+                        label: "Last updated on:",
+                        name: "ProductUpdates.lastupdatedon",
+                        type: "hidden"
+                    }, {
+                        label: "Last updated by:",
+                        name: "ProductUpdates.lastupdatedby",
+                        type: "hidden"
+                    }, {
                         label: "Status:",
                         name: "ProductUpdates.productstatusID",
                         type: "hidden",
                         def: "3"
-                    },{
+                    }, {
                         label: "Notes:",
                         name: "ProductUpdates.AdditionalRequestNotes",
                         type:"textarea"
-                    },{
+                    }, {
                         label: "Mettler PLU:",
                         name: "ProductUpdates.ScalePLU"
-                    },{
+                    }, {
                         label: "Item Type:",
                         name: "ProductUpdates.ScaleItemTypeID",
                         type: "select",
@@ -251,13 +271,13 @@
                             { label: "Price per pound", value: "1" },
                             { label: "Standard pack", value: "2"}
                         ]
-                    },{
+                    }, {
                         label: "Tare / Net Weight:",
                         name: "ProductUpdates.TareNetWeight"
-                    },{
+                    }, {
                         label: "Shelf Life:",
                         name: "ProductUpdates.ShelfLife"
-                    },{
+                    }, {
                         label: "Ingredients:",
                         name: "ProductUpdates.IngredientList",
                         type:"textarea"
@@ -267,19 +287,32 @@
 
             // Cascading select fields on New Product form
             editor.dependent('ProductUpdates.POS_TAB_F04', '/api/Categories');
-                        
+
+            // Update last updated on and last updated by any time a record is edited.
+            // Entire record is resubmitted, so the onchange listener could be applied to any field.
+            editor.field('ProductUpdates.productstatusID').input().on('change', function () {
+                editor.field('ProductUpdates.lastupdatedon').val(getDate());
+                editor.field('ProductUpdates.lastupdatedby').val("@(User.GetCreatedBy())");
+            });
+
+            // Create the DataTables table
             var table = $('#ProductUpdates').DataTable({
                 // This is the default view showing uncompleted requests
-                initComplete: function (e, dt, node, config) { table.column(0).search('^New Product$', true, false).draw() },
+                initComplete: function (e, dt, node, config) {
+                    table
+                        .column(0).search('^New Product$', true, false)
+                        .column(1).search('^3 - Manager Review Completed$', true, false).draw()
+                },
                 //processing: true,
                 //serverSide: true,
                 //paging: true,
                 deferRender: true,
+                lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "All"]],
                 ajax: {
                     url: '/api/ProductUpdates'
                 },
                 columns: [
-                    { "data": "RequestTypes.requestname" }, //, render: function (data, type, row) { var color = 'black'; if (data == "New Product") { color = 'green'} return '<span style="color:' + color + '">' + data + '</span>';} },
+                    { "data": "RequestTypes.requestname" },
                     { "data": "Status.productupdatestatus" },
                     { "data": "ProductUpdates.F01", width: '110px' },
                     { "data": "ProductUpdates.OBJ_TAB_F155" },
@@ -295,7 +328,8 @@
                             if (value === null) return "";
                             return window.moment(value).format('M/D/YYYY hh:mm:ss A');
                         }
-                    }
+                    },
+                    { "data": "ProductUpdates.completeddate", visible: false }
                 ],
                 "rowCallback": function (row, data, index) {
                     if (data.RequestTypes.requestname == "New Product") { $(row).find('td:eq(0)').css('background-color', '#E6EDD7'); }
@@ -304,10 +338,44 @@
                 dom: '<"floatRight"B><"clear">lfrtip',
                 order: [[11, "desc"], [1, "asc"]],
                 buttons: [
-                    { text: 'Edit', extend: 'edit', editor: editor },
-                    { text: 'Show Completed Today', action: function (e, dt, node, config) { table.column(1).search('^4 - Completed$', true, false).draw() } },
-                    { text: 'Show Default View', action: function (e, dt, node, config) { table.column(1).search('^3 - Manager Review Completed$', true, false).draw() } },
-                    { text: 'Show All', action: function (e, dt, node, config) { table.column(1).search('3 - Manager Review Completed$|^4 - Completed$', true, false).column(11).order('desc').draw() } },
+                    {
+                        text: 'Edit', formTitle: 'Edit entry', extend: 'edit', editor: editor,
+                        formButtons:
+                            [
+                                {
+                                    text: 'Update', action: function () {
+                                        editor.field('ProductUpdates.lastupdatedon').val(getDate());
+                                        editor.field('ProductUpdates.lastupdatedby').val("@(User.GetCreatedBy())");
+                                        this.submit();
+                                    }
+                                }
+                            ]
+                    },
+                    {
+                        text: 'Show Completed Today', action: function (e, dt, node, config) {
+                            table.search('')
+                                .columns().search('')
+                                .column(0).search('^New Product$', true, false)
+                                .column(1).search('^4 - Completed$', true, false)
+                                .column(12).search(new Date().getMonth() + 1 + "/" + new Date().getDate() + "/" + new Date().getFullYear(), true, false).draw()
+                        }
+                    },
+                    {
+                        text: 'Show Default View', action: function (e, dt, node, config) {
+                            table.search('')
+                                .columns().search('')
+                                .column(0).search('^New Product$', true, false)
+                                .column(1).search('^3 - Manager Review Completed$', true, false).draw()
+                        }
+                    },
+                    {
+                        text: 'Show All', action: function (e, dt, node, config) {
+                            table.search('')
+                                .columns().search('')
+                                .column(0).search('^New Product$', true, false)
+                                .column(1).search('^3 - Manager Review Completed$|^4 - Completed$', true, false).column(11).order('desc').draw()
+                        }
+                    },
 
                     // Creates an Export New Products button and executes AJAX requests
                     {
@@ -366,7 +434,7 @@
                                 newArray.push(tempArray);
                                 tempArray = {};
                             };
-                            
+
                             console.log(newArray);
 
                             for ($i = 0; $i < newArray.length; $i++) {
@@ -421,6 +489,8 @@
                             }
                         }
                     },
+
+                    // Redirects user back to main Product Maintenance page
                     { text: 'Back', action: function () { window.location = 'ProductMaintenance' } }
                 ]
             });
