@@ -855,18 +855,6 @@
                 }
             });
 
-            // Update last updated on and last updated by any time a record is edited.
-            // Entire record is resubmitted, so the onchange listener could be applied to any field.
-            @*editor.field('ProductUpdates.productstatusID').input().on('change', function () {
-                editor.field('ProductUpdates.lastupdatedon').val(getDate());
-                editor.field('ProductUpdates.lastupdatedby').val("@(User.GetCreatedBy())");
-            });*@
-
-            editor.on('submitSuccess', function () {
-                editor.field('ProductUpdates.lastupdatedon').val(getDate());
-                editor.field('ProductUpdates.lastupdatedby').val("@(User.GetCreatedBy())");
-            });
-
             // Create the DataTables table
             var table = $('#ProductMaintenance').DataTable({
                 // Default table view
