@@ -10,6 +10,7 @@
 
     <title>Product Maintenance</title>
 
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css" />
@@ -100,10 +101,14 @@
                         placeholder: "Select a location"
                     }, {
                         label: "TPR Start",
-                        name: "ProductUpdates.promotprstartdate"
+                        name: "ProductUpdates.promotprstartdate",
+                        type: "datetime",
+                        format: "M/D/YYYY"
                     }, {
                         label: "TPR End",
-                        name: "ProductUpdates.promotprenddate"
+                        name: "ProductUpdates.promotprenddate",
+                        type: "datetime",
+                        format: "M/D/YYYY"
                     }
                 ]
             });
@@ -508,7 +513,7 @@
                     { "data": "Status.productupdatestatus", className: "editable", editField: "ProductUpdates.productstatusID" },
                     { "data": "ProductUpdates.F01" },
                     { "data": "ProductUpdates.OBJ_TAB_F155" },
-                    { "data": "ProductUpdates.OBJ_TAB_F29", width: '110px'},
+                    { "data": "ProductUpdates.OBJ_TAB_F29" },
                     { "data": "ProductUpdates.OBJ_TAB_F22" },
                     { "data": "ProductUpdates.promotprstartdate" },
                     { "data": "ProductUpdates.promotprenddate" },
@@ -574,12 +579,17 @@
                                     var startDate = editorPR.field('ProductUpdates.promotprstartdate').val();
                                     var endDate = editorPR.field('ProductUpdates.promotprenddate').val();
 
+                                    console.log(promo);
+                                    console.log(startDate);
+                                    console.log(endDate);
+                                    console.log(locale);
+
                                     table.search('')
                                         .columns().search('')
                                         .column(0).search('^' + promo + '$', true, false)
                                         .column(6).search('^' + startDate + '$', true, false)
                                         .column(7).search('^' + endDate + '$', true, false)
-                                        .column(12).search('^' + locale + '$', true, false).draw()
+                                        .column(13).search('^' + locale + '$', true, false).draw()
                                     this.close();
                                 }
                             }]
