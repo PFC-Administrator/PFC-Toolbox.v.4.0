@@ -85,6 +85,7 @@
                 table: '#ProductMaintenance',
                 fields: [
                     {
+                        label: "Product Update Type",
                         name: "ProductUpdates.requesttypeID",
                         type: "readonly",
                         type: "hidden",
@@ -159,37 +160,47 @@
                         name: "ProductUpdates.POS_TAB_F79",
                         type: "checkbox",
                         options: [
-                            { label: "", "value": "True" }
+                            { label: "", "value": 1 }
                         ],
                         separator: "|",
-                        unselectedValue: "False"
+                        unselectedValue: 0
                     }, {
                         label: "Scalable:",
                         name: "ProductUpdates.POS_TAB_F82",
                         type: "checkbox",
                         options: [
-                            { label: "", "value": "True" }
+                            { label: "", "value": 1 }
                         ],
                         separator: "|",
-                        unselectedValue: "False"
+                        unselectedValue: 0
                     }, {
                         label: "Taxable:",
                         name: "ProductUpdates.POS_TAB_F81",
+                        options: [
+                            { label: "", "value": 1 }
+                        ],
+                        type: "checkbox",
+                        unselectedValue: 0,
+                        separator: "|"
+                    }, {
+                        label: "Stop discount:",
+                        name: "ProductUpdates.POS_TAB_F150",
                         type: "checkbox",
                         options: [
-                            { label: "", "value": "True" }
+                            { label: "", "value": 1 }
                         ],
                         separator: "|",
-                        unselectedValue: "False"
+                        unselectedValue: 0,
+                        type: "hidden"
                     }, {
                         label: "WIC:",
                         name: "ProductUpdates.POS_TAB_F178",
                         type: "checkbox",
                         options: [
-                            { label: "", "value": "True" }
+                            { label: "", "value": 1 }
                         ],
                         separator: "|",
-                        unselectedValue: "False"
+                        unselectedValue: 0
                     }, {
                         label: "Retail Price",
                         name: "ProductUpdates.price_tab_f30"
@@ -210,6 +221,10 @@
                     }, {
                         label: "Case cost:",
                         name: "ProductUpdates.COST_TAB_F38"
+                    }, {
+                        label: "Client age:",
+                        name: "ProductUpdates.POS_TAB_F171",
+                        type: "hidden"
                     }, {
                         label: "Created by:",
                         name: "ProductUpdates.createdby",
@@ -380,37 +395,51 @@
                         name: "ProductUpdates.POS_TAB_F79",
                         type: "checkbox",
                         options: [
-                            { label: "", "value": "True" }
+                            { label: "", "value": 1 }
                         ],
                         separator: "|",
-                        unselectedValue: "False"
+                        unselectedValue: 0
                     }, {
                         label: "Scalable:",
                         name: "ProductUpdates.POS_TAB_F82",
                         type: "checkbox",
                         options: [
-                            { label: "", "value": "True" }
+                            { label: "", "value": 1 }
                         ],
                         separator: "|",
-                        unselectedValue: "False"
+                        unselectedValue: 0
                     }, {
                         label: "Taxable:",
                         name: "ProductUpdates.POS_TAB_F81",
                         type: "checkbox",
                         options: [
-                            { label: "", "value": "True" }
+                            { label: "", "value": 1 }
                         ],
                         separator: "|",
-                        unselectedValue: "False"
+                        unselectedValue: 0
+                    }, {
+                        label: "Stop discount:",
+                        name: "ProductUpdates.POS_TAB_F150",
+                        type: "checkbox",
+                        options: [
+                            { label: "", "value": 1 }
+                        ],
+                        separator: "|",
+                        unselectedValue: 0,
+                        type: "hidden"
                     }, {
                         label: "WIC:",
                         name: "ProductUpdates.POS_TAB_F178",
                         type: "checkbox",
                         options: [
-                            { label: "", "value": "True" }
+                            { label: "", "value": 1 }
                         ],
                         separator: "|",
-                        unselectedValue: "False"
+                        unselectedValue: 0
+                    }, {
+                        label: "Client age:",
+                        name: "ProductUpdates.POS_TAB_F171",
+                        type: "hidden"
                     }, {
                         label: "Created by:",
                         name: "ProductUpdates.createdby",
@@ -565,6 +594,52 @@
 
             // Cascading select fields on New Product form
             editorNP.dependent('ProductUpdates.POS_TAB_F04', '/api/Categories');
+
+            // Update An Existing Product Form: set default POS attributes
+            editor.dependent('ProductUpdates.POS_TAB_F04', function (val, data, callback) {
+                var subdepartment = editor.field('ProductUpdates.POS_TAB_F04').val();
+
+                var GetSubdepartmentAttributes = $.ajax({
+                    url: "api/GetSubdepartmentBounds",
+                    type: "GET",
+                    dataType: "json",
+                    data: { 'F04': subdepartment },
+                    error: function (error) {
+                        console.log(`Error ${error}`);
+                    }
+                });
+
+                GetSubdepartmentAttributes.then(function (data) {
+                    editor.field('ProductUpdates.POS_TAB_F79').val(data.data[0].SMSSubdepartments.F79);
+                    editor.field('ProductUpdates.POS_TAB_F178').val(data.data[0].SMSSubdepartments.F178);
+                    editor.field('ProductUpdates.POS_TAB_F81').val(data.data[0].SMSSubdepartments.F81);
+                    editor.field('ProductUpdates.POS_TAB_F171').val(data.data[0].SMSSubdepartments.F171);
+                    editor.field('ProductUpdates.POS_TAB_F150').val(data.data[0].SMSSubdepartments.F150);
+                });
+            });
+
+            // New Product Form: set default POS attributes
+            editorNP.dependent('ProductUpdates.POS_TAB_F04', function (val, data, callback) {
+                var subdepartment = editorNP.field('ProductUpdates.POS_TAB_F04').val();
+
+                var GetSubdepartmentAttributes = $.ajax({
+                    url: "api/GetSubdepartmentBounds",
+                    type: "GET",
+                    dataType: "json",
+                    data: { 'F04': subdepartment },
+                    error: function (error) {
+                        console.log(`Error ${error}`);
+                    }
+                });
+
+                GetSubdepartmentAttributes.then(function (data) {
+                    editorNP.field('ProductUpdates.POS_TAB_F79').val(data.data[0].SMSSubdepartments.F79);
+                    editorNP.field('ProductUpdates.POS_TAB_F178').val(data.data[0].SMSSubdepartments.F178);
+                    editorNP.field('ProductUpdates.POS_TAB_F81').val(data.data[0].SMSSubdepartments.F81);
+                    editorNP.field('ProductUpdates.POS_TAB_F171').val(data.data[0].SMSSubdepartments.F171);
+                    editorNP.field('ProductUpdates.POS_TAB_F150').val(data.data[0].SMSSubdepartments.F150);
+                });
+            });
 
             // Hides cost info on load on Product Update form
             editor.field('ProductUpdates.POS_TAB_F04').input().on('change', function () {
@@ -730,7 +805,7 @@
                         editorNP.field('ProductUpdates.OBJ_TAB_F155').update(optionsA);
                     });
 
-                    editorNP.field('ProductUpdates.OBJ_TAB_F155').val("row_" + brand)
+                    editorNP.field('ProductUpdates.OBJ_TAB_F155').val("row_" + brand);
                 }
             });
 

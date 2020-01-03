@@ -541,7 +541,7 @@
                             [{
                                 text: 'Run Report',
                                 action: function (e, dt, node, config) {
-                                    switch (editorPR.field('ProductUpdates.requesttypeID').val())
+                                    switch ( editorPR.field('ProductUpdates.requesttypeID').val() )
                                     {
                                         case 1:
                                             var promo = "Product Info Update";
@@ -579,11 +579,6 @@
                                     var startDate = editorPR.field('ProductUpdates.promotprstartdate').val();
                                     var endDate = editorPR.field('ProductUpdates.promotprenddate').val();
 
-                                    console.log(promo);
-                                    console.log(startDate);
-                                    console.log(endDate);
-                                    console.log(locale);
-
                                     table.search('')
                                         .columns().search('')
                                         .column(0).search('^' + promo + '$', true, false)
@@ -593,7 +588,6 @@
                                     this.close();
                                 }
                             }]
-
                     },
                     {
                         text: 'Edit', formTitle: 'Edit entry', extend: 'edit', editor: editor,

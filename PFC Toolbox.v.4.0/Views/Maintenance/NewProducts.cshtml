@@ -380,8 +380,11 @@
                     // Creates an Export New Products button and executes AJAX requests
                     {
                         text: 'Export', action: function (e, dt, node, config) {
+
+                            // Gather data from each selected row
                             var data = table.rows({ selected: true }).data();
 
+                            // Create array with selected rows data
                             var newArray = [];
                             var tempArray = {};
                             for ($i = 0; $i < data.length; $i++) {
