@@ -76,7 +76,7 @@
         var editor;
         $(document).ready(function () {
 
-            $.fn.dataTable.moment( 'M/D/YYYY hh:mm:ss A' );
+            $.fn.dataTable.moment('M/D/YYYY hh:mm:ss A');
 
             // New Product Form
             var editorNP = new $.fn.dataTable.Editor({
@@ -958,6 +958,21 @@
                 initComplete: function (e, dt, node, config) {
                     table.column(1).search('^1 - Waiting for Manager Review$|^2 - More Info Needed$|^3 - Manager Review Completed$', true, false).draw()
                 },
+                columnDefs: [{
+                    targets: 2,
+                    render: function (data, type, row) {
+                        if (type === 'display' && data != null) {
+                            data = data.replace(/<(?:.|\\n)*?>/gm, '');
+                            if (data.length > 14) {
+                                return '<span class=\"show-ellipsis\">' + data.substr(0, 14) + '</span><span class=\"no-show\">' + data.substr(14) + '</span>';
+                            } else {
+                                return data;
+                            }
+                        } else {
+                            return data;
+                        }
+                    }
+                }],
                 deferRender: true,
                 // Default table lengths
                 lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "All"]],
@@ -965,20 +980,21 @@
                 ajax: {
                     url: '/api/ProductUpdates'
                 },
+                autoWidth: false,
                 // Table columns
                 columns: [
-                    { "data": "RequestTypes.requestname" },
-                    { "data": "Status.productupdatestatus" },
-                    { "data": "ProductUpdates.F01" },
-                    { "data": "ProductUpdates.OBJ_TAB_F155" },
+                    { "data": "RequestTypes.requestname", width: "10%" },
+                    { "data": "Status.productupdatestatus", width: "10%" },
+                    { "data": "ProductUpdates.F01", width: "5%" },
+                    { "data": "ProductUpdates.OBJ_TAB_F155", width: "10%" },
                     { "data": "ProductUpdates.OBJ_TAB_F29" },
-                    { "data": "ProductUpdates.OBJ_TAB_F22" },
-                    { "data": "ProductUpdates.createdby" },
+                    { "data": "ProductUpdates.OBJ_TAB_F22", width: "5%" },
+                    { "data": "ProductUpdates.createdby", width: "10%" },
                     {
                         "data": "ProductUpdates.datecreated", "render": function (value) {
                             if (value === null) return "";
                             return window.moment(value).format('M/D/YYYY hh:mm:ss A');
-                        }
+                        }, width: "10%"
                     },
                     { "data": "ProductUpdates.completeddate", visible: false }
                 ],
@@ -990,7 +1006,7 @@
                 // Control button layout
                 dom: '<"floatRight"B><"clear">lfrtip',
                 // Default table order
-                order: [[7, "desc"], [1, "asc"]],
+                order: [[7, "desc"]],
                 buttons: [
                     // New Product Form: opens the New Product form
                     { text: 'New Product', formTitle: 'Add A New Product', extend: 'create', editor: editorNP,
@@ -1031,8 +1047,9 @@
                         text: 'Show Completed Today', action: function (e, dt, node, config) {
                             table.search('')
                                 .columns().search('')
+                                .columns().order('')
                                 .column(1).search('^4 - Completed$')
-                                .column(8).search(new Date().getMonth() + 1 + "/" + new Date().getDate() + "/" + new Date().getFullYear(), true, false).draw()
+                                .column(8).search(new Date().getMonth() + 1 + "/" + new Date().getDate() + "/" + new Date().getFullYear(), true, false).column(7).order('desc').draw()
                         }
                     },
                     {
@@ -1040,7 +1057,8 @@
                         text: 'Show Default View', action: function (e, dt, node, config) {
                             table.search('')
                                 .columns().search('')
-                                .column(1).search('^1 - Waiting for Manager Review$|^2 - More Info Needed$|^3 - Manager Review Completed$', true, false).draw()
+                                .columns().order('')
+                                .column(1).search('^1 - Waiting for Manager Review$|^2 - More Info Needed$|^3 - Manager Review Completed$', true, false).column(7).order('desc').draw()
                         }
                     },
                     {
@@ -1048,6 +1066,7 @@
                         text: 'Show All', action: function (e, dt, node, config) {
                             table.search('')
                                 .columns().search('')
+                                .columns().order('')
                                 .column(1).search('^1 - Waiting for Manager Review$|^2 - More Info Needed$|^3 - Manager Review Completed$|^4 - Completed$', true, false).column(7).order('desc').draw()
                         }
                     },

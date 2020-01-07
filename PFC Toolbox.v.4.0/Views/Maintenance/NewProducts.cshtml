@@ -30,9 +30,6 @@
                     <th>Brand</th>
                     <th>Description</th>
                     <th>Size</th>
-                    <th>TPR Start</th>
-                    <th>TPR End</th>
-                    <th>TPR Price</th>
                     <th>Retail Price</th>
                     <th>Created By</th>
                     <th>Date Created</th>
@@ -373,6 +370,21 @@
                         .column(0).search('^New Product$', true, false)
                         .column(1).search('^3 - Manager Review Completed$', true, false).draw()
                 },
+                columnDefs: [{
+                    targets: 2,
+                    render: function (data, type, row) {
+                        if (type === 'display' && data != null) {
+                            data = data.replace(/<(?:.|\\n)*?>/gm, '');
+                            if (data.length > 14) {
+                                return '<span class=\"show-ellipsis\">' + data.substr(0, 14) + '</span><span class=\"no-show\">' + data.substr(14) + '</span>';
+                            } else {
+                                return data;
+                            }
+                        } else {
+                            return data;
+                        }
+                    }
+                }],
                 deferRender: true,
                 // Default table lengths
                 lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "All"]],
@@ -380,24 +392,22 @@
                 ajax: {
                     url: '/api/ProductUpdates'
                 },
+                autoWidth: false,
                 // Table columns
                 columns: [
-                    { "data": "RequestTypes.requestname" },
-                    { "data": "Status.productupdatestatus" },
-                    { "data": "ProductUpdates.F01", width: '110px' },
-                    { "data": "ProductUpdates.OBJ_TAB_F155" },
+                    { "data": "RequestTypes.requestname", width: "10%" },
+                    { "data": "Status.productupdatestatus", width: "10%" },
+                    { "data": "ProductUpdates.F01", width: "5%" },
+                    { "data": "ProductUpdates.OBJ_TAB_F155", width: "10%" },
                     { "data": "ProductUpdates.OBJ_TAB_F29" },
-                    { "data": "ProductUpdates.OBJ_TAB_F22" },
-                    { "data": "ProductUpdates.promotprstartdate" },
-                    { "data": "ProductUpdates.promotprenddate" },
-                    { "data": "ProductUpdates.promotprprice" },
-                    { "data": "ProductUpdates.price_tab_f30" },
-                    { "data": "ProductUpdates.createdby" },
+                    { "data": "ProductUpdates.OBJ_TAB_F22", width: "5%" },
+                    { "data": "ProductUpdates.price_tab_f30", width: "5%" },
+                    { "data": "ProductUpdates.createdby", width: "10%" },
                     {
                         "data": "ProductUpdates.datecreated", "render": function (value) {
                             if (value === null) return "";
                             return window.moment(value).format('M/D/YYYY hh:mm:ss A');
-                        }
+                        }, width: "10%"
                     },
                     { "data": "ProductUpdates.completeddate", visible: false }
                 ],
@@ -409,7 +419,7 @@
                 // Control button layout
                 dom: '<"floatRight"B><"clear">lfrtip',
                 // Default table order
-                order: [[11, "desc"], [1, "asc"]],
+                order: [[8, "desc"]],
                 buttons: [
                     {
                         // Custom edit button that updates timestamps
@@ -430,9 +440,10 @@
                         text: 'Show Completed Today', action: function (e, dt, node, config) {
                             table.search('')
                                 .columns().search('')
+                                .columns().order('')
                                 .column(0).search('^New Product$', true, false)
                                 .column(1).search('^4 - Completed$', true, false)
-                                .column(12).search(new Date().getMonth() + 1 + "/" + new Date().getDate() + "/" + new Date().getFullYear(), true, false).draw()
+                                .column(9).search(new Date().getMonth() + 1 + "/" + new Date().getDate() + "/" + new Date().getFullYear(), true, false).draw()
                         }
                     },
                     {
@@ -440,6 +451,7 @@
                         text: 'Show Default View', action: function (e, dt, node, config) {
                             table.search('')
                                 .columns().search('')
+                                .columns().order('')
                                 .column(0).search('^New Product$', true, false)
                                 .column(1).search('^3 - Manager Review Completed$', true, false).draw()
                         }
@@ -449,6 +461,7 @@
                         text: 'Show All', action: function (e, dt, node, config) {
                             table.search('')
                                 .columns().search('')
+                                .columns().order('')
                                 .column(0).search('^New Product$', true, false)
                                 .column(1).search('^3 - Manager Review Completed$|^4 - Completed$', true, false).column(11).order('desc').draw()
                         }
@@ -458,116 +471,126 @@
                     {
                         text: 'Export', action: function (e, dt, node, config) {
 
-                            // Gather data from each selected row
-                            var data = table.rows({ selected: true }).data();
+                            if ( confirm( 'Export ' + table.rows('.selected').count() + ' product(s)?' ) ) {
 
-                            // Create array with selected rows data
-                            var newArray = [];
-                            var tempArray = {};
-                            for ($i = 0; $i < data.length; $i++) {
+                                // Gather data from each selected row
+                                var data = table.rows({ selected: true }).data();
 
-                                // OBJ_TAB
-                                tempArray.F01 = data[$i].ProductUpdates.F01
-                                tempArray.F155 = data[$i].ProductUpdates.OBJ_TAB_F155
-                                tempArray.F29 = data[$i].ProductUpdates.OBJ_TAB_F29
-                                tempArray.F22 = data[$i].ProductUpdates.OBJ_TAB_F22
-                                tempArray.F255 = data[$i].ProductUpdates.OBJ_TAB_F255
-                                tempArray.F17 = data[$i].ProductUpdates.OBJ_TAB_F17
-                                tempArray.F16 = data[$i].ProductUpdates.OBJ_TAB_F16
-                                tempArray.F18 = data[$i].ProductUpdates.OBJ_TAB_F18
+                                // Create array with selected rows data
+                                var newArray = [];
+                                var tempArray = {};
+                                for ($i = 0; $i < data.length; $i++) {
 
-                                // POS_TAB
-                                tempArray.F04 = data[$i].ProductUpdates.POS_TAB_F04
-                                tempArray.F02 = data[$i].ProductUpdates.OBJ_TAB_F29 + " " + data[$i].ProductUpdates.OBJ_TAB_F22
-                                tempArray.F79 = data[$i].ProductUpdates.POS_TAB_F79
-                                tempArray.F178 = data[$i].ProductUpdates.POS_TAB_F178
-                                tempArray.F1120 = data[$i].ProductUpdates.POS_TAB_F1120
-                                tempArray.F83 = data[$i].ProductUpdates.POS_TAB_F83
-                                tempArray.F82 = data[$i].ProductUpdates.POS_TAB_F82
-                                tempArray.F81 = data[$i].ProductUpdates.POS_TAB_F81
-                                tempArray.F96 = data[$i].ProductUpdates.POS_TAB_F96
-                                tempArray.F171 = data[$i].ProductUpdates.POS_TAB_F171
-                                tempArray.F123 = data[$i].ProductUpdates.POS_TAB_F123
-                                tempArray.F150 = data[$i].ProductUpdates.POS_TAB_F150
+                                    // OBJ_TAB
+                                    tempArray.F01 = data[$i].ProductUpdates.F01
+                                    tempArray.F155 = data[$i].ProductUpdates.OBJ_TAB_F155
+                                    tempArray.F29 = data[$i].ProductUpdates.OBJ_TAB_F29
+                                    tempArray.F22 = data[$i].ProductUpdates.OBJ_TAB_F22
+                                    tempArray.F255 = data[$i].ProductUpdates.OBJ_TAB_F255
+                                    tempArray.F17 = data[$i].ProductUpdates.OBJ_TAB_F17
+                                    tempArray.F16 = data[$i].ProductUpdates.OBJ_TAB_F16
+                                    tempArray.F18 = data[$i].ProductUpdates.OBJ_TAB_F18
 
-                                // PRICE_TAB
-                                tempArray.F30 = data[$i].ProductUpdates.price_tab_f30
-                                tempArray.F126 = data[$i].ProductUpdates.PRICE_TAB_F126
-                                tempArray.F31 = data[$i].ProductUpdates.PRICE_TAB_F31
+                                    // POS_TAB
+                                    tempArray.F04 = data[$i].ProductUpdates.POS_TAB_F04
+                                    tempArray.F02 = data[$i].ProductUpdates.OBJ_TAB_F29 + " " + data[$i].ProductUpdates.OBJ_TAB_F22
+                                    tempArray.F79 = data[$i].ProductUpdates.POS_TAB_F79
+                                    tempArray.F178 = data[$i].ProductUpdates.POS_TAB_F178
+                                    tempArray.F1120 = data[$i].ProductUpdates.POS_TAB_F1120
+                                    tempArray.F83 = data[$i].ProductUpdates.POS_TAB_F83
+                                    tempArray.F82 = data[$i].ProductUpdates.POS_TAB_F82
+                                    tempArray.F81 = data[$i].ProductUpdates.POS_TAB_F81
+                                    tempArray.F96 = data[$i].ProductUpdates.POS_TAB_F96
+                                    tempArray.F171 = data[$i].ProductUpdates.POS_TAB_F171
+                                    tempArray.F123 = data[$i].ProductUpdates.ScalePLU
+                                    tempArray.F150 = data[$i].ProductUpdates.POS_TAB_F150
 
-                                // COST_TAB
-                                tempArray.F27 = data[$i].ProductUpdates.COST_TAB_F27
-                                tempArray.F26 = data[$i].ProductUpdates.COST_TAB_F26
-                                if (data[$i].ProductUpdates.COST_TAB_F19 == null) {
-                                    tempArray.F19 = data[$i].ProductUpdates.COST_TAB_F19 = 1;
-                                }
-                                else {
-                                    tempArray.F19 = data[$i].ProductUpdates.COST_TAB_F19
-                                }
-                                if (data[$i].ProductUpdates.COST_TAB_F38 == null) {
-                                    tempArray.F38 = data[$i].ProductUpdates.COST_TAB_F19 = 0.01;
-                                }
-                                else {
-                                    tempArray.F38 = data[$i].ProductUpdates.COST_TAB_F38
-                                }
+                                    // PRICE_TAB
+                                    tempArray.F30 = data[$i].ProductUpdates.price_tab_f30
+                                    tempArray.F126 = data[$i].ProductUpdates.PRICE_TAB_F126
+                                    tempArray.F31 = data[$i].ProductUpdates.PRICE_TAB_F31
 
-                                newArray.push(tempArray);
-                                tempArray = {};
-                            };
-
-                            console.log(newArray);
-
-                            for ($i = 0; $i < newArray.length; $i++) {
-                                var ExportNewProduct = $.ajax({
-                                    url: '@Url.Action("CreateNewProduct", "NewProduct")',
-                                    type: "POST",
-                                    dataType: "json",
-                                    data: {
-
-                                        // OBJ_TAB
-                                        'F01': newArray[$i].F01,
-                                        'F155': newArray[$i].F155,
-                                        'F29': newArray[$i].F29,
-                                        'F22': newArray[$i].F22,
-                                        'F255': newArray[$i].F255,
-                                        'F17': newArray[$i].F17,
-                                        'F16': newArray[$i].F16,
-                                        'F18': newArray[$i].F18,
-
-                                        // POS_TAB
-                                        'F04': newArray[$i].F04,
-                                        'F02': newArray[$i].F02,
-                                        'F79': newArray[$i].F79,
-                                        'F178': newArray[$i].F178,
-                                        'F1120': newArray[$i].F1120,
-                                        'F83': newArray[$i].F83,
-                                        'F82': newArray[$i].F82,
-                                        'F81': newArray[$i].F81,
-                                        'F96': newArray[$i].F96,
-                                        'F171': '21',
-                                        'F123': newArray[$i].F123,
-                                        'F150': newArray[$i].F150,
-
-                                        // PRICE_TAB
-                                        'F30': newArray[$i].F30,
-                                        'F126': '1',
-                                        'F31': '1',
-
-                                        // COST_TAB
-                                        'F27': newArray[$i].F27,
-                                        'F26': newArray[$i].F26,
-                                        'F19': newArray[$i].F19,
-                                        'F38': newArray[$i].F38
-
-                                    },
-                                    error: function (error) {
-                                        console.log(`Error ${error}`);
+                                    // COST_TAB
+                                    tempArray.F27 = data[$i].ProductUpdates.COST_TAB_F27
+                                    tempArray.F26 = data[$i].ProductUpdates.COST_TAB_F26
+                                    if (data[$i].ProductUpdates.COST_TAB_F19 == null) {
+                                        tempArray.F19 = data[$i].ProductUpdates.COST_TAB_F19 = 1;
                                     }
-                                });
+                                    else {
+                                        tempArray.F19 = data[$i].ProductUpdates.COST_TAB_F19
+                                    }
+                                    if (data[$i].ProductUpdates.COST_TAB_F38 == null) {
+                                        tempArray.F38 = data[$i].ProductUpdates.COST_TAB_F19 = 0.01;
+                                    }
+                                    else {
+                                        tempArray.F38 = data[$i].ProductUpdates.COST_TAB_F38
+                                    }
 
-                                ExportNewProduct;
-                            }
-                        }
+                                    newArray.push(tempArray);
+                                    tempArray = {};
+                                };
+
+                                for ($i = 0; $i < newArray.length; $i++) {
+                                    var ExportNewProduct = $.ajax({
+                                        url: '@Url.Action("CreateNewProduct", "NewProduct")',
+                                        type: "POST",
+                                        dataType: "json",
+                                        data: {
+
+                                            // OBJ_TAB
+                                            'UPC': newArray[$i].F01,
+                                            'Brand': newArray[$i].F155,
+                                            'ShortDescription': newArray[$i].F29,
+                                            'Size': newArray[$i].F22,
+                                            'LongDescription': newArray[$i].F255,
+                                            'Category': newArray[$i].F17,
+                                            'Family': newArray[$i].F16,
+                                            'Report': newArray[$i].F18,
+
+                                            // POS_TAB
+                                            'Subdepartment': newArray[$i].F04,
+                                            'POSDescription': newArray[$i].F02,
+                                            'SNAP': newArray[$i].F79,
+                                            'WIC': newArray[$i].F178,
+                                            'Others': newArray[$i].F1120,
+                                            'ForcePrice': newArray[$i].F83,
+                                            'Scalable': newArray[$i].F82,
+                                            'Tax1': newArray[$i].F81,
+                                            'Tax2': newArray[$i].F96,
+                                            'ClientAge': newArray[$i].F171,
+                                            'PLU': newArray[$i].F123,
+                                            'StopDiscount': newArray[$i].F150,
+
+                                            // PRICE_TAB
+                                            'Retail': newArray[$i].F30,
+                                            'PriceLevel': '1',
+                                            'Quantity': '1',
+
+                                            // COST_TAB
+                                            'VendorID': newArray[$i].F27,
+                                            'ReorderCode': newArray[$i].F26,
+                                            'Case': newArray[$i].F19,
+                                            'Cost': newArray[$i].F38
+                                        },
+                                        error: function (error) {
+                                            console.log(`Error ${error}`);
+                                        }
+                                    });
+
+                                    ExportNewProduct;
+                                }
+                                alert('Exported ' + table.rows('.selected').count() + ' products!');
+
+                                editorNP.edit(table.rows({ selected: true }).indexes(), false)
+                                    .set('ProductUpdates.completeddate', getDate())
+                                    .set('ProductUpdates.completedby', "@(User.GetCreatedBy())")
+                                    .set('ProductUpdates.productstatusID', 4)
+                                    .submit();
+                            } else {
+                                alert('Export canceled!');
+                            };
+                        },
+
                     },
 
                     // Redirects user back to main Product Maintenance page

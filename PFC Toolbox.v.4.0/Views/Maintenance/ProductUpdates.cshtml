@@ -111,6 +111,10 @@
                 ]
             });
 
+
+            /***********************************************************************************************************************/
+
+
             // Update An Existing Product Form
             var editor = new $.fn.dataTable.Editor({
                 ajax: '/api/ProductUpdates',
@@ -524,9 +528,26 @@
 
                 // This is the default view showing uncompleted requests
                 initComplete: function (e, dt, node, config) {
-                    table.column(0).search('^((?!(New Product)).)*$', true, false)
-                         .column(1).search('^((?!(4 - Completed)).)*$', true, false).draw()
+                    table
+                        .column(0).search('^((?!(New Product)).)*$', true, false)
+                        .column(1).search('^((?!(4 - Completed)).)*$', true, false).draw()
                 },
+                // Hide text overflow with ellipses
+                columnDefs: [{
+                    targets: 2,
+                    render: function (data, type, row) {
+                        if (type === 'display' && data != null) {
+                            data = data.replace(/<(?:.|\\n)*?>/gm, '');
+                            if (data.length > 14) {
+                                return '<span class=\"show-ellipsis\">' + data.substr(0, 14) + '</span><span class=\"no-show\">' + data.substr(14) + '</span>';
+                            } else {
+                                return data;
+                            }
+                        } else {
+                            return data;
+                        }
+                    }
+                }],
                 deferRender: true,
                 // Default table lengths
                 lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "All"]],
@@ -534,14 +555,15 @@
                 ajax: {
                     url: '/api/ProductUpdates'
                 },
+                autoWidth: false,
                 // Table columns
                 columns: [
-                    { "data": "RequestTypes.requestname" },
-                    { "data": "Status.productupdatestatus", className: "editable", editField: "ProductUpdates.productstatusID" },
-                    { "data": "ProductUpdates.F01" },
-                    { "data": "ProductUpdates.OBJ_TAB_F155" },
+                    { "data": "RequestTypes.requestname", width: "10%" },
+                    { "data": "Status.productupdatestatus", className: "editable", editField: "ProductUpdates.productstatusID", width: "10%" },
+                    { "data": "ProductUpdates.F01", width: "5%" },
+                    { "data": "ProductUpdates.OBJ_TAB_F155", width: "10%" },
                     { "data": "ProductUpdates.OBJ_TAB_F29" },
-                    { "data": "ProductUpdates.OBJ_TAB_F22" },
+                    { "data": "ProductUpdates.OBJ_TAB_F22", width: "5%" },
                     { "data": "ProductUpdates.promotprstartdate" },
                     { "data": "ProductUpdates.promotprenddate" },
                     { "data": "ProductUpdates.promotprprice" },
@@ -563,7 +585,7 @@
                 select: true,
                 // Control button layout
                 dom: '<"floatRight"B><"clear">lfrtip',
-                order: [[11, "desc"], [1, "asc"]],
+                order: [[11, "desc"]],
                 // Default table order
                 buttons: [
                     {
@@ -640,6 +662,7 @@
                         text: 'Show Completed Today', action: function (e, dt, node, config) {
                             table.search('')
                                 .columns().search('')
+                                .columns().order('')
                                 .column(1).search('^4 - Completed$', true, false)
                                 .column(12).search(new Date().getMonth() + 1 + "/" + new Date().getDate() + "/" + new Date().getFullYear(), true, false).draw()
                         }
@@ -649,6 +672,7 @@
                         text: 'Show Default View', action: function (e, dt, node, config) {
                             table.search('')
                                 .columns().search('')
+                                .columns().order('')
                                 .column(0).search('^((?!(New Product)).)*$', true, false)
                                 .column(1).search('^((?!(4 - Completed)).)*$', true, false).draw();
                         }
@@ -658,6 +682,7 @@
                         text: 'Show All', action: function (e, dt, node, config) {
                             table.search('')
                                 .columns().search('')
+                                .columns().order('')
                                 .column(0).search('^((?!(New Product)).)*$', true, false)
                                 .column(1).search('^1 - Waiting for Manager Review$|^2 - More Info Needed$|^3 - Manager Review Completed$|^4 - Completed$', true, false).column(11).order('desc').draw()
                         }
