@@ -525,6 +525,10 @@
 
             // Create the DataTables table
             var table = $('#ProductMaintenance').DataTable({
+                //serverSide: true,
+                deferRender: true,
+                autoWidth: false,
+                select: true,
 
                 // This is the default view showing uncompleted requests
                 initComplete: function (e, dt, node, config) {
@@ -548,14 +552,13 @@
                         }
                     }
                 }],
-                deferRender: true,
                 // Default table lengths
                 lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "All"]],
                 // Table data source
                 ajax: {
-                    url: '/api/ProductUpdates'
+                    url: '/api/ProductUpdates'//,
+                    //type: 'POST'
                 },
-                autoWidth: false,
                 // Table columns
                 columns: [
                     { "data": "RequestTypes.requestname", width: "10%" },
@@ -582,7 +585,6 @@
                 rowCallback: function (row, data, index) {
                     if (data.RequestTypes.requestname == "New Product") { $(row).find('td:eq(0)').css('background-color', '#E6EDD7'); }
                 },
-                select: true,
                 // Control button layout
                 dom: '<"floatRight"B><"clear">lfrtip',
                 order: [[11, "desc"]],

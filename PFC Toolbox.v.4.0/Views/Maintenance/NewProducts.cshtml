@@ -159,7 +159,7 @@
                         name: "ProductUpdates.POS_TAB_F79",
                         type: "checkbox",
                         options: [
-                            { label: "", "value": 1 }
+                            { label: "", value: 1 }
                         ],
                         separator: "|",
                         unselectedValue: 0
@@ -168,7 +168,7 @@
                         name: "ProductUpdates.POS_TAB_F82",
                         type: "checkbox",
                         options: [
-                            { label: "", "value": 1 }
+                            { label: "", value: 1 }
                         ],
                         separator: "|",
                         unselectedValue: 0
@@ -176,7 +176,7 @@
                         label: "Taxable:",
                         name: "ProductUpdates.POS_TAB_F81",
                         options: [
-                            { label: "", "value": 1 }
+                            { label: "", value: 1 }
                         ],
                         type: "checkbox",
                         unselectedValue: 0,
@@ -186,7 +186,7 @@
                         name: "ProductUpdates.POS_TAB_F150",
                         type: "checkbox",
                         options: [
-                            { label: "", "value": 1 }
+                            { label: "", value: 1 }
                         ],
                         separator: "|",
                         unselectedValue: 0,
@@ -196,7 +196,7 @@
                         name: "ProductUpdates.POS_TAB_F178",
                         type: "checkbox",
                         options: [
-                            { label: "", "value": 1 }
+                            { label: "", value: 1 }
                         ],
                         separator: "|",
                         unselectedValue: 0
@@ -363,7 +363,10 @@
 
             // Create the DataTables table
             var table = $('#ProductUpdates').DataTable({
-
+                //serverSide: true,
+                deferRender: true,
+                autoWidth: false,
+                select: true,
                 // Default view showing incomplete requests
                 initComplete: function (e, dt, node, config) {
                     table
@@ -385,14 +388,13 @@
                         }
                     }
                 }],
-                deferRender: true,
                 // Default table lengths
                 lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "All"]],
                 // Table data source
                 ajax: {
-                    url: '/api/ProductUpdates'
+                    url: '/api/ProductUpdates'//,
+                    //type: 'POST'
                 },
-                autoWidth: false,
                 // Table columns
                 columns: [
                     { "data": "RequestTypes.requestname", width: "10%" },
@@ -409,13 +411,12 @@
                             return window.moment(value).format('M/D/YYYY hh:mm:ss A');
                         }, width: "10%"
                     },
-                    { "data": "ProductUpdates.completeddate", visible: false }
+                    { "data": "ProductUpdates.completeddate", visible: false}
                 ],
                 // Change New Products request type background green
                 "rowCallback": function (row, data, index) {
                     if (data.RequestTypes.requestname == "New Product") { $(row).find('td:eq(0)').css('background-color', '#E6EDD7'); }
                 },
-                select: true,
                 // Control button layout
                 dom: '<"floatRight"B><"clear">lfrtip',
                 // Default table order
@@ -475,7 +476,6 @@
 
                                 // Gather data from each selected row
                                 var data = table.rows({ selected: true }).data();
-
                                 // Create array with selected rows data
                                 var newArray = [];
                                 var tempArray = {};
@@ -526,6 +526,26 @@
                                         tempArray.F38 = data[$i].ProductUpdates.COST_TAB_F38
                                     }
 
+                                    // LABEL_TAB
+                                    switch ( data[$i].ProductUpdates.labelID )
+                                    {
+                                        case "1":
+                                            tempArray.F95 = "1 - Full Regular Price.lbz";
+                                            break;
+                                        case "2":
+                                            tempArray.F95 = "2 - Half Regular Price.lbz";
+                                            break;
+                                        case "3":
+                                            tempArray.F95 = "3 - Full No Price.lbz";
+                                            break;
+                                        case "4":
+                                            tempArray.F95 = "4 - Half No Price.lbz";
+                                            break;
+                                        case "5":
+                                            tempArray.F95 = "5 - No Label - Do Not Print";
+                                            break;
+                                    };
+
                                     newArray.push(tempArray);
                                     tempArray = {};
                                 };
@@ -570,24 +590,24 @@
                                             'VendorID': newArray[$i].F27,
                                             'ReorderCode': newArray[$i].F26,
                                             'Case': newArray[$i].F19,
-                                            'Cost': newArray[$i].F38
-                                        },
-                                        error: function (error) {
-                                            console.log(`Error ${error}`);
+                                            'Cost': newArray[$i].F38,
+
+                                            // LABEL_TAB
+                                            'Label': newArray[$i].F95
                                         }
                                     });
 
                                     ExportNewProduct;
-                                }
-                                alert('Exported ' + table.rows('.selected').count() + ' products!');
 
-                                editorNP.edit(table.rows({ selected: true }).indexes(), false)
-                                    .set('ProductUpdates.completeddate', getDate())
-                                    .set('ProductUpdates.completedby', "@(User.GetCreatedBy())")
-                                    .set('ProductUpdates.productstatusID', 4)
-                                    .submit();
+                                    alert('Exported ' + table.rows('.selected').count() + ' products!')
+                                    editorNP.edit(table.rows({ selected: true }).indexes(), false)
+                                        .set('ProductUpdates.completeddate', getDate())
+                                        .set('ProductUpdates.completedby', "@(User.GetCreatedBy())")
+                                        .set('ProductUpdates.productstatusID', 4)
+                                        .submit();
+                                };
                             } else {
-                                alert('Export canceled!');
+                                alert("Export failed!")
                             };
                         },
 

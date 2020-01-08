@@ -953,7 +953,10 @@
 
             // Create the DataTables table
             var table = $('#ProductMaintenance').DataTable({
-
+                //serverSide: true,
+                deferRender: true,
+                autoWidth: false,
+                select: true,
                 // Default view showing incomplete requests
                 initComplete: function (e, dt, node, config) {
                     table.column(1).search('^1 - Waiting for Manager Review$|^2 - More Info Needed$|^3 - Manager Review Completed$', true, false).draw()
@@ -973,14 +976,13 @@
                         }
                     }
                 }],
-                deferRender: true,
                 // Default table lengths
                 lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "All"]],
                 // Table data source
                 ajax: {
-                    url: '/api/ProductUpdates'
+                    url: '/api/ProductUpdates'//,
+                    //type: 'POST'
                 },
-                autoWidth: false,
                 // Table columns
                 columns: [
                     { "data": "RequestTypes.requestname", width: "10%" },
@@ -1002,7 +1004,6 @@
                 rowCallback: function (row, data, index) {
                     if (data.RequestTypes.requestname == "New Product") { $(row).find('td:eq(0)').css('background-color', '#E6EDD7'); }
                 },
-                select: true,
                 // Control button layout
                 dom: '<"floatRight"B><"clear">lfrtip',
                 // Default table order

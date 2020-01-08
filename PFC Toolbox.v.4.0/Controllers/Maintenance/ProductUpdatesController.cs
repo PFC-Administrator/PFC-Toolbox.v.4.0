@@ -118,6 +118,8 @@ namespace PFC_Toolbox.v._4._0.Controllers
                             .Value("labelID")
                             .Label("labelsizes"))
                     )
+                    .Field(new Field("ProductUpdates.LabelSizes")
+                    )
                     .Field(new Field("ProductUpdates.signID")
                         .Options(new Options()
                             .Table("SignSizes")
