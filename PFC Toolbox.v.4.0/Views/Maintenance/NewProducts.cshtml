@@ -477,7 +477,7 @@
 
                                 // Gather data from each selected row
                                 var data = table.rows({ selected: true }).data();
-                                console.log(data);
+
                                 // Create array with selected rows data
                                 var newArray = [];
                                 var tempArray = {};
@@ -555,19 +555,84 @@
                                     tempArray.Mettler = data[$i].ProductUpdates.ismettlerrequired
 
                                     // SCL_TXT_TAB
-                                    tempArray.F297 = data[$i].ProductUpdates.IngredientList.substring(0, 252)
-                                    tempArray.F1837 = data[$i].ProductUpdates.IngredientList.substring(253, 505)
-                                    tempArray.F1838 = data[$i].ProductUpdates.IngredientList.substring(506, 758)
-                                    tempArray.F1839 = data[$i].ProductUpdates.IngredientList.substring(759, 1011)
-                                    tempArray.F1853 = data[$i].ProductUpdates.IngredientList.substring(1012, 1264)
-                                    tempArray.F1854 = data[$i].ProductUpdates.IngredientList.substring(1265, 1517)
-                                    tempArray.F1855 = data[$i].ProductUpdates.IngredientList.substring(1518, 1770)
-                                    tempArray.F1856 = data[$i].ProductUpdates.IngredientList.substring(1771, 2023)
-                                    tempArray.F1968 = data[$i].ProductUpdates.IngredientList.substring(2024, 2276)
-                                    tempArray.F1969 = data[$i].ProductUpdates.IngredientList.substring(2277, 2529)
-                                    tempArray.F1970 = data[$i].ProductUpdates.IngredientList.substring(2530, 2782)
-                                    tempArray.F1971 = data[$i].ProductUpdates.IngredientList.substring(2783, 3035)
-                                    tempArray.F1972 = data[$i].ProductUpdates.IngredientList.substring(3036, 3288)
+                                    if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
+                                        tempArray.F297 = null;
+                                    }
+                                    else {
+                                        tempArray.F297 = data[$i].ProductUpdates.IngredientList.substring(0, 252)
+                                    }
+                                    if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
+                                        tempArray.F1837 = null;
+                                    }
+                                    else {
+                                        tempArray.F1837 = data[$i].ProductUpdates.IngredientList.substring(253, 505)
+                                    }
+                                    if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
+                                        tempArray.F1838 = null;
+                                    }
+                                    else {
+                                        tempArray.F1838 = data[$i].ProductUpdates.IngredientList.substring(506, 758)
+                                    }
+                                    if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
+                                        tempArray.F1838 = null;
+                                    }
+                                    else {
+                                        tempArray.F1839 = data[$i].ProductUpdates.IngredientList.substring(759, 1011)
+                                    }
+                                    if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
+                                        tempArray.F1853 = null;
+                                    }
+                                    else {
+                                        tempArray.F1853 = data[$i].ProductUpdates.IngredientList.substring(1012, 1264)
+                                    }
+                                    if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
+                                        tempArray.F1854 = null;
+                                    }
+                                    else {
+                                        tempArray.F1854 = data[$i].ProductUpdates.IngredientList.substring(1265, 1517)
+                                    }
+                                    if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
+                                        tempArray.F1855 = null;
+                                    }
+                                    else {
+                                        tempArray.F1855 = data[$i].ProductUpdates.IngredientList.substring(1518, 1770)
+                                    }
+                                    if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
+                                        tempArray.F1856 = null;
+                                    }
+                                    else {
+                                        tempArray.F1856 = data[$i].ProductUpdates.IngredientList.substring(1771, 2023)
+                                    }
+                                    if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
+                                        tempArray.F1968 = null;
+                                    }
+                                    else {
+                                        tempArray.F1968 = data[$i].ProductUpdates.IngredientList.substring(2024, 2276)
+                                    }
+                                    if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
+                                        tempArray.F1969 = null;
+                                    }
+                                    else {
+                                        tempArray.F1969 = data[$i].ProductUpdates.IngredientList.substring(2277, 2529)
+                                    }
+                                    if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
+                                        tempArray.F1970 = null;
+                                    }
+                                    else {
+                                        tempArray.F1970 = data[$i].ProductUpdates.IngredientList.substring(2530, 2782)
+                                    }
+                                    if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
+                                        tempArray.F1971 = null;
+                                    }
+                                    else {
+                                        tempArray.F1971 = data[$i].ProductUpdates.IngredientList.substring(2783, 3035)
+                                    }
+                                    if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
+                                        tempArray.F1972 = null;
+                                    }
+                                    else {
+                                        tempArray.F1972 = data[$i].ProductUpdates.IngredientList.substring(3036, 3288)
+                                    }
 
                                     newArray.push(tempArray);
                                     tempArray = {};
