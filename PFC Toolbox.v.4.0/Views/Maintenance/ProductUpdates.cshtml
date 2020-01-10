@@ -667,7 +667,7 @@
                                 .columns().search('')
                                 .columns().order('')
                                 .column(1).search('^4 - Completed$', true, false)
-                                .column(12).search(new Date().getMonth() + 1 + "/" + new Date().getDate() + "/" + new Date().getFullYear(), true, false).draw()
+                                .column(12).search(new Date().getMonth() + 1 + "/" + new Date().getDate() + "/" + new Date().getFullYear(), true, false).column(11).order('desc').draw()
                         }
                     },
                     {
@@ -677,7 +677,7 @@
                                 .columns().search('')
                                 .columns().order('')
                                 .column(0).search('^((?!(New Product)).)*$', true, false)
-                                .column(1).search('^((?!(4 - Completed)).)*$', true, false).draw();
+                                .column(1).search('^((?!(4 - Completed)).)*$', true, false).column(11).order('desc').draw();
                         }
                     },
                     {
@@ -687,7 +687,7 @@
                                 .columns().search('')
                                 .columns().order('')
                                 .column(0).search('^((?!(New Product)).)*$', true, false)
-                                .column(1).search('^1 - Waiting for Manager Review$|^2 - More Info Needed$|^3 - Manager Review Completed$|^4 - Completed$', true, false).column(11).order('desc').draw()
+                                .column(1).search('^1 - Waiting for Manager Review$|^2 - More Info Needed$|^3 - Manager Review Completed$|^4 - Completed$', true, false).column(11).order('desc').draw();
                         }
                     },
                     {
