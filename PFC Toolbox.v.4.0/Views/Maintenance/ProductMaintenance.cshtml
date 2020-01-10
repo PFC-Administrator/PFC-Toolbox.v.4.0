@@ -72,6 +72,7 @@
             return today;
         };
 
+        var currentUser = "@(User.GetCreatedBy())";
         var editorNP;
         var editor;
         $(document).ready(function () {
@@ -229,7 +230,7 @@
                         name: "ProductUpdates.createdby",
                         type: "readonly",
                         type: "hidden",
-                        def: "@(User.GetCreatedBy())"
+                        def: currentUser
                     }, {
                         label: "Date created:",
                         name: "ProductUpdates.datecreated",
@@ -734,7 +735,7 @@
                         name: "ProductUpdates.createdby",
                         type: "readonly",
                         type: "hidden",
-                        def: "@(User.GetCreatedBy())"
+                        def: currentUser
                     }, {
                         label: "Date created:",
                         name: "ProductUpdates.datecreated",
@@ -1049,7 +1050,7 @@
                                 {
                                     text: 'Update', action: function () {
                                         editor.field('ProductUpdates.lastupdatedon').val(getDate());
-                                        editor.field('ProductUpdates.lastupdatedby').val("@(User.GetCreatedBy())");
+                                        editor.field('ProductUpdates.lastupdatedby').val(currentUser);
                                         this.submit();
                                     }
                                 }

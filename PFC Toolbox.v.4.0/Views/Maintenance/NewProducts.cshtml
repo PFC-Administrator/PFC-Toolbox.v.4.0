@@ -73,6 +73,7 @@
             return today;
         };
 
+        var currentUser = "@(User.GetCreatedBy())";
         var editorNP;
         $(document).ready(function () {
 
@@ -234,7 +235,7 @@
                         name: "ProductUpdates.createdby",
                         type: "readonly",
                         type: "hidden",
-                        def: "@(User.GetCreatedBy())"
+                        def: currentUser
                     }, {
                         label: "Date created:",
                         name: "ProductUpdates.datecreated",
@@ -358,7 +359,7 @@
             // New Product Form: set last updated date and last updated by upon edit
             editorNP.field('ProductUpdates.productstatusID').input().on('change', function () {
                 editorNP.field('ProductUpdates.lastupdatedon').val(getDate());
-                editorNP.field('ProductUpdates.lastupdatedby').val("@(User.GetCreatedBy())");
+                editorNP.field('ProductUpdates.lastupdatedby').val(currentUser);
             });
 
             // Create the DataTables table
@@ -431,7 +432,7 @@
                                 {
                                     text: 'Update', action: function () {
                                         editorNP.field('ProductUpdates.lastupdatedon').val(getDate());
-                                        editorNP.field('ProductUpdates.lastupdatedby').val("@(User.GetCreatedBy())");
+                                        editorNP.field('ProductUpdates.lastupdatedby').val(currentUser);
                                         this.submit();
                                     }
                                 }
@@ -515,13 +516,13 @@
                                     // COST_TAB
                                     tempArray.F27 = data[$i].ProductUpdates.COST_TAB_F27
                                     tempArray.F26 = data[$i].ProductUpdates.COST_TAB_F26
-                                    if (data[$i].ProductUpdates.COST_TAB_F19 == null) {
+                                    if (data[$i].ProductUpdates.COST_TAB_F19 == null || data[$i].ProductUpdates.COST_TAB_F19 == "") {
                                         tempArray.F19 = data[$i].ProductUpdates.COST_TAB_F19 = 1;
                                     }
                                     else {
                                         tempArray.F19 = data[$i].ProductUpdates.COST_TAB_F19
                                     }
-                                    if (data[$i].ProductUpdates.COST_TAB_F38 == null) {
+                                    if (data[$i].ProductUpdates.COST_TAB_F38 == null || data[$i].ProductUpdates.COST_TAB_F38 == "") {
                                         tempArray.F38 = data[$i].ProductUpdates.COST_TAB_F38 = 0.01;
                                     }
                                     else {
@@ -710,7 +711,7 @@
 
                                     editorNP.edit(table.rows({ selected: true }).indexes(), false)
                                         .set('ProductUpdates.completeddate', getDate())
-                                        .set('ProductUpdates.completedby', "@(User.GetCreatedBy())")
+                                        .set('ProductUpdates.completedby', currentUser)
                                         .set('ProductUpdates.productstatusID', 4)
                                         .submit();
                                 };
