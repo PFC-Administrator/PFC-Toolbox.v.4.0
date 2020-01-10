@@ -495,9 +495,18 @@
                             range.push('002' + $i + '00000');
                         };
 
+                        // All available PLU/UPC's in SMS
                         var unused = _.difference(range, used);
-                        var MPLUUnused = (unused[0]).slice(3, -5);
 
+                        // If subdepartment is meat related, remove subdepartment prefix to create a 4 digit PLU
+                        if (subdepartment == 41 || subdepartment == 53 || subdepartment == 54 || subdepartment == 55) {
+                            var MPLUUnused = ((unused[0]).slice(4, -5)).replace(/^0+/, '');
+                        }
+                        else {
+                            var MPLUUnused = (unused[0]).slice(3, -5);
+                        }
+
+                        // Set form fields to generated values
                         editorNP.field('ProductUpdates.F01').val(unused[0]);
                         editorNP.field('ProductUpdates.ScalePLU').val(MPLUUnused);
                     });
@@ -556,7 +565,7 @@
                         editorNP.field('ProductUpdates.F01').val(unused[0]);
                     });
                 } else {
-                    alert('Nice');
+                    alert('Uh oh...');
                 }
             });
 
