@@ -90,6 +90,11 @@
                         type: "hidden",
                         def: "6"
                     }, {
+                        label: "Status:",
+                        name: "ProductUpdates.productstatusID",
+                        type: "select",
+                        def: "3"
+                    }, {
                         label: "Location:",
                         name: "ProductUpdates.locationID",
                         type: "select",
@@ -251,11 +256,6 @@
                         label: "Last updated by:",
                         name: "ProductUpdates.lastupdatedby",
                         type: "hidden"
-                    }, {
-                        label: "Status:",
-                        name: "ProductUpdates.productstatusID",
-                        type: "hidden",
-                        def: "3"
                     }, {
                         label: "Notes:",
                         name: "ProductUpdates.AdditionalRequestNotes",
@@ -444,7 +444,7 @@
                                 .columns().order('')
                                 .column(0).search('^New Product$', true, false)
                                 .column(1).search('^4 - Completed$', true, false)
-                                .column(9).search(new Date().getMonth() + 1 + "/" + new Date().getDate() + "/" + new Date().getFullYear(), true, false).draw()
+                                .column(9).search(new Date().getMonth() + 1 + "/" + new Date().getDate() + "/" + new Date().getFullYear(), true, false).column(8).order('desc').draw()
                         }
                     },
                     {
@@ -454,7 +454,7 @@
                                 .columns().search('')
                                 .columns().order('')
                                 .column(0).search('^New Product$', true, false)
-                                .column(1).search('^3 - Manager Review Completed$', true, false).draw()
+                                .column(1).search('^3 - Manager Review Completed$', true, false).column(8).order('desc').draw()
                         }
                     },
                     {
@@ -464,7 +464,7 @@
                                 .columns().search('')
                                 .columns().order('')
                                 .column(0).search('^New Product$', true, false)
-                                .column(1).search('^3 - Manager Review Completed$|^4 - Completed$', true, false).column(11).order('desc').draw()
+                                .column(1).search('^3 - Manager Review Completed$|^4 - Completed$', true, false).column(8).order('desc').draw()
                         }
                     },
 
@@ -476,6 +476,7 @@
 
                                 // Gather data from each selected row
                                 var data = table.rows({ selected: true }).data();
+                                console.log(data);
                                 // Create array with selected rows data
                                 var newArray = [];
                                 var tempArray = {};
@@ -520,7 +521,7 @@
                                         tempArray.F19 = data[$i].ProductUpdates.COST_TAB_F19
                                     }
                                     if (data[$i].ProductUpdates.COST_TAB_F38 == null) {
-                                        tempArray.F38 = data[$i].ProductUpdates.COST_TAB_F19 = 0.01;
+                                        tempArray.F38 = data[$i].ProductUpdates.COST_TAB_F38 = 0.01;
                                     }
                                     else {
                                         tempArray.F38 = data[$i].ProductUpdates.COST_TAB_F38
@@ -545,6 +546,27 @@
                                             tempArray.F95 = "5 - No Label - Do Not Print";
                                             break;
                                     };
+
+                                    // SCL_TAB
+                                    tempArray.F266 = data[$i].ProductUpdates.ScalePLU
+                                    tempArray.F258 = data[$i].ProductUpdates.TareNetWeight
+                                    tempArray.F264 = data[$i].ProductUpdates.ShelfLife
+                                    tempArray.Mettler = data[$i].ProductUpdates.ismettlerrequired
+
+                                    // SCL_TXT_TAB
+                                    tempArray.F297 = data[$i].ProductUpdates.IngredientList.substring(0, 252)
+                                    tempArray.F1837 = data[$i].ProductUpdates.IngredientList.substring(253, 505)
+                                    tempArray.F1838 = data[$i].ProductUpdates.IngredientList.substring(506, 758)
+                                    tempArray.F1839 = data[$i].ProductUpdates.IngredientList.substring(759, 1011)
+                                    tempArray.F1853 = data[$i].ProductUpdates.IngredientList.substring(1012, 1264)
+                                    tempArray.F1854 = data[$i].ProductUpdates.IngredientList.substring(1265, 1517)
+                                    tempArray.F1855 = data[$i].ProductUpdates.IngredientList.substring(1518, 1770)
+                                    tempArray.F1856 = data[$i].ProductUpdates.IngredientList.substring(1771, 2023)
+                                    tempArray.F1968 = data[$i].ProductUpdates.IngredientList.substring(2024, 2276)
+                                    tempArray.F1969 = data[$i].ProductUpdates.IngredientList.substring(2277, 2529)
+                                    tempArray.F1970 = data[$i].ProductUpdates.IngredientList.substring(2530, 2782)
+                                    tempArray.F1971 = data[$i].ProductUpdates.IngredientList.substring(2783, 3035)
+                                    tempArray.F1972 = data[$i].ProductUpdates.IngredientList.substring(3036, 3288)
 
                                     newArray.push(tempArray);
                                     tempArray = {};
@@ -593,21 +615,44 @@
                                             'Cost': newArray[$i].F38,
 
                                             // LABEL_TAB
-                                            'Label': newArray[$i].F95
+                                            'Label': newArray[$i].F95,
+
+                                            // SCL_TAB
+                                            'Mettler': newArray[$i].Mettler,
+                                            'Tare': newArray[$i].F258,
+                                            'ProdLife': newArray[$i].F264,
+                                            'TextLink': newArray[$i].F266,
+
+                                            // SCL_TXT_TAB
+                                            'Ingredients1': newArray[$i].F297,
+                                            'Ingredients2': newArray[$i].F1837,
+                                            'Ingredients3': newArray[$i].F1838,
+                                            'Ingredients4': newArray[$i].F1839,
+                                            'Ingredients5': newArray[$i].F1853,
+                                            'Ingredients6': newArray[$i].F1854,
+                                            'Ingredients7': newArray[$i].F1855,
+                                            'Ingredients8': newArray[$i].F1856,
+                                            'Ingredients9': newArray[$i].F1968,
+                                            'Ingredients10': newArray[$i].F1969,
+                                            'Ingredients11': newArray[$i].F1970,
+                                            'Ingredients12': newArray[$i].F1971,
+                                            'Ingredients13': newArray[$i].F1972
                                         }
                                     });
 
                                     ExportNewProduct;
 
-                                    alert('Exported ' + table.rows('.selected').count() + ' products!')
                                     editorNP.edit(table.rows({ selected: true }).indexes(), false)
                                         .set('ProductUpdates.completeddate', getDate())
                                         .set('ProductUpdates.completedby', "@(User.GetCreatedBy())")
                                         .set('ProductUpdates.productstatusID', 4)
                                         .submit();
                                 };
+
+                                    alert('Exported ' + table.rows('.selected').count() + ' products!')
+
                             } else {
-                                alert("Export failed!")
+                                alert("Export canceled!")
                             };
                         },
 

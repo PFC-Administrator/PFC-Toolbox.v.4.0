@@ -1017,7 +1017,8 @@
                                 'Create',
                                 { text: 'Submit Another', action: function () { this.submit(); editorNP.create(); } },
                                 { text: 'Clear', action: function () { fields = editorNP.displayed(); for (field in fields) { editorNP.field(fields[field]).val(''); }; } },
-                                { text: 'Copy', action: function () { var values = editorNP.edit(table.row(':last', { order: 'index' }), false).val(); editorNP.create({}).set(values); } },]
+                                { text: 'Copy', action: function () { var values = editorNP.edit(table.row(':last', { order: 'index' }), false).val(); editorNP.create({}).set(values); } }
+                            ]
                     },
                     // Update An Existing Product Form: opens the Update an Existing Product Form
                     { text: 'Update Product', formTitle: 'Update An Existing Product', extend: 'create', editor: editor,
@@ -1027,7 +1028,8 @@
                                 'Create',
                                 { text: 'Submit Another', action: function () { this.submit(); editor.create(); } },
                                 { text: 'Clear', action: function () { fields = editor.displayed(); for (field in fields) { editor.field(fields[field]).val(''); }; } },
-                                { text: 'Copy', action: function () { var values = editor.edit(table.row( ':last', { order: 'index' }), false).val(); editor.create({}).set(values); } }, ]
+                                { text: 'Copy', action: function () { var values = editor.edit(table.row(':last', { order: 'index' }), false).val(); editor.create({}).set(values); } }
+                            ]
                     },
                     {
                         // Custom edit button that updates timestamps
