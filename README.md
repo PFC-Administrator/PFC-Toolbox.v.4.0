@@ -4,9 +4,7 @@
 <ol>
   <li>DataTables Server-side processing</li>
   <li>Convert hardcoded SQL queries to stored procedures</li>
-  <li>Remove hardcoded IP addresses</li>
   <li>Create stored procedures that run periodically to update PFCToolbox SQL tables: AspNetUsers, Brands, SMSCategories, SMSOperators, SMSReports, SMSSubdepartments, SMSVendors with data directly from SMS</li>
-  <li>Queue up tags and signage from New Product exports</li>
 </ol>
   
 ## Requests / Ideas:
@@ -20,7 +18,6 @@
   <li>Implementation of Co-op Deals or Bidfile?</li>
   <li>Sales by brand</li>
   <li>Sales by description</li>
-  <li>Promotional reports and sales by promotional reports</li>
-  <li>Package price on New Product / Update Uproduct forms</li>
+  <li>Package price on New Product / Update Product forms</li>
   <li>Multi subdepartment sales reports.</li>
 </ol>
