@@ -121,6 +121,12 @@
                 table: '#ProductMaintenance',
                 fields: [
                     {
+                        label: "Status:",
+                        name: "ProductUpdates.productstatusID",
+                        type: "select",
+                        //type: "hidden",
+                        def: "3"
+                    }, {
                         label: "Product Update Type",
                         name: "ProductUpdates.requesttypeID",
                         type: "select",
@@ -298,11 +304,6 @@
                         label: "Last updated by:",
                         name: "ProductUpdates.lastupdatedby",
                         type: "hidden"
-                    }, {
-                        label: "Status:",
-                        name: "ProductUpdates.productstatusID",
-                        type: "hidden",
-                        def: "3"
                     }, {
                         label: "Notes:",
                         name: "ProductUpdates.AdditionalRequestNotes",
@@ -529,7 +530,6 @@
                 deferRender: true,
                 autoWidth: false,
                 select: true,
-
                 // This is the default view showing uncompleted requests
                 initComplete: function (e, dt, node, config) {
                     table
@@ -562,7 +562,7 @@
                 // Table columns
                 columns: [
                     { "data": "RequestTypes.requestname", width: "10%" },
-                    { "data": "Status.productupdatestatus", className: "editable", editField: "ProductUpdates.productstatusID", width: "10%" },
+                    { "data": "Status.productupdatestatus", className: "editable", editField: "ProductUpdates.productstatusID"},
                     { "data": "ProductUpdates.F01", width: "5%" },
                     { "data": "ProductUpdates.OBJ_TAB_F155", width: "10%" },
                     { "data": "ProductUpdates.OBJ_TAB_F29" },
