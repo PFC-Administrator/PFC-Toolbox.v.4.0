@@ -3,7 +3,6 @@
 ## Needs work:
 <ol>
   <li>DataTables Server-side processing</li>
-  <li>Convert hardcoded SQL queries to stored procedures</li>
   <li>Create stored procedures that run periodically to update PFCToolbox SQL tables: AspNetUsers, Brands, SMSCategories, SMSOperators, SMSReports, SMSSubdepartments, SMSVendors with data directly from SMS</li>
 </ol>
   
