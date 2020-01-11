@@ -246,33 +246,6 @@
                         name: "ProductUpdates.POS_TAB_F171",
                         type: "hidden"
                     }, {
-                        label: "Created by:",
-                        name: "ProductUpdates.createdby",
-                        type: "readonly",
-                        type: "hidden",
-                        def: currentUser
-                    }, {
-                        label: "Date created:",
-                        name: "ProductUpdates.datecreated",
-                        type: "hidden",
-                        def: getDate()
-                    }, {
-                        label: "Date completed:",
-                        name: "ProductUpdates.completeddate",
-                        type: "hidden"
-                    }, {
-                        label: "Completed by:",
-                        name: "ProductUpdates.completedby",
-                        type: "hidden"
-                    }, {
-                        label: "Last updated on:",
-                        name: "ProductUpdates.lastupdatedon",
-                        type: "hidden"
-                    }, {
-                        label: "Last updated by:",
-                        name: "ProductUpdates.lastupdatedby",
-                        type: "hidden"
-                    }, {
                         label: "Status:",
                         name: "ProductUpdates.productstatusID",
                         type: "hidden",
@@ -300,6 +273,33 @@
                         label: "Ingredients:",
                         name: "ProductUpdates.IngredientList",
                         type:"textarea"
+                    }, {
+                        label: "Created by:",
+                        name: "ProductUpdates.createdby",
+                        type: "readonly",
+                        type: "hidden",
+                        def: currentUser
+                    }, {
+                        label: "Date created:",
+                        name: "ProductUpdates.datecreated",
+                        type: "hidden",
+                        def: getDate()
+                    }, {
+                        label: "Date completed:",
+                        name: "ProductUpdates.completeddate",
+                        type: "hidden"
+                    }, {
+                        label: "Completed by:",
+                        name: "ProductUpdates.completedby",
+                        type: "hidden"
+                    }, {
+                        label: "Last updated on:",
+                        name: "ProductUpdates.lastupdatedon",
+                        type: "hidden"
+                    }, {
+                        label: "Last updated by:",
+                        name: "ProductUpdates.lastupdatedby",
+                        type: "hidden"
                     }
                 ]
             });
@@ -845,33 +845,6 @@
                         name: "ProductUpdates.POS_TAB_F171",
                         type: "hidden"
                     }, {
-                        label: "Created by:",
-                        name: "ProductUpdates.createdby",
-                        type: "readonly",
-                        type: "hidden",
-                        def: currentUser
-                    }, {
-                        label: "Date created:",
-                        name: "ProductUpdates.datecreated",
-                        type: "hidden",
-                        def: getDate()
-                    }, {
-                        label: "Date completed:",
-                        name: "ProductUpdates.completeddate",
-                        type: "hidden"
-                    }, {
-                        label: "Completed by:",
-                        name: "ProductUpdates.completedby",
-                        type: "hidden"
-                    }, {
-                        label: "Last updated on:",
-                        name: "ProductUpdates.lastupdatedon",
-                        type: "hidden"
-                    }, {
-                        label: "Last updated by:",
-                        name: "ProductUpdates.lastupdatedby",
-                        type: "hidden"
-                    }, {
                         label: "Status:",
                         name: "ProductUpdates.productstatusID",
                         type: "hidden",
@@ -899,8 +872,49 @@
                         label: "Ingredients:",
                         name: "ProductUpdates.IngredientList",
                         type:"textarea"
+                    }, {
+                        label: "Created by:",
+                        name: "ProductUpdates.createdby",
+                        type: "readonly",
+                        type: "hidden",
+                        def: currentUser
+                    }, {
+                        label: "Date created:",
+                        name: "ProductUpdates.datecreated",
+                        type: "hidden",
+                        def: getDate()
+                    }, {
+                        label: "Date completed:",
+                        name: "ProductUpdates.completeddate",
+                        type: "readonly"
+                    }, {
+                        label: "Completed by:",
+                        name: "ProductUpdates.completedby",
+                        type: "readonly"
+                    }, {
+                        label: "Last updated on:",
+                        name: "ProductUpdates.lastupdatedon",
+                        type: "readonly",
+                        type: "hidden"
+                    }, {
+                        label: "Last updated by:",
+                        name: "ProductUpdates.lastupdatedby",
+                        type: "readonly",
+                        type: "hidden"
                     }
                 ]
+            });
+
+            // Update An Existing Product Form: shows completed by info if product is marked as complete
+            editor.on('open', function () {
+                if (editor.field('ProductUpdates.productstatusID').val() == 4) {
+                    editor.field('ProductUpdates.completeddate').show();
+                    editor.field('ProductUpdates.completedby').show();
+                }
+                else {
+                    editor.field('ProductUpdates.completeddate').hide();
+                    editor.field('ProductUpdates.completedby').hide();
+                }
             });
 
             // Update An Existing Product Form: hides cost info on load
