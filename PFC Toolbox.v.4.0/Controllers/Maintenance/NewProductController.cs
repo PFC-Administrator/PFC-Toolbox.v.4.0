@@ -17,6 +17,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
                 string Mettler,
             // Optional Parameters:
                 string SNAP = null, string WIC = null, string Others = null, string ForcePrice = null, string Scalable = null, string Tax1 = null, string Tax2 = null, string PLU = null, string StopDiscount = null, int Family = 0, int ClientAge = 0,
+                int Like = 0,
                 string Ingredients1 = null, string Ingredients2 = null, string Ingredients3 = null, string Ingredients4 = null, string Ingredients5 = null, string Ingredients6 = null, string Ingredients7 = null, string Ingredients8 = null, string Ingredients9 = null, string Ingredients10 = null, string Ingredients11 = null, string Ingredients12 = null, string Ingredients13 = null,
                 float Tare = 0, int ProdLife = 0, int TextLink = 0)
         {
@@ -52,6 +53,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
                     cmd1.Parameters.Add("@F30", SqlDbType.Money).Value = Retail;
                     cmd1.Parameters.Add("@F126", SqlDbType.Int).Value = PriceLevel;
                     cmd1.Parameters.Add("@F31", SqlDbType.Float).Value = Quantity;
+                    cmd1.Parameters.Add("@F122", SqlDbType.Int).Value = Like;
                     cmd1.Parameters.Add("@F27", SqlDbType.VarChar).Value = VendorID;
                     cmd1.Parameters.Add("@F26", SqlDbType.VarChar).Value = ReorderCode;
                     cmd1.Parameters.Add("@F19", SqlDbType.Float).Value = Case;
@@ -94,6 +96,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
             //        cmd2.Parameters.Add("@F30", SqlDbType.Money).Value = Retail;
             //        cmd2.Parameters.Add("@F126", SqlDbType.Int).Value = PriceLevel;
             //        cmd2.Parameters.Add("@F31", SqlDbType.Float).Value = Quantity;
+            //        cmd1.Parameters.Add("@F122", SqlDbType.Int).Value = Like;
             //        cmd2.Parameters.Add("@F27", SqlDbType.VarChar).Value = VendorID;
             //        cmd2.Parameters.Add("@F26", SqlDbType.VarChar).Value = ReorderCode;
             //        cmd2.Parameters.Add("@F19", SqlDbType.Float).Value = Case;
