@@ -570,6 +570,77 @@
                 }
             });
 
+            // New Product Form: field validation
+            editorNP.on('preSubmit', function (e, o, action) {
+                if (action !== 'remove') {
+
+                    if (!editorNP.field('ProductUpdates.locationID').val()) {
+                        editorNP.field('ProductUpdates.locationID').error('Required');
+                    }
+
+                    if (!editorNP.field('ProductUpdates.ismettlerrequired').val()) {
+                        editorNP.field('ProductUpdates.ismettlerrequired').error('Required');
+                    }
+
+                    if (!editorNP.field('ProductUpdates.F01').val()) {
+                        editorNP.field('ProductUpdates.F01').error('Required');
+                    }
+
+                    if (!editorNP.field('ProductUpdates.labelID').val()) {
+                        editorNP.field('ProductUpdates.labelID').error('Required');
+                    }
+
+                    if (!editorNP.field('ProductUpdates.OBJ_TAB_F155').val()) {
+                        editorNP.field('ProductUpdates.OBJ_TAB_F155').error('Required');
+                    }
+
+                    if (!editorNP.field('ProductUpdates.OBJ_TAB_F29').val()) {
+                        editorNP.field('ProductUpdates.OBJ_TAB_F29').error('Required');
+                    }
+
+                    if (!editorNP.field('ProductUpdates.OBJ_TAB_F22').val()) {
+                        editorNP.field('ProductUpdates.OBJ_TAB_F22').error('Required');
+                    }
+
+                    if (!editorNP.field('ProductUpdates.OBJ_TAB_F255').val()) {
+                        editorNP.field('ProductUpdates.OBJ_TAB_F255').error('Required');
+                    }
+
+                    if (!editorNP.field('ProductUpdates.POS_TAB_F04').val()) {
+                        editorNP.field('ProductUpdates.POS_TAB_F04').error('Required');
+                    }
+
+                    if (!editorNP.field('ProductUpdates.OBJ_TAB_F17').val()) {
+                        editorNP.field('ProductUpdates.OBJ_TAB_F17').error('Required');
+                    }
+
+                    if (!editorNP.field('ProductUpdates.OBJ_TAB_F18').val()) {
+                        editorNP.field('ProductUpdates.OBJ_TAB_F18').error('Required');
+                    }
+
+                    if (!editorNP.field('ProductUpdates.price_tab_f30').val()) {
+                        editorNP.field('ProductUpdates.price_tab_f30').error('Required');
+                    }
+
+                    if (!editorNP.field('ProductUpdates.COST_TAB_F27').val()) {
+                        editorNP.field('ProductUpdates.COST_TAB_F27').error('Required');
+                    }
+
+                    if (!editorNP.field('ProductUpdates.COST_TAB_F19').val()) {
+                        editorNP.field('ProductUpdates.COST_TAB_F19').error('Required');
+                    }
+
+                    if (!editorNP.field('ProductUpdates.COST_TAB_F38').val()) {
+                        editorNP.field('ProductUpdates.COST_TAB_F38').error('Required');
+                    }
+
+                    // If any error was reported, cancel the submission so it can be corrected
+                    if (this.inError()) {
+                        return false;
+                    }
+                }
+            });
+
 
             /***********************************************************************************************************************/
 
@@ -590,14 +661,22 @@
                         type: "select",
                         placeholder: "Select a location"
                     }, {
-                        label: "UPC/PLU",
-                        name: "ProductUpdates.F01"
-                    }, {
                         label: "Mettler Product:",
                         name: "ProductUpdates.ismettlerrequired",
                         type: "select",
                         options: ["Yes", "No"],
                         placeholder: "Select an option"
+                    }, {
+                        label: "Shelf Tag:",
+                        name: "ProductUpdates.labelID",
+                        type: "select",
+                        placeholder: "Select a label size"
+                    }, {
+                        label: "UPC/PLU",
+                        name: "ProductUpdates.F01"
+                    }, {
+                        label: "Mettler PLU:",
+                        name: "ProductUpdates.ScalePLU"
                     }, {
                         label: "Retail Price",
                         name: "ProductUpdates.price_tab_f30"
@@ -627,11 +706,6 @@
                     }, {
                         label: "TPR Price",
                         name: "ProductUpdates.promotprprice"
-                    }, {
-                        label: "Shelf Tag:",
-                        name: "ProductUpdates.labelID",
-                        type: "select",
-                        placeholder: "Select a label size"
                     }, {
                         label: "Sign:",
                         name: "ProductUpdates.signID",
@@ -766,9 +840,6 @@
                         label: "Notes:",
                         name: "ProductUpdates.AdditionalRequestNotes",
                         type:"textarea"
-                    }, {
-                        label: "Mettler PLU:",
-                        name: "ProductUpdates.ScalePLU"
                     }, {
                         label: "Item Type:",
                         name: "ProductUpdates.ScaleItemTypeID",
@@ -960,6 +1031,41 @@
                     }
                 }
             });
+
+            // New Product Form: field validation
+            editor.on('preSubmit', function (e, o, action) {
+                if (action !== 'remove') {
+
+                    if (!editor.field('ProductUpdates.requesttypeID').val()) {
+                        editor.field('ProductUpdates.requesttypeID').error('Required');
+                    }
+
+                    if (!editor.field('ProductUpdates.locationID').val()) {
+                        editor.field('ProductUpdates.locationID').error('Required');
+                    }
+
+                    if (!editor.field('ProductUpdates.ismettlerrequired').val()) {
+                        editor.field('ProductUpdates.ismettlerrequired').error('Required');
+                    }
+
+                    if (!editor.field('ProductUpdates.F01').val()) {
+                        editor.field('ProductUpdates.F01').error('Required');
+                    }
+
+                    if (!editor.field('ProductUpdates.OBJ_TAB_F29').val()) {
+                        editor.field('ProductUpdates.OBJ_TAB_F29').error('Required');
+                    }
+
+                    // If any error was reported, cancel the submission so it can be corrected
+                    if (this.inError()) {
+                        return false;
+                    }
+                }
+            });
+
+
+            /***********************************************************************************************************************/
+
 
             // Create the DataTables table
             var table = $('#ProductMaintenance').DataTable({
