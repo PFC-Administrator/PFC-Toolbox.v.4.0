@@ -183,8 +183,28 @@
                         unselectedValue: 0,
                         separator: "|"
                     }, {
+                        label: "Taxable 2:",
+                        name: "ProductUpdates.POS_TAB_F96",
+                        options: [
+                            { label: "", "value": 1 }
+                        ],
+                        type: "checkbox",
+                        type: "hidden",
+                        unselectedValue: 0,
+                        separator: "|"
+                    }, {
                         label: "Stop discount:",
                         name: "ProductUpdates.POS_TAB_F150",
+                        type: "checkbox",
+                        options: [
+                            { label: "", "value": 1 }
+                        ],
+                        separator: "|",
+                        unselectedValue: 0,
+                        type: "hidden"
+                    }, {
+                        label: "Force price:",
+                        name: "ProductUpdates.POS_TAB_F83",
                         type: "checkbox",
                         options: [
                             { label: "", "value": 1 }
@@ -782,8 +802,28 @@
                         separator: "|",
                         unselectedValue: 0
                     }, {
+                        label: "Taxable 2:",
+                        name: "ProductUpdates.POS_TAB_F96",
+                        options: [
+                            { label: "", "value": 1 }
+                        ],
+                        type: "checkbox",
+                        type: "hidden",
+                        unselectedValue: 0,
+                        separator: "|"
+                    }, {
                         label: "Stop discount:",
                         name: "ProductUpdates.POS_TAB_F150",
+                        type: "checkbox",
+                        options: [
+                            { label: "", "value": 1 }
+                        ],
+                        separator: "|",
+                        unselectedValue: 0,
+                        type: "hidden"
+                    }, {
+                        label: "Force price:",
+                        name: "ProductUpdates.POS_TAB_F83",
                         type: "checkbox",
                         options: [
                             { label: "", "value": 1 }
@@ -909,12 +949,14 @@
             // Update An Existing Product Form: hides Mettler Ingredients unless Yes to Mettler Product option is selected
             editor.field('ProductUpdates.ismettlerrequired').input().on('change', function () {
                 if (editor.field('ProductUpdates.ismettlerrequired').val() == 'Yes') {
-
                     editor.field('ProductUpdates.ScalePLU').show();
                     editor.field('ProductUpdates.ScaleItemTypeID').show();
                     editor.field('ProductUpdates.TareNetWeight').show();
                     editor.field('ProductUpdates.ShelfLife').show();
                     editor.field('ProductUpdates.IngredientList').show();
+
+                    // Force price
+                    editor.field('ProductUpdates.POS_TAB_F83').val(1);
                 } else {
                     editor.field('ProductUpdates.ScalePLU').hide();
                     editor.field('ProductUpdates.ScaleItemTypeID').hide();
@@ -930,7 +972,7 @@
                     editor.field('ProductUpdates.POS_TAB_F82').val(1);
                     editor.field('ProductUpdates.OBJ_TAB_F22').val("per lb.")
                 } else {
-                    editor.field('ProductUpdates.POS_TAB_F82').val(2);
+                    editor.field('ProductUpdates.POS_TAB_F82').val(0);
                 }
             });
 

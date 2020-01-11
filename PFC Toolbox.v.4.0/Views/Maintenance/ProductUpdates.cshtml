@@ -122,6 +122,11 @@
                 table: '#ProductMaintenance',
                 fields: [
                     {
+                        label: "Status:",
+                        name: "ProductUpdates.productstatusID",
+                        type: "select",
+                        def: "3"
+                    }, {
                         label: "Product Update Type",
                         name: "ProductUpdates.requesttypeID",
                         type: "select",
@@ -253,8 +258,28 @@
                         separator: "|",
                         unselectedValue: 0
                     }, {
+                        label: "Taxable 2:",
+                        name: "ProductUpdates.POS_TAB_F96",
+                        options: [
+                            { label: "", "value": 1 }
+                        ],
+                        type: "checkbox",
+                        type: "hidden",
+                        unselectedValue: 0,
+                        separator: "|"
+                    }, {
                         label: "Stop discount:",
                         name: "ProductUpdates.POS_TAB_F150",
+                        type: "checkbox",
+                        options: [
+                            { label: "", "value": 1 }
+                        ],
+                        separator: "|",
+                        unselectedValue: 0,
+                        type: "hidden"
+                    }, {
+                        label: "Force price:",
+                        name: "ProductUpdates.POS_TAB_F83",
                         type: "checkbox",
                         options: [
                             { label: "", "value": 1 }
@@ -302,11 +327,6 @@
                         label: "Last updated by:",
                         name: "ProductUpdates.lastupdatedby",
                         type: "hidden"
-                    }, {
-                        label: "Status:",
-                        name: "ProductUpdates.productstatusID",
-                        type: "hidden",
-                        def: "3"
                     }, {
                         label: "Notes:",
                         name: "ProductUpdates.AdditionalRequestNotes",

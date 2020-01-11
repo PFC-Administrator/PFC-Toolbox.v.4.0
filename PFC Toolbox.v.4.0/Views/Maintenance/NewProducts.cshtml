@@ -85,6 +85,11 @@
                 table: '#ProductUpdates',
                 fields: [
                     {
+                        label: "Status:",
+                        name: "ProductUpdates.productstatusID",
+                        type: "select",
+                        def: "3"
+                    }, {
                         label: "Product Update Type",
                         name: "ProductUpdates.requesttypeID",
                         type: "readonly",
@@ -183,8 +188,28 @@
                         unselectedValue: 0,
                         separator: "|"
                     }, {
+                        label: "Taxable 2:",
+                        name: "ProductUpdates.POS_TAB_F96",
+                        options: [
+                            { label: "", "value": 1 }
+                        ],
+                        type: "checkbox",
+                        type: "hidden",
+                        unselectedValue: 0,
+                        separator: "|"
+                    }, {
                         label: "Stop discount:",
                         name: "ProductUpdates.POS_TAB_F150",
+                        type: "checkbox",
+                        options: [
+                            { label: "", "value": 1 }
+                        ],
+                        separator: "|",
+                        unselectedValue: 0,
+                        type: "hidden"
+                    }, {
+                        label: "Force price:",
+                        name: "ProductUpdates.POS_TAB_F83",
                         type: "checkbox",
                         options: [
                             { label: "", "value": 1 }
@@ -252,11 +277,6 @@
                         label: "Last updated by:",
                         name: "ProductUpdates.lastupdatedby",
                         type: "hidden"
-                    }, {
-                        label: "Status:",
-                        name: "ProductUpdates.productstatusID",
-                        type: "hidden",
-                        def: "3"
                     }, {
                         label: "Notes:",
                         name: "ProductUpdates.AdditionalRequestNotes",
@@ -478,14 +498,14 @@
 
                                 // Gather data from each selected row
                                 var data = table.rows({ selected: true }).data();
-
+                                
                                 // Create array with selected rows data
                                 var newArray = [];
                                 var tempArray = {};
                                 for ($i = 0; $i < data.length; $i++) {
 
                                     // OBJ_TAB
-                                    tempArray.F01 = data[$i].ProductUpdates.F01
+                                    tempArray.F01 = pad(data[$i].ProductUpdates.F01, 13, 0);
                                     tempArray.F155 = data[$i].ProductUpdates.OBJ_TAB_F155
                                     tempArray.F29 = data[$i].ProductUpdates.OBJ_TAB_F29
                                     tempArray.F22 = data[$i].ProductUpdates.OBJ_TAB_F22
@@ -508,7 +528,12 @@
                                     tempArray.F83 = data[$i].ProductUpdates.POS_TAB_F83
                                     tempArray.F82 = data[$i].ProductUpdates.POS_TAB_F82
                                     tempArray.F81 = data[$i].ProductUpdates.POS_TAB_F81
-                                    tempArray.F96 = data[$i].ProductUpdates.POS_TAB_F96
+                                    if (data[$i].ProductUpdates.POS_TAB_F96 == null || data[$i].ProductUpdates.POS_TAB_F96 == "") {
+                                        tempArray.F96 = 0;
+                                    }
+                                    else {
+                                        tempArray.F96 = 1;
+                                    }
                                     tempArray.F171 = data[$i].ProductUpdates.POS_TAB_F171
 
                                     tempArray.F123 = data[$i].ProductUpdates.ScalePLU
@@ -518,6 +543,7 @@
                                     tempArray.F30 = data[$i].ProductUpdates.price_tab_f30
                                     tempArray.F126 = data[$i].ProductUpdates.PRICE_TAB_F126
                                     tempArray.F31 = data[$i].ProductUpdates.PRICE_TAB_F31
+                                    tempArray.F122 = data[$i].ProductUpdates.LIKE_TAB_F122
 
                                     // COST_TAB
                                     tempArray.F27 = data[$i].ProductUpdates.COST_TAB_F27
@@ -706,6 +732,7 @@
                                             'Retail': newArray[$i].F30,
                                             'PriceLevel': '1',
                                             'Quantity': '1',
+                                            'Like': newArray[$i].F122,
 
                                             // COST_TAB
                                             'VendorID': newArray[$i].F27,

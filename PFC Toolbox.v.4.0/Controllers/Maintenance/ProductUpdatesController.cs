@@ -135,12 +135,19 @@ namespace PFC_Toolbox.v._4._0.Controllers
                     .Options(new Options()
                     .Table("SMSReports")
                     .Value("F18")
-                            .Label("F1024"))
+                    .Label("F1024"))
                     )
                     .Field(new Field("ProductUpdates.OBJ_TAB_F16")
+                    .Options(new Options()
+                    .Table("SMSFamilies")
+                    .Value("F16")
+                    .Label("F1040"))
                     )
                     .Field(new Field("ProductUpdates.LIKE_TAB_F122")
-                    .SetFormatter(Format.IfEmpty(null))
+                    .Options(new Options()
+                    .Table("SMSLikes")
+                    .Value("F122")
+                    .Label("F2790"))
                     )
                     .Field(new Field("ProductUpdates.POS_TAB_F79")
                     )
@@ -149,6 +156,9 @@ namespace PFC_Toolbox.v._4._0.Controllers
                     .Field(new Field("ProductUpdates.POS_TAB_F81")
                     )
                     .Field(new Field("ProductUpdates.POS_TAB_F150")
+                    .SetFormatter(Format.IfEmpty(null))
+                    )
+                    .Field(new Field("ProductUpdates.POS_TAB_F83")
                     .SetFormatter(Format.IfEmpty(null))
                     )
                     .Field(new Field("ProductUpdates.POS_TAB_F178")
@@ -211,6 +221,10 @@ namespace PFC_Toolbox.v._4._0.Controllers
                     .LeftJoin("SMSCategories", "SMSCategories.F17", "=", "ProductUpdates.OBJ_TAB_F17"
                     )
                     .LeftJoin("SMSReports", "SMSReports.F18", "=", "ProductUpdates.OBJ_TAB_F18"
+                    )
+                    .LeftJoin("SMSLikes", "SMSLikes.F122", "=", "ProductUpdates.LIKE_TAB_F122"
+                    )
+                    .LeftJoin("SMSFamilies", "SMSFamilies.F16", "=", "ProductUpdates.OBJ_TAB_F16"
                     )
                     .LeftJoin("SMSVendors", "SMSVendors.F27", "=", "ProductUpdates.COST_TAB_F27"
                     )
