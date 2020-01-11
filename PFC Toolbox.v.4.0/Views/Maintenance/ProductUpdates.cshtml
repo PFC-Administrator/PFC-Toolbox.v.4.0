@@ -122,11 +122,6 @@
                 table: '#ProductMaintenance',
                 fields: [
                     {
-                        label: "Status:",
-                        name: "ProductUpdates.productstatusID",
-                        type: "select",
-                        def: "3"
-                    }, {
                         label: "Product Update Type",
                         name: "ProductUpdates.requesttypeID",
                         type: "select",
@@ -137,14 +132,22 @@
                         type: "select",
                         placeholder: "Select a location"
                     }, {
-                        label: "UPC/PLU",
-                        name: "ProductUpdates.F01"
-                    }, {
                         label: "Mettler Product:",
                         name: "ProductUpdates.ismettlerrequired",
                         type: "select",
                         options: ["Yes", "No"],
                         placeholder: "Select an option"
+                    }, {
+                        label: "Shelf Tag:",
+                        name: "ProductUpdates.labelID",
+                        type: "select",
+                        placeholder: "Select a label size"
+                    }, {
+                        label: "UPC/PLU",
+                        name: "ProductUpdates.F01"
+                    }, {
+                        label: "Mettler PLU:",
+                        name: "ProductUpdates.ScalePLU"
                     }, {
                         label: "Retail Price",
                         name: "ProductUpdates.price_tab_f30"
@@ -174,11 +177,6 @@
                     }, {
                         label: "TPR Price",
                         name: "ProductUpdates.promotprprice"
-                    }, {
-                        label: "Shelf Tag:",
-                        name: "ProductUpdates.labelID",
-                        type: "select",
-                        placeholder: "Select a label size"
                     }, {
                         label: "Sign:",
                         name: "ProductUpdates.signID",
@@ -305,12 +303,14 @@
                         name: "ProductUpdates.lastupdatedby",
                         type: "hidden"
                     }, {
+                        label: "Status:",
+                        name: "ProductUpdates.productstatusID",
+                        type: "hidden",
+                        def: "3"
+                    }, {
                         label: "Notes:",
                         name: "ProductUpdates.AdditionalRequestNotes",
                         type:"textarea"
-                    }, {
-                        label: "Mettler PLU:",
-                        name: "ProductUpdates.ScalePLU"
                     }, {
                         label: "Item Type:",
                         name: "ProductUpdates.ScaleItemTypeID",

@@ -91,11 +91,6 @@
                         type: "hidden",
                         def: "6"
                     }, {
-                        label: "Status:",
-                        name: "ProductUpdates.productstatusID",
-                        type: "select",
-                        def: "3"
-                    }, {
                         label: "Location:",
                         name: "ProductUpdates.locationID",
                         type: "select",
@@ -165,7 +160,7 @@
                         name: "ProductUpdates.POS_TAB_F79",
                         type: "checkbox",
                         options: [
-                            { label: "", value: 1 }
+                            { label: "", "value": 1 }
                         ],
                         separator: "|",
                         unselectedValue: 0
@@ -174,7 +169,7 @@
                         name: "ProductUpdates.POS_TAB_F82",
                         type: "checkbox",
                         options: [
-                            { label: "", value: 1 }
+                            { label: "", "value": 1 }
                         ],
                         separator: "|",
                         unselectedValue: 0
@@ -182,7 +177,7 @@
                         label: "Taxable:",
                         name: "ProductUpdates.POS_TAB_F81",
                         options: [
-                            { label: "", value: 1 }
+                            { label: "", "value": 1 }
                         ],
                         type: "checkbox",
                         unselectedValue: 0,
@@ -192,7 +187,7 @@
                         name: "ProductUpdates.POS_TAB_F150",
                         type: "checkbox",
                         options: [
-                            { label: "", value: 1 }
+                            { label: "", "value": 1 }
                         ],
                         separator: "|",
                         unselectedValue: 0,
@@ -202,7 +197,7 @@
                         name: "ProductUpdates.POS_TAB_F178",
                         type: "checkbox",
                         options: [
-                            { label: "", value: 1 }
+                            { label: "", "value": 1 }
                         ],
                         separator: "|",
                         unselectedValue: 0
@@ -257,6 +252,11 @@
                         label: "Last updated by:",
                         name: "ProductUpdates.lastupdatedby",
                         type: "hidden"
+                    }, {
+                        label: "Status:",
+                        name: "ProductUpdates.productstatusID",
+                        type: "hidden",
+                        def: "3"
                     }, {
                         label: "Notes:",
                         name: "ProductUpdates.AdditionalRequestNotes",
@@ -499,12 +499,18 @@
                                     tempArray.F02 = data[$i].ProductUpdates.OBJ_TAB_F29 + " " + data[$i].ProductUpdates.OBJ_TAB_F22
                                     tempArray.F79 = data[$i].ProductUpdates.POS_TAB_F79
                                     tempArray.F178 = data[$i].ProductUpdates.POS_TAB_F178
-                                    tempArray.F1120 = data[$i].ProductUpdates.POS_TAB_F1120
+                                    if (data[$i].ProductUpdates.POS_TAB_F1120 == null || data[$i].ProductUpdates.POS_TAB_F1120 == "") {
+                                        tempArray.F1120 = null;
+                                    }
+                                    else {
+                                        tempArray.F1120 = data[$i].ProductUpdates.POS_TAB_F1120
+                                    }
                                     tempArray.F83 = data[$i].ProductUpdates.POS_TAB_F83
                                     tempArray.F82 = data[$i].ProductUpdates.POS_TAB_F82
                                     tempArray.F81 = data[$i].ProductUpdates.POS_TAB_F81
                                     tempArray.F96 = data[$i].ProductUpdates.POS_TAB_F96
                                     tempArray.F171 = data[$i].ProductUpdates.POS_TAB_F171
+
                                     tempArray.F123 = data[$i].ProductUpdates.ScalePLU
                                     tempArray.F150 = data[$i].ProductUpdates.POS_TAB_F150
 
@@ -556,78 +562,104 @@
                                     tempArray.Mettler = data[$i].ProductUpdates.ismettlerrequired
 
                                     // SCL_TXT_TAB
+                                    // Ingredients1
                                     if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
                                         tempArray.F297 = null;
                                     }
                                     else {
                                         tempArray.F297 = data[$i].ProductUpdates.IngredientList.substring(0, 252)
                                     }
+
+                                    // Ingredients2
                                     if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
                                         tempArray.F1837 = null;
                                     }
                                     else {
                                         tempArray.F1837 = data[$i].ProductUpdates.IngredientList.substring(253, 505)
                                     }
+
+                                    // Ingredients3
                                     if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
                                         tempArray.F1838 = null;
                                     }
                                     else {
                                         tempArray.F1838 = data[$i].ProductUpdates.IngredientList.substring(506, 758)
                                     }
+
+                                    // Ingredients4
                                     if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
                                         tempArray.F1838 = null;
                                     }
                                     else {
                                         tempArray.F1839 = data[$i].ProductUpdates.IngredientList.substring(759, 1011)
                                     }
+
+                                    // Ingredients5
                                     if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
                                         tempArray.F1853 = null;
                                     }
                                     else {
                                         tempArray.F1853 = data[$i].ProductUpdates.IngredientList.substring(1012, 1264)
                                     }
+
+                                    // Ingredients6
                                     if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
                                         tempArray.F1854 = null;
                                     }
                                     else {
                                         tempArray.F1854 = data[$i].ProductUpdates.IngredientList.substring(1265, 1517)
                                     }
+
+                                    // Ingredients7
                                     if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
                                         tempArray.F1855 = null;
                                     }
                                     else {
                                         tempArray.F1855 = data[$i].ProductUpdates.IngredientList.substring(1518, 1770)
                                     }
+
+                                    // Ingredients8
                                     if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
                                         tempArray.F1856 = null;
                                     }
                                     else {
                                         tempArray.F1856 = data[$i].ProductUpdates.IngredientList.substring(1771, 2023)
                                     }
+
+                                    // Ingredients9
                                     if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
                                         tempArray.F1968 = null;
                                     }
+
                                     else {
                                         tempArray.F1968 = data[$i].ProductUpdates.IngredientList.substring(2024, 2276)
                                     }
+
+                                    // Ingredients10
                                     if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
                                         tempArray.F1969 = null;
                                     }
                                     else {
                                         tempArray.F1969 = data[$i].ProductUpdates.IngredientList.substring(2277, 2529)
                                     }
+
+                                    // Ingredients11
                                     if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
                                         tempArray.F1970 = null;
                                     }
                                     else {
                                         tempArray.F1970 = data[$i].ProductUpdates.IngredientList.substring(2530, 2782)
                                     }
+
+                                    // Ingredients12
                                     if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
                                         tempArray.F1971 = null;
                                     }
                                     else {
                                         tempArray.F1971 = data[$i].ProductUpdates.IngredientList.substring(2783, 3035)
                                     }
+
+                                    // Ingredients13
                                     if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
                                         tempArray.F1972 = null;
                                     }
