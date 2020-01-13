@@ -236,6 +236,7 @@
     <Compile Include="Controllers\Identity\ManageController.cs" />
     <Compile Include="Controllers\Maintenance\RefreshBrandController.cs" />
     <Compile Include="Controllers\Maintenance\SubdepartmentController.cs" />
+    <Compile Include="Controllers\Maintenance\UPCController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -392,6 +393,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Documentation\" />
+    <Folder Include="Views\UPC\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

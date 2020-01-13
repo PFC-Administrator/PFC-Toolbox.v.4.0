@@ -10,15 +10,15 @@
 
     <title>New Products</title>
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.4/css/buttons.dataTables.min.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.2.7/css/select.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css" />
     <link rel="stylesheet" type="text/css" href="https://editor.datatables.net/extensions/Editor/css/editor.dataTables.min.css" />
     <link rel="stylesheet" type="text/css" href="~/Content/Custom.css" />
 </head>
 <body class="dataTables">
     <div class="container">
-
         <h1><img src="~/Content/PFC_Logo_128px.png" width="100" height="100">        New Products</h1>
         <br />
         <table id="ProductUpdates" class="display text-nowrap compact" style="width:100%">
@@ -30,31 +30,28 @@
                     <th>Brand</th>
                     <th>Description</th>
                     <th>Size</th>
-                    <th>TPR Start</th>
-                    <th>TPR End</th>
-                    <th>TPR Price</th>
                     <th>Retail Price</th>
                     <th>Created By</th>
                     <th>Date Created</th>
                 </tr>
             </thead>
         </table>
-
     </div>
 </body>
 </html>
 
 @section scripts{
-    <script type="text/javascript" charset="utf-8" src=" https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.4/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/select/1.2.7/js/dataTables.select.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
     <script src="~/Content/Editor-1.8.1/js/dataTables.editor.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
@@ -65,30 +62,44 @@
         // Function to pad numbers with 0's
         function pad(number, width = 3, z = 0) { return (String(z).repeat(width) + String(number)).slice(String(number).length) }
 
+        // Function to get today's date
+        function getDate() {
+            today = new Date().getMonth() + 1
+            + "/" + new Date().getDate()
+            + "/" + new Date().getFullYear()
+            + " " + new Date().getHours()
+            + ":" + new Date().getMinutes()
+            + ":" + new Date().getSeconds()
+            return today;
+        };
+
+        var currentUser = "@(User.GetCreatedBy())";
         var editorNP;
-        var editor;
         $(document).ready(function () {
 
             $.fn.dataTable.moment( 'M/D/YYYY hh:mm:ss A' );
 
-            // Product Update Form
-            var editor = new $.fn.dataTable.Editor({
+            // New Product Form
+            var editorNP = new $.fn.dataTable.Editor({
                 ajax: '/api/ProductUpdates',
                 table: '#ProductUpdates',
                 fields: [
                     {
+                        label: "Status:",
+                        name: "ProductUpdates.productstatusID",
+                        type: "select",
+                        def: "3"
+                    }, {
                         label: "Product Update Type",
                         name: "ProductUpdates.requesttypeID",
-                        type: "select",
-                        placeholder: "Select a request type"
+                        type: "readonly",
+                        type: "hidden",
+                        def: "6"
                     }, {
                         label: "Location:",
                         name: "ProductUpdates.locationID",
                         type: "select",
                         placeholder: "Select a location"
-                    }, {
-                        label: "UPC/PLU",
-                        name: "ProductUpdates.F01"
                     }, {
                         label: "Mettler Product:",
                         name: "ProductUpdates.ismettlerrequired",
@@ -96,44 +107,16 @@
                         options: ["Yes", "No"],
                         placeholder: "Select an option"
                     }, {
-                        label: "Retail Price",
-                        name: "ProductUpdates.price_tab_f30"
-                    },{
-                        label: "Vendor:",
-                        name: "ProductUpdates.COST_TAB_F27",
-                        type: "select",
-                        placeholder: "Select a vendor"
-                    }, {
-                        label: "Reorder code:",
-                        name: "ProductUpdates.COST_TAB_F26"
-                    }, {
-                        label: "Retail margin:",
-                        name: "ProductUpdates.PRICE_TAB_F49"
-                    }, {
-                        label: "Items per case:",
-                        name: "ProductUpdates.COST_TAB_F19"
-                    }, {
-                        label: "Case cost:",
-                        name: "ProductUpdates.COST_TAB_F38"
-                    }, {
-                        label: "TPR Start",
-                        name: "ProductUpdates.promotprstartdate"
-                    }, {
-                        label: "TPR End",
-                        name: "ProductUpdates.promotprenddate"
-                    }, {
-                        label: "TPR Price",
-                        name: "ProductUpdates.promotprprice"
-                    }, {
                         label: "Shelf Tag:",
                         name: "ProductUpdates.labelID",
                         type: "select",
                         placeholder: "Select a label size"
                     }, {
-                        label: "Sign:",
-                        name: "ProductUpdates.signID",
-                        type: "select",
-                        placeholder: "Select a sign size"
+                        label: "UPC/PLU",
+                        name: "ProductUpdates.F01"
+                    }, {
+                        label: "Mettler PLU:",
+                        name: "ProductUpdates.ScalePLU"
                     }, {
                         label: "Brand:",
                         name: "ProductUpdates.OBJ_TAB_F155",
@@ -182,67 +165,96 @@
                         name: "ProductUpdates.POS_TAB_F79",
                         type: "checkbox",
                         options: [
-                            { label: "", "value": "True" }
+                            { label: "", "value": 1 }
                         ],
                         separator: "|",
-                        unselectedValue: "False"
+                        unselectedValue: 0
                     }, {
                         label: "Scalable:",
                         name: "ProductUpdates.POS_TAB_F82",
                         type: "checkbox",
                         options: [
-                            { label: "", "value": "True" }
+                            { label: "", "value": 1 }
                         ],
                         separator: "|",
-                        unselectedValue: "False"
+                        unselectedValue: 0
                     }, {
                         label: "Taxable:",
                         name: "ProductUpdates.POS_TAB_F81",
+                        options: [
+                            { label: "", "value": 1 }
+                        ],
+                        type: "checkbox",
+                        unselectedValue: 0,
+                        separator: "|"
+                    }, {
+                        label: "Taxable 2:",
+                        name: "ProductUpdates.POS_TAB_F96",
+                        options: [
+                            { label: "", "value": 1 }
+                        ],
+                        type: "checkbox",
+                        type: "hidden",
+                        unselectedValue: 0,
+                        separator: "|"
+                    }, {
+                        label: "Stop discount:",
+                        name: "ProductUpdates.POS_TAB_F150",
                         type: "checkbox",
                         options: [
-                            { label: "", "value": "True" }
+                            { label: "", "value": 1 }
                         ],
                         separator: "|",
-                        unselectedValue: "False"
+                        unselectedValue: 0,
+                        type: "hidden"
+                    }, {
+                        label: "Force price:",
+                        name: "ProductUpdates.POS_TAB_F83",
+                        type: "checkbox",
+                        options: [
+                            { label: "", "value": 1 }
+                        ],
+                        separator: "|",
+                        unselectedValue: 0,
+                        type: "hidden"
                     }, {
                         label: "WIC:",
                         name: "ProductUpdates.POS_TAB_F178",
                         type: "checkbox",
                         options: [
-                            { label: "", "value": "True" }
+                            { label: "", "value": 1 }
                         ],
                         separator: "|",
-                        unselectedValue: "False"
+                        unselectedValue: 0
                     }, {
-                        label: "Created by:",
-                        name: "ProductUpdates.createdby",
-                        type: "readonly",
-                        type: "hidden",
-                        def: "@(User.GetCreatedBy())"
+                        label: "Retail Price",
+                        name: "ProductUpdates.price_tab_f30"
                     }, {
-                        label: "Date created:",
-                        name: "ProductUpdates.datecreated",
-                        type: "hidden",
-                        def: function () {
-                            var today = new Date().getMonth() + 1
-                                + "/" + new Date().getDate()
-                                + "/" + new Date().getFullYear()
-                                + " " + new Date().getHours()
-                                + ":" + new Date().getMinutes()
-                                + ":" + new Date().getSeconds(); return today }
-                    },{
-                        label: "Status:",
-                        name: "ProductUpdates.productstatusID",
-                        type: "hidden",
-                        def: "3"
-                    },{
+                        label: "Vendor:",
+                        name: "ProductUpdates.COST_TAB_F27",
+                        type: "select",
+                        placeholder: "Select a vendor"
+                    }, {
+                        label: "Reorder code:",
+                        name: "ProductUpdates.COST_TAB_F26"
+                    }, {
+                        label: "Retail margin:",
+                        name: "ProductUpdates.PRICE_TAB_F49"
+                    }, {
+                        label: "Items per case:",
+                        name: "ProductUpdates.COST_TAB_F19"
+                    }, {
+                        label: "Case cost:",
+                        name: "ProductUpdates.COST_TAB_F38"
+                    }, {
+                        label: "Client age:",
+                        name: "ProductUpdates.POS_TAB_F171",
+                        type: "hidden"
+                    }, {
                         label: "Notes:",
                         name: "ProductUpdates.AdditionalRequestNotes",
                         type:"textarea"
-                    },{
-                        label: "Mettler PLU:",
-                        name: "ProductUpdates.ScalePLU"
-                    },{
+                    }, {
                         label: "Item Type:",
                         name: "ProductUpdates.ScaleItemTypeID",
                         type: "select",
@@ -251,176 +263,538 @@
                             { label: "Price per pound", value: "1" },
                             { label: "Standard pack", value: "2"}
                         ]
-                    },{
+                    }, {
                         label: "Tare / Net Weight:",
                         name: "ProductUpdates.TareNetWeight"
-                    },{
+                    }, {
                         label: "Shelf Life:",
                         name: "ProductUpdates.ShelfLife"
-                    },{
+                    }, {
                         label: "Ingredients:",
                         name: "ProductUpdates.IngredientList",
                         type:"textarea"
+                    }, {
+                        label: "Created by:",
+                        name: "ProductUpdates.createdby",
+                        type: "readonly",
+                        type: "hidden",
+                        def: currentUser
+                    }, {
+                        label: "Date created:",
+                        name: "ProductUpdates.datecreated",
+                        type: "hidden",
+                        def: getDate()
+                    }, {
+                        label: "Date completed:",
+                        name: "ProductUpdates.completeddate"
+                    }, {
+                        label: "Completed by:",
+                        name: "ProductUpdates.completedby"
+                    }, {
+                        label: "Last updated on:",
+                        name: "ProductUpdates.lastupdatedon",
+                        type: "hidden"
+                    }, {
+                        label: "Last updated by:",
+                        name: "ProductUpdates.lastupdatedby",
+                        type: "hidden"
                     }
                 ]
             });
 
-            // Cascading select fields on New Product form
-            editor.dependent('ProductUpdates.POS_TAB_F04', '/api/Categories');
-                        
+            // New Product Form: shows completed by info if product is marked as complete
+            editorNP.on('open', function () {
+                if (editorNP.field('ProductUpdates.productstatusID').val() == 4) {
+                    editorNP.field('ProductUpdates.completeddate').show();
+                    editorNP.field('ProductUpdates.completedby').show();
+                }
+                else {
+                    editorNP.field('ProductUpdates.completeddate').hide();
+                    editorNP.field('ProductUpdates.completedby').hide();
+                }
+            });
+
+            // New Product Form: hides Family Button unless Hackberry's Brand is selected
+            editorNP.field('ProductUpdates.OBJ_TAB_F155').input().on('change', function () {
+                if (editorNP.field('ProductUpdates.OBJ_TAB_F155').val() == "HACKBERRYS" || editorNP.field('ProductUpdates.OBJ_TAB_F155').val() == "HACKBERRY'S") {
+                    editorNP.field('ProductUpdates.OBJ_TAB_F16').show();
+                } else {
+                    editorNP.field('ProductUpdates.OBJ_TAB_F16').hide();
+                }
+            });
+
+            // New Product Form: hides Like code unless Produce is selected
+            editorNP.field('ProductUpdates.POS_TAB_F04').input().on('change', function () {
+                if (editorNP.field('ProductUpdates.POS_TAB_F04').val() == '6' || editorNP.field('ProductUpdates.POS_TAB_F04').val() == '17' || editorNP.field('ProductUpdates.POS_TAB_F04').val() == '3') {
+                    editorNP.field('ProductUpdates.LIKE_TAB_F122').show();
+                } else {
+                    editorNP.field('ProductUpdates.LIKE_TAB_F122').hide();
+                }
+            });
+
+            // New Product Form: hides Mettler Ingredients unless Yes to Mettler Product option is selected
+            editorNP.field('ProductUpdates.ismettlerrequired').input().on('change', function () {
+                if (editorNP.field('ProductUpdates.ismettlerrequired').val() == 'Yes') {
+
+                    editorNP.field('ProductUpdates.ScalePLU').show();
+                    editorNP.field('ProductUpdates.ScaleItemTypeID').show();
+                    editorNP.field('ProductUpdates.TareNetWeight').show();
+                    editorNP.field('ProductUpdates.ShelfLife').show();
+                    editorNP.field('ProductUpdates.IngredientList').show();
+                } else {
+                    editorNP.field('ProductUpdates.ScalePLU').hide();
+                    editorNP.field('ProductUpdates.ScaleItemTypeID').hide();
+                    editorNP.field('ProductUpdates.TareNetWeight').hide();
+                    editorNP.field('ProductUpdates.ShelfLife').hide();
+                    editorNP.field('ProductUpdates.IngredientList').hide();
+                }
+            });
+
+            // New Product Form: set scalable checkbox on Item Type selection
+            editorNP.field('ProductUpdates.ScaleItemTypeID').input().on('change', function () {
+                if (editorNP.field('ProductUpdates.ScaleItemTypeID').val() == '1') {
+                    editorNP.field('ProductUpdates.POS_TAB_F82').val(1);
+                    editorNP.field('ProductUpdates.OBJ_TAB_F22').val("per lb.")
+                } else {
+                    editorNP.field('ProductUpdates.POS_TAB_F82').val(2);
+                }
+            });
+
+            // New Product Form: filter available categories on subdepartment selection
+            editorNP.dependent('ProductUpdates.POS_TAB_F04', '/api/Categories');
+
+            // New Product Form: set default POS attributes
+            editorNP.dependent('ProductUpdates.POS_TAB_F04', function () {
+                var subdepartment = editorNP.field('ProductUpdates.POS_TAB_F04').val();
+
+                var GetSubdepartmentAttributes = $.ajax({
+                    url: "api/GetSubdepartmentBounds",
+                    type: "GET",
+                    dataType: "json",
+                    data: { 'F04': subdepartment },
+                    error: function (error) {
+                        console.log(`Error ${error}`);
+                    }
+                });
+
+                GetSubdepartmentAttributes.then(function (data) {
+                    editorNP.field('ProductUpdates.POS_TAB_F79').val(data.data[0].SMSSubdepartments.F79);
+                    editorNP.field('ProductUpdates.POS_TAB_F178').val(data.data[0].SMSSubdepartments.F178);
+                    editorNP.field('ProductUpdates.POS_TAB_F81').val(data.data[0].SMSSubdepartments.F81);
+                    editorNP.field('ProductUpdates.POS_TAB_F171').val(data.data[0].SMSSubdepartments.F171);
+                    editorNP.field('ProductUpdates.POS_TAB_F150').val(data.data[0].SMSSubdepartments.F150);
+                });
+            });
+
+            // New Product Form: set last updated date and last updated by upon edit
+            editorNP.field('ProductUpdates.productstatusID').input().on('change', function () {
+                editorNP.field('ProductUpdates.lastupdatedon').val(getDate());
+                editorNP.field('ProductUpdates.lastupdatedby').val(currentUser);
+            });
+
+            // Create the DataTables table
             var table = $('#ProductUpdates').DataTable({
-                // This is the default view showing uncompleted requests
-                initComplete: function (e, dt, node, config) { table.column(0).search('^New Product$', true, false).draw() },
-                //processing: true,
                 //serverSide: true,
-                //paging: true,
                 deferRender: true,
-                ajax: {
-                    url: '/api/ProductUpdates'
+                autoWidth: false,
+                select: true,
+                // Default view showing incomplete requests
+                initComplete: function (e, dt, node, config) {
+                    table
+                        .column(0).search('^New Product$', true, false)
+                        .column(1).search('^3 - Manager Review Completed$', true, false).draw()
                 },
+                columnDefs: [{
+                    targets: 2,
+                    render: function (data, type, row) {
+                        if (type === 'display' && data != null) {
+                            data = data.replace(/<(?:.|\\n)*?>/gm, '');
+                            if (data.length > 14) {
+                                return '<span class=\"show-ellipsis\">' + data.substr(0, 14) + '</span><span class=\"no-show\">' + data.substr(14) + '</span>';
+                            } else {
+                                return data;
+                            }
+                        } else {
+                            return data;
+                        }
+                    }
+                }],
+                // Default table lengths
+                lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "All"]],
+                // Table data source
+                ajax: {
+                    url: '/api/ProductUpdates'//,
+                    //type: 'POST'
+                },
+                // Table columns
                 columns: [
-                    { "data": "RequestTypes.requestname" }, //, render: function (data, type, row) { var color = 'black'; if (data == "New Product") { color = 'green'} return '<span style="color:' + color + '">' + data + '</span>';} },
-                    { "data": "Status.productupdatestatus" },
-                    { "data": "ProductUpdates.F01", width: '110px' },
-                    { "data": "ProductUpdates.OBJ_TAB_F155" },
+                    { "data": "RequestTypes.requestname", width: "10%" },
+                    { "data": "Status.productupdatestatus", width: "10%" },
+                    { "data": "ProductUpdates.F01", width: "5%" },
+                    { "data": "ProductUpdates.OBJ_TAB_F155", width: "10%" },
                     { "data": "ProductUpdates.OBJ_TAB_F29" },
-                    { "data": "ProductUpdates.OBJ_TAB_F22" },
-                    { "data": "ProductUpdates.promotprstartdate" },
-                    { "data": "ProductUpdates.promotprenddate" },
-                    { "data": "ProductUpdates.promotprprice" },
-                    { "data": "ProductUpdates.price_tab_f30" },
-                    { "data": "ProductUpdates.createdby" },
+                    { "data": "ProductUpdates.OBJ_TAB_F22", width: "5%" },
+                    { "data": "ProductUpdates.price_tab_f30", width: "5%" },
+                    { "data": "ProductUpdates.createdby", width: "10%" },
                     {
                         "data": "ProductUpdates.datecreated", "render": function (value) {
                             if (value === null) return "";
                             return window.moment(value).format('M/D/YYYY hh:mm:ss A');
-                        }
-                    }
+                        }, width: "10%"
+                    },
+                    { "data": "ProductUpdates.completeddate", visible: false}
                 ],
+                // Change New Products request type background green
                 "rowCallback": function (row, data, index) {
-                    if (data.RequestTypes.requestname == "New Product") { $(row).find('td:eq(0)').css('background-color', '#E6EDD7'); }
+                    if (data.RequestTypes.requestname == "New Product") { $(row).find('td:eq(0)').css('background-color', '#FAC090'); }
+                    if (data.RequestTypes.requestname !== "New Product") { $(row).find('td:eq(0)').css('background-color', '#E6EDD7'); }
                 },
-                select: true,
+                // Control button layout
                 dom: '<"floatRight"B><"clear">lfrtip',
-                order: [[11, "desc"], [1, "asc"]],
+                // Default table order
+                order: [[8, "desc"]],
                 buttons: [
-                    { text: 'Edit', extend: 'edit', editor: editor },
-                    { text: 'Show Completed Today', action: function (e, dt, node, config) { table.column(1).search('^4 - Completed$', true, false).draw() } },
-                    { text: 'Show Default View', action: function (e, dt, node, config) { table.column(1).search('^3 - Manager Review Completed$', true, false).draw() } },
-                    { text: 'Show All', action: function (e, dt, node, config) { table.column(1).search('3 - Manager Review Completed$|^4 - Completed$', true, false).column(11).order('desc').draw() } },
+                    {
+                        // Custom edit button that updates timestamps
+                        text: 'Edit', formTitle: 'Edit New Product', extend: 'edit', editor: editorNP,
+                        formButtons:
+                            [
+                                {
+                                    text: 'Update', action: function () {
+                                        editorNP.field('ProductUpdates.lastupdatedon').val(getDate());
+                                        editorNP.field('ProductUpdates.lastupdatedby').val(currentUser);
+                                        this.submit();
+                                    }
+                                }
+                            ]
+                    },
+                    {
+                        // Show completed today filter button
+                        text: 'Show Completed Today', action: function (e, dt, node, config) {
+                            table.search('')
+                                .columns().search('')
+                                .columns().order('')
+                                .column(0).search('^New Product$', true, false)
+                                .column(1).search('^4 - Completed$', true, false)
+                                .column(9).search(new Date().getMonth() + 1 + "/" + new Date().getDate() + "/" + new Date().getFullYear(), true, false).column(8).order('desc').draw()
+                        }
+                    },
+                    {
+                        // Show default view filter button
+                        text: 'Show Default View', action: function (e, dt, node, config) {
+                            table.search('')
+                                .columns().search('')
+                                .columns().order('')
+                                .column(0).search('^New Product$', true, false)
+                                .column(1).search('^3 - Manager Review Completed$', true, false).column(8).order('desc').draw()
+                        }
+                    },
+                    {
+                        // Show all records filter button
+                        text: 'Show All', action: function (e, dt, node, config) {
+                            table.search('')
+                                .columns().search('')
+                                .columns().order('')
+                                .column(0).search('^New Product$', true, false)
+                                .column(1).search('^3 - Manager Review Completed$|^4 - Completed$', true, false).column(8).order('desc').draw()
+                        }
+                    },
 
                     // Creates an Export New Products button and executes AJAX requests
                     {
                         text: 'Export', action: function (e, dt, node, config) {
-                            var data = table.rows({ selected: true }).data();
 
-                            var newArray = [];
-                            var tempArray = {};
-                            for ($i = 0; $i < data.length; $i++) {
+                            if ( confirm( 'Export ' + table.rows('.selected').count() + ' product(s)?' ) ) {
 
-                                // OBJ_TAB
-                                tempArray.F01 = data[$i].ProductUpdates.F01
-                                tempArray.F155 = data[$i].ProductUpdates.OBJ_TAB_F155
-                                tempArray.F29 = data[$i].ProductUpdates.OBJ_TAB_F29
-                                tempArray.F22 = data[$i].ProductUpdates.OBJ_TAB_F22
-                                tempArray.F255 = data[$i].ProductUpdates.OBJ_TAB_F255
-                                tempArray.F17 = data[$i].ProductUpdates.OBJ_TAB_F17
-                                tempArray.F16 = data[$i].ProductUpdates.OBJ_TAB_F16
-                                tempArray.F18 = data[$i].ProductUpdates.OBJ_TAB_F18
+                                // Gather data from each selected row
+                                var data = table.rows({ selected: true }).data();
+                                
+                                // Create array with selected rows data
+                                var newArray = [];
+                                var tempArray = {};
+                                for ($i = 0; $i < data.length; $i++) {
 
-                                // POS_TAB
-                                tempArray.F04 = data[$i].ProductUpdates.POS_TAB_F04
-                                tempArray.F02 = data[$i].ProductUpdates.OBJ_TAB_F29 + " " + data[$i].ProductUpdates.OBJ_TAB_F22
-                                tempArray.F79 = data[$i].ProductUpdates.POS_TAB_F79
-                                tempArray.F178 = data[$i].ProductUpdates.POS_TAB_F178
-                                tempArray.F1120 = data[$i].ProductUpdates.POS_TAB_F1120
-                                tempArray.F83 = data[$i].ProductUpdates.POS_TAB_F83
-                                tempArray.F82 = data[$i].ProductUpdates.POS_TAB_F82
-                                tempArray.F81 = data[$i].ProductUpdates.POS_TAB_F81
-                                tempArray.F96 = data[$i].ProductUpdates.POS_TAB_F96
-                                tempArray.F171 = data[$i].ProductUpdates.POS_TAB_F171
-                                tempArray.F123 = data[$i].ProductUpdates.POS_TAB_F123
-                                tempArray.F150 = data[$i].ProductUpdates.POS_TAB_F150
+                                    // OBJ_TAB
+                                    tempArray.F01 = pad(data[$i].ProductUpdates.F01, 13, 0);
+                                    tempArray.F155 = data[$i].ProductUpdates.OBJ_TAB_F155
+                                    tempArray.F29 = data[$i].ProductUpdates.OBJ_TAB_F29
+                                    tempArray.F22 = data[$i].ProductUpdates.OBJ_TAB_F22
+                                    tempArray.F255 = data[$i].ProductUpdates.OBJ_TAB_F255
+                                    tempArray.F17 = data[$i].ProductUpdates.OBJ_TAB_F17
+                                    tempArray.F16 = data[$i].ProductUpdates.OBJ_TAB_F16
+                                    tempArray.F18 = data[$i].ProductUpdates.OBJ_TAB_F18
 
-                                // PRICE_TAB
-                                tempArray.F30 = data[$i].ProductUpdates.price_tab_f30
-                                tempArray.F126 = data[$i].ProductUpdates.PRICE_TAB_F126
-                                tempArray.F31 = data[$i].ProductUpdates.PRICE_TAB_F31
-
-                                // COST_TAB
-                                tempArray.F27 = data[$i].ProductUpdates.COST_TAB_F27
-                                tempArray.F26 = data[$i].ProductUpdates.COST_TAB_F26
-                                if (data[$i].ProductUpdates.COST_TAB_F19 == null) {
-                                    tempArray.F19 = data[$i].ProductUpdates.COST_TAB_F19 = 1;
-                                }
-                                else {
-                                    tempArray.F19 = data[$i].ProductUpdates.COST_TAB_F19
-                                }
-                                if (data[$i].ProductUpdates.COST_TAB_F38 == null) {
-                                    tempArray.F38 = data[$i].ProductUpdates.COST_TAB_F19 = 0.01;
-                                }
-                                else {
-                                    tempArray.F38 = data[$i].ProductUpdates.COST_TAB_F38
-                                }
-
-                                newArray.push(tempArray);
-                                tempArray = {};
-                            };
-                            
-                            console.log(newArray);
-
-                            for ($i = 0; $i < newArray.length; $i++) {
-                                var ExportNewProduct = $.ajax({
-                                    url: '@Url.Action("CreateNewProduct", "NewProduct")',
-                                    type: "POST",
-                                    dataType: "json",
-                                    data: {
-
-                                        // OBJ_TAB
-                                        'F01': newArray[$i].F01,
-                                        'F155': newArray[$i].F155,
-                                        'F29': newArray[$i].F29,
-                                        'F22': newArray[$i].F22,
-                                        'F255': newArray[$i].F255,
-                                        'F17': newArray[$i].F17,
-                                        'F16': newArray[$i].F16,
-                                        'F18': newArray[$i].F18,
-
-                                        // POS_TAB
-                                        'F04': newArray[$i].F04,
-                                        'F02': newArray[$i].F02,
-                                        'F79': newArray[$i].F79,
-                                        'F178': newArray[$i].F178,
-                                        'F1120': newArray[$i].F1120,
-                                        'F83': newArray[$i].F83,
-                                        'F82': newArray[$i].F82,
-                                        'F81': newArray[$i].F81,
-                                        'F96': newArray[$i].F96,
-                                        'F171': '21',
-                                        'F123': newArray[$i].F123,
-                                        'F150': newArray[$i].F150,
-
-                                        // PRICE_TAB
-                                        'F30': newArray[$i].F30,
-                                        'F126': '1',
-                                        'F31': '1',
-
-                                        // COST_TAB
-                                        'F27': newArray[$i].F27,
-                                        'F26': newArray[$i].F26,
-                                        'F19': newArray[$i].F19,
-                                        'F38': newArray[$i].F38
-
-                                    },
-                                    error: function (error) {
-                                        console.log(`Error ${error}`);
+                                    // POS_TAB
+                                    tempArray.F04 = data[$i].ProductUpdates.POS_TAB_F04
+                                    tempArray.F02 = data[$i].ProductUpdates.OBJ_TAB_F29 + " " + data[$i].ProductUpdates.OBJ_TAB_F22
+                                    tempArray.F79 = data[$i].ProductUpdates.POS_TAB_F79
+                                    tempArray.F178 = data[$i].ProductUpdates.POS_TAB_F178
+                                    if (data[$i].ProductUpdates.POS_TAB_F1120 == null || data[$i].ProductUpdates.POS_TAB_F1120 == "") {
+                                        tempArray.F1120 = null;
                                     }
-                                });
+                                    else {
+                                        tempArray.F1120 = data[$i].ProductUpdates.POS_TAB_F1120
+                                    }
+                                    tempArray.F83 = data[$i].ProductUpdates.POS_TAB_F83
+                                    tempArray.F82 = data[$i].ProductUpdates.POS_TAB_F82
+                                    tempArray.F81 = data[$i].ProductUpdates.POS_TAB_F81
+                                    if (data[$i].ProductUpdates.POS_TAB_F96 == null || data[$i].ProductUpdates.POS_TAB_F96 == "") {
+                                        tempArray.F96 = 0;
+                                    }
+                                    else {
+                                        tempArray.F96 = 1;
+                                    }
+                                    tempArray.F171 = data[$i].ProductUpdates.POS_TAB_F171
 
-                                ExportNewProduct;
-                            }
-                        }
+                                    tempArray.F123 = data[$i].ProductUpdates.ScalePLU
+                                    tempArray.F150 = data[$i].ProductUpdates.POS_TAB_F150
+
+                                    // PRICE_TAB
+                                    tempArray.F30 = data[$i].ProductUpdates.price_tab_f30
+                                    tempArray.F126 = data[$i].ProductUpdates.PRICE_TAB_F126
+                                    tempArray.F31 = data[$i].ProductUpdates.PRICE_TAB_F31
+                                    tempArray.F122 = data[$i].ProductUpdates.LIKE_TAB_F122
+
+                                    // COST_TAB
+                                    tempArray.F27 = data[$i].ProductUpdates.COST_TAB_F27
+                                    tempArray.F26 = data[$i].ProductUpdates.COST_TAB_F26
+                                    if (data[$i].ProductUpdates.COST_TAB_F19 == null || data[$i].ProductUpdates.COST_TAB_F19 == "") {
+                                        tempArray.F19 = data[$i].ProductUpdates.COST_TAB_F19 = 1;
+                                    }
+                                    else {
+                                        tempArray.F19 = data[$i].ProductUpdates.COST_TAB_F19
+                                    }
+                                    if (data[$i].ProductUpdates.COST_TAB_F38 == null || data[$i].ProductUpdates.COST_TAB_F38 == "") {
+                                        tempArray.F38 = data[$i].ProductUpdates.COST_TAB_F38 = 0.01;
+                                    }
+                                    else {
+                                        tempArray.F38 = data[$i].ProductUpdates.COST_TAB_F38
+                                    }
+
+                                    // LABEL_TAB
+                                    switch ( data[$i].ProductUpdates.labelID )
+                                    {
+                                        case "1":
+                                            tempArray.F95 = "1 - Full Regular Price.lbz";
+                                            break;
+                                        case "2":
+                                            tempArray.F95 = "2 - Half Regular Price.lbz";
+                                            break;
+                                        case "3":
+                                            tempArray.F95 = "3 - Full No Price.lbz";
+                                            break;
+                                        case "4":
+                                            tempArray.F95 = "4 - Half No Price.lbz";
+                                            break;
+                                        case "5":
+                                            tempArray.F95 = "5 - No Label - Do Not Print";
+                                            break;
+                                    };
+
+                                    // SCL_TAB
+                                    tempArray.F266 = data[$i].ProductUpdates.ScalePLU
+                                    tempArray.F258 = data[$i].ProductUpdates.TareNetWeight
+                                    tempArray.F264 = data[$i].ProductUpdates.ShelfLife
+                                    tempArray.Mettler = data[$i].ProductUpdates.ismettlerrequired
+
+                                    // SCL_TXT_TAB
+                                    // Ingredients1
+                                    if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
+                                        tempArray.F297 = null;
+                                    }
+                                    else {
+                                        tempArray.F297 = data[$i].ProductUpdates.IngredientList.substring(0, 252)
+                                    }
+
+                                    // Ingredients2
+                                    if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
+                                        tempArray.F1837 = null;
+                                    }
+                                    else {
+                                        tempArray.F1837 = data[$i].ProductUpdates.IngredientList.substring(253, 505)
+                                    }
+
+                                    // Ingredients3
+                                    if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
+                                        tempArray.F1838 = null;
+                                    }
+                                    else {
+                                        tempArray.F1838 = data[$i].ProductUpdates.IngredientList.substring(506, 758)
+                                    }
+
+                                    // Ingredients4
+                                    if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
+                                        tempArray.F1838 = null;
+                                    }
+                                    else {
+                                        tempArray.F1839 = data[$i].ProductUpdates.IngredientList.substring(759, 1011)
+                                    }
+
+                                    // Ingredients5
+                                    if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
+                                        tempArray.F1853 = null;
+                                    }
+                                    else {
+                                        tempArray.F1853 = data[$i].ProductUpdates.IngredientList.substring(1012, 1264)
+                                    }
+
+                                    // Ingredients6
+                                    if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
+                                        tempArray.F1854 = null;
+                                    }
+                                    else {
+                                        tempArray.F1854 = data[$i].ProductUpdates.IngredientList.substring(1265, 1517)
+                                    }
+
+                                    // Ingredients7
+                                    if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
+                                        tempArray.F1855 = null;
+                                    }
+                                    else {
+                                        tempArray.F1855 = data[$i].ProductUpdates.IngredientList.substring(1518, 1770)
+                                    }
+
+                                    // Ingredients8
+                                    if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
+                                        tempArray.F1856 = null;
+                                    }
+                                    else {
+                                        tempArray.F1856 = data[$i].ProductUpdates.IngredientList.substring(1771, 2023)
+                                    }
+
+                                    // Ingredients9
+                                    if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
+                                        tempArray.F1968 = null;
+                                    }
+
+                                    else {
+                                        tempArray.F1968 = data[$i].ProductUpdates.IngredientList.substring(2024, 2276)
+                                    }
+
+                                    // Ingredients10
+                                    if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
+                                        tempArray.F1969 = null;
+                                    }
+                                    else {
+                                        tempArray.F1969 = data[$i].ProductUpdates.IngredientList.substring(2277, 2529)
+                                    }
+
+                                    // Ingredients11
+                                    if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
+                                        tempArray.F1970 = null;
+                                    }
+                                    else {
+                                        tempArray.F1970 = data[$i].ProductUpdates.IngredientList.substring(2530, 2782)
+                                    }
+
+                                    // Ingredients12
+                                    if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
+                                        tempArray.F1971 = null;
+                                    }
+                                    else {
+                                        tempArray.F1971 = data[$i].ProductUpdates.IngredientList.substring(2783, 3035)
+                                    }
+
+                                    // Ingredients13
+                                    if (data[$i].ProductUpdates.IngredientList == null || data[$i].ProductUpdates.IngredientList == "") {
+                                        tempArray.F1972 = null;
+                                    }
+                                    else {
+                                        tempArray.F1972 = data[$i].ProductUpdates.IngredientList.substring(3036, 3288)
+                                    }
+
+                                    newArray.push(tempArray);
+                                    tempArray = {};
+                                };
+
+                                for ($i = 0; $i < newArray.length; $i++) {
+                                    var ExportNewProduct = $.ajax({
+                                        url: '@Url.Action("CreateNewProduct", "NewProduct")',
+                                        type: "POST",
+                                        dataType: "json",
+                                        data: {
+
+                                            // OBJ_TAB
+                                            'UPC': newArray[$i].F01,
+                                            'Brand': newArray[$i].F155,
+                                            'ShortDescription': newArray[$i].F29,
+                                            'Size': newArray[$i].F22,
+                                            'LongDescription': newArray[$i].F255,
+                                            'Category': newArray[$i].F17,
+                                            'Family': newArray[$i].F16,
+                                            'Report': newArray[$i].F18,
+
+                                            // POS_TAB
+                                            'Subdepartment': newArray[$i].F04,
+                                            'POSDescription': newArray[$i].F02,
+                                            'SNAP': newArray[$i].F79,
+                                            'WIC': newArray[$i].F178,
+                                            'Others': newArray[$i].F1120,
+                                            'ForcePrice': newArray[$i].F83,
+                                            'Scalable': newArray[$i].F82,
+                                            'Tax1': newArray[$i].F81,
+                                            'Tax2': newArray[$i].F96,
+                                            'ClientAge': newArray[$i].F171,
+                                            'PLU': newArray[$i].F123,
+                                            'StopDiscount': newArray[$i].F150,
+
+                                            // PRICE_TAB
+                                            'Retail': newArray[$i].F30,
+                                            'PriceLevel': '1',
+                                            'Quantity': '1',
+                                            'Like': newArray[$i].F122,
+
+                                            // COST_TAB
+                                            'VendorID': newArray[$i].F27,
+                                            'ReorderCode': newArray[$i].F26,
+                                            'Case': newArray[$i].F19,
+                                            'Cost': newArray[$i].F38,
+
+                                            // LABEL_TAB
+                                            'Label': newArray[$i].F95,
+
+                                            // SCL_TAB
+                                            'Mettler': newArray[$i].Mettler,
+                                            'Tare': newArray[$i].F258,
+                                            'ProdLife': newArray[$i].F264,
+                                            'TextLink': newArray[$i].F266,
+
+                                            // SCL_TXT_TAB
+                                            'Ingredients1': newArray[$i].F297,
+                                            'Ingredients2': newArray[$i].F1837,
+                                            'Ingredients3': newArray[$i].F1838,
+                                            'Ingredients4': newArray[$i].F1839,
+                                            'Ingredients5': newArray[$i].F1853,
+                                            'Ingredients6': newArray[$i].F1854,
+                                            'Ingredients7': newArray[$i].F1855,
+                                            'Ingredients8': newArray[$i].F1856,
+                                            'Ingredients9': newArray[$i].F1968,
+                                            'Ingredients10': newArray[$i].F1969,
+                                            'Ingredients11': newArray[$i].F1970,
+                                            'Ingredients12': newArray[$i].F1971,
+                                            'Ingredients13': newArray[$i].F1972
+                                        }
+                                    });
+
+                                    ExportNewProduct;
+
+                                    editorNP.edit(table.rows({ selected: true }).indexes(), false)
+                                        .set('ProductUpdates.completeddate', getDate())
+                                        .set('ProductUpdates.completedby', currentUser)
+                                        .set('ProductUpdates.productstatusID', 4)
+                                        .submit();
+                                };
+
+                                    alert('Exported ' + table.rows('.selected').count() + ' products!')
+
+                            } else {
+                                alert("Export canceled!")
+                            };
+                        },
+
                     },
+
+                    // Redirects user back to main Product Maintenance page
                     { text: 'Back', action: function () { window.location = 'ProductMaintenance' } }
                 ]
             });

@@ -384,6 +384,8 @@ namespace PFC_Toolbox.v._4._0.Controllers
                     // open connection
                     conn.Open();
 
+                    cmd.CommandTimeout = 1000;
+
                     // run query against db
                     reader = cmd.ExecuteReader();
 

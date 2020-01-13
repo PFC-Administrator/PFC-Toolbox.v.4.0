@@ -9,6 +9,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
 {
     public class CategoriesController : ApiController
     {
+        // GET: Categories
         [Route("api/Categories")]
         [HttpPost]
         public IHttpActionResult CategoryOptions()

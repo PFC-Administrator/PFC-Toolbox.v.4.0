@@ -10,7 +10,7 @@ namespace PFC_Toolbox.v._4._0.Extensions
             if (CreatedBy != null)
                 return CreatedBy.Value;
 
-            return "";
+            return "Jeremy A.";
         }
 
     }

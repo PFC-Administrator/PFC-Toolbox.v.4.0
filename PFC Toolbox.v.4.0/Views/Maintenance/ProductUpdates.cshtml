@@ -10,17 +10,16 @@
 
     <title>Product Maintenance</title>
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.4/css/buttons.dataTables.min.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.2.7/css/select.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css" />
     <link rel="stylesheet" type="text/css" href="https://editor.datatables.net/extensions/Editor/css/editor.dataTables.min.css" />
     <link rel="stylesheet" type="text/css" href="~/Content/Custom.css" />
 </head>
 <body class="dataTables">
     <div class="container">
-
         <h1><img src="~/Content/PFC_Logo_128px.png" width="100" height="100">        Product Updates</h1>
-
         <br />
         <table id="ProductMaintenance" class="display text-nowrap compact" style="width:100%">
             <thead>
@@ -37,26 +36,25 @@
                     <th>Retail Price</th>
                     <th>Created By</th>
                     <th>Date Created</th>
-                    <th>Location</th>
                 </tr>
             </thead>
         </table>
-
     </div>
 </body>
 </html>
 
 @section scripts{
-    <script type="text/javascript" charset="utf-8" src=" https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.4/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/select/1.2.7/js/dataTables.select.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
     <script src="~/Content/Editor-1.8.1/js/dataTables.editor.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
@@ -67,6 +65,18 @@
         // Function to pad numbers with 0's
         function pad(number, width = 3, z = 0) { return (String(z).repeat(width) + String(number)).slice(String(number).length) }
 
+        // Function to get today's date
+        function getDate() {
+            today = new Date().getMonth() + 1
+            + "/" + new Date().getDate()
+            + "/" + new Date().getFullYear()
+            + " " + new Date().getHours()
+            + ":" + new Date().getMinutes()
+            + ":" + new Date().getSeconds()
+            return today;
+        };
+
+        var currentUser = "@(User.GetCreatedBy())";
         var editorPR;
         var editor;
         $(document).ready(function () {
@@ -90,20 +100,33 @@
                         placeholder: "Select a location"
                     }, {
                         label: "TPR Start",
-                        name: "ProductUpdates.promotprstartdate"
+                        name: "ProductUpdates.promotprstartdate",
+                        type: "datetime",
+                        format: "M/D/YYYY"
                     }, {
                         label: "TPR End",
-                        name: "ProductUpdates.promotprenddate"
+                        name: "ProductUpdates.promotprenddate",
+                        type: "datetime",
+                        format: "M/D/YYYY"
                     }
                 ]
             });
 
-            // Product Update Form
+
+            /***********************************************************************************************************************/
+
+
+            // Update An Existing Product Form
             var editor = new $.fn.dataTable.Editor({
                 ajax: '/api/ProductUpdates',
                 table: '#ProductMaintenance',
                 fields: [
                     {
+                        label: "Status:",
+                        name: "ProductUpdates.productstatusID",
+                        type: "select",
+                        def: "3"
+                    }, {
                         label: "Product Update Type",
                         name: "ProductUpdates.requesttypeID",
                         type: "select",
@@ -114,18 +137,26 @@
                         type: "select",
                         placeholder: "Select a location"
                     }, {
-                        label: "UPC/PLU",
-                        name: "ProductUpdates.F01"
-                    }, {
                         label: "Mettler Product:",
                         name: "ProductUpdates.ismettlerrequired",
                         type: "select",
                         options: ["Yes", "No"],
                         placeholder: "Select an option"
                     }, {
+                        label: "Shelf Tag:",
+                        name: "ProductUpdates.labelID",
+                        type: "select",
+                        placeholder: "Select a label size"
+                    }, {
+                        label: "UPC/PLU",
+                        name: "ProductUpdates.F01"
+                    }, {
+                        label: "Mettler PLU:",
+                        name: "ProductUpdates.ScalePLU"
+                    }, {
                         label: "Retail Price",
                         name: "ProductUpdates.price_tab_f30"
-                    },{
+                    }, {
                         label: "Vendor:",
                         name: "ProductUpdates.COST_TAB_F27",
                         type: "select",
@@ -151,11 +182,6 @@
                     }, {
                         label: "TPR Price",
                         name: "ProductUpdates.promotprprice"
-                    }, {
-                        label: "Shelf Tag:",
-                        name: "ProductUpdates.labelID",
-                        type: "select",
-                        placeholder: "Select a label size"
                     }, {
                         label: "Sign:",
                         name: "ProductUpdates.signID",
@@ -209,67 +235,76 @@
                         name: "ProductUpdates.POS_TAB_F79",
                         type: "checkbox",
                         options: [
-                            { label: "", "value": "True" }
+                            { label: "", "value": 1 }
                         ],
                         separator: "|",
-                        unselectedValue: "False"
+                        unselectedValue: 0
                     }, {
                         label: "Scalable:",
                         name: "ProductUpdates.POS_TAB_F82",
                         type: "checkbox",
                         options: [
-                            { label: "", "value": "True" }
+                            { label: "", "value": 1 }
                         ],
                         separator: "|",
-                        unselectedValue: "False"
+                        unselectedValue: 0
                     }, {
                         label: "Taxable:",
                         name: "ProductUpdates.POS_TAB_F81",
                         type: "checkbox",
                         options: [
-                            { label: "", "value": "True" }
+                            { label: "", "value": 1 }
                         ],
                         separator: "|",
-                        unselectedValue: "False"
+                        unselectedValue: 0
+                    }, {
+                        label: "Taxable 2:",
+                        name: "ProductUpdates.POS_TAB_F96",
+                        options: [
+                            { label: "", "value": 1 }
+                        ],
+                        type: "checkbox",
+                        type: "hidden",
+                        unselectedValue: 0,
+                        separator: "|"
+                    }, {
+                        label: "Stop discount:",
+                        name: "ProductUpdates.POS_TAB_F150",
+                        type: "checkbox",
+                        options: [
+                            { label: "", "value": 1 }
+                        ],
+                        separator: "|",
+                        unselectedValue: 0,
+                        type: "hidden"
+                    }, {
+                        label: "Force price:",
+                        name: "ProductUpdates.POS_TAB_F83",
+                        type: "checkbox",
+                        options: [
+                            { label: "", "value": 1 }
+                        ],
+                        separator: "|",
+                        unselectedValue: 0,
+                        type: "hidden"
                     }, {
                         label: "WIC:",
                         name: "ProductUpdates.POS_TAB_F178",
                         type: "checkbox",
                         options: [
-                            { label: "", "value": "True" }
+                            { label: "", "value": 1 }
                         ],
                         separator: "|",
-                        unselectedValue: "False"
+                        unselectedValue: 0
                     }, {
-                        label: "Created by:",
-                        name: "ProductUpdates.createdby",
-                        type: "readonly",
-                        type: "hidden",
-                        def: "@(User.GetCreatedBy())"
+                        label: "Client age:",
+                        name: "ProductUpdates.POS_TAB_F171",
+                        type: "hidden"
                     }, {
-                        label: "Date created:",
-                        name: "ProductUpdates.datecreated",
-                        type: "hidden",
-                        def: function () {
-                            var today = new Date().getMonth() + 1
-                                + "/" + new Date().getDate()
-                                + "/" + new Date().getFullYear()
-                                + " " + new Date().getHours()
-                                + ":" + new Date().getMinutes()
-                                + ":" + new Date().getSeconds(); return today }
-                    },{
-                        label: "Status:",
-                        name: "ProductUpdates.productstatusID",
-                        type: "hidden",
-                        def: "3"
-                    },{
                         label: "Notes:",
                         name: "ProductUpdates.AdditionalRequestNotes",
                         type:"textarea"
-                    },{
-                        label: "Mettler PLU:",
-                        name: "ProductUpdates.ScalePLU"
-                    },{
+                    }, {
                         label: "Item Type:",
                         name: "ProductUpdates.ScaleItemTypeID",
                         type: "select",
@@ -278,105 +313,110 @@
                             { label: "Price per pound", value: "1" },
                             { label: "Standard pack", value: "2"}
                         ]
-                    },{
+                    }, {
                         label: "Tare / Net Weight:",
                         name: "ProductUpdates.TareNetWeight"
-                    },{
+                    }, {
                         label: "Shelf Life:",
                         name: "ProductUpdates.ShelfLife"
-                    },{
+                    }, {
                         label: "Ingredients:",
                         name: "ProductUpdates.IngredientList",
                         type:"textarea"
+                    }, {
+                        label: "Created by:",
+                        name: "ProductUpdates.createdby",
+                        type: "readonly",
+                        type: "hidden",
+                        def: currentUser
+                    }, {
+                        label: "Date created:",
+                        name: "ProductUpdates.datecreated",
+                        type: "hidden",
+                        def: getDate()
+                    }, {
+                        label: "Date completed:",
+                        name: "ProductUpdates.completeddate"
+                    }, {
+                        label: "Completed by:",
+                        name: "ProductUpdates.completedby"
+                    }, {
+                        label: "Last updated on:",
+                        name: "ProductUpdates.lastupdatedon",
+                        type: "hidden"
+                    }, {
+                        label: "Last updated by:",
+                        name: "ProductUpdates.lastupdatedby",
+                        type: "hidden"
                     }
                 ]
             });
 
-            // Hides signs unless a promotional request type is selected on Product Update form
+            // Update An Existing Product Form: shows completed by info if product is marked as complete
+            editor.on('open', function () {
+                if (editor.field('ProductUpdates.productstatusID').val() == 4) {
+                    editor.field('ProductUpdates.completeddate').show();
+                    editor.field('ProductUpdates.completedby').show();
+                }
+                else {
+                    editor.field('ProductUpdates.completeddate').hide();
+                    editor.field('ProductUpdates.completedby').hide();
+                }
+            });
+
+            // Update An Existing Product Form: hides cost info on load
+            editor.field('ProductUpdates.POS_TAB_F04').input().on('change', function () {
+                    editor.field('ProductUpdates.COST_TAB_F27').hide();
+                    editor.field('ProductUpdates.COST_TAB_F26').hide();
+                    editor.field('ProductUpdates.PRICE_TAB_F49').hide();
+                    editor.field('ProductUpdates.COST_TAB_F19').hide();
+                    editor.field('ProductUpdates.COST_TAB_F38').hide();
+
+            });
+
+            // Update An Existing Product Form: hides TPR related fields unless a promotional request type is selected
             editor.field('ProductUpdates.requesttypeID').input().on('change', function () {
-                if (editor.field('ProductUpdates.requesttypeID').val() == '2' || editor.field('ProductUpdates.requesttypeID').val() == '3' || editor.field('ProductUpdates.requesttypeID').val() == '4' || editor.field('ProductUpdates.requesttypeID').val() == '5' || editor.field('ProductUpdates.requesttypeID').val() == '7' || editor.field('ProductUpdates.requesttypeID').val() == '8' || editor.field('ProductUpdates.requesttypeID').val() == '9')
-                {
+                if (editor.field('ProductUpdates.requesttypeID').val() == '2' || editor.field('ProductUpdates.requesttypeID').val() == '3' || editor.field('ProductUpdates.requesttypeID').val() == '4' || editor.field('ProductUpdates.requesttypeID').val() == '5' || editor.field('ProductUpdates.requesttypeID').val() == '7' || editor.field('ProductUpdates.requesttypeID').val() == '8' || editor.field('ProductUpdates.requesttypeID').val() == '9') {
                     editor.field('ProductUpdates.signID').show();
-                }
-                else
-                {
-                    editor.field('ProductUpdates.signID').hide();
-                }
-            });
-
-            // Hides TPR fields unless a promotional request type is selected on Product Update form
-            editor.field('ProductUpdates.requesttypeID').input().on('change', function () {
-                if (editor.field('ProductUpdates.requesttypeID').val() == '2' || editor.field('ProductUpdates.requesttypeID').val() == '3' || editor.field('ProductUpdates.requesttypeID').val() == '4' || editor.field('ProductUpdates.requesttypeID').val() == '5' || editor.field('ProductUpdates.requesttypeID').val() == '7' || editor.field('ProductUpdates.requesttypeID').val() == '8' || editor.field('ProductUpdates.requesttypeID').val() == '9')
-                {
                     editor.field('ProductUpdates.promotprstartdate').show();
-                }
-                else
-                {
-                    editor.field('ProductUpdates.promotprstartdate').hide();
-                }
-            });
-
-            // Hides TPR fields unless a promotional request type is selected on Product Update form
-            editor.field('ProductUpdates.requesttypeID').input().on('change', function () {
-                if (editor.field('ProductUpdates.requesttypeID').val() == '2' || editor.field('ProductUpdates.requesttypeID').val() == '3' || editor.field('ProductUpdates.requesttypeID').val() == '4' || editor.field('ProductUpdates.requesttypeID').val() == '5' || editor.field('ProductUpdates.requesttypeID').val() == '7' || editor.field('ProductUpdates.requesttypeID').val() == '8' || editor.field('ProductUpdates.requesttypeID').val() == '9')
-                {
                     editor.field('ProductUpdates.promotprenddate').show();
-                }
-                else
-                {
-                    editor.field('ProductUpdates.promotprenddate').hide();
-                }
-            });
-
-            // Hides TPR fields unless a promotional request type is selected on Product Update form
-            editor.field('ProductUpdates.requesttypeID').input().on('change', function () {
-                if (editor.field('ProductUpdates.requesttypeID').val() == '2' || editor.field('ProductUpdates.requesttypeID').val() == '3' || editor.field('ProductUpdates.requesttypeID').val() == '4' || editor.field('ProductUpdates.requesttypeID').val() == '5' || editor.field('ProductUpdates.requesttypeID').val() == '7' || editor.field('ProductUpdates.requesttypeID').val() == '8' || editor.field('ProductUpdates.requesttypeID').val() == '9')
-                {
                     editor.field('ProductUpdates.promotprprice').show();
-                }
-                else
-                {
+                } else {
+                    editor.field('ProductUpdates.signID').hide();
+                    editor.field('ProductUpdates.promotprstartdate').hide();
+                    editor.field('ProductUpdates.promotprenddate').hide();
                     editor.field('ProductUpdates.promotprprice').hide();
                 }
             });
 
-            // Hides Family Button unless Hackberry's item is selected on Product Update form
+            // Update An Existing Product Form: hides Family Button unless Hackberry's Brand is selected
             editor.field('ProductUpdates.requesttypeID').input().on('change', function () {
-                if (editor.field('ProductUpdates.requesttypeID').val() == '10')
-                {
+                if (editor.field('ProductUpdates.requesttypeID').val() == '10') {
                     editor.field('ProductUpdates.OBJ_TAB_F16').show();
-                }
-                else
-                {
+                } else {
                     editor.field('ProductUpdates.OBJ_TAB_F16').hide();
                 }
             });
-            
-            // Hides Like code unless Produce is selected on Product Update form
+
+            // Update An Existing Product Form: hides Like code unless Produce is selected
             editor.field('ProductUpdates.POS_TAB_F04').input().on('change', function () {
-                if (editor.field('ProductUpdates.POS_TAB_F04').val() == '6' || editor.field('ProductUpdates.POS_TAB_F04').val() == '17' || editor.field('ProductUpdates.POS_TAB_F04').val() == '3')
-                {
+                if (editor.field('ProductUpdates.POS_TAB_F04').val() == '6' || editor.field('ProductUpdates.POS_TAB_F04').val() == '17' || editor.field('ProductUpdates.POS_TAB_F04').val() == '3') {
                     editor.field('ProductUpdates.LIKE_TAB_F122').show();
-                }
-                else
-                {
+                } else {
                     editor.field('ProductUpdates.LIKE_TAB_F122').hide();
                 }
             });
 
-            // Hides Mettler Ingredients unless Yes to Mettler Product option is select on Product Update form
+            // Update An Existing Product Form: hides Mettler Ingredients unless Yes to Mettler Product option is selected
             editor.field('ProductUpdates.ismettlerrequired').input().on('change', function () {
-                if (editor.field('ProductUpdates.ismettlerrequired').val() == 'Yes')
-                {
+                if (editor.field('ProductUpdates.ismettlerrequired').val() == 'Yes') {
 
                     editor.field('ProductUpdates.ScalePLU').show();
                     editor.field('ProductUpdates.ScaleItemTypeID').show();
                     editor.field('ProductUpdates.TareNetWeight').show();
                     editor.field('ProductUpdates.ShelfLife').show();
                     editor.field('ProductUpdates.IngredientList').show();
-                }
-                else
-                {
+                } else {
                     editor.field('ProductUpdates.ScalePLU').hide();
                     editor.field('ProductUpdates.ScaleItemTypeID').hide();
                     editor.field('ProductUpdates.TareNetWeight').hide();
@@ -385,67 +425,79 @@
                 }
             });
 
-            // Cascading select fields on Product Update form
-            editor.dependent('ProductUpdates.POS_TAB_F04', '/api/Categories');
-
-            // Hides cost info on load on Product Update form
-            editor.field('ProductUpdates.POS_TAB_F04').input().on('change', function ()
-            {
-                    editor.field('ProductUpdates.COST_TAB_F27').hide();
-                    editor.field('ProductUpdates.COST_TAB_F26').hide();
-                    editor.field('ProductUpdates.PRICE_TAB_F49').hide();
-                    editor.field('ProductUpdates.COST_TAB_F19').hide();
-                    editor.field('ProductUpdates.COST_TAB_F38').hide();
-
+            // Update An Existing Product Form: set scalable checkbox on Item Type selection.
+            editor.field('ProductUpdates.ScaleItemTypeID').input().on('change', function () {
+                if (editor.field('ProductUpdates.ScaleItemTypeID').val() == '1') {
+                    editor.field('ProductUpdates.POS_TAB_F82').val(1);
+                    editor.field('ProductUpdates.OBJ_TAB_F22').val("per lb.")
+                } else {
+                    editor.field('ProductUpdates.POS_TAB_F82').val(2);
+                }
             });
 
+            // Update An Existing Product Form: filter available categories on subdepartment selection
+            editor.dependent('ProductUpdates.POS_TAB_F04', '/api/Categories');
+
+            // Update An Existing Product Form: set default POS attributes
+            editor.dependent('ProductUpdates.POS_TAB_F04', function () {
+                var subdepartment = editor.field('ProductUpdates.POS_TAB_F04').val();
+
+                var GetSubdepartmentAttributes = $.ajax({
+                    url: "api/GetSubdepartmentBounds",
+                    type: "GET",
+                    dataType: "json",
+                    data: { 'F04': subdepartment },
+                    error: function (error) {
+                        console.log(`Error ${error}`);
+                    }
+                });
+
+                GetSubdepartmentAttributes.then(function (data) {
+                    editor.field('ProductUpdates.POS_TAB_F79').val(data.data[0].SMSSubdepartments.F79);
+                    editor.field('ProductUpdates.POS_TAB_F178').val(data.data[0].SMSSubdepartments.F178);
+                    editor.field('ProductUpdates.POS_TAB_F81').val(data.data[0].SMSSubdepartments.F81);
+                    editor.field('ProductUpdates.POS_TAB_F171').val(data.data[0].SMSSubdepartments.F171);
+                    editor.field('ProductUpdates.POS_TAB_F150').val(data.data[0].SMSSubdepartments.F150);
+                });
+            });
+
+            // Update An Existing Product Form: display cost info when cost button is clicked
             var costCounter = 0;
-            // Display cost info when cost button is clicked on Product Update form
             $(document).on('click', '#cost', function () {
-                if (costCounter == 0)
-                {
+                if (costCounter == 0) {
                     editor.field('ProductUpdates.COST_TAB_F27').show();
                     editor.field('ProductUpdates.COST_TAB_F26').show();
                     editor.field('ProductUpdates.PRICE_TAB_F49').show();
                     editor.field('ProductUpdates.COST_TAB_F19').show();
                     editor.field('ProductUpdates.COST_TAB_F38').show();
                     costCounter = 1
-                    //alert(costCounter);
-                }
-                else
-                {
+                } else {
                     editor.field('ProductUpdates.COST_TAB_F27').hide();
                     editor.field('ProductUpdates.COST_TAB_F26').hide();
                     editor.field('ProductUpdates.PRICE_TAB_F49').hide();
                     editor.field('ProductUpdates.COST_TAB_F19').hide();
                     editor.field('ProductUpdates.COST_TAB_F38').hide();
                     costCounter = 0
-                    //alert(costCounter);
                 }
             });
 
+            // Update An Existing Product Form: display SRP calculator info when cost button is clicked
             var srpCounter = 0;
-            // Display SRP calculator info when cost button is clicked on Product Update form
             $(document).on('click', '#srpcalculator', function () {
-                if (srpCounter == 0)
-                {
+                if (srpCounter == 0) {
                     editor.field('ProductUpdates.COST_TAB_F19').show();
                     editor.field('ProductUpdates.COST_TAB_F38').show();
                     editor.field('ProductUpdates.PRICE_TAB_F49').show();
                     srpCounter = 1
-                    //alert(srpCounter);
-                }
-                else
-                {
+                } else {
                     editor.field('ProductUpdates.COST_TAB_F19').hide();
                     editor.field('ProductUpdates.COST_TAB_F38').hide();
                     editor.field('ProductUpdates.PRICE_TAB_F49').hide();
                     srpCounter = 0
-                    //alert(srpCounter);
                 }
             });
 
-            // SRP Calculator on Product Update form
+            // Update An Existing Product Form: SRP Calculator
             $(document).on('click', '#calculate', function () {
                 var srp;
 
@@ -480,28 +532,72 @@
                     }
                 }
             });
-           
+
+            // Update An Existing Product Form: activate an inline edit on click of a table cell that has the className attribute "editable" set to it
+            $('#ProductMaintenance').on('click', 'tbody td.editable', function (e) {
+                editor.inline(this, {
+                    onBlur: 'submit'
+                });
+            });
+
+            console.log(currentUser);
+            // Update An Existing Product Form: set last updated date and last updated by upon edit
+            editor.field('ProductUpdates.productstatusID').input().on('change', function () {
+                editor.field('ProductUpdates.lastupdatedon').val(getDate());
+                editor.field('ProductUpdates.lastupdatedby').val(currentUser);
+            });
+
+            // Update An Existing Product Form: set completed date and completed by upon record completion
+            editor.field('ProductUpdates.productstatusID').input().on('change', function () {
+                if (editor.field('ProductUpdates.productstatusID').val() == '4' && editor.field('ProductUpdates.completeddate').val() == null && editor.field('ProductUpdates.completedby').val() == null) {
+                    editor.field('ProductUpdates.completeddate').val(getDate());
+                    editor.field('ProductUpdates.completedby').val(currentUser);
+                }
+            });
+
+            // Create the DataTables table
             var table = $('#ProductMaintenance').DataTable({
+                //serverSide: true,
+                deferRender: true,
+                autoWidth: false,
+                select: true,
                 // This is the default view showing uncompleted requests
                 initComplete: function (e, dt, node, config) {
-                    table.column(0).search('^((?!(New Product)).)*$', true, false)
-                         .column(1).search('^((?!(4 - Completed)).)*$', true, false).draw()
+                    table
+                        .column(0).search('^((?!(New Product)).)*$', true, false)
+                        .column(1).search('^((?!(4 - Completed)).)*$', true, false).draw()
                 },
-                //processing: true,
-                //serverSide: true,
-                //paging: true,
-                deferRender: true,
-                "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "All"]],
+                // Hide text overflow with ellipses
+                columnDefs: [{
+                    targets: 2,
+                    render: function (data, type, row) {
+                        if (type === 'display' && data != null) {
+                            data = data.replace(/<(?:.|\\n)*?>/gm, '');
+                            if (data.length > 14) {
+                                return '<span class=\"show-ellipsis\">' + data.substr(0, 14) + '</span><span class=\"no-show\">' + data.substr(14) + '</span>';
+                            } else {
+                                return data;
+                            }
+                        } else {
+                            return data;
+                        }
+                    }
+                }],
+                // Default table lengths
+                lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "All"]],
+                // Table data source
                 ajax: {
-                    url: '/api/ProductUpdates'
+                    url: '/api/ProductUpdates'//,
+                    //type: 'POST'
                 },
+                // Table columns
                 columns: [
-                    { "data": "RequestTypes.requestname" },
-                    { "data": "Status.productupdatestatus" },
-                    { "data": "ProductUpdates.F01" },
-                    { "data": "ProductUpdates.OBJ_TAB_F155" },
-                    { "data": "ProductUpdates.OBJ_TAB_F29", width: '110px'},
-                    { "data": "ProductUpdates.OBJ_TAB_F22" },
+                    { "data": "RequestTypes.requestname", width: "10%" },
+                    { "data": "Status.productupdatestatus", className: "editable", editField: "ProductUpdates.productstatusID"},
+                    { "data": "ProductUpdates.F01", width: "5%" },
+                    { "data": "ProductUpdates.OBJ_TAB_F155", width: "10%" },
+                    { "data": "ProductUpdates.OBJ_TAB_F29" },
+                    { "data": "ProductUpdates.OBJ_TAB_F22", width: "5%" },
                     { "data": "ProductUpdates.promotprstartdate" },
                     { "data": "ProductUpdates.promotprenddate" },
                     { "data": "ProductUpdates.promotprprice" },
@@ -513,21 +609,26 @@
                             return window.moment(value).format('M/D/YYYY hh:mm:ss A');
                         }
                     },
+                    { "data": "ProductUpdates.completeddate", visible: false },
                     { "data": "ProductUpdates.locationID", visible: false }
                 ],
-                "rowCallback": function (row, data, index) {
-                    if (data.RequestTypes.requestname == "New Product") { $(row).find('td:eq(0)').css('background-color', '#E6EDD7'); }
+                // Change New Products request type background green
+                rowCallback: function (row, data, index) {
+                    if (data.RequestTypes.requestname == "New Product") { $(row).find('td:eq(0)').css('background-color', '#FAC090'); }
+                    if (data.RequestTypes.requestname !== "New Product") { $(row).find('td:eq(0)').css('background-color', '#E6EDD7'); }
                 },
-                select: true,
+                // Control button layout
                 dom: '<"floatRight"B><"clear">lfrtip',
-                order: [[11, "desc"], [1, "asc"]],
+                order: [[11, "desc"]],
+                // Default table order
                 buttons: [
-                    { text: 'Promotion Report', title: 'Update An Existing Product', extend: 'create', editor: editorPR,
+                    {
+                        // Custom Promotion Report button
+                        text: 'Promotion Report', formTitle: 'Run Promotion Report', extend: 'create', editor: editorPR,
                         formButtons:
                             [{
                                 text: 'Run Report',
                                 action: function (e, dt, node, config) {
-                                    // Hides signs unless a promotional request type is selected on Product Update form
                                     switch ( editorPR.field('ProductUpdates.requesttypeID').val() )
                                     {
                                         case 1:
@@ -566,34 +667,63 @@
                                     var startDate = editorPR.field('ProductUpdates.promotprstartdate').val();
                                     var endDate = editorPR.field('ProductUpdates.promotprenddate').val();
 
-                                    table.column(0).search('^' + promo + '$', true, false)
-                                         .column(6).search('^' + startDate + '$', true, false)
-                                         .column(7).search('^' + endDate + '$', true, false)
-                                         .column(12).search('^' + locale + '$', true, false).draw()
+                                    table.search('')
+                                        .columns().search('')
+                                        .column(0).search('^' + promo + '$', true, false)
+                                        .column(6).search('^' + startDate + '$', true, false)
+                                        .column(7).search('^' + endDate + '$', true, false)
+                                        .column(13).search('^' + locale + '$', true, false).draw()
                                     this.close();
                                 }
                             }]
-
                     },
-                    { text: 'Edit', extend:'edit', editor:editor},
-                    { text: 'Show Completed Today', action: function (e, dt, node, config) { table.column(1).search('^4 - Completed$', true, false).draw() } },
                     {
+                        // Custom edit button that updates timestamps
+                        text: 'Edit', formTitle: 'Edit entry', extend: 'edit', editor: editor,
+                        formButtons:
+                            [
+                                {
+                                    text: 'Update', action: function () {
+                                        editor.field('ProductUpdates.lastupdatedon').val(getDate());
+                                        editor.field('ProductUpdates.lastupdatedby').val(currentUser);
+                                        this.submit();
+                                    }
+                                }
+                            ]
+                    },
+                    {
+                        // Show completed today filter button
+                        text: 'Show Completed Today', action: function (e, dt, node, config) {
+                            table.search('')
+                                .columns().search('')
+                                .columns().order('')
+                                .column(0).search('^((?!(New Product)).)*$', true, false)
+                                .column(1).search('^4 - Completed$', true, false)
+                                .column(12).search(new Date().getMonth() + 1 + "/" + new Date().getDate() + "/" + new Date().getFullYear(), true, false).column(11).order('desc').draw()
+                        }
+                    },
+                    {
+                        // Show default view filter button
                         text: 'Show Default View', action: function (e, dt, node, config) {
-                            table.column(0).search('', true, false)
-                                 .column(6).search('', true, false)
-                                 .column(7).search('', true, false)
-                                 .column(12).search('', true, false)
-                                 .column(0).search('^((?!(New Product)).)*$', true, false)
-                                 .column(1).search('^((?!(4 - Completed)).)*$', true, false).draw();
+                            table.search('')
+                                .columns().search('')
+                                .columns().order('')
+                                .column(0).search('^((?!(New Product)).)*$', true, false)
+                                .column(1).search('^((?!(4 - Completed)).)*$', true, false).column(11).order('desc').draw();
                         }
                     },
                     {
+                        // Show all records filter button
                         text: 'Show All', action: function (e, dt, node, config) {
-                            table.column(1).search('3 - Manager Review Completed$|^4 - Completed$', true, false)
-                                 .column(11).order('desc').draw()
+                            table.search('')
+                                .columns().search('')
+                                .columns().order('')
+                                .column(0).search('^((?!(New Product)).)*$', true, false)
+                                .column(1).search('^1 - Waiting for Manager Review$|^2 - More Info Needed$|^3 - Manager Review Completed$|^4 - Completed$', true, false).column(11).order('desc').draw();
                         }
                     },
                     {
+                        // Export table button
                         extend: 'collection', text: 'Export', autoClose: true,
                         buttons: [
                             'copy',
@@ -603,19 +733,23 @@
                             'print'
                         ]
                     },
+
+                    // Redirects user back to main Product Maintenance page
                     { text: 'Back', action: function () { window.location = 'ProductMaintenance' } }
                 ]
             });
 
-            // Update An Existing Product Form buttons
+            // Update An Existing Product Form: Cost button
             $('<button id="cost" style="position:absolute;top:20%;right:12.5%">Cost</button>').insertAfter(
                 editor.field('ProductUpdates.price_tab_f30').input()
             );
 
+            // Update An Existing Product Form: SRP button
             $('<button id="srpcalculator" style="position:absolute;top:20%;right:5%">SRP</button>').insertAfter(
                 editor.field('ProductUpdates.price_tab_f30').input()
             );
 
+            // Update An Existing Product Form: Calculate button
             $('<button id="calculate" style="position:absolute;top:20%;right:8%">Calculate</button>').insertAfter(
                 editor.field('ProductUpdates.COST_TAB_F38').input()
             );
