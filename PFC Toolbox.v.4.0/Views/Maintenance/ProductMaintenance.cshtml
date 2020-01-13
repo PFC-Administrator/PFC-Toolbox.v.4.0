@@ -1111,34 +1111,6 @@
                 }
             });
 
-            // Update An Existing Product Form: check if UPC already exists in SMS
-            //editor.field('ProductUpdates.F01').input().on('blur', function () {
-            //    var UPC = pad(editor.field('ProductUpdates.F01').val(), 13, 0);
-
-            //    var CheckUPC = $.ajax({
-            //        url: "api/CheckUPC",
-            //        type: "GET",
-            //        dataType: "json",
-            //        error: function (error) {
-            //            console.log(`Error ${error}`);
-            //        }
-            //    });
-
-            //    CheckUPC.done(function (data) {
-            //        var used = [];
-            //        for ($i = 0; $i < data.data.length; $i++) {
-            //            used.push(data.data[$i].OBJ_TAB.F01);
-            //        }
-
-            //        for ($i = 0; $i < used.length; $i++) {
-            //            if (UPC !== used[$i]) {
-            //                editor.field('ProductUpdates.F01').error("UPC/PLU does not exist in SMS");
-            //            }
-            //            break;
-            //        }
-            //    });
-            //});
-
             // Update An Existing Product Form: field validation
             editor.on('preSubmit', function (e, o, action) {
                 if (action !== 'remove') {
