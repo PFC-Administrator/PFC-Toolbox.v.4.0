@@ -12,7 +12,6 @@
   <li>Limit accessibility to functions by ASP.NET Identity login level</li>
   <li>New Vendor request forms</li>
   <li>Allow accounting to add new vendors themselves</li>
-  <li>Send emails to users who have products marked as "more info needed"</li>
   <li>Implementation of Co-op Deals or Bidfile?</li>
   <li>Sales by brand</li>
   <li>Sales by description</li>
