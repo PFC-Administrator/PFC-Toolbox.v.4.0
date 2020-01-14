@@ -1,5 +1,6 @@
 ﻿@{
     ViewBag.Title = "Product Maintenance";
+    var CreatedBy = Request["CreatedBy"];
 }
 @using PFC_Toolbox.v._4._0.Extensions;
 @using PFC_Toolbox.v._4._0.Models;
@@ -72,7 +73,7 @@
             return today;
         };
 
-        var currentUser = "@(User.GetCreatedBy())";
+        var currentUser = "@CreatedBy";
         var editorNP;
         var editor;
         $(document).ready(function () {
@@ -1132,7 +1133,7 @@
                     } else {
                         // Check if UPC doesn't exist in SMS
                         var UPC = pad(editor.field('ProductUpdates.F01').val(), 13, 0);
-                        console.log(UPC);
+
                         var CheckUPC = $.ajax({
                             url: "api/CheckUPC",
                             type: "GET",

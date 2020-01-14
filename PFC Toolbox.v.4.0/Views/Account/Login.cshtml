@@ -42,12 +42,12 @@
                     </div>
                 </div>
                 @*<p>
-                    @Html.ActionLink("Register as a new user", "Register")
-                </p>
-                 Enable this once you have account confirmation enabled for password reset functionality
-            <p>
-                @Html.ActionLink("Forgot your password?", "ForgotPassword")
-            </p>*@
+                            @Html.ActionLink("Register as a new user", "Register")
+                        </p>
+                         Enable this once you have account confirmation enabled for password reset functionality
+                    <p>
+                        @Html.ActionLink("Forgot your password?", "ForgotPassword")
+                    </p>*@
             }
         </section>
     </div>
@@ -60,4 +60,59 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-}
+        <script type="text/javascript" charset="utf-8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+        <script>
+
+            // Function to create cookies
+            function createCookie(name, value, days) {
+                if (days) {
+                    var date = new Date();
+                    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                    var expires = "; expires=" + date.toGMTString();
+                }
+                else var expires = "";
+                document.cookie = name + "=" + value + expires + "; path=/";
+            }
+
+            // Function to read cookies
+            function readCookie(name) {
+                var nameEQ = name + "=";
+                var ca = document.cookie.split(';');
+                for (var i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                }
+                return null;
+            }
+
+            // Function to get user's SMS login ID at login
+            function getSMSLoginID() {
+                return document.getElementById("SMSLoginID").value;
+            }
+
+            // Get user's account info on page unload
+            window.addEventListener('beforeunload', function (event) {
+                var GetUserInfo = $.ajax({
+                    url: "/Maintenance/api/GetUserInfo",
+                    type: "GET",
+                    dataType: "json",
+                    data: {
+                        'currentUser': getSMSLoginID()
+                    },
+                    error: function (error) {
+                        console.log(`Error ${error}`);
+                    }
+                });
+
+                // When AJAX request id one, create cookies
+                GetUserInfo.done(function (data) {
+                    console.log(data)
+                    createCookie('CreatedBy', data.data[0].CreatedBy, 0);
+                    createCookie('Email', data.data[0].Email, 0);
+                    createCookie('UserName', data.data[0].UserName, 0);
+                });
+            });
+        </script>
+    }

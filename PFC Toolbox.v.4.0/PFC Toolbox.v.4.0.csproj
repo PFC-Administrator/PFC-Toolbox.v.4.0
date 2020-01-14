@@ -223,6 +223,7 @@
     <Compile Include="Controllers\Identity\AccountController.cs" />
     <Compile Include="Controllers\DocumentationController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\Identity\UserController.cs" />
     <Compile Include="Controllers\LocationsController.cs" />
     <Compile Include="Controllers\LogsController.cs" />
     <Compile Include="Controllers\Logs\PurchasesController.cs" />
@@ -393,7 +394,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Documentation\" />
-    <Folder Include="Views\UPC\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
