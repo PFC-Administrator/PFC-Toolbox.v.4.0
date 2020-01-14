@@ -1,5 +1,6 @@
 ﻿@{
     ViewBag.Title = "Product Maintenance";
+    var CreatedBy = Request["CreatedBy"];
 }
 @using PFC_Toolbox.v._4._0.Extensions;
 @using PFC_Toolbox.v._4._0.Models;
@@ -76,7 +77,7 @@
             return today;
         };
 
-        var currentUser = "@(User.GetCreatedBy())";
+        var currentUser = "@CreatedBy";
         var editorPR;
         var editor;
         $(document).ready(function () {
