@@ -15,6 +15,5 @@
   <li>Implementation of Co-op Deals or Bidfile?</li>
   <li>Sales by brand</li>
   <li>Sales by description</li>
-  <li>Package price on New Product / Update Product forms</li>
   <li>Multi subdepartment sales reports.</li>
 </ol>
