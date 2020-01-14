@@ -412,7 +412,7 @@
             });
 
             // New Product Form: set last updated date and last updated by upon edit
-            editorNP.field('ProductUpdates.productstatusID').input().on('change', function () {
+            editorNP.field('ProductUpdates.productstatusID').input().on('edit', function () {
                 editorNP.field('ProductUpdates.lastupdatedon').val(getDate());
                 editorNP.field('ProductUpdates.lastupdatedby').val(currentUser);
             });
