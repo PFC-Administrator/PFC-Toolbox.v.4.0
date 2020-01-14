@@ -60,8 +60,20 @@
 
     <script>
 
+        // Function to convert fields to title case
+        function titleCase(string) {
+            return string.replace(
+                /\w\S*/g,
+                function (txt) {
+                    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+                }
+            );
+        }
+
         // Function to pad numbers with 0's
-        function pad(number, width = 3, z = 0) { return (String(z).repeat(width) + String(number)).slice(String(number).length) }
+        function pad(number, width = 3, z = 0) {
+            return (String(z).repeat(width) + String(number)).slice(String(number).length)
+        }
 
         // Function to get today's date
         function getDate() {
@@ -301,6 +313,18 @@
                         type: "hidden"
                     }
                 ]
+            });
+
+            // New Product Form: converts receipt description to title case
+            editorNP.field('ProductUpdates.OBJ_TAB_F29').input().on('change', function () {
+                var productName = titleCase(editorNP.field('ProductUpdates.OBJ_TAB_F29').val());
+                editorNP.field('ProductUpdates.OBJ_TAB_F29').val(productName); 
+            });
+
+            // New Product Form: converts signage descriptions to title case
+            editorNP.field('ProductUpdates.OBJ_TAB_F255').input().on('change', function () {
+                var productName = titleCase(editorNP.field('ProductUpdates.OBJ_TAB_F255').val());
+                editorNP.field('ProductUpdates.OBJ_TAB_F255').val(productName); 
             });
 
             // New Product Form: shows completed by info if product is marked as complete
