@@ -35,12 +35,9 @@
     <br />
 
     <label>Subdepartment:</label>
-    <select id="subdept"
+    <select id="subdepartment"
             class="form-control"
-            name="subdept"
-            data-source="api/GetSubdepartmentBounds"
-            data-valueKey="F04"
-            data-displayKey="F1022"
+            name="subdepartment"
             required >
     </select>
     <br />
@@ -80,7 +77,7 @@
 
             // Populate subdepartment select list
             $.ajax({
-                url: "api/GetSubdepartmentBounds",
+                url: "/api/GetSubdepartments",
             }).then(function (data) {
                 var s = '<option value="" disabled selected>Select a subdepartment</option>';
 
@@ -88,7 +85,7 @@
                     s += '<option value="' + data.data[$i].SMSSubdepartments.F04 + ', ' + data.data[$i].SMSSubdepartments.F1022 + '">' + data.data[$i].SMSSubdepartments.F1022 + '</option>';
                 }
 
-                $("#subdept").html(s);
+                $("#subdepartment").html(s);
             });
         });
     </script>

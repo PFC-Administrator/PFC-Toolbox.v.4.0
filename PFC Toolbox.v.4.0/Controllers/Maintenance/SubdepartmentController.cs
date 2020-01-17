@@ -82,9 +82,9 @@ namespace PFC_Toolbox.v._4._0.Controllers
             }
         }
 
-        [Route("Reports/api/GetSubdepartmentBounds")]
+        [Route("api/GetSubdepartments")]
         [HttpGet]
-        public IHttpActionResult ProductUpdates()
+        public IHttpActionResult GetSubdepartments()
         {
             var request = HttpContext.Current.Request;
 
