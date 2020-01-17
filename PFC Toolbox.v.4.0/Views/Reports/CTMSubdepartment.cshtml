@@ -6,26 +6,6 @@
 
 <h2>Contribution to Margin by Subdepartment</h2>
 
-@section scripts{
-    <script>
-        $(document).ready(function () {
-            var startDate_input = $('input[name="startDate"]'); //our date input has the name "date"
-            var endDate_input = $('input[name="endDate"]'); //our date input has the name "date"
-            var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
-            var options = {
-                format: 'm/dd/yyyy',
-                container: container,
-                todayHighlight: true,
-                orientation: "top right",
-                autoclose: true,
-            };
-            startDate_input.datepicker(options);
-            endDate_input.datepicker(options);
-        })
-
-    </script>
-}
-
 @using (Ajax.BeginForm("GetCTMSubdepartment", "Reports", new AjaxOptions
 {
     HttpMethod = "GET",
@@ -34,68 +14,82 @@
 }))
 {
     <label>Start Date:</label>
-    <input class="form-control" id="startDate" name="startDate" placeholder="MM/DD/YYYY" type="text" autocomplete="off" />
+    <input class="form-control"
+           id="startDate"
+           name="startDate"
+           placeholder="M/DD/YYYY"
+           type="text"
+           autocomplete="off"
+           required />
+    <div id="custom-pos"></div>
     <br />
+
     <label>End Date:</label>
-    <input class="form-control" id="endDate" name="endDate" placeholder="MM/DD/YYYY" type="text" autocomplete="off" />
+    <input class="form-control"
+           id="endDate"
+           name="endDate"
+           placeholder="M/DD/YYYY"
+           type="text"
+           autocomplete="off"
+           required />
     <br />
+
     <label>Subdepartment:</label>
-    <br />
-    <select class="form-control" name="subdept" id="subdept" onchange="myNewFunction(this)">
-        <option value="" disabled selected>Select a subdepartment</option>
-        <option value="28, Bar">Bar</option>
-        <option value="7, Beer">Beer</option>
-        <option value="34, Bev">Bev</option>
-        <option value="15, Body Care">Body Care</option>
-        <option value="14, Book">Books</option>
-        <option value="24, Bread">Bread</option>
-        <option value="3, Bulk Grocery">Bulk Grocery</option>
-        <option value="18, Cheese">Cheese</option>
-        <option value="25, Coffee Bar">Coffee Bar</option>
-        <option value="22, Bakery">Bakery</option>
-        <option value="8, Deli Counter">Deli Counter X</option>
-        <option value="35, Prepared Foods">Prepared Foods</option>
-        <option value="29, Desserts">Desserts</option>
-        <option value="19, Floral">Floral</option>
-        <option value="9, Frozen">Frozen</option>
-        <option value="4, Packaged">Packaged</option>
-        <option value="10, Herbs">Herbs</option>
-        <option value="11, Housewares">Housewares</option>
-        <option value="30, Hackberrys">Hackberrys</option>
-        <option value="27, Milk">Milk</option>
-        <option value="31, No Charge Restaurant Items">No Charge Restaurant Items</option>
-        <option value="17, Organic Produce">Organic Produce</option>
-        <option value="6, Produce">Produce</option>
-        <option value="49, Produce Tax">Produce Tax</option>
-        <option value="5, Refrigerated Foods">Refrigerated Foods</option>
-        <option value="39, Seafood">Seafood</option>
-        <option value="1, Tax Prepared Foods">Tax Prepared Foods</option>
-        <option value="21, Tax FS Prepared Foods">Tax FS Prepared Foods</option>
-        <option value="16, Tax FS Packaged">Tax FS Packaged</option>
-        <option value="2, Tax Non-food Packaged">Tax Non-food Packaged</option>
-        <option value="33, Tips">Tips</option>
-        <option value="41, Value Added">Value Added</option>
-        <option value="12, Vitamins">Vitamins</option>
-        <option value="26, Wholesale">Wholesale</option>
-        <option value="51, Wine">Wine</option>
-        <option value="52, Other Spirits">Other Spirits</option>
-        <option value="53, Fresh Meat">Fresh Meat</option>
-        <option value="54, Fresh Seafood">Fresh Seafood</option>
-        <option value="55, Packaged Meat">Packaged Meat</option>
+    <select id="subdept"
+            class="form-control"
+            name="subdept"
+            data-source="api/GetSubdepartmentBounds"
+            data-valueKey="F04"
+            data-displayKey="F1022"
+            required >
     </select>
     <br />
+
     <label>Location:</label>
-    <br />
-    <select class="form-control" name="location" id="location">
+    <select class="form-control" name="location" id="location" required>
         <option value="" disabled selected>Select a location</option>
-        <option value="PAL, Both Locations">Both Locations</option>
         <option value="001, La Crosse">La Crosse</option>
         <option value="002, Rochester">Rochester</option>
     </select>
     <br />
-    <br>
+
     <input type="submit" class="btn btn-primary" value="Run Report" />
 }
 
-
 <div id="Item Results"></div>
+
+@section scripts{
+    <script type="text/javascript" charset="utf-8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+
+            // Date picker
+            var startDate_input = $('input[name="startDate"]');
+            var endDate_input = $('input[name="endDate"]');
+            var options = {
+                format: 'm/dd/yyyy',
+                container: '#custom-pos',
+                todayHighlight: true,
+                orientation: "left top",
+                autoclose: true,
+            };
+            startDate_input.datepicker(options);
+            endDate_input.datepicker(options);
+
+            // Populate subdepartment select list
+            $.ajax({
+                url: "api/GetSubdepartmentBounds",
+            }).then(function (data) {
+                var s = '<option value="" disabled selected>Select a subdepartment</option>';
+
+                for ($i = 0; $i < data.data.length; $i++) {
+                    s += '<option value="' + data.data[$i].SMSSubdepartments.F04 + ', ' + data.data[$i].SMSSubdepartments.F1022 + '">' + data.data[$i].SMSSubdepartments.F1022 + '</option>';
+                }
+
+                $("#subdept").html(s);
+            });
+        });
+    </script>
+}

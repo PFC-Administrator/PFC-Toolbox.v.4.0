@@ -14,8 +14,8 @@
 <link rel="stylesheet" type="text/css" href="https://editor.datatables.net/extensions/Editor/css/editor.dataTables.min.css" />
 <link rel="stylesheet" type="text/css" href="~/Content/Custom.css" />
 
+<h1 style="float:right;"><img src="~/Content/PFC_Logo_128px.png" width="100" height="100">@(ViewBag.Store)</h1>
 <h2 style="float:left;">Contribution to Margin by Subdepartment</h2>
-<h2 style="float:right;">@(ViewBag.Store)</h2>
 <hr style="clear:both" />
 <h3>@(ViewBag.SdpCode) - @(ViewBag.SdpDesc)</h3>
 <h4>@startDate &nbsp;&nbsp; to &nbsp;&nbsp; @endDate</h4>
@@ -95,6 +95,7 @@
                     <th>Total Weight</th>
                     <th>Total Sales</th>
                     <th>Total Units</th>
+                    <th>Total CTM</th>
                 </tr>
             </thead>
             <tbody>
@@ -102,6 +103,7 @@
                     <td>@String.Format("{0}", ViewBag.TotalWeight)</td>
                     <td>@String.Format("{0:C}", ViewBag.TotalAmount)</td>
                     <td>@String.Format("{0}", ViewBag.TotalUnits)</td>
+                    <td>@String.Format("{0:P2}", ViewBag.TotalCTM)</td>
                 </tr>
             </tbody>
         </table>
@@ -124,7 +126,6 @@
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
 
     @* Creates a useable javascript variable from razrview viewbag variable *@
-
     <script> var viewBagTotalAmount = @(ViewBag.TotalAmount); </script>
 
     <script type="text/javascript">
@@ -176,27 +177,19 @@
                 }]
             });
 
-
-            var editIcon = function (data, type, row) {
-                if (type === 'display text-nowrap compact') {
-                    return data + ' <i class="fa fa-pencil"/>';
-                }
-                return data;
-            };
-
-            // Calculates new applied margin on cost change
-            editor.field('SalesCost').input().on('keypress', function () {
-                editor.field('SalesAppliedMargin').val(((1 - (this.value / editor.field('SalesRetail').val().replace(/[\$,]/g, ''))) * 100).toFixed(2) + '%');
-                editor.field('SalesCTM').val((((editor.field('SalesAmount').val().replace(/[\$,]/g, '') - (editor.field('SalesQuantity').val().replace(/[\$,]/g, '') * editor.field('SalesCost').val().replace(/[\$,]/g, ''))) / viewBagTotalAmount) * 100).toFixed(2) + '%');
-            });
-
-
             // Calculates new applied margin and CTM on retail change
-            editor.field('SalesRetail').input().on('keypress', function () {
+            editor.field('SalesRetail').input().on('change', function () {
+                editor.field('SalesRetail').val(editor.field('SalesRetail').val().replace("$",""));
                 editor.field('SalesAppliedMargin').val(((1 - (editor.field('SalesCost').val().replace(/[\$,]/g, '') / this.value)) * 100).toFixed(2) + '%');
                 editor.field('SalesCTM').val((((editor.field('SalesAmount').val().replace(/[\$,]/g, '') - (editor.field('SalesQuantity').val().replace(/[\$,]/g, '') * editor.field('SalesCost').val().replace(/[\$,]/g, ''))) / viewBagTotalAmount) * 100).toFixed(2) + '%');
             });
 
+            // Calculates new applied margin on cost change
+            editor.field('SalesCost').input().on('change', function () {
+                editor.field('SalesCost').val(editor.field('SalesCost').val().replace("$",""));
+                editor.field('SalesAppliedMargin').val(((1 - (this.value / editor.field('SalesRetail').val().replace(/[\$,]/g, ''))) * 100).toFixed(2) + '%');
+                editor.field('SalesCTM').val((((editor.field('SalesAmount').val().replace(/[\$,]/g, '') - (editor.field('SalesQuantity').val().replace(/[\$,]/g, '') * editor.field('SalesCost').val().replace(/[\$,]/g, ''))) / viewBagTotalAmount) * 100).toFixed(2) + '%');
+            });
 
             // Activate an inline edit on click of a table cell
             $('#results').on('click', 'tbody td.editable', function (e) {
@@ -213,7 +206,7 @@
                     { data: "SalesWeight", width: '50px' },
                     { data: "SalesQuantity", width: '60px' },
                     { data: "SalesAmount", width: '80px' },
-                    { data: "SalesRetail", className: 'editable', width: '60px', render: $.fn.dataTable.render.number(',', '.', 2, '$'), editIcon },
+                    { data: "SalesRetail", className: 'editable', width: '60px', render: $.fn.dataTable.render.number(',', '.', 2, '$') },
                     { data: "SalesCost", className: 'editable', width: '60px', render: $.fn.dataTable.render.number(',', '.', 2, '$') },
                     { data: "SalesVendorID", className: 'editable', width: '60px' },
                     { data: "SalesReorder", className: 'editable', width: '60px' },
@@ -224,7 +217,6 @@
 
                 select: true,
 
-                // EXPORT BUTTON SECTION
                 dom: '<"floatRight"B><"clear">lfrtip',
                 buttons: [{
                     extend: 'collection',
@@ -239,70 +231,72 @@
                     ]
                 }],
 
-                    // FOOTER TOTALS SECTION
-                    "footerCallback": function (row, data, start, end, display) {
-                        var api = this.api(), data;
-                        // Remove the formatting to get integer data for summation
-                        var intVal = function (i) {
-                            return typeof i === 'string' ?
-                                i.replace(/[\$,]/g, '') * 1 :
-                                typeof i === 'number' ?
-                                    i : 0;
-                        };
+                // Footer Totals
+                "footerCallback": function (row, data, start, end, display) {
 
-                        // TOTAL WEIGHT
-                        pageTotalWeight = api
-                            .column(3, { page: 'current' })
-                            .data()
-                            .reduce(function (a, b) {
-                                return intVal(a) + intVal(b);
-                            }, 0);
+                    var api = this.api(), data;
 
-                        // Update footer
-                        $(api.column(3).footer()).html(
-                            Math.round(pageTotalWeight * 100) / 100
-                        );
+                    // Remove the formatting to get integer data for summation
+                    var intVal = function (i) {
+                        return typeof i === 'string' ?
+                            i.replace(/[)\$,]/g, '').replace(/[(]/g, '-') * 1 :
+                            typeof i === 'number' ?
+                                i : 0;
+                    };
 
-                        // TOTAL SALES
-                        pageTotalSales = api
-                            .column(4, { page: 'current' })
-                            .data()
-                            .reduce(function (a, b) {
-                                return intVal(a) + intVal(b);
-                            }, 0);
+                    // Remove formatting to get float data for summation
+                    var decVal = function (i) {
+                        return typeof i === 'string' ?
+                            i.replace(/[)\$,]/g, '').replace(/[(]/g, '-') :
+                            typeof i === 'number' ?
+                                i : 0;
+                    };
 
-                        // Update footer
-                        $(api.column(4).footer()).html(
-                            Math.round(pageTotalSales * 100) / 100
-                        );
+                    // Sum weight column
+                    pageTotalWeight = api
+                        .column(3, { page: 'current' })
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
 
-                        // TOTAL UNITS
-                        pageTotalUnits = api
-                            .column(5, { page: 'current' })
-                            .data()
-                            .reduce(function (a, b) {
-                                return intVal(a) + intVal(b);
-                            }, 0);
+                    // Update footer
+                    $(api.column(3).footer()).html(pageTotalWeight.toFixed(3));
 
-                        // Update footer
-                        $(api.column(5).footer()).html(
-                            '$' + Math.round(pageTotalUnits * 100) / 100
-                        );
+                    // Sum quantity column
+                    pageTotalUnits = api
+                        .column(4, { page: 'current' })
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
 
-                        @* For testing footer callback totals row
-                        api.columns('.sum', { page: 'current' }).every(function () {
-                            var sum = this
-                                .data()
-                                .reduce(function (a, b) {
-                                    return intVal(a) + intVal(b);
-                                }, 0);
+                    // Update footer
+                    $(api.column(4).footer()).html(pageTotalUnits.toFixed(2));
 
-                            this.footer().innerHTML = sum;
-                        });*@
+                    // Sum sales column
+                    pageTotalSales = api
+                        .column(5, { page: 'current' })
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    // Update footer
+                    $(api.column(5).footer()).html('$' + pageTotalSales.toFixed(2));
+
+                    // Sum CTM column
+                    pageTotalSales = api
+                        .column(12, { page: 'current' })
+                        .data()
+                        .reduce(function (a, b) {
+                            return parseFloat(decVal(a)) + parseFloat(decVal(b));
+                        }, 0);
+
+                    // Update footer
+                    $(api.column(12).footer()).html(pageTotalSales.toFixed(2) + '%');
                 }
+            });
         });
-        });
-
-
     </script>
 }
