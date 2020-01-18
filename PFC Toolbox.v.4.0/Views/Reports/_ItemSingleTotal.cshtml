@@ -46,9 +46,9 @@
                             <td>@Html.DisplayFor(modelItem => item.ItemBrand)</td>
                             <td>@Html.DisplayFor(modelItem => item.ItemDescription)</td>
                             <td>@Html.DisplayFor(modelItem => item.ItemSize)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SalesWeight)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SalesTotal)</td>
                             <td>@Html.DisplayFor(modelItem => item.SalesQuantity)</td>
-                            <td>@Html.DisplayFor(modelItem => item.SalesAmount)</td>
-                            <td>@Html.DisplayFor(modelItem => item.SalesUnits)</td>
                         </tr>
                     }
                 }
@@ -83,8 +83,8 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>@String.Format("{0}", ViewBag.TotalQuantity)</td>
-                    <td>@String.Format("{0:C}", ViewBag.TotalAmount)</td>
+                    <td>@String.Format("{0}", ViewBag.TotalWeight)</td>
+                    <td>@String.Format("{0:C}", ViewBag.TotalSales)</td>
                     <td>@String.Format("{0}", ViewBag.TotalUnits)</td>
                 </tr>
             </tbody>

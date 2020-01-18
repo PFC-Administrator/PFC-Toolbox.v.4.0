@@ -34,8 +34,8 @@ namespace PFC_Toolbox.v._4._0.Controllers
             SqlDataReader reader = null;
             List<ItemSingleTotalModel> report = new List<ItemSingleTotalModel>();
             ItemSingleTotalModel item = null;
-            decimal totalAmount = 0;
-            double totalQty = 0, totalUnits = 0;
+            decimal totalSales = 0;
+            double totalWeight = 0, totalUnits = 0;
 
             // Connect to Host SMS and run Toolbox-ISTBySubdepartmentReport stored procedure
             using (SqlConnection con = new SqlConnection { ConnectionString = ConfigurationManager.ConnectionStrings["SMSHostConnection"].ConnectionString })
@@ -74,26 +74,26 @@ namespace PFC_Toolbox.v._4._0.Controllers
                             item.ItemBrand = reader["Brand"].ToString();
                             item.ItemDescription = reader["Description"].ToString();
                             item.ItemSize = reader["Size"].ToString();
+                            if (Double.TryParse(reader["Weight"].ToString(), out tempDouble))
+                            {
+                                item.SalesWeight = tempDouble;
+                            }
+                            else item.SalesWeight = 0;
+                            if (Decimal.TryParse(reader["Total Sales"].ToString(), out tempDecimal))
+                            {
+                                item.SalesTotal = tempDecimal;
+                            }
+                            else item.SalesTotal = 0;
                             if (Double.TryParse(reader["Quantity"].ToString(), out tempDouble))
                             {
                                 item.SalesQuantity = tempDouble;
                             }
                             else item.SalesQuantity = 0;
-                            if (Decimal.TryParse(reader["Amount"].ToString(), out tempDecimal))
-                            {
-                                item.SalesAmount = tempDecimal;
-                            }
-                            else item.SalesAmount = 0;
-                            if (Double.TryParse(reader["Units"].ToString(), out tempDouble))
-                            {
-                                item.SalesUnits = tempDouble;
-                            }
-                            else item.SalesUnits = 0;
 
                             // Sum totals
-                            totalQty = totalQty + item.SalesQuantity;
-                            totalAmount = totalAmount + item.SalesAmount;
-                            totalUnits = totalUnits + item.SalesUnits;
+                            totalWeight = totalWeight + item.SalesWeight;
+                            totalSales = totalSales + item.SalesTotal;
+                            totalUnits = totalUnits + item.SalesQuantity;
                             
                             // Add results to list
                             report.Add(item);
@@ -106,9 +106,9 @@ namespace PFC_Toolbox.v._4._0.Controllers
             }
 
             // Add totals to ViewBag to be used in report display
-            ViewBag.TotalQuantity = totalQty;
-            ViewBag.TotalAmount = totalAmount;
-            ViewBag.TotalUnits = totalUnits;
+            ViewBag.totalWeight = totalWeight;
+            ViewBag.totalSales = totalSales;
+            ViewBag.totalUnits = totalUnits;
             ViewBag.store = storeDescription;
 
             // Return results to report display
@@ -137,8 +137,8 @@ namespace PFC_Toolbox.v._4._0.Controllers
             SqlDataReader reader = null;
             List<ItemSingleTotalbySubdepartmentModel> report = new List<ItemSingleTotalbySubdepartmentModel>();
             ItemSingleTotalbySubdepartmentModel item = null;
-            decimal totalAmount = 0;
-            double totalQty = 0, totalUnits = 0;
+            decimal totalSales = 0;
+            double totalWeight = 0, totalUnits = 0;
             
             // Connect to Host SMS and run Toolbox-ISTBySubdepartmentReport stored procedure
             using (SqlConnection con = new SqlConnection { ConnectionString = ConfigurationManager.ConnectionStrings["SMSHostConnection"].ConnectionString })
@@ -177,26 +177,26 @@ namespace PFC_Toolbox.v._4._0.Controllers
                             item.ItemBrand = reader["Brand"].ToString();
                             item.ItemDescription = reader["Description"].ToString();
                             item.ItemSize = reader["Size"].ToString();
+                            if (Double.TryParse(reader["Weight"].ToString(), out tempDouble))
+                            {
+                                item.SalesWeight = tempDouble;
+                            }
+                            else item.SalesWeight = 0;
+                            if (Decimal.TryParse(reader["Total Sales"].ToString(), out tempDecimal))
+                            {
+                                item.SalesTotal = tempDecimal;
+                            }
+                            else item.SalesTotal = 0;
                             if (Double.TryParse(reader["Quantity"].ToString(), out tempDouble))
                             {
                                 item.SalesQuantity = tempDouble;
                             }
                             else item.SalesQuantity = 0;
-                            if (Decimal.TryParse(reader["Amount"].ToString(), out tempDecimal))
-                            {
-                                item.SalesAmount = tempDecimal;
-                            }
-                            else item.SalesAmount = 0;
-                            if (Double.TryParse(reader["Units"].ToString(), out tempDouble))
-                            {
-                                item.SalesUnits = tempDouble;
-                            }
-                            else item.SalesUnits = 0;
 
                             // Sum totals
-                            totalQty = totalQty + item.SalesQuantity;
-                            totalAmount = totalAmount + item.SalesAmount;
-                            totalUnits = totalUnits + item.SalesUnits;
+                            totalWeight = totalWeight + item.SalesWeight;
+                            totalSales = totalSales + item.SalesTotal;
+                            totalUnits = totalUnits + item.SalesQuantity;
 
                             // Add results to list
                             report.Add(item);
@@ -209,9 +209,9 @@ namespace PFC_Toolbox.v._4._0.Controllers
             }
 
             // Add totals to ViewBag to be used in report display
-            ViewBag.TotalQuantity = totalQty;
-            ViewBag.TotalAmount = totalAmount;
-            ViewBag.TotalUnits = totalUnits;
+            ViewBag.totalWeight = totalWeight;
+            ViewBag.totalSales = totalSales;
+            ViewBag.totalUnits = totalUnits;
             ViewBag.sdpCode = subdepartmentCode;
             ViewBag.sdpDesc = subdepartmentDescription;
             ViewBag.store = storeDescription;
@@ -242,7 +242,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
             SqlDataReader reader = null;
             List<CTMSubdepartmentModel> report = new List<CTMSubdepartmentModel>();
             CTMSubdepartmentModel item = null;
-            decimal totalAmount = 0, totalCTM = 0;
+            decimal totalSales = 0, totalCTM = 0;
             double totalWeight = 0, totalUnits = 0;
 
             // Connect to La Crosse or Rochester SMS and run Toolbox-CTMReport stored procedure
@@ -293,8 +293,8 @@ namespace PFC_Toolbox.v._4._0.Controllers
                                 else item.SalesQuantity = 0;
                                 if (Decimal.TryParse(reader["Total Sales"].ToString(), out tempDecimal))
                                 {
-                                    item.SalesAmount = tempDecimal;
-                                }else item.SalesAmount = 0;
+                                    item.SalesTotal = tempDecimal;
+                                }else item.SalesTotal = 0;
                                 if (Decimal.TryParse(reader["Retail"].ToString(), out tempDecimal))
                                 {
                                     item.SalesRetail = tempDecimal;
@@ -309,12 +309,12 @@ namespace PFC_Toolbox.v._4._0.Controllers
                                 {
                                     item.SalesVendorID = reader["Vendor ID"].ToString();
                                 }
-                                else item.SalesVendorID = "TEST";
+                                else item.SalesVendorID = "UNDEF";
                                 if (!reader["Reorder"].ToString().Equals(""))
                                 {
                                     item.SalesReorder = reader["Reorder"].ToString();
                                 }
-                                else item.SalesReorder = "na";
+                                else item.SalesReorder = "UNDEF";
                                 if (Decimal.TryParse(reader["% of Sales"].ToString(), out tempDecimal))
                                 {
                                     item.SalesPercent = tempDecimal;
@@ -333,7 +333,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
 
                                 // Sum totals
                                 totalWeight = totalWeight + item.SalesWeight;
-                                totalAmount = totalAmount + item.SalesAmount;
+                                totalSales = totalSales + item.SalesTotal;
                                 totalUnits = totalUnits + item.SalesQuantity;
                                 totalCTM = totalCTM + item.SalesCTM;
 
@@ -348,9 +348,9 @@ namespace PFC_Toolbox.v._4._0.Controllers
                 }
 
                 // Add totals to ViewBag to be used in report display
-                ViewBag.TotalWeight = totalWeight;
-                ViewBag.TotalAmount = totalAmount;
-                ViewBag.TotalUnits = totalUnits;
+                ViewBag.totalWeight = totalWeight;
+                ViewBag.totalSales = totalSales;
+                ViewBag.totalUnits = totalUnits;
                 ViewBag.TotalCTM = totalCTM;
                 ViewBag.sdpCode = subdepartmentCode;
                 ViewBag.sdpDesc = subdepartmentDescription;
@@ -406,9 +406,9 @@ namespace PFC_Toolbox.v._4._0.Controllers
                                 else item.SalesQuantity = 0;
                                 if (Decimal.TryParse(reader["Total Sales"].ToString(), out tempDecimal))
                                 {
-                                    item.SalesAmount = tempDecimal;
+                                    item.SalesTotal = tempDecimal;
                                 }
-                                else item.SalesAmount = 0;
+                                else item.SalesTotal = 0;
                                 if (Decimal.TryParse(reader["Retail"].ToString(), out tempDecimal))
                                 {
                                     item.SalesRetail = tempDecimal;
@@ -423,12 +423,12 @@ namespace PFC_Toolbox.v._4._0.Controllers
                                 {
                                     item.SalesVendorID = reader["Vendor ID"].ToString();
                                 }
-                                else item.SalesVendorID = "TEST";
+                                else item.SalesVendorID = "UNDEF";
                                 if (!reader["Reorder"].ToString().Equals(""))
                                 {
                                     item.SalesReorder = reader["Reorder"].ToString();
                                 }
-                                else item.SalesReorder = "na";
+                                else item.SalesReorder = "UNDEF";
                                 if (Decimal.TryParse(reader["% of Sales"].ToString(), out tempDecimal))
                                 {
                                     item.SalesPercent = tempDecimal;
@@ -447,7 +447,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
 
                                 // Sum totals
                                 totalWeight = totalWeight + item.SalesWeight;
-                                totalAmount = totalAmount + item.SalesAmount;
+                                totalSales = totalSales + item.SalesTotal;
                                 totalUnits = totalUnits + item.SalesQuantity;
                                 totalCTM = totalCTM + item.SalesCTM;
 
@@ -462,10 +462,10 @@ namespace PFC_Toolbox.v._4._0.Controllers
                 }
 
                 // Add totals to ViewBag to be used in report display
-                ViewBag.TotalWeight = totalWeight;
-                ViewBag.TotalAmount = totalAmount;
-                ViewBag.TotalUnits = totalUnits;
-                ViewBag.TotalCTM = totalCTM;
+                ViewBag.totalWeight = totalWeight;
+                ViewBag.totalSales = totalSales;
+                ViewBag.totalUnits = totalUnits;
+                ViewBag.totalCTM = totalCTM;
                 ViewBag.sdpCode = subdepartmentCode;
                 ViewBag.sdpDesc = subdepartmentDescription;
                 ViewBag.store = storeDescription;
