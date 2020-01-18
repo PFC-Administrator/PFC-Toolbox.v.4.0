@@ -4,42 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Item Single Total</h2>
-
-@section scripts{
-    <script>
-        $(document).ready(function () {
-            var startDate_input = $('input[name="startDate"]'); //our date input has the name "date"
-            var endDate_input = $('input[name="endDate"]'); //our date input has the name "date"
-            var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
-            var options = {
-                format: 'mm/dd/yyyy',
-                container: container,
-                todayHighlight: true,
-                orientation: "top right",
-                autoclose: true,
-            };
-            startDate_input.datepicker(options);
-            endDate_input.datepicker(options);
-        })
-
-        //### Function to add leading zero(s)
-        var UPC = $('#UPC');
-        $('#UPC').on('change', function () {
-            var result = leadingZeros(UPC.val())
-            UPC.val(result);
-        });
-        
-        function leadingZeros(UPC) {
-            var s = UPC + ""
-            while (s.length < 13) s = "0" + s;
-            return s;
-        }
-        //### END Function to add leading zero(s)
-    </script>
-}
-
-@*<p style="font-style:italic">Known bug: reports longer than ~6 months will time-out, keep them under 6 months for best results.</p>*@
+<h2>Item Single Total by UPC</h2>
 
 @using (Ajax.BeginForm("GetItemSingleTotal", "Reports", new AjaxOptions
 {
@@ -48,26 +13,107 @@
     UpdateTargetId = "Item Results"
 }))
 {
-    <label>Start Date:</label>
-    <input class="form-control" id="startDate" name="startDate" placeholder="MM/DD/YYYY" type="text" autocomplete="off" />
-    <br />
-    <label>End Date:</label>
-    <input class="form-control" id="endDate" name="endDate" placeholder="MM/DD/YYYY" type="text" autocomplete="off" />
-    <br />
-    <label>UPC:</label>
-    <input class="form-control" id="UPC" name="UPC" type="text" autocomplete="off" />
-    <br />
-    <label>Location:</label>
-    <br />
-    <select class="form-control" id="location" name="location">
-        <option value="" disabled selected>Select a location</option>
-        <option value="PAL, Both Locations">Both Locations</option>
-        <option value="001, La Crosse">La Crosse</option>
-        <option value="002, Rochester">Rochester</option>
-    </select>
-    <br />
-    <br />
-    <input class="btn btn-primary" type="submit" value="Run Report" />
+<div class="form-group">
+    <form name="add_name" id="add_name">
+
+        <label>Start Date:</label>
+        <input class="form-control"
+               id="startDate"
+               name="startDate"
+               placeholder="M/DD/YYYY"
+               type="text"
+               autocomplete="off"
+               required />
+        <div id="custom-pos"></div>
+        <br />
+
+        <label>End Date:</label>
+        <input class="form-control"
+               id="endDate"
+               name="endDate"
+               placeholder="M/DD/YYYY"
+               type="text"
+               autocomplete="off"
+               required />
+        <br />
+
+        <label>UPC:</label>
+        <table id="dynamic_field">
+            <tr>
+                <td><input type="text" name="UPC" id="UPC" placeholder="Enter a UPC" class="form-control name_list" required/></td>
+                <td><button type="button" name="add" id="add" required>Add More</button></td>
+            </tr>
+        </table>
+
+        <br />
+
+        <label>Location:</label>
+        <select class="form-control" name="location" id="location" required>
+            <option value="" disabled selected>Select a location</option>
+            <option value="001, La Crosse">La Crosse</option>
+            <option value="002, Rochester">Rochester</option>
+            <option value="PAL, Both stores">Both stores</option>
+        </select>
+
+        <br />
+        <input type="submit" class="btn btn-primary" value="Run Report" />
+    </form>
+
+    <input type="hidden" id="UPCs" name="UPCs">
+</div>
 }
 
 <div id="Item Results"></div>
+
+@section scripts{
+    <script type="text/javascript" charset="utf-8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            // Date picker
+            var startDate_input = $('input[name="startDate"]');
+            var endDate_input = $('input[name="endDate"]');
+            var options = {
+                format: 'm/dd/yyyy',
+                container: '#custom-pos',
+                todayHighlight: true,
+                orientation: "left top",
+                autoclose: true,
+            };
+            startDate_input.datepicker(options);
+            endDate_input.datepicker(options);
+        });
+
+        // Function to pad numbers with 0's
+        function pad(number, width = 3, z = 0) {
+            return (String(z).repeat(width) + String(number)).slice(String(number).length)
+        };
+
+        // Add a new UPC field every time the Add More button is clicked
+        var fieldCount = 1;
+        $('#add').click(function () {
+            $('#dynamic_field').append('<tr id="row' + fieldCount + '"><td><input type="text" name="UPC" id="UPC' + fieldCount + '" placeholder="Enter a UPC" class="form-control name_list" /></td><td><button name="remove" id="' + fieldCount + '" class="btn btn-danger btn_remove">X</button></td></tr>');
+            fieldCount++;
+        });
+
+        // Remove the last new UPC field generated
+        $(document).on('click', '.btn_remove', function () {
+            var button_id = $(this).attr("id");
+            $('#row' + button_id + '').remove();
+        });
+
+        // Format 
+        $(document).on('submit', function () {
+            var upcString;
+
+            upcString = pad($('#UPC').val(), 13, 0);
+
+            for ($i = 1; $i < fieldCount; $i++) {
+                upcString = upcString + " " + pad($('#UPC' + $i + '').val(), 13, 0)
+            }
+            console.log(upcString);
+            document.getElementById("UPCs").value = upcString;
+        });
+    </script>
+}

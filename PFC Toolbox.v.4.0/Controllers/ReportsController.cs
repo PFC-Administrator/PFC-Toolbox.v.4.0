@@ -24,110 +24,96 @@ namespace PFC_Toolbox.v._4._0.Controllers
             return View();
         }
 
-        public ActionResult GetItemSingleTotal(string location, string UPC, string startDate, string endDate)
+        public ActionResult GetItemSingleTotal(string location, string startDate, string endDate, string UPCs)
         {
-            string store = location.Split(',')[1];
+            // Creates variables for use within stored procedure and report display
+            string storeCode = location.Split(',')[0];
+            string storeDescription = location.Split(',')[1];
 
-            // create local objects
+            // Create local objects
             SqlDataReader reader = null;
             List<ItemSingleTotalModel> report = new List<ItemSingleTotalModel>();
             ItemSingleTotalModel item = null;
             decimal totalAmount = 0;
             double totalQty = 0, totalUnits = 0;
 
-            // set query
-            string query = "declare @StartDate DateTime "
-                                    + " declare @EndDate DateTime "
-                                    + " declare @sTarget char(3) "
-                                    + " declare @UPC varchar(13) "
-                                    + " set @StartDate = '" + startDate.ToString() + "'"
-                                    + " set @EndDate = '" + endDate.ToString() + "' "
-                                    + " set @sTarget = '" + location + "' "
-                                    + " set @UPC = '" + UPC + "' "
-                                    + " select TRS.F01 UPC, "
-                                    + " SDP.F04 SubdeptCode, "
-                                    + " MAX(SDP.F1022) SubdeptName, MAX(OBJ.F155) Brand, "
-                                    + " MAX(OBJ.F29) ItemDescription, MAX(OBJ.F22) Size, "
-                                    + " SUM(case when TRS.F67=0 then 0 else TRS.F64 end) Quantity, "
-                                    + " SUM(TRS.F65) Amount, "
-                                    + " SUM(case when TRS.F67=0 then TRS.F64 else TRS.F67 end) Units "
-                                    + " from RPT_ITM_D TRS join OBJ_TAB OBJ on TRS.F01=OBJ.F01 "
-                                    + " join TLZ_TAB TLZ on TRS.F1034=TLZ.F1034 "
-                                    + " join POS_TAB POS on TRS.F01=POS.F01  "
-                                    + " join SDP_TAB SDP on POS.F04=SDP.F04 "
-                                    + " join LNK_TAB LNK on TRS.F1056=LNK.F1056 and TRS.F1057=LNK.F1057 and LNK.F1000=@sTarget "
-                                    + " where TRS.F254 between @StartDate and @EndDate "
-                                    + " and TRS.F1034 between 3 and 4 "
-                                    + " and TRS.F01 = @UPC "
-                                    + " and POS.F1000=(SELECT TOP 1 SUB_POS.F1000  "
-                                    + "             FROM POS_TAB SUB_POS  "
-                                    + "             JOIN LNK_TAB SUB_LNK ON SUB_POS.F1000=SUB_LNK.F1000  "
-                                    + "             JOIN LNK_TAB SUB_LNK2 ON SUB_LNK.F1056=SUB_LNK2.F1056 AND SUB_LNK.F1057=SUB_LNK2.F1057 AND SUB_LNK2.F1000=@sTarget  "
-                                    + "             JOIN STO_TAB SUB_STO ON SUB_LNK.F1000=SUB_STO.F1000  "
-                                    + "             WHERE SUB_POS.F01=POS.F01 ORDER BY SUB_STO.F1937 DESC) "
-                                    + " group by SDP.F04, TRS.F01 order by SDP.F04, MAX(OBJ.F155), MAX(OBJ.F29) ";
-
-            // open db connection
-            string connect = ConfigurationManager.ConnectionStrings["SMSHostConnection"].ConnectionString;
-            using (SqlConnection conn = new SqlConnection(connect))
+            // Connect to Host SMS and run Toolbox-ISTBySubdepartmentReport stored procedure
+            using (SqlConnection con = new SqlConnection { ConnectionString = ConfigurationManager.ConnectionStrings["SMSHostConnection"].ConnectionString })
             {
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                using (SqlCommand cmd = new SqlCommand("[Toolbox-ISTByUPCReport]", con))
                 {
-                    // open connection
-                    conn.Open();
+                    // Set the command type as a stored procedure
+                    cmd.CommandType = CommandType.StoredProcedure;
 
-                    // run query against db
+                    // Set the stored procedure parameters
+                    cmd.Parameters.Add("@startDate", SqlDbType.DateTime).Value = startDate;
+                    cmd.Parameters.Add("@endDate", SqlDbType.DateTime).Value = endDate;
+                    cmd.Parameters.Add("@storeTarget", SqlDbType.VarChar).Value = storeCode;
+                    cmd.Parameters.Add("@UPC", SqlDbType.VarChar).Value = UPCs;
+
+                    // Open connection to SQL server and set a timeout of 1000 incase report takes a while
+                    con.Open();
+                    cmd.CommandTimeout = 1000;
+
+                    // Execute cmd against server and store in reader object
                     reader = cmd.ExecuteReader();
 
-                    // save query results to list
+                    // Save query results to list
                     if (reader.HasRows)
                     {
                         while (reader.Read())
                         {
+                            // Temp variables for TryParse
+                            decimal tempDecimal;
+                            double tempDouble;
+
+                            // Store results in ItemSingleTotalModel model
                             item = new ItemSingleTotalModel();
                             item.ItemCode = reader["UPC"].ToString();
-                            item.Subdept = reader["SubdeptName"].ToString();
+                            item.Subdept = reader["Subdepartment"].ToString();
                             item.ItemBrand = reader["Brand"].ToString();
-                            item.ItemDescription = reader["ItemDescription"].ToString();
+                            item.ItemDescription = reader["Description"].ToString();
                             item.ItemSize = reader["Size"].ToString();
-                            if (!reader["Quantity"].ToString().Equals(""))
+                            if (Double.TryParse(reader["Quantity"].ToString(), out tempDouble))
                             {
-                                item.SalesQuantity = Double.Parse(reader["Quantity"].ToString());
-                            } // end if
+                                item.SalesQuantity = tempDouble;
+                            }
                             else item.SalesQuantity = 0;
-                            if (!reader["Amount"].ToString().Equals(""))
+                            if (Decimal.TryParse(reader["Amount"].ToString(), out tempDecimal))
                             {
-                                item.SalesAmount = Decimal.Parse(reader["Amount"].ToString());
+                                item.SalesAmount = tempDecimal;
                             }
                             else item.SalesAmount = 0;
-                            if (!reader["Units"].ToString().Equals(""))
+                            if (Double.TryParse(reader["Units"].ToString(), out tempDouble))
                             {
-                                item.SalesUnits = Double.Parse(reader["Units"].ToString());
+                                item.SalesUnits = tempDouble;
                             }
                             else item.SalesUnits = 0;
+
+                            // Sum totals
                             totalQty = totalQty + item.SalesQuantity;
                             totalAmount = totalAmount + item.SalesAmount;
                             totalUnits = totalUnits + item.SalesUnits;
+                            
+                            // Add results to list
                             report.Add(item);
-                        } // end while
-                    } // end if reader.hasrows
+                        }
+                    }
 
-                    // close conn
-                    conn.Close();
+                    // Close connection to SQL server
+                    con.Close();
+                }
+            }
 
-                } // end sqlcommand
-            } // end sqlconnection
-
-            // add totals to ViewBag
+            // Add totals to ViewBag to be used in report display
             ViewBag.TotalQuantity = totalQty;
             ViewBag.TotalAmount = totalAmount;
             ViewBag.TotalUnits = totalUnits;
-            ViewBag.store = store;
+            ViewBag.store = storeDescription;
 
-            // return results
+            // Return results to report display
             return PartialView("_ItemSingleTotal", report);
-
-        } // end GetItemSingleTotal
+        }
 
 
         /*******************************************************************************************************************************************************************************************************************/
