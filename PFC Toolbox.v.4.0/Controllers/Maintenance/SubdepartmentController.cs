@@ -16,6 +16,8 @@ namespace PFC_Toolbox.v._4._0.Controllers
             using (var db1 = new Database("sqlserver", ConfigurationManager.ConnectionStrings["ToolboxConnection"].ConnectionString))
             {
                 var response = new Editor(db1, "SMSSubdepartments", "F04")
+                    .Field(new Field("SMSSubdepartments.F04")
+                    ).Where(q => q.Where("F04", F04, "="))
                     .Field(new Field("SMSSubdepartments.lowerBound")
                     ).Where(q => q.Where("F04", F04, "="))
                     .Field(new Field("SMSSubdepartments.upperBound")
@@ -70,6 +72,29 @@ namespace PFC_Toolbox.v._4._0.Controllers
                     ).Where(q => q.Where("F04", F04, "="))
                     .Field(new Field("SMSSubdepartments.F178")
                     ).Where(q => q.Where("F04", F04, "="))
+                    .Field(new Field("SMSSubdepartments.F1022")
+                    ).Where(q => q.Where("F04", F04, "="))
+                    .Process(request)
+                    .Data();
+
+                return Json(response);
+
+            }
+        }
+
+        [Route("api/GetSubdepartments")]
+        [HttpGet]
+        public IHttpActionResult GetSubdepartments()
+        {
+            var request = HttpContext.Current.Request;
+
+            using (var db1 = new Database("sqlserver", ConfigurationManager.ConnectionStrings["ToolboxConnection"].ConnectionString))
+            {
+                var response = new Editor(db1, "SMSSubdepartments", "F04")
+                    .Field(new Field("SMSSubdepartments.F04")
+                    )
+                    .Field(new Field("SMSSubdepartments.F1022")
+                    )
                     .Process(request)
                     .Data();
 

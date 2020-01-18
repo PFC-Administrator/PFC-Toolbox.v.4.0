@@ -14,14 +14,16 @@
 <link rel="stylesheet" type="text/css" href="https://editor.datatables.net/extensions/Editor/css/editor.dataTables.min.css" />
 <link rel="stylesheet" type="text/css" href="~/Content/Custom.css" />
 
-<h2 style="float:left;">Item Single Total</h2>
-<h2 style="float:right;">@(ViewBag.Store)</h2>
+<h1 style="float:right;"><img src="~/Content/PFC_Logo_128px.png" width="100" height="100">@(ViewBag.Store)</h1>
+<h2 style="float:left;">Item Single Total by UPC</h2>
 <hr style="clear:both" />
 <h4>@startDate &nbsp;&nbsp; to &nbsp;&nbsp; @endDate</h4>
 
+<br />
+
 <div>
     <fieldset title="Item Results">
-        <table id="results" class="display text-nowrap" style="width:100%">
+        <table id="results" class="display text-nowrap compact" style="width:100%">
             <thead>
                 <tr>
                     <th>Item Code</th>
@@ -32,10 +34,6 @@
                     <th>Weight</th>
                     <th>Total Sales</th>
                     <th>Units</th>
-                    @* For testing footer callback total row
-                        <th class="sum">Weight</th>
-                        <th class="sum">Total Sales</th>
-                        <th class="sum">Units</th>*@
                 </tr>
             </thead>
             <tbody>
@@ -48,38 +46,25 @@
                             <td>@Html.DisplayFor(modelItem => item.ItemBrand)</td>
                             <td>@Html.DisplayFor(modelItem => item.ItemDescription)</td>
                             <td>@Html.DisplayFor(modelItem => item.ItemSize)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SalesWeight)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SalesTotal)</td>
                             <td>@Html.DisplayFor(modelItem => item.SalesQuantity)</td>
-                            <td>@Html.DisplayFor(modelItem => item.SalesAmount)</td>
-                            <td>@Html.DisplayFor(modelItem => item.SalesUnits)</td>
                         </tr>
                     }
                 }
             </tbody>
             <tfoot>
                 <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
                     <th style="text-align:center">Total:</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
                     <th></th>
                     <th></th>
                     <th></th>
                 </tr>
             </tfoot>
-            @* For testing footer callback totals row
-                <tfoot>
-                <tr>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th>Totals: </th>
-                <th></th>
-                <th></th>
-                <th></th>
-                </tr>
-                </tfoot>*@
         </table>
     </fieldset>
 </div>
@@ -98,8 +83,8 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>@String.Format("{0}", ViewBag.TotalQuantity)</td>
-                    <td>@String.Format("{0:C}", ViewBag.TotalAmount)</td>
+                    <td>@String.Format("{0}", ViewBag.TotalWeight)</td>
+                    <td>@String.Format("{0:C}", ViewBag.TotalSales)</td>
                     <td>@String.Format("{0}", ViewBag.TotalUnits)</td>
                 </tr>
             </tbody>
@@ -125,8 +110,10 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#results').DataTable({
-                // EXPORT BUTTON SECTION
-                dom: '<"floatRight"B><"clear">',
+                
+                select: true,
+
+                dom: '<"floatRight"B><"clear">lfrtip',
                 buttons: [{
                     extend: 'collection',
                     text: 'Export',
@@ -139,20 +126,29 @@
                         'print'
                     ]
                 }],
-                ordering: false,
 
-                // FOOTER TOTALS SECTION
+                // Footer Totals
                 "footerCallback": function (row, data, start, end, display) {
+
                     var api = this.api(), data;
+
                     // Remove the formatting to get integer data for summation
                     var intVal = function (i) {
                         return typeof i === 'string' ?
-                            i.replace(/[\$,]/g, '') * 1 :
+                            i.replace(/[)\$,]/g, '').replace(/[(]/g, '-') * 1 :
                             typeof i === 'number' ?
                                 i : 0;
                     };
 
-                    // TOTAL WEIGHT
+                    // Remove formatting to get float data for summation
+                    var decVal = function (i) {
+                        return typeof i === 'string' ?
+                            i.replace(/[)\$,]/g, '').replace(/[(]/g, '-') :
+                            typeof i === 'number' ?
+                                i : 0;
+                    };
+
+                    // Sum weight column
                     pageTotalWeight = api
                         .column(5, { page: 'current' })
                         .data()
@@ -161,24 +157,9 @@
                         }, 0);
 
                     // Update footer
-                    $(api.column(5).footer()).html(
-                        pageTotalWeight
-                    );
+                    $(api.column(5).footer()).html(pageTotalWeight.toFixed(3));
 
-                    // TOTAL SALES
-                    pageTotalSales = api
-                        .column(6, { page: 'current' })
-                        .data()
-                        .reduce(function (a, b) {
-                            return intVal(a) + intVal(b);
-                        }, 0);
-
-                    // Update footer
-                    $(api.column(6).footer()).html(
-                        '$' + pageTotalSales
-                    );
-
-                    // TOTAL UNITS
+                    // Sum quantity column
                     pageTotalUnits = api
                         .column(7, { page: 'current' })
                         .data()
@@ -187,20 +168,18 @@
                         }, 0);
 
                     // Update footer
-                    $(api.column(7).footer()).html(
-                        pageTotalUnits
-                    );
+                    $(api.column(7).footer()).html(pageTotalUnits.toFixed(2));
 
-                    @* For testing footer callback totals row
-                        api.columns('.sum', { page: 'current' }).every(function () {
-                        var sum = this
-                            .data()
-                            .reduce(function (a, b) {
-                                return intVal(a) + intVal(b);
-                            }, 0);
+                    // Sum sales column
+                    pageTotalSales = api
+                        .column(6, { page: 'current' })
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
 
-                        this.footer().innerHTML = sum;
-                    });*@
+                    // Update footer
+                    $(api.column(6).footer()).html('$' + pageTotalSales.toFixed(2));
                 }
             });
         });

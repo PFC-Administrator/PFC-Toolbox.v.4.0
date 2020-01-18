@@ -17,6 +17,11 @@ span.show-ellipsis:after {
     content: "...";
 }
 
+/* Date picker tweak*/
+#custom-pos {
+  position: relative;
+}
+
 /* Edits overall width of Toolbox display*/
 .container {
     width: 1500px;

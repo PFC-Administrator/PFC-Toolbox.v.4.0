@@ -23,7 +23,7 @@ namespace PFC_Toolbox.v._4._0.Models
 
         [DisplayAttribute(Name = "Total Sales")]
         [DisplayFormat(DataFormatString = "{0:C}")]
-        public Decimal SalesAmount { get; set; }
+        public Decimal SalesTotal { get; set; }
 
         [DisplayAttribute(Name = "Retail")]
         [DisplayFormat(DataFormatString = "{0:C}")]
