@@ -90,7 +90,7 @@
         var editorNP;
         $(document).ready(function () {
 
-            $.fn.dataTable.moment( 'M/D/YYYY hh:mm:ss A' );
+            $.fn.dataTable.moment( 'M/D/YYYY h:mm:ss A' );
 
             // New Product Form
             var editorNP = new $.fn.dataTable.Editor({
@@ -459,12 +459,13 @@
                     { "data": "ProductUpdates.OBJ_TAB_F155", width: "10%" },
                     { "data": "ProductUpdates.OBJ_TAB_F29" },
                     { "data": "ProductUpdates.OBJ_TAB_F22", width: "5%" },
-                    { "data": "ProductUpdates.price_tab_f30", width: "5%" },
+                    { "data": "ProductUpdates.price_tab_f30", width: "5%",
+                        "render": $.fn.dataTable.render.number(',', '.', 2, '$') },
                     { "data": "ProductUpdates.createdby", width: "10%" },
                     {
                         "data": "ProductUpdates.datecreated", "render": function (value) {
                             if (value === null) return "";
-                            return window.moment(value).format('M/D/YYYY hh:mm:ss A');
+                            return window.moment(value).format('M/D/YYYY h:mm:ss A');
                         }, width: "10%"
                     },
                     { "data": "ProductUpdates.completeddate", visible: false}
@@ -510,6 +511,7 @@
                             table.search('')
                                 .columns().search('')
                                 .columns().order('')
+                                .page.len(20)
                                 .column(0).search('^New Product$', true, false)
                                 .column(1).search('^3 - Manager Review Completed$', true, false).column(8).order('desc').draw()
                         }

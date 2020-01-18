@@ -13,9 +13,9 @@ namespace PFC_Toolbox.v._4._0.Models
 
         public string writeofftotalprice { get; set; }
 
-        public string writeoffusername { get; set; }
+        public string CreatedBy { get; set; }
 
-        public string writeoffdatetime { get; set; }
+        public string DateCreated { get; set; }
 
         public string writeoffmemo { get; set; }
     }
