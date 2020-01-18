@@ -15,9 +15,9 @@ namespace PFC_Toolbox.v._4._0.Controllers
         {
             var request = HttpContext.Current.Request;
 
-            using (var db1 = new Database("sqlserver", ConfigurationManager.ConnectionStrings["ToolboxConnection"].ConnectionString))
+            using (var db = new Database("sqlserver", ConfigurationManager.ConnectionStrings["ToolboxConnection"].ConnectionString))
             {
-                var response = new Editor(db1, "ProductUpdates", "productupdateID")
+                var response = new Editor(db, "ProductUpdates", "productupdateID")
                     .Model<ProductUpdatesModel>()
                     .Field(new Field("ProductUpdates.productupdateID")
                     .Validator(Validation.NotEmpty())

@@ -389,7 +389,6 @@
     <Content Include="Views\Auxiliary\Index.cshtml" />
     <Content Include="Views\Auxiliary\ListVendors.cshtml" />
     <Content Include="Views\Maintenance\_Promotion.cshtml" />
-    <Content Include="Views\Maintenance\Promotion.cshtml" />
     <Content Include="Views\Maintenance\ProductMaintenance.cshtml" />
     <Content Include="Views\Error\Error.cshtml" />
   </ItemGroup>

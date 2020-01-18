@@ -1,123 +1,136 @@
 ﻿@{
     ViewBag.Title = "Writeoffs";
+    var CreatedBy = Request["CreatedBy"];
 }
 
 <html>
-    <head>
-        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
-        <title>Writeoffs</title>
+    <title>Writeoffs</title>
 
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.4/css/buttons.dataTables.min.css" />
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.2.7/css/select.dataTables.min.css" />
-        <link rel="stylesheet" type="text/css" href="https://editor.datatables.net/extensions/Editor/css/editor.dataTables.min.css" />
-
-    </head>
-    <body class="dataTables">
-        <div class="container">
-
-            <h2 style="float:left;">Writeoffs</h2>
-            <hr style="clear:both" />
-
-            <br />
-
-            <table id="Writeoffs" class="display text-nowrap compact" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Item Name</th>
-                        <th>Total Price</th>
-                        <th>Date</th>
-                        <th>Location</th>
-                        <th>Subdepartment</th>
-                        <th>Notes</th>
-                    </tr>
-                </thead>
-            </table>
-
-        </div>
-    </body>
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://editor.datatables.net/extensions/Editor/css/editor.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/Custom.css" />
+</head>
+<body class="dataTables">
+    <div class="container">
+        <h1><img src="~/Content/PFC_Logo_128px.png" width="100" height="100">        Writeoffs</h1>
+        <br />
+        <table id="Writeoffs" class="display text-nowrap compact" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Item Name</th>
+                    <th>Total Price</th>
+                    <th>Location</th>
+                    <th>Subdepartment</th>
+                    <th>Notes</th>
+                    <th>Created By</th>
+                    <th>Date Created</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</body>
 </html>
 
 @section scripts{
-    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.4/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/select/1.2.7/js/dataTables.select.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
     <script src="~/Content/Editor-1.8.1/js/dataTables.editor.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
-
+      
     <script>
+
+        // Function to get today's date
+        function getDate() {
+            today = new Date().getMonth() + 1
+            + "/" + new Date().getDate()
+            + "/" + new Date().getFullYear()
+            + " " + new Date().getHours()
+            + ":" + new Date().getMinutes()
+            + ":" + new Date().getSeconds()
+            return today;
+        };
+
+        var currentUser = "@CreatedBy";
         var editor;
         $(document).ready(function () {
 
-            $.fn.dataTable.moment('M/D/YYYY');
+            $.fn.dataTable.moment('M/D/YYYY h:mm:ss A');
 
             var editor = new $.fn.dataTable.Editor({
                 ajax: '/api/Writeoffs',
                 table: '#Writeoffs',
-                //idSrc: 'writeoffID',
                 fields: [
                     {
-                        "label": "Code:",
-                        "name": "Writeoffs.writeoffcode"
+                        label: "Code:",
+                        name: "Writeoffs.writeoffcode"
                     },
                     {
-                        "label": "Item Name:",
-                        "name": "Writeoffs.writeoffitemname"
+                        label: "Item Name:",
+                        name: "Writeoffs.writeoffitemname"
                     },
                     {
-                        "label": "Quantity:",
-                        "name": "Writeoffs.writeoffquantity"
+                        label: "Quantity:",
+                        name: "Writeoffs.writeoffquantity"
                     },
                     {
-                        "label": "Unit Price:",
-                        "name": "Writeoffs.writeoffunitprice"
+                        label: "Unit Price:",
+                        name: "Writeoffs.writeoffunitprice"
                     },
                     {
-                        "label": "Total Price:",
-                        "name": "Writeoffs.writeofftotalprice"
+                        label: "Total Price:",
+                        name: "Writeoffs.writeofftotalprice"
                     },
                     {
-                        "label": "UserName:",
-                        "name": "Writeoffs.writeoffusername"
+                        label: "Location:",
+                        name: "Writeoffs.locationID",
+                        type: "select",
+                        placeholder: "Select a location"
                     },
                     {
-                        "label": "Date:",
-                        "name": "Writeoffs.writeoffdatetime",
-                        "type": "datetime",
-                        "def": function () { return new Date(); },
-                        "format": 'M/D/YYYY'
+                        label: "Subdepartment:",
+                        name: "Writeoffs.subdepartmentID",
+                        type: "select",
+                        placeholder: "Select a subdepartment",
                     },
                     {
-                        "label": "Location:",
-                        "name": "Writeoffs.locationID",
-                        "type": "select",
-                        "placeholder": "Select a location"
+                        label: "Notes:",
+                        name: "Writeoffs.writeoffmemo"
                     },
                     {
-                        "label": "Subdepartment:",
-                        "name": "Writeoffs.subdepartmentID",
-                        "type": "select",
-                        "placeholder": "Select a subdepartment",
+                        label: "Created by:",
+                        name: "Writeoffs.CreatedBy",
+                        def: currentUser
                     },
                     {
-                        "label": "Notes:",
-                        "name": "Writeoffs.writeoffmemo"
+                        label: "Date created:",
+                        name: "Writeoffs.DateCreated",
+                        type: "readonly",
+                        def: getDate()
                     }
                 ]
             });
 
             var table = $('#Writeoffs').DataTable({
-                paging: true,
                 deferRender: true,
+                select: true,
+                lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "All"]],
                 ajax: '/api/Writeoffs',
                 columns: [
                     {
@@ -125,10 +138,7 @@
                     },
                     {
                         "data": "Writeoffs.writeofftotalprice",
-                        "render": $.fn.dataTable.render.number(',', '.', 2, '$')  
-                    },
-                    {
-                        "data": "Writeoffs.writeoffdatetime"
+                        "render": $.fn.dataTable.render.number(',', '.', 2, '$')
                     },
                     {
                         "data": "Locations.locationname"
@@ -138,18 +148,46 @@
                     },
                     {
                         "data": "Writeoffs.writeoffmemo"
+                    },
+                    {
+                        "data": "Writeoffs.CreatedBy"
+                    },
+                    {
+                        "data": "Writeoffs.DateCreated", "render": function (value) {
+                            if (value === null) return "";
+                            return window.moment(value).format('M/D/YYYY h:mm:ss A');
+                        }
                     }
                 ],
-                select: true,
                 dom: '<"floatRight"B><"clear">lfrtip',
-                order: [[2, "desc"]],
+                order: [[6, "desc"]],
                 buttons: [
                     { extend: 'create', editor: editor },
                     { extend: 'edit', editor: editor },
-                    { extend: 'remove', editor: editor }
+                    { extend: 'remove', editor: editor },
+                    {
+                        // Export table button
+                        extend: 'collection', text: 'Export', autoClose: true,
+                        buttons: [
+                            'copy',
+                            'excel',
+                            'csv',
+                            'pdf',
+                            'print'
+                        ]
+                    },
+                    {
+                        // Show default view filter button
+                        text: 'Show Default View', action: function (e, dt, node, config) {
+                            table.search('')
+                                .columns().search('')
+                                .columns().order('')
+                                .page.len(20)
+                                .column(6).order('desc').draw()
+                        }
+                    }
                 ]
             });
         });
-
     </script>
 }

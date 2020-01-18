@@ -2,8 +2,6 @@
     ViewBag.Title = "Product Maintenance";
     var CreatedBy = Request["CreatedBy"];
 }
-@using PFC_Toolbox.v._4._0.Extensions;
-@using PFC_Toolbox.v._4._0.Models;
 
 <html>
 <head>
@@ -90,7 +88,7 @@
         var editor;
         $(document).ready(function () {
 
-            $.fn.dataTable.moment('M/D/YYYY hh:mm:ss A');
+            $.fn.dataTable.moment('M/D/YYYY h:mm:ss A');
 
             // New Product Form
             var editorNP = new $.fn.dataTable.Editor({
@@ -1253,7 +1251,7 @@
                     {
                         "data": "ProductUpdates.datecreated", "render": function (value) {
                             if (value === null) return "";
-                            return window.moment(value).format('M/D/YYYY hh:mm:ss A');
+                            return window.moment(value).format('M/D/YYYY h:mm:ss A');
                         }, width: "10%"
                     },
                     { "data": "ProductUpdates.completeddate", visible: false }
@@ -1320,6 +1318,7 @@
                             table.search('')
                                 .columns().search('')
                                 .columns().order('')
+                                .page.len(20)
                                 .column(1).search('^1 - Waiting for Manager Review$|^2 - More Info Needed$|^3 - Manager Review Completed$', true, false).column(7).order('desc').draw()
                         }
                     },
