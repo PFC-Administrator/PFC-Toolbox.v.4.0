@@ -1,0 +1,141 @@
+﻿@{
+    ViewBag.Title = "Users";
+    var CreatedBy = Request["CreatedBy"];
+    var Role = Request["Role"];
+}
+
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+    <title>Users</title>
+
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://editor.datatables.net/extensions/Editor/css/editor.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/Custom.css" />
+</head>
+<body class="dataTables">
+    <div class="container">
+        <h1><img src="~/Content/PFC_Logo_128px.png" width="100" height="100">        Manage Users</h1>
+        <br />
+        <table id="Users" class="display text-nowrap compact" style="width:100%">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>SMS Login ID</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</body>
+</html>
+
+@section scripts{
+    <script type="text/javascript" charset="utf-8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
+    <script src="~/Content/Editor-1.8.1/js/dataTables.editor.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
+
+    <script>
+
+        // Function to get today's date
+        function getDate() {
+            today = new Date().getMonth() + 1
+            + "/" + new Date().getDate()
+            + "/" + new Date().getFullYear()
+            + " " + new Date().getHours()
+            + ":" + new Date().getMinutes()
+            + ":" + new Date().getSeconds()
+            return today;
+        };
+
+        var editor;
+        $(document).ready(function () {
+
+            $.fn.dataTable.moment('M/D/YYYY h:mm:ss A');
+
+            // New Product Form
+            var editor = new $.fn.dataTable.Editor({
+                ajax: '/api/GetUsers',
+                table: '#Users',
+                fields: [
+                    {
+                        label: "User:",
+                        name: "AspNetUsers.CreatedBy",
+                        type: "readonly"
+                    },
+                    {
+                        label: "SMS Login ID",
+                        name: "AspNetUsers.UserName",
+                        type: "readonly"
+                    },
+                    {
+                        label: "Email:",
+                        name: "AspNetUsers.Email"
+                    },
+                    {
+                        label: "Role:",
+                        name: "AspNetUsers.Role",
+                        type: "select",
+                        placeholder: "Select a role"
+                    }
+                ]
+            });
+
+            // Disable CreatedBy and UserName fields from being edited
+            editor.on('initEdit', function () {
+                editor.disable('AspNetUsers.CreatedBy');
+                editor.disable('AspNetUsers.UserName');
+            });
+
+            // Create the DataTables table
+            var table = $('#Users').DataTable({
+                deferRender: true,
+                autoWidth: false,
+                select: true,
+                // Default table lengths
+                lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "All"]],
+                // Table data source
+                ajax: {
+                    url: '/api/GetUsers'
+                },
+                // Table columns
+                columns: [
+                    { "data": "AspNetUsers.CreatedBy" },
+                    { "data": "AspNetUsers.UserName" },
+                    { "data": "AspNetUsers.Email" },
+                    { "data": "AspNetRoles.Name" }
+                ],
+                // Control button layout
+                dom: '<"floatRight"B><"clear">lfrtip',
+                // Default table order
+                order: [[0, "asc"]],
+                buttons: [
+                    { extend: 'edit', editor: editor },
+                    {
+                        // Show default view filter button
+                        text: 'Show Default View', action: function (e, dt, node, config) {
+                            table.search('')
+                                .columns().search('')
+                                .columns().order('')
+                                .page.len(20)
+                                .column(0).order('asc').draw();
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
+}

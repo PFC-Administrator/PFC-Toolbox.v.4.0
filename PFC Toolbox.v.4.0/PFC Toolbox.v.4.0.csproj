@@ -292,6 +292,7 @@
     <Content Include="Content\Editor-1.8.1\js\editor.jqueryui.min.js" />
     <Content Include="Content\Editor-1.8.1\js\editor.semanticui.js" />
     <Content Include="Content\Editor-1.8.1\js\editor.semanticui.min.js" />
+    <Content Include="Content\Custom.js" />
     <Content Include="Content\PFC_Logo_128px.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -388,9 +389,10 @@
     <Content Include="Views\Maintenance\NewProducts.cshtml" />
     <Content Include="Views\Auxiliary\Index.cshtml" />
     <Content Include="Views\Auxiliary\ListVendors.cshtml" />
-    <Content Include="Views\Maintenance\_Promotion.cshtml" />
     <Content Include="Views\Maintenance\ProductMaintenance.cshtml" />
     <Content Include="Views\Error\Error.cshtml" />
+    <Content Include="Views\Error\AccessDenied.cshtml" />
+    <Content Include="Views\Account\Users.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

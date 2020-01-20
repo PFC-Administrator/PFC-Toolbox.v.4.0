@@ -84,7 +84,10 @@ namespace PFC_Toolbox.v._4._0.Controllers
                     )
                     .LeftJoin("Vendors", "Vendors.vendorID", "=", "Purchases.vendorID"
                     )
-                    .Where( q => q.Where("Purchases.purchasedate", "DATEADD(year, -1, GETDATE())", ">=", false))
+
+                    // Where statements
+                    .Where(q => q.Where("PurchaseID", "(SELECT TOP 2000 PurchaseID FROM Purchases ORDER BY PurchaseID DESC)", "IN", false))
+                    //.Where( q => q.Where("Purchases.purchasedate", "DATEADD(year, -1, GETDATE())", ">=", false))
                      .Process(request)
                     .Data();
 

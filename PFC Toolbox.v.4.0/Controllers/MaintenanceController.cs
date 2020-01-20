@@ -15,6 +15,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
         }
 
         // GET: /Maintenance/ProductMaintenance
+        [Authorize] // Restricts the page to logged in users only
         public ActionResult ProductMaintenance()
         {
             return View();

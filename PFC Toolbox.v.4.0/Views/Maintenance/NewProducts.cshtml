@@ -318,13 +318,13 @@
             // New Product Form: converts receipt description to title case
             editorNP.field('ProductUpdates.OBJ_TAB_F29').input().on('change', function () {
                 var productName = titleCase(editorNP.field('ProductUpdates.OBJ_TAB_F29').val());
-                editorNP.field('ProductUpdates.OBJ_TAB_F29').val(productName); 
+                editorNP.field('ProductUpdates.OBJ_TAB_F29').val(productName);
             });
 
             // New Product Form: converts signage descriptions to title case
             editorNP.field('ProductUpdates.OBJ_TAB_F255').input().on('change', function () {
                 var productName = titleCase(editorNP.field('ProductUpdates.OBJ_TAB_F255').val());
-                editorNP.field('ProductUpdates.OBJ_TAB_F255').val(productName); 
+                editorNP.field('ProductUpdates.OBJ_TAB_F255').val(productName);
             });
 
             // New Product Form: shows completed by info if product is marked as complete
@@ -448,7 +448,7 @@
                 lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "All"]],
                 // Table data source
                 ajax: {
-                    url: '/api/ProductUpdates'//,
+                    url: '/api/NewProducts'//,
                     //type: 'POST'
                 },
                 // Table columns
@@ -535,7 +535,7 @@
 
                                 // Gather data from each selected row
                                 var data = table.rows({ selected: true }).data();
-                                
+
                                 // Create array with selected rows data
                                 var newArray = [];
                                 var tempArray = {};

@@ -179,14 +179,14 @@
 
             // Calculates new applied margin and CTM on retail change
             editor.field('SalesRetail').input().on('change', function () {
-                editor.field('SalesRetail').val(editor.field('SalesRetail').val().replace("$",""));
+                editor.field('SalesRetail').val(editor.field('SalesRetail').val().replace("$", ""));
                 editor.field('SalesAppliedMargin').val(((1 - (editor.field('SalesCost').val().replace(/[\$,]/g, '') / this.value)) * 100).toFixed(2) + '%');
                 editor.field('SalesCTM').val((((editor.field('SalesAmount').val().replace(/[\$,]/g, '') - (editor.field('SalesQuantity').val().replace(/[\$,]/g, '') * editor.field('SalesCost').val().replace(/[\$,]/g, ''))) / viewBagTotalAmount) * 100).toFixed(2) + '%');
             });
 
             // Calculates new applied margin on cost change
             editor.field('SalesCost').input().on('change', function () {
-                editor.field('SalesCost').val(editor.field('SalesCost').val().replace("$",""));
+                editor.field('SalesCost').val(editor.field('SalesCost').val().replace("$", ""));
                 editor.field('SalesAppliedMargin').val(((1 - (this.value / editor.field('SalesRetail').val().replace(/[\$,]/g, ''))) * 100).toFixed(2) + '%');
                 editor.field('SalesCTM').val((((editor.field('SalesAmount').val().replace(/[\$,]/g, '') - (editor.field('SalesQuantity').val().replace(/[\$,]/g, '') * editor.field('SalesCost').val().replace(/[\$,]/g, ''))) / viewBagTotalAmount) * 100).toFixed(2) + '%');
             });

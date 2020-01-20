@@ -1,6 +1,7 @@
 ﻿@{
     ViewBag.Title = "Product Maintenance";
     var CreatedBy = Request["CreatedBy"];
+    var Role = Request["Role"];
 }
 
 <html>
@@ -84,6 +85,7 @@
         };
 
         var currentUser = "@CreatedBy";
+        var role = "@Role";
         var editorNP;
         var editor;
         $(document).ready(function () {
@@ -316,13 +318,13 @@
             // New Product Form: converts receipt description to title case
             editorNP.field('ProductUpdates.OBJ_TAB_F29').input().on('change', function () {
                 var productName = titleCase(editorNP.field('ProductUpdates.OBJ_TAB_F29').val());
-                editorNP.field('ProductUpdates.OBJ_TAB_F29').val(productName); 
+                editorNP.field('ProductUpdates.OBJ_TAB_F29').val(productName);
             });
 
             // New Product Form: converts signage descriptions to title case
             editorNP.field('ProductUpdates.OBJ_TAB_F255').input().on('change', function () {
                 var productName = titleCase(editorNP.field('ProductUpdates.OBJ_TAB_F255').val());
-                editorNP.field('ProductUpdates.OBJ_TAB_F255').val(productName); 
+                editorNP.field('ProductUpdates.OBJ_TAB_F255').val(productName);
             });
 
             // New Product Form: hides Family Button unless Hackberry's Brand is selected
@@ -432,6 +434,21 @@
                     }
                 }
             });
+
+            // New Product Form: New Brand button
+            $('<button id="newbrand" style="position:absolute;top:20%;right:5%">New Brand</button>').insertAfter(
+                editorNP.field('ProductUpdates.OBJ_TAB_F155').input()
+            );
+
+            // New Product Form: Get New PLU Button
+            $('<button id="getplu" style="position:absolute;top:20%;right:5%">Get New PLU</button>').insertAfter(
+                editorNP.field('ProductUpdates.F01').input()
+            );
+
+            // New Product Form: Calculate button
+            $('<button id="calculateNP" style="position:absolute;top:20%;right:8%">Calculate</button>').insertAfter(
+                editorNP.field('ProductUpdates.COST_TAB_F38').input()
+            );
 
             // New Product Form: enter new Brand
             $(document).on('click', '#newbrand', function () {
@@ -950,13 +967,13 @@
             // Update An Existing Product Form: converts receipt description to title case
             editor.field('ProductUpdates.OBJ_TAB_F29').input().on('change', function () {
                 var productName = titleCase(editor.field('ProductUpdates.OBJ_TAB_F29').val());
-                editor.field('ProductUpdates.OBJ_TAB_F29').val(productName); 
+                editor.field('ProductUpdates.OBJ_TAB_F29').val(productName);
             });
 
             // Update An Existing Product Form: converts signage descriptions to title case
             editor.field('ProductUpdates.OBJ_TAB_F255').input().on('change', function () {
                 var productName = titleCase(editor.field('ProductUpdates.OBJ_TAB_F255').val());
-                editor.field('ProductUpdates.OBJ_TAB_F255').val(productName); 
+                editor.field('ProductUpdates.OBJ_TAB_F255').val(productName);
             });
 
             // Update An Existing Product Form: shows completed by info if product is marked as complete
@@ -1142,6 +1159,21 @@
                 }
             });
 
+            // Update An Existing Product Form: Cost button
+            $('<button id="cost" style="position:absolute;top:20%;right:12.5%">Cost</button>').insertAfter(
+                editor.field('ProductUpdates.price_tab_f30').input()
+            );
+
+            // Update An Existing Product Form: SRP button
+            $('<button id="srpcalculator" style="position:absolute;top:20%;right:5%">SRP</button>').insertAfter(
+                editor.field('ProductUpdates.price_tab_f30').input()
+            );
+
+            // Update An Existing Product Form: Calculate button
+            $('<button id="calculate" style="position:absolute;top:20%;right:8%">Calculate</button>').insertAfter(
+                editor.field('ProductUpdates.COST_TAB_F38').input()
+            );
+
             // Update An Existing Product Form: field validation
             editor.on('preSubmit', function (e, o, action) {
                 if (action !== 'remove') {
@@ -1236,7 +1268,7 @@
                 lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "All"]],
                 // Table data source
                 ajax: {
-                    url: '/api/ProductUpdates'//,
+                    url: '/api/ProductMaintenance'//,
                     //type: 'POST'
                 },
                 // Table columns
@@ -1333,42 +1365,17 @@
                     },
 
                     // Redirects user to New Products page
-                    { text: 'Manage New Products (Export)', action: function () { window.location = 'NewProducts' } },
+                    { text: 'Manage New Products (Export)', attr: { id: 'ManageNewProducts' }, action: function () { window.location = 'NewProducts' } },
 
                     // Redirects user to Product Updates page
                     { text: 'Manage Update Requests', action: function () { window.location = 'ProductUpdates' } }
                 ]
             });
 
-            // Update An Existing Product Form: Cost button
-            $('<button id="cost" style="position:absolute;top:20%;right:12.5%">Cost</button>').insertAfter(
-                editor.field('ProductUpdates.price_tab_f30').input()
-            );
-
-            // Update An Existing Product Form: SRP button
-            $('<button id="srpcalculator" style="position:absolute;top:20%;right:5%">SRP</button>').insertAfter(
-                editor.field('ProductUpdates.price_tab_f30').input()
-            );
-
-            // Update An Existing Product Form: Calculate button
-            $('<button id="calculate" style="position:absolute;top:20%;right:8%">Calculate</button>').insertAfter(
-                editor.field('ProductUpdates.COST_TAB_F38').input()
-            );
-
-            // New Product Form: New Brand button
-            $('<button id="newbrand" style="position:absolute;top:20%;right:5%">New Brand</button>').insertAfter(
-                editorNP.field('ProductUpdates.OBJ_TAB_F155').input()
-            );
-
-            // New Product Form: Get New PLU Button
-            $('<button id="getplu" style="position:absolute;top:20%;right:5%">Get New PLU</button>').insertAfter(
-                editorNP.field('ProductUpdates.F01').input()
-            );
-
-            // New Product Form: Calculate button
-            $('<button id="calculateNP" style="position:absolute;top:20%;right:8%">Calculate</button>').insertAfter(
-                editorNP.field('ProductUpdates.COST_TAB_F38').input()
-            );
+            // Product Maintenance: disable Manage New Products (Export) button unless current user has manager or admin status
+            if (!(role >= 4)) {
+                table.button('#ManageNewProducts').disable();
+            }
         });
     </script>
 }

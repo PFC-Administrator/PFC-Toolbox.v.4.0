@@ -52,11 +52,6 @@ namespace PFC_Toolbox.v._4._0.Models
         [Display(Name = "SMS Login ID")]
         public string SMSLoginID { get; set; }
 
-        //[Required]
-        //[Display(Name = "Email")]
-        //[EmailAddress]
-        //public string Email { get; set; }
-
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]

@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@{var Role = Convert.ToInt32(Request["Role"]);}
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -32,6 +33,10 @@
                     <li>@Html.ActionLink("Documentation", "Index", "Documentation")</li>
                     @*<li>@Html.ActionLink("Auxiliary", "Index", "Auxiliary")</li>*@
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    @if (Role == 5)
+                    {
+                        <li id="usersLink">@Html.ActionLink("Users", "Users", "Account")</li>
+                    }
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -44,14 +49,10 @@
             <p>&copy; @DateTime.Now.Year - PFC Toolbox v4.0</p>
         </footer>
     </div>
-
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" rel="stylesheet" />
-
+    
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
 
 </body>
 </html>
