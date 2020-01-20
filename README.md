@@ -8,7 +8,6 @@
   
 ## Requests / Ideas:
 <ol>
-  <li>Limit accessibility to functions by ASP.NET Identity login level</li>
   <li>New Vendor request forms</li>
   <li>Allow accounting to add new vendors themselves</li>
   <li>Implementation of Co-op Deals or Bidfile?</li>
