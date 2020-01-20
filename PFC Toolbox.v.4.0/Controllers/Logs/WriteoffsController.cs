@@ -73,7 +73,10 @@ namespace PFC_Toolbox.v._4._0.Controllers
                     )
                     .LeftJoin("Subdepartments", "Subdepartments.subdepartmentID", "=", "Writeoffs.subdepartmentID"
                     )
-                    .Where(q => q.Where("Writeoffs.DateCreated", "DATEADD(year, -1, GETDATE())", ">=", false))
+
+                    // Where statements
+                    .Where(q => q.Where("WriteoffID", "(SELECT TOP 2000 WriteoffID FROM Writeoffs ORDER BY WriteoffID DESC)", "IN", false))
+                     //.Where(q => q.Where("Writeoffs.DateCreated", "DATEADD(year, -1, GETDATE())", ">=", false))
                      .Process(request)
                     .Data();
 

@@ -368,13 +368,13 @@
             // Update An Existing Product Form: converts receipt description to title case
             editor.field('ProductUpdates.OBJ_TAB_F29').input().on('change', function () {
                 var productName = titleCase(editor.field('ProductUpdates.OBJ_TAB_F29').val());
-                editor.field('ProductUpdates.OBJ_TAB_F29').val(productName); 
+                editor.field('ProductUpdates.OBJ_TAB_F29').val(productName);
             });
 
             // Update An Existing Product Form: converts signage descriptions to title case
             editor.field('ProductUpdates.OBJ_TAB_F255').input().on('change', function () {
                 var productName = titleCase(editor.field('ProductUpdates.OBJ_TAB_F255').val());
-                editor.field('ProductUpdates.OBJ_TAB_F255').val(productName); 
+                editor.field('ProductUpdates.OBJ_TAB_F255').val(productName);
             });
 
             // Update An Existing Product Form: shows completed by info if product is marked as complete
@@ -585,9 +585,9 @@
 
                     // Gather data from each selected row
                     var data = table.rows({ selected: true }).data();
-                                        
+
                     var CreatedBy = data[0].createdby;
-                    
+
                     if (confirm('Send email?')) {
                         var subject = "More Info Needed";
                         var body = "Hi " + CreatedBy + ", ";
@@ -628,7 +628,7 @@
                 lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "All"]],
                 // Table data source
                 ajax: {
-                    url: '/api/ProductUpdates'//,
+                    url: '/api/UpdateRequests'//,
                     //type: 'POST'
                 },
                 // Table columns

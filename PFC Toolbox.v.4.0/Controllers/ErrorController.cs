@@ -17,5 +17,10 @@ namespace PFC_Toolbox.v._4._0.Controllers
             Response.StatusCode = 404;
             return View("NotFound");
         }
+
+        public ViewResult AccessDenied()
+        {
+            return View("AccessDenied");
+        }
     }
 }
