@@ -5,16 +5,56 @@
 
 <h2>Reports</h2>
 
+<hr />
+
 <h3>SMS Reports</h3>
+<div class="row">
+    <div class="col-md-4">
+        <h4>Item Single Total by UPC</h4>
+        <p>Find itemized sales by specific UPC's.</p>
+        <p><a class="btn btn-default" href='@Url.Action("ItemSingleTotal", "Reports")'>Click here &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h4>Item Single Total by Subdepartment</h4>
+        <p>Find itemized sales by subdepartment.</p>
+        <p><a class="btn btn-default" href='@Url.Action("ItemSingleTotalbySubdepartment", "Reports")'>Click here &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h4>Contribution to Margin by Subdepartment</h4>
+        <p>Find itemized sales and contribution to margin metrics by subdepartment.</p>
+        <p><a class="btn btn-default" href='@Url.Action("CTMSubdepartment", "Reports")'>Click here &raquo;</a></p>
+    </div>
+</div>
 
-<p>
-    @Html.ActionLink("Item Single Total by UPC", "ItemSingleTotal", "Reports")
-</p>
+@*<hr />
 
-<p>
-    @Html.ActionLink("Item Single Total by Subdepartment", "ItemSingleTotalbySubdepartment", "Reports")
-</p>
+<h3>Toolbox Reports</h3>
+<div class="row">
+    <div class="col-md-4">
+        <h3>Item Single Total by UPC</h3>
+        <p></p>
+        <p><a class="btn btn-default" href='@Url.Action("ItemSingleTotal", "Reports")'>Click here &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h3>Item Single Total by Subdepartment</h3>
+        <p></p>
+        <p><a class="btn btn-default" href='@Url.Action("ItemSingleTotalbySubdepartment", "Reports")'>Click here &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h3>Contribution to Margin by Subdepartment</h3>
+        <p></p>
+        <p><a class="btn btn-default" href='@Url.Action("CTMSubdepartment", "Reports")'>Click here &raquo;</a></p>
+    </div>
+</div>*@
 
-<p>
-    @Html.ActionLink("Contribution to Margin by Subdepartment", "CTMSubdepartment", "Reports")
-</p>
+@*<p>
+        @Html.ActionLink("Item Single Total by UPC", "ItemSingleTotal", "Reports")
+    </p>*@
+
+@*<p>
+        @Html.ActionLink("Item Single Total by Subdepartment", "ItemSingleTotalbySubdepartment", "Reports")
+    </p>
+
+    <p>
+        @Html.ActionLink("Contribution to Margin by Subdepartment", "CTMSubdepartment", "Reports")
+    </p>*@

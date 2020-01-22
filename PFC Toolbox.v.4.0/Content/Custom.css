@@ -5,6 +5,75 @@
     float: right;
 }
 
+/* Date picker tweak*/
+#custom-pos {
+    position: relative;
+}
+
+/* Edits overall width of Toolbox display*/
+.container {
+    width: 1500px;
+}
+
+/* Center store multi totals */
+#laxJumbotron, #rochJumbotron {
+    padding-top: 5px;
+    padding-bottom: 15px;
+}
+
+.container .jumbotron, .container-fluid .jumbotron {
+    padding-right: 25px;
+    padding-left: 25px;
+}
+.container.jumbotronContainer{
+    padding-right: 60px;
+    padding-left: 60px;
+    padding-top: 20px;
+}
+
+/* Custom button colors*/
+.btn-primary {
+    background-color: #3c763d;
+    border-color: #2a5f2b;
+}
+
+.btn-primary:hover {
+    background-color: #224f23;
+    border-color: #2a5f2b;
+}
+
+.btn-primary:active {
+    background-color: #224f23;
+    border-color: #2a5f2b;
+}
+
+.btn-default {
+    background-color: #3c763d;
+    border-color: #2a5f2b;
+    color: white;
+}
+
+.btn-default:hover {
+    background-color: #224f23;
+    border-color: #2a5f2b;
+    color: white;
+}
+
+.btn-default:active {
+    background-color: #224f23;
+    border-color: #2a5f2b;
+    color: white;
+}
+
+#hrJumbotron {
+    border: 0;
+    clear: both;
+    display: block;
+    width: 96%;
+    background-color: #1112;
+    height: 1px;
+}
+
 h1 {
     margin-top: -5px;
 }
@@ -15,16 +84,6 @@ span.no-show {
 
 span.show-ellipsis:after {
     content: "...";
-}
-
-/* Date picker tweak*/
-#custom-pos {
-  position: relative;
-}
-
-/* Edits overall width of Toolbox display*/
-.container {
-    width: 1500px;
 }
 
 .DTE_Body_Content {

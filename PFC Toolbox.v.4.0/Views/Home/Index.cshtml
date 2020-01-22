@@ -1,13 +1,132 @@
 ﻿@{
     ViewBag.Title = "Home Page";
     var Role = Request["Role"];
+    @model List<PFC_Toolbox.v._4._0.Models.StoreMultiTotalsModel>
 }
+
+<head>
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/Custom.css" />
+</head>
 
 <div class="jumbotron">
     <h1>The Toolbox</h1>
     <p class="lead">Welcome to the People's Food Co-op Toolbox!</p>
-    <p><a href="http://www.pfc.coop" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+    <p><a href="http://www.pfc.coop" class="btn btn-primary btn-lg" id="">Learn more &raquo;</a></p>
 </div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="jumbotron" id="laxJumobtron">
+            <div id="LaxResults">
+                <h2 class="text-center">La Crosse Totals</h2>
+                <hr id="hrJumbotron"/>
+                <table id="storeMultiTotalResults" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th class="text-center" style="font-size: 20px">Weight</th>
+                            <th class="text-center" style="font-size: 20px">Sales</th>
+                            <th class="text-center" style="font-size: 20px">Units</th>
+                            <th class="text-center" style="font-size: 20px">Transactions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{if (Model != null)
+                            {
+                                foreach (var item in Model)
+                                {
+                                                <tr>
+                                                    <td align="center" style="font-size: 30px" ;>@Html.DisplayFor(modelItem => item.SalesWeight)</td>
+                                                    <td align="center" style="font-size: 30px" ;>@Html.DisplayFor(modelItem => item.SalesTotal)</td>
+                                                    <td align="center" style="font-size: 30px" ;>@Html.DisplayFor(modelItem => item.SalesQuantity)</td>
+                                                    <td align="center" style="font-size: 30px" ;>@Html.DisplayFor(modelItem => item.SalesTransactions)</td>
+                                                </tr>
+                                    }
+                            }
+                            }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="jumbotron" id="rochJumobtron">
+                <div id="RochResults">
+                    <h2 class="text-center">Rochester Totals</h2>
+                    <hr id="hrJumbotron"/>
+                    <table id="storeMultiTotalResults" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="font-size: 20px">Weight</th>
+                                <th class="text-center" style="font-size: 20px">Sales</th>
+                                <th class="text-center" style="font-size: 20px">Units</th>
+                                <th class="text-center" style="font-size: 20px">Transactions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{if (Model != null)
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                                        <tr>
+                                                            <td align="center" style="font-size: 30px" ;>@Html.DisplayFor(modelItem => item.SalesWeight)</td>
+                                                            <td align="center" style="font-size: 30px" ;>@Html.DisplayFor(modelItem => item.SalesTotal)</td>
+                                                            <td align="center" style="font-size: 30px" ;>@Html.DisplayFor(modelItem => item.SalesQuantity)</td>
+                                                            <td align="center" style="font-size: 30px" ;>@Html.DisplayFor(modelItem => item.SalesTransactions)</td>
+                                                        </tr>
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+    </div>
+</div>
+
+@*<div id="Results" class="jumbotron">
+    <div style="width: 50%; float:left" align="center">
+        <h2>La Crosse</h2>
+    </div>
+
+    <div style="width: 50%; float:right" align="center">
+        <h2>Rochester</h2>
+    </div>
+    <br />
+    <br />
+    <hr />
+    <hr />
+    <table id="storeMultiTotalResults" style="height:100%; width:100%">
+        <thead>
+            <tr>
+                <th class="text-center" style="font-size: 20px">Total Weight</th>
+                <th class="text-center" style="font-size: 20px">Total Sales</th>
+                <th class="text-center" style="font-size: 20px">Total Units</th>
+                <th class="text-center" style="font-size: 20px">Total Weight</th>
+                <th class="text-center" style="font-size: 20px">Total Sales</th>
+                <th class="text-center" style="font-size: 20px">Total Units</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td align="center" style="font-size: 30px" ;>@Html.DisplayFor(modelItem => item.LaxSalesWeight)</td>
+                            <td align="center" style="font-size: 30px" ;>@Html.DisplayFor(modelItem => item.LaxSalesTotal)</td>
+                            <td align="center" style="font-size: 30px" ;>@Html.DisplayFor(modelItem => item.LaxSalesQuantity)</td>
+                            <td align="center" style="font-size: 30px" ;>@Html.DisplayFor(modelItem => item.RochSalesWeight)</td>
+                            <td align="center" style="font-size: 30px" ;>@Html.DisplayFor(modelItem => item.RochSalesTotal)</td>
+                            <td align="center" style="font-size: 30px" ;>@Html.DisplayFor(modelItem => item.RochSalesQuantity)</td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>*@
 
 <div class="row">
     <div class="col-md-4">
@@ -28,3 +147,40 @@
         <p><a class="btn btn-default" href="http://localhost:21690/Logs">Click here &raquo;</a></p>
     </div>
 </div>
+
+@section scripts{
+    <script type="text/javascript" charset="utf-8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            refresh();
+
+            function refresh() {
+                $.ajax({
+                    type: 'GET',
+                    dataType: 'html',
+                    url: '@Html.Raw(Url.Action("GetLaxStoreMultiTotals","Home"))',
+                    success: function (data) {
+                        $('#LaxResults').replaceWith($('#LaxResults', data));
+                        setTimeout(function () {
+                            refresh();
+                        }, 30000);
+                    }
+                });
+
+                $.ajax({
+                    type: 'GET',
+                    dataType: 'html',
+                    url: '@Html.Raw(Url.Action("GetRochStoreMultiTotals","Home"))',
+                    success: function (data) {
+                        $('#RochResults').replaceWith($('#RochResults', data));
+                        setTimeout(function () {
+                            refresh();
+                        }, 30000);
+                    }
+                });
+            }
+        });
+    </script>
+}

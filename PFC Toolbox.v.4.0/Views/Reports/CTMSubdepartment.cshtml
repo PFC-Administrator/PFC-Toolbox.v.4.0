@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "CTMSubdepartment";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -38,12 +37,13 @@
     <select id="subdepartment"
             class="form-control"
             name="subdepartment"
+            autocomplete="off"
             required>
     </select>
     <br />
 
     <label>Location:</label>
-    <select class="form-control" name="location" id="location" required>
+    <select class="form-control" name="location" id="location" autocomplete="off" required>
         <option value="" disabled selected>Select a location</option>
         <option value="001, La Crosse">La Crosse</option>
         <option value="002, Rochester">Rochester</option>

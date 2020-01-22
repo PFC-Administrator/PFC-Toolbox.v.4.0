@@ -7,6 +7,9 @@
     <title>@ViewBag.Title | Toolbox v4.0</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/Custom.css" />
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -26,7 +29,6 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    @*<li>@Html.ActionLink("About", "About", "Home")</li>*@
                     <li>@Html.ActionLink("Maintenance", "ProductMaintenance", "Maintenance")</li>
                     <li>@Html.ActionLink("Reports", "Index", "Reports")</li>
                     <li>@Html.ActionLink("Logs", "Index", "Logs")</li>
@@ -49,10 +51,15 @@
             <p>&copy; @DateTime.Now.Year - PFC Toolbox v4.0</p>
         </footer>
     </div>
-    
+
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.min.js"></script>
+    <script src="~/Content/Editor-1.8.1/js/dataTables.editor.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="~/Content/Functions.js"></script>
 
 </body>
 </html>

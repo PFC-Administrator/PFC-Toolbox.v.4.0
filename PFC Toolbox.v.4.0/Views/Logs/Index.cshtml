@@ -6,14 +6,22 @@
 
 <h2>Logs</h2>
 
-<p>
-    @Html.ActionLink("Purchase Log", "CreatePurchases", "Logs")
-</p>
+<hr />
 
-<p>
-    @Html.ActionLink("Writeoffs Log", "CreateWriteoffs", "Logs")
-</p>
-
-@*<p>
-    @Html.ActionLink("Expiration Log", "CreateExpirations", "Logs")
-</p>*@
+<div class="row">
+    <div class="col-md-4">
+        <h4>Purchases</h4>
+        <p>Record purchases.</p>
+        <p><a class="btn btn-default" href='@Url.Action("CreatePurchases", "Logs")'>Click here &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h4>Writeoffs</h4>
+        <p>Record writeoffs.</p>
+        <p><a class="btn btn-default" href='@Url.Action("CreateWriteoffs", "Logs")'>Click here &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h4>Expirations</h4>
+        <p>Record expirations.</p>
+        <p><a class="btn btn-default" href='@Url.Action("CreateExpirations", "Logs")'>Click here &raquo;</a></p>
+    </div>
+</div>

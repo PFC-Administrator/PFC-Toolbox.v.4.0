@@ -466,7 +466,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
             }
         }
 
-        [Route("api/UpdateRequests")]
+        [Route("api/ProductUpdates")]
         [HttpGet]
         [HttpPost]
         public IHttpActionResult UpdateRequests()

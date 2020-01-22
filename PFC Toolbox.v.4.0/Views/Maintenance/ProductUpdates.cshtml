@@ -2,8 +2,6 @@
     ViewBag.Title = "Product Maintenance";
     var CreatedBy = Request["CreatedBy"];
 }
-@using PFC_Toolbox.v._4._0.Extensions;
-@using PFC_Toolbox.v._4._0.Models;
 
 <html>
 <head>
@@ -16,16 +14,16 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css" />
     <link rel="stylesheet" type="text/css" href="https://editor.datatables.net/extensions/Editor/css/editor.dataTables.min.css" />
-    <link rel="stylesheet" type="text/css" href="~/Content/Custom.css" />
 </head>
 <body class="dataTables">
-    <div class="container">
+    <div class="productUpdatesContainer">
         <h1><img src="~/Content/PFC_Logo_128px.png" width="100" height="100">        Product Updates</h1>
         <br />
-        <table id="ProductMaintenance" class="display text-nowrap compact" style="width:100%">
+        <table id="ProductUpdates" class="display text-nowrap compact" style="width:100%">
             <thead>
                 <tr>
                     <th>Request Type</th>
+                    <th></th>
                     <th>Status</th>
                     <th>Item Code</th>
                     <th>Brand</th>
@@ -46,7 +44,6 @@
 
 @section scripts{
     <script type="text/javascript" charset="utf-8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
-    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
@@ -57,37 +54,12 @@
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
-    <script src="~/Content/Editor-1.8.1/js/dataTables.editor.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
 
     <script>
 
-        // Function to convert fields to title case
-        function titleCase(string) {
-            return string.replace(
-                /\w\S*/g,
-                function (txt) {
-                    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-                }
-            );
-        }
-
-        // Function to pad numbers with 0's
-        function pad(number, width = 3, z = 0) {
-            return (String(z).repeat(width) + String(number)).slice(String(number).length)
-        }
-
-        // Function to get today's date
-        function getDate() {
-            today = new Date().getMonth() + 1
-            + "/" + new Date().getDate()
-            + "/" + new Date().getFullYear()
-            + " " + new Date().getHours()
-            + ":" + new Date().getMinutes()
-            + ":" + new Date().getSeconds()
-            return today;
-        };
+        // Reference ~/Content/Functions.js for custom functions
 
         var currentUser = "@CreatedBy";
         var editorPR;
@@ -99,7 +71,7 @@
             // Promotion Report Form
             var editorPR = new $.fn.dataTable.Editor({
                 ajax: '/api/ProductUpdates',
-                table: '#ProductMaintenance',
+                table: '#ProductUpdates',
                 fields: [
                     {
                         label: "Product Update Type",
@@ -132,7 +104,7 @@
             // Update An Existing Product Form
             var editor = new $.fn.dataTable.Editor({
                 ajax: '/api/ProductUpdates',
-                table: '#ProductMaintenance',
+                table: '#ProductUpdates',
                 fields: [
                     {
                         label: "Status:",
@@ -188,10 +160,14 @@
                         name: "ProductUpdates.COST_TAB_F38"
                     }, {
                         label: "TPR Start",
-                        name: "ProductUpdates.promotprstartdate"
+                        name: "ProductUpdates.promotprstartdate",
+                        type: "datetime",
+                        format: "M/DD/YYYY"
                     }, {
                         label: "TPR End",
-                        name: "ProductUpdates.promotprenddate"
+                        name: "ProductUpdates.promotprenddate",
+                        type: "datetime",
+                        format: "M/DD/YYYY"
                     }, {
                         label: "TPR Price",
                         name: "ProductUpdates.promotprprice"
@@ -367,13 +343,25 @@
 
             // Update An Existing Product Form: converts receipt description to title case
             editor.field('ProductUpdates.OBJ_TAB_F29').input().on('change', function () {
-                var productName = titleCase(editor.field('ProductUpdates.OBJ_TAB_F29').val());
+                var productName = editor.field('ProductUpdates.OBJ_TAB_F29').val();
+                    productName = titleCase(productName);
+                    productName = limitLength(productName, 32)
                 editor.field('ProductUpdates.OBJ_TAB_F29').val(productName);
+            });
+
+            // Update An Existing Product Form: format size field
+            editor.field('ProductUpdates.OBJ_TAB_F22').input().on('blur', function () {
+                var size = editor.field('ProductUpdates.OBJ_TAB_F22').val();
+                    size = sizeFormatter(size);
+                    size = limitLength(size, 10)
+                editor.field('ProductUpdates.OBJ_TAB_F22').val(size);
             });
 
             // Update An Existing Product Form: converts signage descriptions to title case
             editor.field('ProductUpdates.OBJ_TAB_F255').input().on('change', function () {
-                var productName = titleCase(editor.field('ProductUpdates.OBJ_TAB_F255').val());
+                var productName = editor.field('ProductUpdates.OBJ_TAB_F255').val();
+                    productName = titleCase(productName);
+                    productName = limitLength(productName, 64)
                 editor.field('ProductUpdates.OBJ_TAB_F255').val(productName);
             });
 
@@ -558,8 +546,23 @@
                 }
             });
 
+            // Update An Existing Product Form: Cost button
+            $('<button id="cost" style="position:absolute;top:20%;right:12.5%">Cost</button>').insertAfter(
+                editor.field('ProductUpdates.price_tab_f30').input()
+            );
+
+            // Update An Existing Product Form: SRP button
+            $('<button id="srpcalculator" style="position:absolute;top:20%;right:5%">SRP</button>').insertAfter(
+                editor.field('ProductUpdates.price_tab_f30').input()
+            );
+
+            // Update An Existing Product Form: Calculate button
+            $('<button id="calculate" style="position:absolute;top:20%;right:8%">Calculate</button>').insertAfter(
+                editor.field('ProductUpdates.COST_TAB_F38').input()
+            );
+
             // Update An Existing Product Form: activate an inline edit on click of a table cell that has the className attribute "editable" set to it
-            $('#ProductMaintenance').on('click', 'tbody td.editable', function (e) {
+            $('#ProductUpdates').on('click', 'tbody td.editable', function (e) {
                 editor.inline(this, {
                     onBlur: 'submit'
                 });
@@ -597,7 +600,7 @@
             });
 
             // Create the DataTables table
-            var table = $('#ProductMaintenance').DataTable({
+            var table = $('#ProductUpdates').DataTable({
                 //serverSide: true,
                 deferRender: true,
                 autoWidth: false,
@@ -606,11 +609,11 @@
                 initComplete: function (e, dt, node, config) {
                     table
                         .column(0).search('^((?!(New Product)).)*$', true, false)
-                        .column(1).search('^((?!(4 - Completed)).)*$', true, false).draw()
+                        .column(2).search('^((?!(4 - Completed)).)*$', true, false).draw()
                 },
                 // Hide text overflow with ellipses
                 columnDefs: [{
-                    targets: 2,
+                    targets: 3,
                     render: function (data, type, row) {
                         if (type === 'display' && data != null) {
                             data = data.replace(/<(?:.|\\n)*?>/gm, '');
@@ -624,16 +627,25 @@
                         }
                     }
                 }],
+                columnDefs: [
+                    { orderable: false, targets: 1 }
+                ],
                 // Default table lengths
                 lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "All"]],
                 // Table data source
                 ajax: {
-                    url: '/api/UpdateRequests'//,
+                    url: '/api/ProductUpdates'//,
                     //type: 'POST'
                 },
                 // Table columns
                 columns: [
                     { "data": "RequestTypes.requestname", width: "10%" },
+                    {
+                        "data": null,
+                        className: "center",
+                        defaultContent: '<a href="" class="editor_edit"><i class="fa fa-pencil" style="font-size:18px;color:black"></i></a>',
+                        width: "2%"
+                    },
                     { "data": "Status.productupdatestatus", className: "editable", editField: "ProductUpdates.productstatusID"},
                     { "data": "ProductUpdates.F01", width: "5%" },
                     { "data": "ProductUpdates.OBJ_TAB_F155", width: "10%" },
@@ -662,7 +674,7 @@
                 },
                 // Control button layout
                 dom: '<"floatRight"B><"clear">lfrtip',
-                order: [[11, "desc"]],
+                order: [[12, "desc"]],
                 // Default table order
                 buttons: [
                     {
@@ -713,26 +725,12 @@
                                     table.search('')
                                         .columns().search('')
                                         .column(0).search('^' + promo + '$', true, false)
-                                        .column(6).search('^' + startDate + '$', true, false)
-                                        .column(7).search('^' + endDate + '$', true, false)
-                                        .column(13).search('^' + locale + '$', true, false).draw()
+                                        .column(7).search('^' + startDate + '$', true, false)
+                                        .column(8).search('^' + endDate + '$', true, false)
+                                        .column(14).search('^' + locale + '$', true, false).draw()
                                     this.close();
                                 }
                             }]
-                    },
-                    {
-                        // Custom edit button that updates timestamps
-                        text: 'Edit', formTitle: 'Edit entry', extend: 'edit', editor: editor,
-                        formButtons:
-                            [
-                                {
-                                    text: 'Update', action: function () {
-                                        editor.field('ProductUpdates.lastupdatedon').val(getDate());
-                                        editor.field('ProductUpdates.lastupdatedby').val(currentUser);
-                                        this.submit();
-                                    }
-                                }
-                            ]
                     },
                     {
                         // Show completed today filter button
@@ -741,8 +739,8 @@
                                 .columns().search('')
                                 .columns().order('')
                                 .column(0).search('^((?!(New Product)).)*$', true, false)
-                                .column(1).search('^4 - Completed$', true, false)
-                                .column(12).search(new Date().getMonth() + 1 + "/" + new Date().getDate() + "/" + new Date().getFullYear(), true, false).column(11).order('desc').draw()
+                                .column(2).search('^4 - Completed$', true, false)
+                                .column(13).search(new Date().getMonth() + 1 + "/" + new Date().getDate() + "/" + new Date().getFullYear(), true, false).column(12).order('desc').draw()
                         }
                     },
                     {
@@ -753,7 +751,7 @@
                                 .columns().order('')
                                 .page.len(20)
                                 .column(0).search('^((?!(New Product)).)*$', true, false)
-                                .column(1).search('^((?!(4 - Completed)).)*$', true, false).column(11).order('desc').draw();
+                                .column(2).search('^((?!(4 - Completed)).)*$', true, false).column(12).order('desc').draw();
                         }
                     },
                     {
@@ -763,7 +761,7 @@
                                 .columns().search('')
                                 .columns().order('')
                                 .column(0).search('^((?!(New Product)).)*$', true, false)
-                                .column(1).search('^1 - Waiting for Manager Review$|^2 - More Info Needed$|^3 - Manager Review Completed$|^4 - Completed$', true, false).column(11).order('desc').draw();
+                                .column(2).search('^1 - Waiting for Manager Review$|^2 - More Info Needed$|^3 - Manager Review Completed$|^4 - Completed$', true, false).column(12).order('desc').draw();
                         }
                     },
                     {
@@ -783,20 +781,24 @@
                 ]
             });
 
-            // Update An Existing Product Form: Cost button
-            $('<button id="cost" style="position:absolute;top:20%;right:12.5%">Cost</button>').insertAfter(
-                editor.field('ProductUpdates.price_tab_f30').input()
-            );
+            // Product Maintenance: adds edit pencil in each cell
+            $('#ProductUpdates').on('click', 'a.editor_edit', function (e) {
+                e.preventDefault();
 
-            // Update An Existing Product Form: SRP button
-            $('<button id="srpcalculator" style="position:absolute;top:20%;right:5%">SRP</button>').insertAfter(
-                editor.field('ProductUpdates.price_tab_f30').input()
-            );
-
-            // Update An Existing Product Form: Calculate button
-            $('<button id="calculate" style="position:absolute;top:20%;right:8%">Calculate</button>').insertAfter(
-                editor.field('ProductUpdates.COST_TAB_F38').input()
-            );
+                editor.edit($(this).closest('tr'), {
+                    title: 'Edit entry',
+                    buttons:
+                        [
+                            {
+                                text: 'Update', action: function () {
+                                    editor.field('ProductUpdates.lastupdatedon').val(getDate());
+                                    editor.field('ProductUpdates.lastupdatedby').val(currentUser);
+                                    this.submit();
+                                }
+                            }
+                        ]
+                });
+            });
         });
     </script>
 }

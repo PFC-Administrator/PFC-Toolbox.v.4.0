@@ -251,6 +251,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Extensions.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\StoreMultiTotalsModel.cs" />
     <Compile Include="Models\LocationsModel.cs" />
     <Compile Include="Models\Logs\PurchasesModel.cs" />
     <Compile Include="Models\Logs\WriteoffsModel.cs" />
@@ -292,7 +293,7 @@
     <Content Include="Content\Editor-1.8.1\js\editor.jqueryui.min.js" />
     <Content Include="Content\Editor-1.8.1\js\editor.semanticui.js" />
     <Content Include="Content\Editor-1.8.1\js\editor.semanticui.min.js" />
-    <Content Include="Content\Custom.js" />
+    <Content Include="Content\Functions.js" />
     <Content Include="Content\PFC_Logo_128px.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -345,7 +346,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
