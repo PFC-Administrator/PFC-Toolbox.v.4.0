@@ -66,7 +66,14 @@
         var editor;
         $(document).ready(function () {
 
-            $.fn.dataTable.moment( 'M/D/YYYY h:mm:ss A' );
+            $.fn.dataTable.moment('M/D/YYYY h:mm:ss A');
+
+            // Disable autocomplete on form fields
+            $.extend(true, $.fn.dataTable.Editor.Field.defaults, {
+                attr: {
+                    autocomplete: 'off'
+                }
+            });
 
             // Promotion Report Form
             var editorPR = new $.fn.dataTable.Editor({
@@ -379,12 +386,13 @@
 
             // Update An Existing Product Form: hides cost info on load
             editor.field('ProductUpdates.POS_TAB_F04').input().on('change', function () {
-                    editor.field('ProductUpdates.COST_TAB_F27').hide();
-                    editor.field('ProductUpdates.COST_TAB_F26').hide();
-                    editor.field('ProductUpdates.PRICE_TAB_F49').hide();
-                    editor.field('ProductUpdates.COST_TAB_F19').hide();
-                    editor.field('ProductUpdates.COST_TAB_F38').hide();
+                editor.field('ProductUpdates.COST_TAB_F27').hide();
+                editor.field('ProductUpdates.COST_TAB_F26').hide();
+                editor.field('ProductUpdates.PRICE_TAB_F49').hide();
+                editor.field('ProductUpdates.COST_TAB_F19').hide();
 
+                // Hide calculate button
+                document.getElementById('calculate').style.visibility = 'hidden';
             });
 
             // Update An Existing Product Form: hides TPR related fields unless a promotional request type is selected
@@ -483,6 +491,10 @@
                     editor.field('ProductUpdates.PRICE_TAB_F49').show();
                     editor.field('ProductUpdates.COST_TAB_F19').show();
                     editor.field('ProductUpdates.COST_TAB_F38').show();
+
+                    // Show calculate button
+                    document.getElementById('calculate').style.visibility = 'visible';
+
                     costCounter = 1
                 } else {
                     editor.field('ProductUpdates.COST_TAB_F27').hide();
@@ -490,6 +502,10 @@
                     editor.field('ProductUpdates.PRICE_TAB_F49').hide();
                     editor.field('ProductUpdates.COST_TAB_F19').hide();
                     editor.field('ProductUpdates.COST_TAB_F38').hide();
+
+                    // Hide calculate button
+                    document.getElementById('calculate').style.visibility = 'hidden';
+
                     costCounter = 0
                 }
             });
@@ -501,11 +517,19 @@
                     editor.field('ProductUpdates.COST_TAB_F19').show();
                     editor.field('ProductUpdates.COST_TAB_F38').show();
                     editor.field('ProductUpdates.PRICE_TAB_F49').show();
+
+                    // Show calculate button
+                    document.getElementById('calculate').style.visibility = 'visible';
+
                     srpCounter = 1
                 } else {
                     editor.field('ProductUpdates.COST_TAB_F19').hide();
                     editor.field('ProductUpdates.COST_TAB_F38').hide();
                     editor.field('ProductUpdates.PRICE_TAB_F49').hide();
+
+                    // Hide calculate button
+                    document.getElementById('calculate').style.visibility = 'hidden';
+
                     srpCounter = 0
                 }
             });
