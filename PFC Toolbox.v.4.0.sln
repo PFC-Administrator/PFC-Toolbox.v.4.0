@@ -13,6 +13,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PFCToolbox.Service", "PFCTo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PFCToolbox.Test", "PFCToolbox.Test\PFCToolbox.Test.csproj", "{79924A41-858E-448B-B7C5-9D78F2770753}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{10ACEFE1-AE21-4620-905A-DCC75BBF2E65}"
+	ProjectSection(SolutionItems) = preProject
+		P:\Community\Information Technology\PFC Toolbox v4.0\SQL\Grant.sql = P:\Community\Information Technology\PFC Toolbox v4.0\SQL\Grant.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
