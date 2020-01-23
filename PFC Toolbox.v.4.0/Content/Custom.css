@@ -22,6 +22,8 @@
 }
 
 .container .jumbotron, .container-fluid .jumbotron {
+    padding-top: 30px;
+    padding-bottom: 30px;
     padding-right: 25px;
     padding-left: 25px;
 }
