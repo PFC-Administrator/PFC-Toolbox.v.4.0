@@ -1174,6 +1174,41 @@
                 }
             });
 
+            // Update An Existing Product Form: Add more upc's
+            $('<button name="add" id="add" style="position:absolute;top:20%;right:8.3%">Add More</button>').insertAfter(
+                editor.field('ProductUpdates.F01').input()
+            );
+
+            // Add a new UPC field every time the Add More button is clicked
+            var fieldCount = 1;
+            $(document).on('click', '#add', function () {
+
+                
+                    $('<input id="UPC' + fieldCount + '" type="text" autocomplete="off">').insertAfter(
+                        editor.field('ProductUpdates.F01').input()
+                    );
+                
+                //$('<tr id="row' + fieldCount + '"><td><input type="text" name="UPC" id="UPC' + fieldCount + '" placeholder="Enter a UPC" class="form-control name_list" /></td><td><button name="remove" id="' + fieldCount + '" class="btn btn-danger btn_remove">X</button></td></tr>').insertAfter(
+                //    editor.field('ProductUpdates.F01').input()
+                //);
+                
+                fieldCount++;
+                console.log(fieldCount);
+            });
+           
+        //var fieldCount = 1;
+        //    $('#add').click(function () {
+        //        console.log("clicked");
+        //    $('#dynamic_field').append('<tr id="row' + fieldCount + '"><td><input type="text" name="UPC" id="UPC' + fieldCount + '" placeholder="Enter a UPC" class="form-control name_list" /></td><td><button name="remove" id="' + fieldCount + '" class="btn btn-danger btn_remove">X</button></td></tr>');
+        //    fieldCount++;
+        //});
+
+        //// Remove the last new UPC field generated
+        //$(document).on('click', '.btn_remove', function () {
+        //    var button_id = $(this).attr("id");
+        //    $('#row' + button_id + '').remove();
+        //});
+
             // Update An Existing Product Form: Cost button
             $('<button id="cost" style="position:absolute;top:20%;right:12.5%">Cost</button>').insertAfter(
                 editor.field('ProductUpdates.price_tab_f30').input()
