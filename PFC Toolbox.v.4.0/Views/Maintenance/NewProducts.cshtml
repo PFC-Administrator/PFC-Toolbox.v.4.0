@@ -62,7 +62,14 @@
         var editorNP;
         $(document).ready(function () {
 
-            $.fn.dataTable.moment( 'M/D/YYYY h:mm:ss A' );
+            $.fn.dataTable.moment('M/D/YYYY h:mm:ss A');
+
+            // Disable autocomplete on form fields
+            $.extend(true, $.fn.dataTable.Editor.Field.defaults, {
+                attr: {
+                    autocomplete: 'off'
+                }
+            });
 
             // New Product Form
             var editorNP = new $.fn.dataTable.Editor({

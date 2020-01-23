@@ -80,6 +80,11 @@
             return document.getElementById("SMSLoginID").value;
         }
 
+        // Turn off autocomplete on login fields
+        $(document).ready(function () {
+            $("input:text, form").attr("autocomplete", "off");
+        })
+
         // Get user's account info on page unload
         window.addEventListener('beforeunload', function (event) {
             var GetUserInfo = $.ajax({

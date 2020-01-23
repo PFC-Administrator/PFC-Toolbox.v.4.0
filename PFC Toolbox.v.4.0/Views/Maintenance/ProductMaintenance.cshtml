@@ -66,6 +66,13 @@
 
             $.fn.dataTable.moment('M/D/YYYY h:mm:ss A');
 
+            // Disable autocomplete on form fields
+            $.extend(true, $.fn.dataTable.Editor.Field.defaults, {
+                attr: {
+                    autocomplete: 'off'
+                }
+            });
+
             // New Product Form
             var editorNP = new $.fn.dataTable.Editor({
                 ajax: '/api/NewProducts',
@@ -240,7 +247,7 @@
                     }, {
                         label: "Notes:",
                         name: "ProductUpdates.AdditionalRequestNotes",
-                        type:"textarea"
+                        type: "textarea"
                     }, {
                         label: "Item Type:",
                         name: "ProductUpdates.ScaleItemTypeID",
@@ -248,7 +255,7 @@
                         placeholder: "Select an option",
                         options: [
                             { label: "Price per pound", value: "1" },
-                            { label: "Standard pack", value: "2"}
+                            { label: "Standard pack", value: "2" }
                         ]
                     }, {
                         label: "Tare / Net Weight:",
@@ -259,7 +266,7 @@
                     }, {
                         label: "Ingredients:",
                         name: "ProductUpdates.IngredientList",
-                        type:"textarea"
+                        type: "textarea"
                     }, {
                         label: "Created by:",
                         name: "ProductUpdates.createdby",
@@ -292,24 +299,24 @@
             // New Product Form: converts receipt description to title case
             editorNP.field('ProductUpdates.OBJ_TAB_F29').input().on('change', function () {
                 var productName = editorNP.field('ProductUpdates.OBJ_TAB_F29').val();
-                    productName = titleCase(productName);
-                    productName = limitLength(productName, 32)
+                productName = titleCase(productName);
+                productName = limitLength(productName, 32)
                 editorNP.field('ProductUpdates.OBJ_TAB_F29').val(productName);
             });
 
             // New Product Form: format size field
             editorNP.field('ProductUpdates.OBJ_TAB_F22').input().on('blur', function () {
                 var size = editorNP.field('ProductUpdates.OBJ_TAB_F22').val();
-                    size = sizeFormatter(size);
-                    size = limitLength(size, 10)
+                size = sizeFormatter(size);
+                size = limitLength(size, 10)
                 editorNP.field('ProductUpdates.OBJ_TAB_F22').val(size);
             });
 
             // New Product Form: converts signage descriptions to title case
             editorNP.field('ProductUpdates.OBJ_TAB_F255').input().on('change', function () {
                 var productName = editorNP.field('ProductUpdates.OBJ_TAB_F255').val();
-                    productName = titleCase(productName);
-                    productName = limitLength(productName, 64)
+                productName = titleCase(productName);
+                productName = limitLength(productName, 64)
                 editorNP.field('ProductUpdates.OBJ_TAB_F255').val(productName);
             });
 
@@ -389,33 +396,27 @@
             $(document).on('click', '#calculateNP', function () {
                 var srp;
 
-                if (editorNP.field('ProductUpdates.PRICE_TAB_F49').val() == null || editorNP.field('ProductUpdates.PRICE_TAB_F49').val() == "")
-                {
+                if (editorNP.field('ProductUpdates.PRICE_TAB_F49').val() == null || editorNP.field('ProductUpdates.PRICE_TAB_F49').val() == "") {
                     alert('Please enter the target margin.');
                 }
-                else
-                {
+                else {
                     var targetMargin = editorNP.field('ProductUpdates.PRICE_TAB_F49').val();
 
-                    if (editorNP.field('ProductUpdates.COST_TAB_F19').val() == null || editorNP.field('ProductUpdates.COST_TAB_F19').val() == "")
-                    {
+                    if (editorNP.field('ProductUpdates.COST_TAB_F19').val() == null || editorNP.field('ProductUpdates.COST_TAB_F19').val() == "") {
                         alert('Please enter the number of items per case or a 1.');
                     }
-                    else
-                    {
+                    else {
                         var itemsPerCase = editorNP.field('ProductUpdates.COST_TAB_F19').val();
 
-                        if (editorNP.field('ProductUpdates.COST_TAB_F38').val() == null || editorNP.field('ProductUpdates.COST_TAB_F38').val() == "")
-                        {
+                        if (editorNP.field('ProductUpdates.COST_TAB_F38').val() == null || editorNP.field('ProductUpdates.COST_TAB_F38').val() == "") {
                             alert('Please enter a cost per case.');
                         }
-                        else
-                        {
+                        else {
                             var costPerCase = editorNP.field('ProductUpdates.COST_TAB_F38').val();
 
-                            srp = ( ( Math.round( ( ( costPerCase / itemsPerCase ) / ( 1 - ( targetMargin / 100 ) ) ) * 10 ) / 10 ) - .01 );
+                            srp = ((Math.round(((costPerCase / itemsPerCase) / (1 - (targetMargin / 100))) * 10) / 10) - .01);
 
-                            editorNP.field('ProductUpdates.price_tab_f30').val( srp )
+                            editorNP.field('ProductUpdates.price_tab_f30').val(srp)
                         }
                     }
                 }
@@ -742,7 +743,8 @@
                         placeholder: "Select a label size"
                     }, {
                         label: "UPC/PLU",
-                        name: "ProductUpdates.F01"
+                        name: "ProductUpdates.F01",
+                        id: "UPC"
                     }, {
                         label: "Mettler PLU:",
                         name: "ProductUpdates.ScalePLU"
@@ -905,7 +907,7 @@
                     }, {
                         label: "Notes:",
                         name: "ProductUpdates.AdditionalRequestNotes",
-                        type:"textarea"
+                        type: "textarea"
                     }, {
                         label: "Item Type:",
                         name: "ProductUpdates.ScaleItemTypeID",
@@ -913,7 +915,7 @@
                         placeholder: "Select an option",
                         options: [
                             { label: "Price per pound", value: "1" },
-                            { label: "Standard pack", value: "2"}
+                            { label: "Standard pack", value: "2" }
                         ]
                     }, {
                         label: "Tare / Net Weight:",
@@ -924,7 +926,7 @@
                     }, {
                         label: "Ingredients:",
                         name: "ProductUpdates.IngredientList",
-                        type:"textarea"
+                        type: "textarea"
                     }, {
                         label: "Created by:",
                         name: "ProductUpdates.createdby",
@@ -957,24 +959,24 @@
             // Update An Existing Product Form: converts receipt description to title case
             editor.field('ProductUpdates.OBJ_TAB_F29').input().on('change', function () {
                 var productName = editor.field('ProductUpdates.OBJ_TAB_F29').val();
-                    productName = titleCase(productName);
-                    productName = limitLength(productName, 32)
+                productName = titleCase(productName);
+                productName = limitLength(productName, 32)
                 editor.field('ProductUpdates.OBJ_TAB_F29').val(productName);
             });
 
             // Update An Existing Product Form: format size field
             editor.field('ProductUpdates.OBJ_TAB_F22').input().on('blur', function () {
                 var size = editor.field('ProductUpdates.OBJ_TAB_F22').val();
-                    size = sizeFormatter(size);
-                    size = limitLength(size, 10)
+                size = sizeFormatter(size);
+                size = limitLength(size, 10)
                 editor.field('ProductUpdates.OBJ_TAB_F22').val(size);
             });
 
             // Update An Existing Product Form: converts signage descriptions to title case
             editor.field('ProductUpdates.OBJ_TAB_F255').input().on('change', function () {
                 var productName = editor.field('ProductUpdates.OBJ_TAB_F255').val();
-                    productName = titleCase(productName);
-                    productName = limitLength(productName, 64)
+                productName = titleCase(productName);
+                productName = limitLength(productName, 64)
                 editor.field('ProductUpdates.OBJ_TAB_F255').val(productName);
             });
 
@@ -992,12 +994,13 @@
 
             // Update An Existing Product Form: hides cost info on load
             editor.field('ProductUpdates.POS_TAB_F04').input().on('change', function () {
-                    editor.field('ProductUpdates.COST_TAB_F27').hide();
-                    editor.field('ProductUpdates.COST_TAB_F26').hide();
-                    editor.field('ProductUpdates.PRICE_TAB_F49').hide();
-                    editor.field('ProductUpdates.COST_TAB_F19').hide();
-                    editor.field('ProductUpdates.COST_TAB_F38').hide();
+                editor.field('ProductUpdates.COST_TAB_F27').hide();
+                editor.field('ProductUpdates.COST_TAB_F26').hide();
+                editor.field('ProductUpdates.PRICE_TAB_F49').hide();
+                editor.field('ProductUpdates.COST_TAB_F19').hide();
 
+                // Hide calculate button
+                document.getElementById('calculate').style.visibility = 'hidden';
             });
 
             // Update An Existing Product Form: hides TPR related fields unless a promotional request type is selected
@@ -1098,6 +1101,10 @@
                     editor.field('ProductUpdates.PRICE_TAB_F49').show();
                     editor.field('ProductUpdates.COST_TAB_F19').show();
                     editor.field('ProductUpdates.COST_TAB_F38').show();
+
+                    // Show calculate button
+                    document.getElementById('calculate').style.visibility = 'visible';
+
                     costCounter = 1
                 } else {
                     editor.field('ProductUpdates.COST_TAB_F27').hide();
@@ -1105,6 +1112,10 @@
                     editor.field('ProductUpdates.PRICE_TAB_F49').hide();
                     editor.field('ProductUpdates.COST_TAB_F19').hide();
                     editor.field('ProductUpdates.COST_TAB_F38').hide();
+
+                    // Hide calculate button
+                    document.getElementById('calculate').style.visibility = 'hidden';
+
                     costCounter = 0
                 }
             });
@@ -1116,11 +1127,19 @@
                     editor.field('ProductUpdates.COST_TAB_F19').show();
                     editor.field('ProductUpdates.COST_TAB_F38').show();
                     editor.field('ProductUpdates.PRICE_TAB_F49').show();
+
+                    // Show calculate button
+                    document.getElementById('calculate').style.visibility = 'visible';
+
                     srpCounter = 1
                 } else {
                     editor.field('ProductUpdates.COST_TAB_F19').hide();
                     editor.field('ProductUpdates.COST_TAB_F38').hide();
                     editor.field('ProductUpdates.PRICE_TAB_F49').hide();
+
+                    // Hide calculate button
+                    document.getElementById('calculate').style.visibility = 'hidden';
+
                     srpCounter = 0
                 }
             });
@@ -1129,33 +1148,27 @@
             $(document).on('click', '#calculate', function () {
                 var srp;
 
-                if (editor.field('ProductUpdates.PRICE_TAB_F49').val() == null || editor.field('ProductUpdates.PRICE_TAB_F49').val() == "")
-                {
+                if (editor.field('ProductUpdates.PRICE_TAB_F49').val() == null || editor.field('ProductUpdates.PRICE_TAB_F49').val() == "") {
                     alert('Please enter the target margin.');
                 }
-                else
-                {
+                else {
                     var targetMargin = editor.field('ProductUpdates.PRICE_TAB_F49').val();
 
-                    if (editor.field('ProductUpdates.COST_TAB_F19').val() == null || editor.field('ProductUpdates.COST_TAB_F19').val() == "")
-                    {
+                    if (editor.field('ProductUpdates.COST_TAB_F19').val() == null || editor.field('ProductUpdates.COST_TAB_F19').val() == "") {
                         alert('Please enter the number of items per case or a 1.');
                     }
-                    else
-                    {
+                    else {
                         var itemsPerCase = editor.field('ProductUpdates.COST_TAB_F19').val();
 
-                        if (editor.field('ProductUpdates.COST_TAB_F38').val() == null || editor.field('ProductUpdates.COST_TAB_F38').val() == "")
-                        {
+                        if (editor.field('ProductUpdates.COST_TAB_F38').val() == null || editor.field('ProductUpdates.COST_TAB_F38').val() == "") {
                             alert('Please enter a cost per case.');
                         }
-                        else
-                        {
+                        else {
                             var costPerCase = editor.field('ProductUpdates.COST_TAB_F38').val();
 
-                            srp = ( ( Math.round( ( ( costPerCase / itemsPerCase ) / ( 1 - ( targetMargin / 100 ) ) ) * 10 ) / 10 ) - .01 );
+                            srp = ((Math.round(((costPerCase / itemsPerCase) / (1 - (targetMargin / 100))) * 10) / 10) - .01);
 
-                            editor.field('ProductUpdates.price_tab_f30').val( srp )
+                            editor.field('ProductUpdates.price_tab_f30').val(srp)
                         }
                     }
                 }
