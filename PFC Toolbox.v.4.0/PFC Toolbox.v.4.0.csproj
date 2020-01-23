@@ -58,7 +58,7 @@
   <ItemGroup>
     <Reference Include="DataTables-Editor-Server, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DataTables-Editor-Server\DataTables-Editor-Server.dll</HintPath>
+      <HintPath>..\packages\DataTables-Editor-Server.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.3.0\lib\net45\EntityFramework.dll</HintPath>
