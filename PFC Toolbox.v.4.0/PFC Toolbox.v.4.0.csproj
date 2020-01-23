@@ -294,6 +294,7 @@
     <Content Include="Content\Editor-1.8.1\js\editor.semanticui.js" />
     <Content Include="Content\Editor-1.8.1\js\editor.semanticui.min.js" />
     <Content Include="Content\Functions.js" />
+    <Content Include="Content\PFC_Logo_256px.png" />
     <Content Include="Content\PFC_Logo_128px.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
