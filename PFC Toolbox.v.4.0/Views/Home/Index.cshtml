@@ -86,66 +86,23 @@
     </div>
 </div>
 
-@*<div id="Results" class="jumbotron">
-    <div style="width: 50%; float:left" align="center">
-        <h2>La Crosse</h2>
-    </div>
-
-    <div style="width: 50%; float:right" align="center">
-        <h2>Rochester</h2>
-    </div>
-    <br />
-    <br />
-    <hr />
-    <hr />
-    <table id="storeMultiTotalResults" style="height:100%; width:100%">
-        <thead>
-            <tr>
-                <th class="text-center" style="font-size: 20px">Total Weight</th>
-                <th class="text-center" style="font-size: 20px">Total Sales</th>
-                <th class="text-center" style="font-size: 20px">Total Units</th>
-                <th class="text-center" style="font-size: 20px">Total Weight</th>
-                <th class="text-center" style="font-size: 20px">Total Sales</th>
-                <th class="text-center" style="font-size: 20px">Total Units</th>
-            </tr>
-        </thead>
-        <tbody>
-            @{if (Model != null)
-                {
-                    foreach (var item in Model)
-                    {
-                        <tr>
-                            <td align="center" style="font-size: 30px" ;>@Html.DisplayFor(modelItem => item.LaxSalesWeight)</td>
-                            <td align="center" style="font-size: 30px" ;>@Html.DisplayFor(modelItem => item.LaxSalesTotal)</td>
-                            <td align="center" style="font-size: 30px" ;>@Html.DisplayFor(modelItem => item.LaxSalesQuantity)</td>
-                            <td align="center" style="font-size: 30px" ;>@Html.DisplayFor(modelItem => item.RochSalesWeight)</td>
-                            <td align="center" style="font-size: 30px" ;>@Html.DisplayFor(modelItem => item.RochSalesTotal)</td>
-                            <td align="center" style="font-size: 30px" ;>@Html.DisplayFor(modelItem => item.RochSalesQuantity)</td>
-                        </tr>
-                    }
-                }
-            }
-        </tbody>
-    </table>
-</div>*@
-
 <div class="row">
     <div class="col-md-4">
         <h2>Product Maintenance</h2>
         <p>
             Add new products, update existing products, request promotional pricing, pull promotional reports, and more.
         </p>
-        <p><a class="btn btn-default" href="http://localhost:21690/Maintenance/ProductMaintenance">Click here &raquo;</a></p>
+        <p><a class="btn btn-default" href="@Url.Action("ProductMaintenance", "Maintenance")">Click here &raquo;</a></p>
     </div>
     <div class="col-md-4">
         <h2>Reports</h2>
         <p>Run basic reports for current product metrics and margin control.</p>
-        <p><a class="btn btn-default" href="http://localhost:21690/Reports">Click here &raquo;</a></p>
+        <p><a class="btn btn-default" href="@Url.Action("Index", "Reports")">Click here &raquo;</a></p>
     </div>
     <div class="col-md-4">
         <h2>Logs</h2>
         <p>Track invoices, write-offs, and expirations.</p>
-        <p><a class="btn btn-default" href="http://localhost:21690/Logs">Click here &raquo;</a></p>
+        <p><a class="btn btn-default" href="@Url.Action("Index", "Logs")">Click here &raquo;</a></p>
     </div>
 </div>
 
