@@ -717,7 +717,7 @@
 
             // Update An Existing Product Form
             var editor = new $.fn.dataTable.Editor({
-                ajax: '/api/ProductUpdates',
+                ajax: '/api/ProductMaintenance',
                 table: '#ProductMaintenance',
                 fields: [
                     {
@@ -1344,20 +1344,6 @@
                                 { text: 'Copy', action: function () { var values = editor.edit(table.row(':last', { order: 'index' }), false).val(); editor.create({}).set(values); } }
                             ]
                     },
-                    //{
-                    //    // Custom edit button that updates timestamps
-                    //    text: 'Edit', formTitle: 'Edit entry', extend: 'edit', editor: editor,
-                    //    formButtons:
-                    //        [
-                    //            {
-                    //                text: 'Update', action: function () {
-                    //                    editor.field('ProductUpdates.lastupdatedon').val(getDate());
-                    //                    editor.field('ProductUpdates.lastupdatedby').val(currentUser);
-                    //                    this.submit();
-                    //                }
-                    //            }
-                    //        ]
-                    //},
                     {
                         // Show completed today filter button
                         text: 'Show Completed Today', action: function (e, dt, node, config) {
