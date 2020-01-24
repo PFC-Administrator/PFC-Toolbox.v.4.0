@@ -90,7 +90,7 @@ span.show-ellipsis:after {
 }
 
 .DTE_Body_Content {
-    max-height: 730px !important;
+    max-height: 553px !important;
 }
 
 label {
@@ -101,8 +101,8 @@ body {
     margin: 27px;
 }
 
-/* Custom Update An Existing Product Form*/
-#customForm {
+/* Custom Update An Existing Product Form */
+/*#customForm {
     display: flex;
     flex-flow: row wrap;
 }
@@ -141,4 +141,4 @@ body {
 
     #customForm div.DTE_Field {
         padding: 5px;
-    }
+    }*/
