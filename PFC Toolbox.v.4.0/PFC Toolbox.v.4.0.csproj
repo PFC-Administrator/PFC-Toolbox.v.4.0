@@ -236,7 +236,7 @@
     <Compile Include="Controllers\Maintenance\PLUController.cs" />
     <Compile Include="Controllers\Maintenance\ProductUpdatesController.cs" />
     <Compile Include="Controllers\Identity\ManageController.cs" />
-    <Compile Include="Controllers\Maintenance\RefreshBrandController.cs" />
+    <Compile Include="Controllers\Maintenance\BrandsController.cs" />
     <Compile Include="Controllers\Maintenance\SubdepartmentController.cs" />
     <Compile Include="Controllers\Maintenance\UPCController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
@@ -251,6 +251,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Extensions.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Reports\ItemSingleTotalbyBrandModel.cs" />
     <Compile Include="Models\StoreMultiTotalsModel.cs" />
     <Compile Include="Models\LocationsModel.cs" />
     <Compile Include="Models\Logs\PurchasesModel.cs" />
@@ -394,6 +395,8 @@
     <Content Include="Views\Error\Error.cshtml" />
     <Content Include="Views\Error\AccessDenied.cshtml" />
     <Content Include="Views\Account\Users.cshtml" />
+    <Content Include="Views\Reports\_ItemSingleTotalbyBrand.cshtml" />
+    <Content Include="Views\Reports\ItemSingleTotalbyBrand.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

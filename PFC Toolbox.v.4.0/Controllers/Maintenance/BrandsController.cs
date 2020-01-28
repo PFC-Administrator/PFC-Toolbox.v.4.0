@@ -5,12 +5,11 @@ using DataTables;
 
 namespace PFC_Toolbox.v._4._0.Controllers
 {
-    public class RefreshBrandController : ApiController
+    public class BrandsController : ApiController
     {
-        [Route("Maintenance/api/RefreshBrand")]
+        [Route("api/GetBrands")]
         [HttpGet]
-        [HttpPost]
-        public IHttpActionResult RefreshBrand()
+        public IHttpActionResult GetBrands()
         {
             var request = HttpContext.Current.Request;
 

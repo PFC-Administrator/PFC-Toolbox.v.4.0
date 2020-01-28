@@ -460,7 +460,7 @@
                     }),
                         SetNewBrand = CreateNewBrand.then(function (data) {
                             return $.ajax({
-                                url: "api/RefreshBrand",
+                                url: "/api/GetBrands",
                                 type: "GET",
                                 dataType: "json",
                                 error: function (error) {
@@ -1261,9 +1261,9 @@
                 autoWidth: false,
                 select: true,
                 // Default view showing incomplete requests
-                initComplete: function (e, dt, node, config) {
-                    table.column(2).search('^1 - Waiting for Manager Review$|^2 - More Info Needed$|^3 - Manager Review Completed$', true, false).draw()
-                },
+                //initComplete: function (e, dt, node, config) {
+                //    table.column(2).search('^1 - Waiting for Manager Review$|^2 - More Info Needed$|^3 - Manager Review Completed$', true, false).draw()
+                //},
                 columnDefs: [{
                     targets: 3,
                     render: function (data, type, row) {
