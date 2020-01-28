@@ -9,10 +9,10 @@
 <ol>
   <li>New Vendor request forms</li>
   <li>Add multiple UPC's in Product Update forms</li>
+  <li>Add multiple amounts and subdepartments in Purchases</li>
   <li>Request multiple shelf tags and signs in Product Update forms</li>
   <li>Allow accounting to add new vendors themselves</li>
-  <li>Implementation of Co-op Deals or Bidfile?</li>
-  <li>Sales by brand</li>
   <li>Sales by description</li>
   <li>Multi subdepartment sales reports.</li>
+    <li>Implementation of Co-op Deals or Bidfile?</li>
 </ol>
