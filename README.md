@@ -14,5 +14,5 @@
   <li>Allow accounting to add new vendors themselves</li>
   <li>Sales by description</li>
   <li>Multi subdepartment sales reports.</li>
-    <li>Implementation of Co-op Deals or Bidfile?</li>
+  <li>Implementation of Co-op Deals or Bidfile?</li>
 </ol>
