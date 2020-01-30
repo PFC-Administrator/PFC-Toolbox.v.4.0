@@ -16,3 +16,8 @@
   <li>Multi subdepartment sales reports.</li>
   <li>Implementation of Co-op Deals or Bidfile?</li>
 </ol>
+
+## Notes:
+<ol>
+  <li>Bookmarks to Product Maintenance circumvent the need to be logged in and create errors when trying to fill out product forms.</li>
+</ol>
