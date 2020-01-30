@@ -449,7 +449,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
             SqlDataReader reader = null;
             List<CTMSubdepartmentModel> report = new List<CTMSubdepartmentModel>();
             CTMSubdepartmentModel item = null;
-            decimal totalSales = 0, totalCTM = 0;
+            decimal totalSales = 0, totalApplied = 0, totalCTM = 0;
             double totalWeight = 0, totalUnits = 0;
 
             // Connect to La Crosse or Rochester SMS and run Toolbox-CTMReport stored procedure
@@ -542,6 +542,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
                                 totalWeight = totalWeight + item.SalesWeight;
                                 totalSales = totalSales + item.SalesTotal;
                                 totalUnits = totalUnits + item.SalesQuantity;
+                                totalApplied = totalApplied + item.SalesAppliedMargin;
                                 totalCTM = totalCTM + item.SalesCTM;
 
                                 // Add results to list
@@ -558,6 +559,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
                 ViewBag.totalWeight = totalWeight;
                 ViewBag.totalSales = totalSales;
                 ViewBag.totalUnits = totalUnits;
+                ViewBag.totalApplied = totalApplied;
                 ViewBag.TotalCTM = totalCTM;
                 ViewBag.sdpCode = subdepartmentCode;
                 ViewBag.sdpDesc = subdepartmentDescription;

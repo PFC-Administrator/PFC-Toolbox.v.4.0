@@ -89,12 +89,13 @@
 
 <div>
     <fieldset title="Report Totals">
-        <table id="report totals" class="display text-nowrap" style="width:25%">
+        <table id="report totals" class="display text-nowrap" style="width:35%">
             <thead>
                 <tr>
                     <th>Total Weight</th>
                     <th>Total Sales</th>
                     <th>Total Units</th>
+                    <th>Total Applied</th>
                     <th>Total CTM</th>
                 </tr>
             </thead>
@@ -103,6 +104,7 @@
                     <td>@String.Format("{0}", ViewBag.TotalWeight)</td>
                     <td>@String.Format("{0:C}", ViewBag.TotalSales)</td>
                     <td>@String.Format("{0}", ViewBag.TotalUnits)</td>
+                    <td>@String.Format("{0:P2}", ViewBag.TotalApplied)</td>
                     <td>@String.Format("{0:P2}", ViewBag.TotalCTM)</td>
                 </tr>
             </tbody>
@@ -199,6 +201,8 @@
             $('#results').DataTable({
                 responsive: true,
 
+                // Default table lengths
+                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
                 columns: [
                     { data: "ItemCode", width: '110px' },
                     { data: "ItemBrand" },
@@ -284,6 +288,17 @@
 
                     // Update footer
                     $(api.column(5).footer()).html('$' + pageTotalSales.toFixed(2));
+
+                    // Sum CTM column
+                    pageTotalSales = api
+                        .column(11, { page: 'current' })
+                        .data()
+                        .reduce(function (a, b) {
+                            return parseFloat(decVal(a)) + parseFloat(decVal(b));
+                        }, 0);
+
+                    // Update footer
+                    $(api.column(11).footer()).html(pageTotalSales.toFixed(2) + '%');
 
                     // Sum CTM column
                     pageTotalSales = api
