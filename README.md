@@ -7,6 +7,7 @@
   
 ## Requests / Ideas:
 <ol>
+  <li>Include report totals in exports</li>
   <li>New Vendor request forms</li>
   <li>Add multiple UPC's in Product Update forms</li>
   <li>Add multiple amounts and subdepartments in Purchases</li>
