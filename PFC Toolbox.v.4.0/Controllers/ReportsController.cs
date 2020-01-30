@@ -221,6 +221,111 @@ namespace PFC_Toolbox.v._4._0.Controllers
         /*******************************************************************************************************************************************************************************************************************/
 
 
+        // GET: /Reports/ItemSingleTotalbyBrand
+        public ActionResult ItemSingleTotalbyCategory()
+        {
+            return View();
+        }
+
+        public ActionResult GetItemSingleTotalbyCategory(string location, string category, string startDate, string endDate)
+        {
+            // Create variables for use within stored procedure and report display
+            string categoryCode = category.Split(',')[0];
+            string categoryDescription = category.Split(',')[1];
+            string storeCode = location.Split(',')[0];
+            string storeDescription = location.Split(',')[1];
+
+            // Create local objects
+            SqlDataReader reader = null;
+            List<ItemSingleTotalbyCategoryModel> report = new List<ItemSingleTotalbyCategoryModel>();
+            ItemSingleTotalbyCategoryModel item = null;
+            decimal totalSales = 0;
+            double totalWeight = 0, totalUnits = 0;
+
+            // Connect to Host SMS and run Toolbox-ISTByCategoryReport stored procedure
+            using (SqlConnection con = new SqlConnection { ConnectionString = ConfigurationManager.ConnectionStrings["SMSHostConnection"].ConnectionString })
+            {
+                using (SqlCommand cmd = new SqlCommand("[Toolbox-ISTByCategoryReport]", con))
+                {
+                    // Set the command type as a stored procedure
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    // Set the stored procedure parameters
+                    cmd.Parameters.Add("@startDate", SqlDbType.DateTime).Value = startDate;
+                    cmd.Parameters.Add("@endDate", SqlDbType.DateTime).Value = endDate;
+                    cmd.Parameters.Add("@storeTarget", SqlDbType.VarChar).Value = storeCode;
+                    cmd.Parameters.Add("@category", SqlDbType.VarChar).Value = categoryCode;
+
+                    // Open connection to SQL server and set a timeout of 1000 in case report takes a while
+                    con.Open();
+                    cmd.CommandTimeout = 1000;
+
+                    // Execute cmd against server and store in reader object
+                    reader = cmd.ExecuteReader();
+
+                    // Save query results to list
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            // Temp variables for TryParse
+                            decimal tempDecimal;
+                            double tempDouble;
+
+                            // Store results in ItemSingleTotalbyCategoryModel model
+                            item = new ItemSingleTotalbyCategoryModel();
+                            item.ItemCode = reader["UPC"].ToString();
+                            item.Subdept = reader["Subdepartment"].ToString();
+                            item.ItemBrand = reader["Brand"].ToString();
+                            item.ItemDescription = reader["Description"].ToString();
+                            item.ItemSize = reader["Size"].ToString();
+                            if (Double.TryParse(reader["Weight"].ToString(), out tempDouble))
+                            {
+                                item.SalesWeight = tempDouble;
+                            }
+                            else item.SalesWeight = 0;
+                            if (Decimal.TryParse(reader["Total Sales"].ToString(), out tempDecimal))
+                            {
+                                item.SalesTotal = tempDecimal;
+                            }
+                            else item.SalesTotal = 0;
+                            if (Double.TryParse(reader["Quantity"].ToString(), out tempDouble))
+                            {
+                                item.SalesQuantity = tempDouble;
+                            }
+                            else item.SalesQuantity = 0;
+
+                            // Sum totals
+                            totalWeight = totalWeight + item.SalesWeight;
+                            totalSales = totalSales + item.SalesTotal;
+                            totalUnits = totalUnits + item.SalesQuantity;
+
+                            // Add results to list
+                            report.Add(item);
+                        }
+                    }
+
+                    // Close connection to SQL server
+                    con.Close();
+                }
+            }
+
+            // Add totals to ViewBag to be used in report display
+            ViewBag.totalWeight = totalWeight;
+            ViewBag.totalSales = totalSales;
+            ViewBag.totalUnits = totalUnits;
+            ViewBag.categoryCode = categoryCode;
+            ViewBag.categoryDescription = categoryDescription;
+            ViewBag.store = storeDescription;
+
+            // Return results to report display
+            return PartialView("_ItemSingleTotalbyCategory", report);
+        }
+
+
+        /*******************************************************************************************************************************************************************************************************************/
+
+
         // GET: /Reports/ItemSingleTotalbySubdepartment
         public ActionResult ItemSingleTotalbySubdepartment()
         {
