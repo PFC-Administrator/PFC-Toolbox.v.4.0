@@ -32,6 +32,26 @@ namespace PFC_Toolbox.v._4._0.Controllers
                 return Json(result);
             }
         }
+
+        [Route("api/GetCategories")]
+        [HttpGet]
+        public IHttpActionResult GetCategories()
+        {
+            var request = HttpContext.Current.Request;
+
+            using (var db1 = new Database("sqlserver", ConfigurationManager.ConnectionStrings["ToolboxConnection"].ConnectionString))
+            {
+                var response = new Editor(db1, "SMSCategories", "F17")
+                    .Field(new Field("SMSCategories.F17")
+                    )
+                    .Field(new Field("SMSCategories.F1023")
+                    )
+                    .Process(request)
+                    .Data();
+
+                return Json(response);
+            }
+        }
     }
 }
 
