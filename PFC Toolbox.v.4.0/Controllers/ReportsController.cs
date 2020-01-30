@@ -221,7 +221,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
         /*******************************************************************************************************************************************************************************************************************/
 
 
-        // GET: /Reports/ItemSingleTotalbyBrand
+        // GET: /Reports/ItemSingleTotalbyCategory
         public ActionResult ItemSingleTotalbyCategory()
         {
             return View();
