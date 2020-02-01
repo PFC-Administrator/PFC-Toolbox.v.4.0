@@ -122,7 +122,10 @@
                     autoClose: true,
                     buttons: [
                         'copy',
-                        'excel',
+                        {
+                            extend: 'excel',
+                            filename: 'ISTBCategory-"@startDate"-"@endDate"'
+                        },
                         'csv',
                         'pdf',
                         'print'

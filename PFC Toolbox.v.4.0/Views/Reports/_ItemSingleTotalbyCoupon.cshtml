@@ -121,7 +121,11 @@
                     autoClose: true,
                     buttons: [
                         'copy',
-                        'excel',
+                        {
+                            extend: 'excel',
+                            filename: 'ISTBCoupon-"@startDate"-"@endDate"',
+                            footer: true
+                        },
                         'csv',
                         'pdf',
                         'print'

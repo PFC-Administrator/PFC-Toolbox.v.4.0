@@ -121,7 +121,10 @@
                     autoClose: true,
                     buttons: [
                         'copy',
-                        'excel',
+                        {
+                            extend: 'excel',
+                            filename: 'ISTBUPC-"@startDate"-"@endDate"'
+                        },
                         'csv',
                         'pdf',
                         'print'

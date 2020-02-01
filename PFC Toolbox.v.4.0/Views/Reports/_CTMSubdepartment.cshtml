@@ -226,7 +226,11 @@
                     autoClose: true,
                     buttons: [
                         'copy',
-                        'excel',
+                        {
+                            extend: 'excel',
+                            filename: 'CTM-"@startDate"-"@endDate"',
+                            footer: true
+                        },
                         'csv',
                         'pdf',
                         'print'
