@@ -326,6 +326,98 @@ namespace PFC_Toolbox.v._4._0.Controllers
         /*******************************************************************************************************************************************************************************************************************/
 
 
+        // GET: /Reports/ItemSingleTotalbyCoupon
+        public ActionResult ItemSingleTotalbyCoupon()
+        {
+            return View();
+        }
+
+        public ActionResult GetItemSingleTotalbyCoupon(string location, string startDate, string endDate)
+        {
+            // Create variables for use within stored procedure and report display
+            string storeCode = location.Split(',')[0];
+            string storeDescription = location.Split(',')[1];
+
+            // Create local objects
+            SqlDataReader reader = null;
+            List<ItemSingleTotalbyCouponModel> report = new List<ItemSingleTotalbyCouponModel>();
+            ItemSingleTotalbyCouponModel item = null;
+            decimal totalSales = 0;
+            double totalUnits = 0;
+
+            // Connect to Host SMS and run Toolbox-ISTByCouponReport stored procedure
+            using (SqlConnection con = new SqlConnection { ConnectionString = ConfigurationManager.ConnectionStrings["SMSHostConnection"].ConnectionString })
+            {
+                using (SqlCommand cmd = new SqlCommand("[Toolbox-ISTByCouponReport]", con))
+                {
+                    // Set the command type as a stored procedure
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    // Set the stored procedure parameters
+                    cmd.Parameters.Add("@startDate", SqlDbType.DateTime).Value = startDate;
+                    cmd.Parameters.Add("@endDate", SqlDbType.DateTime).Value = endDate;
+                    cmd.Parameters.Add("@storeTarget", SqlDbType.VarChar).Value = storeCode;
+
+                    // Open connection to SQL server and set a timeout of 1000 in case report takes a while
+                    con.Open();
+                    cmd.CommandTimeout = 1000;
+
+                    // Execute cmd against server and store in reader object
+                    reader = cmd.ExecuteReader();
+
+                    // Save query results to list
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            // Temp variables for TryParse
+                            decimal tempDecimal;
+                            double tempDouble;
+
+                            // Store results in ItemSingleTotalbyCouponModel model
+                            item = new ItemSingleTotalbyCouponModel();
+                            item.ItemCode = reader["UPC"].ToString();
+                            item.Subdept = reader["Subdepartment"].ToString();
+                            item.ItemBrand = reader["Brand"].ToString();
+                            item.ItemDescription = reader["Description"].ToString();
+                            if (Decimal.TryParse(reader["Total Sales"].ToString(), out tempDecimal))
+                            {
+                                item.SalesTotal = tempDecimal;
+                            }
+                            else item.SalesTotal = 0;
+                            if (Double.TryParse(reader["Quantity"].ToString(), out tempDouble))
+                            {
+                                item.SalesQuantity = tempDouble;
+                            }
+                            else item.SalesQuantity = 0;
+
+                            // Sum totals
+                            totalSales = totalSales + item.SalesTotal;
+                            totalUnits = totalUnits + item.SalesQuantity;
+
+                            // Add results to list
+                            report.Add(item);
+                        }
+                    }
+
+                    // Close connection to SQL server
+                    con.Close();
+                }
+            }
+
+            // Add totals to ViewBag to be used in report display
+            ViewBag.totalSales = totalSales;
+            ViewBag.totalUnits = totalUnits;
+            ViewBag.store = storeDescription;
+
+            // Return results to report display
+            return PartialView("_ItemSingleTotalbyCoupon", report);
+        }
+
+
+        /*******************************************************************************************************************************************************************************************************************/
+
+
         // GET: /Reports/ItemSingleTotalbySubdepartment
         public ActionResult ItemSingleTotalbySubdepartment()
         {
@@ -449,7 +541,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
             SqlDataReader reader = null;
             List<CTMSubdepartmentModel> report = new List<CTMSubdepartmentModel>();
             CTMSubdepartmentModel item = null;
-            decimal totalSales = 0, totalApplied = 0, totalCTM = 0;
+            decimal totalSales = 0, totalCTM = 0;
             double totalWeight = 0, totalUnits = 0;
 
             // Connect to La Crosse or Rochester SMS and run Toolbox-CTMReport stored procedure
@@ -542,7 +634,6 @@ namespace PFC_Toolbox.v._4._0.Controllers
                                 totalWeight = totalWeight + item.SalesWeight;
                                 totalSales = totalSales + item.SalesTotal;
                                 totalUnits = totalUnits + item.SalesQuantity;
-                                totalApplied = totalApplied + item.SalesAppliedMargin;
                                 totalCTM = totalCTM + item.SalesCTM;
 
                                 // Add results to list
@@ -559,7 +650,6 @@ namespace PFC_Toolbox.v._4._0.Controllers
                 ViewBag.totalWeight = totalWeight;
                 ViewBag.totalSales = totalSales;
                 ViewBag.totalUnits = totalUnits;
-                ViewBag.totalApplied = totalApplied;
                 ViewBag.TotalCTM = totalCTM;
                 ViewBag.sdpCode = subdepartmentCode;
                 ViewBag.sdpDesc = subdepartmentDescription;

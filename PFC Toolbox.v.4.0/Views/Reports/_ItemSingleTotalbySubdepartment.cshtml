@@ -77,16 +77,16 @@
         <table id="report totals" class="display text-nowrap" style="width:25%">
             <thead>
                 <tr>
-                    <th>Total Weight</th>
-                    <th>Total Sales</th>
-                    <th>Total Units</th>
+                    <th class="text-center" >Total Weight</th>
+                    <th class="text-center" >Total Sales</th>
+                    <th class="text-center" >Total Units</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>@String.Format("{0}", ViewBag.TotalWeight)</td>
-                    <td>@String.Format("{0:C}", ViewBag.TotalSales)</td>
-                    <td>@String.Format("{0}", ViewBag.TotalUnits)</td>
+                    <td align="center" >@String.Format("{0}", ViewBag.TotalWeight)</td>
+                    <td align="center" >@String.Format("{0:C}", ViewBag.TotalSales)</td>
+                    <td align="center" >@String.Format("{0}", ViewBag.TotalUnits)</td>
                 </tr>
             </tbody>
         </table>

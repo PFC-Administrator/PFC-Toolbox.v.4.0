@@ -1,8 +1,8 @@
 ﻿@{
-    ViewBag.Title = "Item Single Total";
+    ViewBag.Title = "Item Single Total by Coupon";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    @model List<PFC_Toolbox.v._4._0.Models.ItemSingleTotalModel>
+    @model List<PFC_Toolbox.v._4._0.Models.ItemSingleTotalbyCouponModel>
 
     var startDate = Request["startDate"];
     var endDate = Request["endDate"];
@@ -15,9 +15,9 @@
 <link rel="stylesheet" type="text/css" href="~/Content/Custom.css" />
 
 <h1 style="float:right;"><img src="~/Content/PFC_Logo_128px.png" width="100" height="100">@(ViewBag.Store)</h1>
-<h2 style="float:left;">Item Single Total by UPC</h2>
+<h2 style="float:left;">Item Single Total by Coupon</h2>
 <hr style="clear:both" />
-<h4>@startDate &nbsp;&nbsp; to &nbsp;&nbsp; @endDate</h4>
+<h3>@startDate &nbsp;&nbsp; to &nbsp;&nbsp; @endDate</h3>
 
 <br />
 
@@ -30,34 +30,28 @@
                     <th>Subdepartment</th>
                     <th>Brand</th>
                     <th>Description</th>
-                    <th>Size</th>
-                    <th>Weight</th>
-                    <th>Total Sales</th>
-                    <th>Units</th>
+                    <th>Total Discounts</th>
+                    <th>Total Redeemed</th>
                 </tr>
             </thead>
             <tbody>
                 @{
                     foreach (var item in Model)
                     {
-                        <tr>
-                            <td>@Html.DisplayFor(modelItem => item.ItemCode)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Subdept)</td>
-                            <td>@Html.DisplayFor(modelItem => item.ItemBrand)</td>
-                            <td>@Html.DisplayFor(modelItem => item.ItemDescription)</td>
-                            <td>@Html.DisplayFor(modelItem => item.ItemSize)</td>
-                            <td>@Html.DisplayFor(modelItem => item.SalesWeight)</td>
-                            <td>@Html.DisplayFor(modelItem => item.SalesTotal)</td>
-                            <td>@Html.DisplayFor(modelItem => item.SalesQuantity)</td>
-                        </tr>
+                                <tr>
+                                    <td>@Html.DisplayFor(modelItem => item.ItemCode)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Subdept)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.ItemBrand)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.ItemDescription)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.SalesTotal)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.SalesQuantity)</td>
+                                </tr>
                     }
                 }
             </tbody>
             <tfoot>
                 <tr>
                     <th style="text-align:center">Total:</th>
-                    <th></th>
-                    <th></th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -73,17 +67,15 @@
 
 <div>
     <fieldset title="Report Totals">
-        <table id="report totals" class="display text-nowrap" style="width:25%">
+        <table id="report totals" class="display text-nowrap" style="width:20%">
             <thead>
                 <tr>
-                    <th class="text-center" >Total Weight</th>
-                    <th class="text-center" >Total Sales</th>
-                    <th class="text-center" >Total Units</th>
+                    <th class="text-center" >Total Discounts</th>
+                    <th class="text-center" >Total Redeemed</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td align="center" >@String.Format("{0}", ViewBag.TotalWeight)</td>
                     <td align="center" >@String.Format("{0:C}", ViewBag.TotalSales)</td>
                     <td align="center" >@String.Format("{0}", ViewBag.TotalUnits)</td>
                 </tr>
@@ -114,6 +106,14 @@
                 select: true,
                 // Default table lengths
                 lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                columns: [
+                    { data: "ItemCode", width: '10%' },
+                    { data: "Subdept", width: '15%' },
+                    { data: "ItemBrand", width: '12%' },
+                    { data: "ItemDescription", width: '40%' },
+                    { data: "SalesQuantity", width: '10%' },
+                    { data: "SalesAmount", width: '10%' }
+                ],
                 dom: '<"floatRight"B><"clear">lfrtip',
                 buttons: [{
                     extend: 'collection',
@@ -149,8 +149,19 @@
                                 i : 0;
                     };
 
-                    // Sum weight column
-                    pageTotalWeight = api
+                    // Sum sales column
+                    pageTotalSales = api
+                        .column(4, { page: 'current' })
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    // Update footer
+                    $(api.column(4).footer()).html('$' + pageTotalSales.toFixed(2));
+
+                    // Sum quantity column
+                    pageTotalUnits = api
                         .column(5, { page: 'current' })
                         .data()
                         .reduce(function (a, b) {
@@ -158,29 +169,7 @@
                         }, 0);
 
                     // Update footer
-                    $(api.column(5).footer()).html(pageTotalWeight.toFixed(3));
-
-                    // Sum quantity column
-                    pageTotalUnits = api
-                        .column(7, { page: 'current' })
-                        .data()
-                        .reduce(function (a, b) {
-                            return intVal(a) + intVal(b);
-                        }, 0);
-
-                    // Update footer
-                    $(api.column(7).footer()).html(pageTotalUnits.toFixed(2));
-
-                    // Sum sales column
-                    pageTotalSales = api
-                        .column(6, { page: 'current' })
-                        .data()
-                        .reduce(function (a, b) {
-                            return intVal(a) + intVal(b);
-                        }, 0);
-
-                    // Update footer
-                    $(api.column(6).footer()).html('$' + pageTotalSales.toFixed(2));
+                    $(api.column(5).footer()).html(pageTotalUnits.toFixed(2));
                 }
             });
         });

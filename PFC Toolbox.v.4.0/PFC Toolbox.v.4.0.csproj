@@ -251,6 +251,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Extensions.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Reports\ItemSingleTotalbyCoupon.cs" />
     <Compile Include="Models\Reports\ItemSingleTotalbyCategoryModel.cs" />
     <Compile Include="Models\Reports\ItemSingleTotalbyBrandModel.cs" />
     <Compile Include="Models\StoreMultiTotalsModel.cs" />
@@ -400,6 +401,8 @@
     <Content Include="Views\Reports\ItemSingleTotalbyBrand.cshtml" />
     <Content Include="Views\Reports\ItemSingleTotalbyCategory.cshtml" />
     <Content Include="Views\Reports\_ItemSingleTotalbyCategory.cshtml" />
+    <Content Include="Views\Reports\_ItemSingleTotalbyCoupon.cshtml" />
+    <Content Include="Views\Reports\ItemSingleTotalbyCoupon.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
