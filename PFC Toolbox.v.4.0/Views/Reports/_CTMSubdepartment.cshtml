@@ -289,17 +289,6 @@
 
                     // Sum CTM column
                     pageTotalSales = api
-                        .column(11, { page: 'current' })
-                        .data()
-                        .reduce(function (a, b) {
-                            return parseFloat(decVal(a)) + parseFloat(decVal(b));
-                        }, 0);
-
-                    // Update footer
-                    $(api.column(11).footer()).html(pageTotalSales.toFixed(2) + '%');
-
-                    // Sum CTM column
-                    pageTotalSales = api
                         .column(12, { page: 'current' })
                         .data()
                         .reduce(function (a, b) {
