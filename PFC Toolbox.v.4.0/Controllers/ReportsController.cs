@@ -37,7 +37,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
             decimal totalSales = 0;
             double totalWeight = 0, totalUnits = 0;
 
-            // Connect to Host SMS and run Toolbox-ISTBySubdepartmentReport stored procedure
+            // Connect to Host SMS and run Toolbox-ISTByUPCReport stored procedure
             using (SqlConnection con = new SqlConnection { ConnectionString = ConfigurationManager.ConnectionStrings["SMSHostConnection"].ConnectionString })
             {
                 using (SqlCommand cmd = new SqlCommand("[Toolbox-ISTByUPCReport]", con))
@@ -427,7 +427,14 @@ namespace PFC_Toolbox.v._4._0.Controllers
         public ActionResult GetItemSingleTotalbySubdepartment(string location, string subdepartment, string startDate, string endDate)
         {
             // Create variables for use within stored procedure and report display
-            string subdepartmentCode = subdepartment.Split(',')[0];
+            string subdepartmentStart = subdepartment.Split(',')[0];
+            string subdepartmentEnd = subdepartment.Split(',')[0];
+            if (subdepartment.Split(',')[0].Equals("0"))
+            {
+                subdepartmentStart = "0";
+                subdepartmentEnd = "999";
+            }
+
             string subdepartmentDescription = subdepartment.Split(',')[1];
             string storeCode = location.Split(',')[0];
             string storeDescription = location.Split(',')[1];
@@ -438,7 +445,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
             ItemSingleTotalbySubdepartmentModel item = null;
             decimal totalSales = 0;
             double totalWeight = 0, totalUnits = 0;
-            
+
             // Connect to Host SMS and run Toolbox-ISTBySubdepartmentReport stored procedure
             using (SqlConnection con = new SqlConnection { ConnectionString = ConfigurationManager.ConnectionStrings["SMSHostConnection"].ConnectionString })
             {
@@ -451,7 +458,8 @@ namespace PFC_Toolbox.v._4._0.Controllers
                     cmd.Parameters.Add("@startDate", SqlDbType.DateTime).Value = startDate;
                     cmd.Parameters.Add("@endDate", SqlDbType.DateTime).Value = endDate;
                     cmd.Parameters.Add("@storeTarget", SqlDbType.VarChar).Value = storeCode;
-                    cmd.Parameters.Add("@subdepartment", SqlDbType.Int).Value = subdepartmentCode;
+                    cmd.Parameters.Add("@subdepartmentStart", SqlDbType.Int).Value = subdepartmentStart;
+                    cmd.Parameters.Add("@subdepartmentEnd", SqlDbType.Int).Value = subdepartmentEnd;
 
                     // Open connection to SQL server and set a timeout of 1000 incase report takes a while
                     con.Open();

@@ -85,6 +85,8 @@
                     s += '<option value="' + data.data[$i].SMSSubdepartments.F04 + ', ' + data.data[$i].SMSSubdepartments.F1022 + '">' + data.data[$i].SMSSubdepartments.F1022 + '</option>';
                 }
 
+                s += '<option value="0, ALL SUBDEPARTMENTS">ALL SUBDEPARTMENTS</option>';
+
                 $("#subdepartment").html(s);
             });
         });
