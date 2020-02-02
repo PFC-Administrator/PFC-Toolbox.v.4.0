@@ -519,7 +519,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
             ViewBag.totalWeight = totalWeight;
             ViewBag.totalSales = totalSales;
             ViewBag.totalUnits = totalUnits;
-            ViewBag.sdpCode = subdepartmentCode;
+            ViewBag.sdpCode = subdepartmentStart;
             ViewBag.sdpDesc = subdepartmentDescription;
             ViewBag.store = storeDescription;
 
