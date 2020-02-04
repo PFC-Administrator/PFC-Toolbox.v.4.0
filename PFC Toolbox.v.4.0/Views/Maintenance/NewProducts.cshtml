@@ -219,9 +219,6 @@
                         separator: "|",
                         unselectedValue: 0
                     }, {
-                        label: "Retail Price",
-                        name: "ProductUpdates.price_tab_f30"
-                    }, {
                         label: "Vendor:",
                         name: "ProductUpdates.COST_TAB_F27",
                         type: "select",
@@ -238,6 +235,9 @@
                     }, {
                         label: "Case cost:",
                         name: "ProductUpdates.COST_TAB_F38"
+                    }, {
+                        label: "Retail Price",
+                        name: "ProductUpdates.price_tab_f30"
                     }, {
                         label: "Client age:",
                         name: "ProductUpdates.POS_TAB_F171",
@@ -295,7 +295,7 @@
             });
 
             // New Product Form: converts receipt description to title case
-            editorNP.field('ProductUpdates.OBJ_TAB_F29').input().on('change', function () {
+            editorNP.field('ProductUpdates.OBJ_TAB_F29').input().on('blur', function () {
                 var productName = editorNP.field('ProductUpdates.OBJ_TAB_F29').val();
                     productName = titleCase(productName);
                     productName = limitLength(productName, 32)
@@ -311,7 +311,7 @@
             });
 
             // New Product Form: converts signage descriptions to title case
-            editorNP.field('ProductUpdates.OBJ_TAB_F255').input().on('change', function () {
+            editorNP.field('ProductUpdates.OBJ_TAB_F255').input().on('blur', function () {
                 var productName = editorNP.field('ProductUpdates.OBJ_TAB_F255').val();
                     productName = titleCase(productName);
                     productName = limitLength(productName, 64)

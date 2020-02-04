@@ -146,9 +146,6 @@
                         label: "Mettler PLU:",
                         name: "ProductUpdates.ScalePLU"
                     }, {
-                        label: "Retail Price",
-                        name: "ProductUpdates.price_tab_f30"
-                    }, {
                         label: "Vendor:",
                         name: "ProductUpdates.COST_TAB_F27",
                         type: "select",
@@ -165,6 +162,9 @@
                     }, {
                         label: "Case cost:",
                         name: "ProductUpdates.COST_TAB_F38"
+                    }, {
+                        label: "Retail Price",
+                        name: "ProductUpdates.price_tab_f30"
                     }, {
                         label: "TPR Start",
                         name: "ProductUpdates.promotprstartdate",
@@ -349,7 +349,7 @@
             });
 
             // Update An Existing Product Form: converts receipt description to title case
-            editor.field('ProductUpdates.OBJ_TAB_F29').input().on('change', function () {
+            editor.field('ProductUpdates.OBJ_TAB_F29').input().on('blur', function () {
                 var productName = editor.field('ProductUpdates.OBJ_TAB_F29').val();
                     productName = titleCase(productName);
                     productName = limitLength(productName, 32)
@@ -365,7 +365,7 @@
             });
 
             // Update An Existing Product Form: converts signage descriptions to title case
-            editor.field('ProductUpdates.OBJ_TAB_F255').input().on('change', function () {
+            editor.field('ProductUpdates.OBJ_TAB_F255').input().on('blur', function () {
                 var productName = editor.field('ProductUpdates.OBJ_TAB_F255').val();
                     productName = titleCase(productName);
                     productName = limitLength(productName, 64)
@@ -754,7 +754,8 @@
                                         .column(14).search('^' + locale + '$', true, false).draw()
                                     this.close();
                                 }
-                            }]
+                            }],
+                        onReturn: false
                     },
                     {
                         // Show completed today filter button
