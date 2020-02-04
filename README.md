@@ -15,6 +15,7 @@
   <li>Allow accounting to add new vendors themselves</li>
   <li>Sales by description</li>
   <li>Multi subdepartment sales reports.</li>
+  <li>Allow people to request or create new Operator codes.</li>
   <li>Implementation of Co-op Deals or Bidfile?</li>
 </ol>
 
