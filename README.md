@@ -15,7 +15,9 @@
   <li>Allow accounting to add new vendors themselves</li>
   <li>Sales by description</li>
   <li>Multi subdepartment sales reports.</li>
+  <li>Allow people to request or create new Operator codes.</li>
   <li>Implementation of Co-op Deals or Bidfile?</li>
+  <li>When copying from previous entry, "Category" didn't copy over and I have to re-enter it. On the same line, the Price, Cost, and re-order code should disappear for the copied entry.</li>
 </ol>
 
 ## Notes:
