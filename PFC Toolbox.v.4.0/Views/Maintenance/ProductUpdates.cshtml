@@ -623,6 +623,14 @@
                 };
             });
 
+            // Product Maintenance: adds a drop down arrow next to the product status select list
+            var dropDownArrow = function (data, type, row) {
+                if (type === 'display') {
+                    return data + ' <i class="fa fa-toggle-down style="font-size:18px;color:black""/>';
+                }
+                return data;
+            };
+
             // Create the DataTables table
             var table = $('#ProductUpdates').DataTable({
                 //serverSide: true,
@@ -670,7 +678,7 @@
                         defaultContent: '<a href="" class="editor_edit"><i class="fa fa-pencil" style="font-size:18px;color:black"></i></a>',
                         width: "2%"
                     },
-                    { "data": "Status.productupdatestatus", className: "editable", editField: "ProductUpdates.productstatusID"},
+                    { "data": "Status.productupdatestatus", className: "editable", editField: "ProductUpdates.productstatusID", render: dropDownArrow},
                     { "data": "ProductUpdates.F01", width: "5%" },
                     { "data": "ProductUpdates.OBJ_TAB_F155", width: "10%" },
                     { "data": "ProductUpdates.OBJ_TAB_F29" },
