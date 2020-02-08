@@ -151,7 +151,8 @@
                         label: "Like:",
                         name: "ProductUpdates.LIKE_TAB_F122",
                         type: "select",
-                        placeholder: "Select a like code"
+                        placeholder: "Select a like code",
+                        id: "likecodeNP"
                     }, {
                         label: "SNAP:",
                         name: "ProductUpdates.POS_TAB_F79",
@@ -406,6 +407,13 @@
             editorNP.field('ProductUpdates.productstatusID').input().on('edit', function () {
                 editorNP.field('ProductUpdates.lastupdatedon').val(getDate());
                 editorNP.field('ProductUpdates.lastupdatedby').val(currentUser);
+            });
+
+            // New Product Form: clear like code select field
+            $(document).on('keydown', '#likecodeNP', function (event) {
+                if (event.keyCode == 8 || event.keyCode == 46) {
+                    editorNP.field('ProductUpdates.LIKE_TAB_F122').val(null);
+                }
             });
 
             // Create the DataTables table

@@ -154,7 +154,8 @@
                         label: "Like:",
                         name: "ProductUpdates.LIKE_TAB_F122",
                         type: "select",
-                        placeholder: "Select a like code"
+                        placeholder: "Select a like code",
+                        id: "likecodeNP"
                     }, {
                         label: "SNAP:",
                         name: "ProductUpdates.POS_TAB_F79",
@@ -717,6 +718,13 @@
                 }
             });
 
+            // New Product Form: clear like code select field
+            $(document).on('keydown', '#likecodeNP', function (event) {
+                if (event.keyCode == 8 || event.keyCode == 46) {
+                    editorNP.field('ProductUpdates.LIKE_TAB_F122').val(null);
+                }
+            });
+
 
             /***********************************************************************************************************************/
 
@@ -802,7 +810,8 @@
                         label: "Brand:",
                         name: "ProductUpdates.OBJ_TAB_F155",
                         type: "select",
-                        placeholder: "Select a brand"
+                        placeholder: "Select a brand",
+                        id: "brandPU"
                     }, {
                         label: "Receipt Description:",
                         name: "ProductUpdates.OBJ_TAB_F29"
@@ -816,7 +825,8 @@
                         label: "Subdepartment:",
                         name: "ProductUpdates.POS_TAB_F04",
                         type: "select",
-                        placeholder: "Select a subdepartment"
+                        placeholder: "Select a subdepartment",
+                        id: "subdepartmentPU"
                     }, {
                         label: "Category:",
                         name: "ProductUpdates.OBJ_TAB_F17",
@@ -825,22 +835,26 @@
                             value: 'F17'
                         },
                         type: "select",
-                        placeholder: "Select a category"
+                        placeholder: "Select a category",
+                        id: "categoryPU"
                     }, {
                         label: "Report:",
                         name: "ProductUpdates.OBJ_TAB_F18",
                         type: "select",
-                        placeholder: "Select a report"
+                        placeholder: "Select a report",
+                        id: "reportPU"
                     }, {
                         label: "Family button:",
                         name: "ProductUpdates.OBJ_TAB_F16",
                         type: "select",
-                        placeholder: "Select a family button"
+                        placeholder: "Select a family button",
+                        id: "familyPU"
                     }, {
                         label: "Like:",
                         name: "ProductUpdates.LIKE_TAB_F122",
                         type: "select",
-                        placeholder: "Select a like code"
+                        placeholder: "Select a like code",
+                        id: "likecodePU"
                     }, {
                         label: "SNAP:",
                         name: "ProductUpdates.POS_TAB_F79",
@@ -1259,6 +1273,48 @@
                     if (this.inError()) {
                         return false;
                     }
+                }
+            });
+
+            // Update An Existing Product Form: clear brand select field
+            $(document).on('keydown', '#brandPU', function (event) {
+                if (event.keyCode == 8 || event.keyCode == 46) {
+                    editor.field('ProductUpdates.OBJ_TAB_F155').val(null);
+                }
+            });
+
+            // Update An Existing Product Form: clear subdepartment select field
+            $(document).on('keydown', '#subdepartmentPU', function (event) {
+                if (event.keyCode == 8 || event.keyCode == 46) {
+                    editor.field('ProductUpdates.POS_TAB_F04').val(null);
+                }
+            });
+
+            // Update An Existing Product Form: clear category select field
+            $(document).on('keydown', '#categoryPU', function (event) {
+                if (event.keyCode == 8 || event.keyCode == 46) {
+                    editor.field('ProductUpdates.OBJ_TAB_F17').val(null);
+                }
+            });
+
+            // Update An Existing Product Form: clear report select field
+            $(document).on('keydown', '#reportPU', function (event) {
+                if (event.keyCode == 8 || event.keyCode == 46) {
+                    editor.field('ProductUpdates.OBJ_TAB_F18').val(null);
+                }
+            });
+
+            // Update An Existing Product Form: clear family select field
+            $(document).on('keydown', '#familyPU', function (event) {
+                if (event.keyCode == 8 || event.keyCode == 46) {
+                    editor.field('ProductUpdates.OBJ_TAB_F16').val(null);
+                }
+            });
+
+            // Update An Existing Product Form: clear like code select field
+            $(document).on('keydown', '#likecodePU', function (event) {
+                if (event.keyCode == 8 || event.keyCode == 46) {
+                    editor.field('ProductUpdates.LIKE_TAB_F122').val(null);
                 }
             });
 
