@@ -35,6 +35,11 @@
                     <th>Retail Price</th>
                     <th>Created By</th>
                     <th>Date Created</th>
+                    <th style="display:none;"></th>
+                    <th style="display:none;">Location</th>
+                    <th style="display:none;">Notes</th>
+                    <th style="display:none;">Ingredients</th>
+                    <th style="display:none;">Margin</th>
                 </tr>
             </thead>
         </table>
@@ -79,6 +84,11 @@
             var editorPR = new $.fn.dataTable.Editor({
                 ajax: '/api/ProductUpdates',
                 table: '#ProductUpdates',
+                formOptions: {
+                    main: {
+                        onReturn: false
+                    }
+                },
                 fields: [
                     {
                         label: "Product Update Type",
@@ -166,6 +176,9 @@
                         label: "Retail Price",
                         name: "ProductUpdates.price_tab_f30"
                     }, {
+                        label: "TPR Price",
+                        name: "ProductUpdates.promotprprice"
+                    }, {
                         label: "TPR Start",
                         name: "ProductUpdates.promotprstartdate",
                         type: "datetime",
@@ -175,9 +188,6 @@
                         name: "ProductUpdates.promotprenddate",
                         type: "datetime",
                         format: "M/DD/YYYY"
-                    }, {
-                        label: "TPR Price",
-                        name: "ProductUpdates.promotprprice"
                     }, {
                         label: "Sign:",
                         name: "ProductUpdates.signID",
@@ -391,15 +401,15 @@
             });
 
             // Update An Existing Product Form: hides cost info on load
-            editor.field('ProductUpdates.POS_TAB_F04').input().on('change', function () {
-                editor.field('ProductUpdates.COST_TAB_F27').hide();
-                editor.field('ProductUpdates.COST_TAB_F26').hide();
-                editor.field('ProductUpdates.PRICE_TAB_F49').hide();
-                editor.field('ProductUpdates.COST_TAB_F19').hide();
+            //editor.field('ProductUpdates.POS_TAB_F04').input().on('change', function () {
+            //    editor.field('ProductUpdates.COST_TAB_F27').hide();
+            //    editor.field('ProductUpdates.COST_TAB_F26').hide();
+            //    editor.field('ProductUpdates.PRICE_TAB_F49').hide();
+            //    editor.field('ProductUpdates.COST_TAB_F19').hide();
 
-                // Hide calculate button
-                document.getElementById('calculate').style.visibility = 'hidden';
-            });
+            //    // Hide calculate button
+            //    document.getElementById('calculate').style.visibility = 'hidden';
+            //});
 
             // Update An Existing Product Form: hides TPR related fields unless a promotional request type is selected
             editor.field('ProductUpdates.requesttypeID').input().on('change', function () {
@@ -577,12 +587,17 @@
             });
 
             // Update An Existing Product Form: Cost button
-            $('<button id="cost" style="position:absolute;top:20%;right:12.5%">Cost</button>').insertAfter(
-                editor.field('ProductUpdates.price_tab_f30').input()
-            );
+            //$('<button id="cost" style="position:absolute;top:20%;right:12.5%">Cost</button>').insertAfter(
+            //    editor.field('ProductUpdates.price_tab_f30').input()
+            //);
 
             // Update An Existing Product Form: SRP button
-            $('<button id="srpcalculator" style="position:absolute;top:20%;right:5%">SRP</button>').insertAfter(
+            //$('<button id="srpcalculator" style="position:absolute;top:20%;right:5%">SRP</button>').insertAfter(
+            //    editor.field('ProductUpdates.price_tab_f30').input()
+            //);
+
+                        // Update An Existing Product Form: SRP button
+            $('<button id="srpcalculator" style="position:absolute;top:20%;right:12%">SRP</button>').insertAfter(
                 editor.field('ProductUpdates.price_tab_f30').input()
             );
 
@@ -745,7 +760,10 @@
                         }
                     },
                     { "data": "ProductUpdates.completeddate", visible: false },
-                    { "data": "ProductUpdates.locationID", visible: false }
+                    { "data": "Locations.locationname", editField: "ProductUpdates.locationID", visible: false },
+                    { "data": "ProductUpdates.AdditionalRequestNotes", visible: false },
+                    { "data": "ProductUpdates.IngredientList", visible: false },
+                    { "data": "ProductUpdates.PRICE_TAB_F49", visible: false }
                 ],
                 // Change New Products request type background green
                 rowCallback: function (row, data, index) {
@@ -761,57 +779,72 @@
                         // Custom Promotion Report button
                         text: 'Promotion Report', formTitle: 'Run Promotion Report', extend: 'create', editor: editorPR,
                         formButtons:
-                            [{
-                                text: 'Run Report',
-                                action: function (e, dt, node, config) {
-                                    switch ( editorPR.field('ProductUpdates.requesttypeID').val() )
-                                    {
-                                        case 1:
-                                            var promo = "Product Info Update";
-                                            break;
-                                        case 2:
-                                            var promo = "Happy Hour";
-                                            break;
-                                        case 3:
-                                            var promo = "Member Specials";
-                                            break;
-                                        case 4:
-                                            var promo = "PFC Fresh Deals";
-                                            break;
-                                        case 5:
-                                            var promo = "Ad Hoc Promo";
-                                            break;
-                                        case 6:
-                                            var promo = "New Product";
-                                            break;
-                                        case 7:
-                                            var promo = "Co-op Deals Correction";
-                                            break;
-                                        case 8:
-                                            var promo = "Flash Sale";
-                                            break;
-                                        case 9:
-                                            var promo = "NCG Fresh Deals";
-                                            break;
-                                        case 10:
-                                            var promo = "Hackberry's Menu Item";
-                                            break;
-                                    };
+                            [{ text: 'Cancel', action: function () { this.close(); } },
+                                {
+                                    text: 'Run Report',
+                                    action: function (e, dt, node, config) {
+                                        switch (editorPR.field('ProductUpdates.requesttypeID').val())
+                                        {
+                                            case 1:
+                                                promo = "Product Info Update";
+                                                break;
+                                            case 2:
+                                                promo = "Happy Hour";
+                                                break;
+                                            case 3:
+                                                promo = "Member Specials";
+                                                break;
+                                            case 4:
+                                                promo = "PFC Fresh Deals";
+                                                break;
+                                            case 5:
+                                                promo = "Ad Hoc Promo";
+                                                break;
+                                            case 6:
+                                                promo = "New Product";
+                                                break;
+                                            case 7:
+                                                promo = "Co-op Deals Correction";
+                                                break;
+                                            case 8:
+                                                promo = "Flash Sale";
+                                                break;
+                                            case 9:
+                                                promo = "NCG Fresh Deals";
+                                                break;
+                                            case 10:
+                                                promo = "Hackberry's Menu Item";
+                                                break;
+                                        };
 
-                                    var locale = editorPR.field('ProductUpdates.locationID').val()
-                                    var startDate = editorPR.field('ProductUpdates.promotprstartdate').val();
-                                    var endDate = editorPR.field('ProductUpdates.promotprenddate').val();
+                                        switch (editorPR.field('ProductUpdates.locationID').val())
+                                        {
+                                            case 1:
+                                                var locale = "La Crosse";
+                                                break;
+                                            case 2:
+                                                var locale = "Rochester";
+                                                break;
+                                            case 3:
+                                                var locale = "Both stores";
+                                                break;
+                                        };
 
-                                    table.search('')
-                                        .columns().search('')
-                                        .column(0).search('^' + promo + '$', true, false)
-                                        .column(7).search('^' + startDate + '$', true, false)
-                                        .column(8).search('^' + endDate + '$', true, false)
-                                        .column(14).search('^' + locale + '$', true, false).draw()
-                                    this.close();
-                                }
-                            }],
-                        onReturn: false
+                                        var startDate = editorPR.field('ProductUpdates.promotprstartdate').val();
+                                        var endDate = editorPR.field('ProductUpdates.promotprenddate').val();
+
+                                        table.search('')
+                                            .columns().search('')
+                                            .column(0).search('^' + promo + '$', true, false)
+                                            .column(7).search('^' + startDate + '$', true, false)
+                                            .column(8).search('^' + endDate + '$', true, false)
+                                            .column(14).search('^' + locale + '$', true, false).draw()
+                                        this.close();
+
+                                        // Trigger export excel button on hidden export button
+                                        table.button('4-0').trigger();
+                                    }
+                                }]
                     },
                     {
                         // Show completed today filter button
@@ -847,13 +880,16 @@
                     },
                     {
                         // Export table button
-                        extend: 'collection', text: 'Export', autoClose: true,
+                        extend: 'collection', attr: { id: 'exportButton' },
                         buttons: [
-                            'copy',
-                            'excel',
-                            'csv',
-                            'pdf',
-                            'print'
+                            {
+                                extend: 'excel',
+                                filename: 'FDPR-' + getDate().split(" ")[0],
+                                title: 'Fresh Deals Promotion Report',
+                                exportOptions: {
+                                    columns: [0, 3, 4, 5, 6, 10, 9, 17, 7, 8, 11, 15, 16, 12, 14]
+                                }
+                            }
                         ]
                     },
 
@@ -861,6 +897,9 @@
                     { text: 'Back', action: function () { window.location = 'ProductMaintenance' } }
                 ]
             });
+
+            // Product Maintenance: hide the export button
+            $('#exportButton').css('display', 'none');
 
             // Product Maintenance: adds edit pencil in each cell
             $('#ProductUpdates').on('click', 'a.editor_edit', function (e) {
