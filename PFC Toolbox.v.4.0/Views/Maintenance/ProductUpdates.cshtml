@@ -97,9 +97,15 @@
                         placeholder: "Select a request type"
                     }, {
                         label: "Location:",
-                        name: "ProductUpdates.locationID",
+                        name: "promolocations",
                         type: "select",
-                        placeholder: "Select a location"
+                        placeholder: "Select a location",
+                        options: [
+                            { label: "La Crosse store", value: 1 },
+                            { label: "Rochester store", value: 2 },
+                            { label: "Both stores", value: 3 },
+                            { label: "All", value: 4}
+                        ]
                     }, {
                         label: "TPR Start",
                         name: "ProductUpdates.promotprstartdate",
@@ -783,6 +789,9 @@
                                 {
                                     text: 'Run Report',
                                     action: function (e, dt, node, config) {
+
+                                        var promo;
+                                        var locale;
                                         switch (editorPR.field('ProductUpdates.requesttypeID').val())
                                         {
                                             case 1:
@@ -817,18 +826,21 @@
                                                 break;
                                         };
 
-                                        switch (editorPR.field('ProductUpdates.locationID').val())
+                                        switch (editorPR.field('promolocations').val())
                                         {
                                             case 1:
-                                                var locale = "La Crosse";
+                                                locale = "La Crosse";
                                                 break;
                                             case 2:
-                                                var locale = "Rochester";
+                                                locale = "Rochester";
                                                 break;
                                             case 3:
-                                                var locale = "Both stores";
+                                                locale = "Both stores";
                                                 break;
-                                        };
+                                            case 4:
+                                                locale = "La Crosse$|^Rochester$|^Both stores";
+                                                break;
+                                        }
 
                                         var startDate = editorPR.field('ProductUpdates.promotprstartdate').val();
                                         var endDate = editorPR.field('ProductUpdates.promotprenddate').val();
@@ -841,8 +853,8 @@
                                             .column(14).search('^' + locale + '$', true, false).draw()
                                         this.close();
 
-                                        // Trigger export excel button on hidden export button
-                                        table.button('4-0').trigger();
+                                        // Product Maintenance: display the export button
+                                        document.getElementById("exportButton").style.display = "unset";
                                     }
                                 }]
                     },
@@ -879,18 +891,25 @@
                         }
                     },
                     {
-                        // Export table button
-                        extend: 'collection', attr: { id: 'exportButton' },
-                        buttons: [
-                            {
-                                extend: 'excel',
-                                filename: 'FDPR-' + getDate().split(" ")[0],
-                                title: 'Fresh Deals Promotion Report',
-                                exportOptions: {
-                                    columns: [0, 3, 4, 5, 6, 10, 9, 17, 7, 8, 11, 15, 16, 12, 14]
-                                }
-                            }
-                        ]
+                        text: 'Export',
+                        attr: { id: 'exportButton' },
+                        extend: 'excel',
+                        filename: 'FDPR-' + getDate().split(" ")[0],
+                        title: 'Fresh Deals Promotion Report',
+                        exportOptions: {
+                            columns: [0, 3, 4, 5, 6, 10, 9, 17, 7, 8, 11, 15, 16, 12, 14]
+                        },
+                        action: function (e, dt, node, config) {
+
+                            // Order columns by location and deselect any selected row, so all data is exported.
+                            table.column(14).order('asc').draw().rows().deselect();
+
+                            // Call the default csvHtml5 action method to create the CSV file
+                            $.fn.dataTable.ext.buttons.excelHtml5.action.call(this, e, dt, node, config);
+
+                            // Product Maintenance: hide the export button
+                            document.getElementById("exportButton").style.display = "none";
+                        }
                     },
 
                     // Redirects user back to main Product Maintenance page
@@ -899,7 +918,7 @@
             });
 
             // Product Maintenance: hide the export button
-            $('#exportButton').css('display', 'none');
+            document.getElementById("exportButton").style.display = "none";
 
             // Product Maintenance: adds edit pencil in each cell
             $('#ProductUpdates').on('click', 'a.editor_edit', function (e) {
