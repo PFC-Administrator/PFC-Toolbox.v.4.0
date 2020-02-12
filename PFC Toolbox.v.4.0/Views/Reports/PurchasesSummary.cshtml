@@ -1,0 +1,104 @@
+﻿@{
+    ViewBag.Title = "Purchases Summary";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    @model List<PFC_Toolbox.v._4._0.Models.PurchasesSummaryModel>
+}
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+    <title>Purchase Log Summary</title>
+
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://editor.datatables.net/extensions/Editor/css/editor.dataTables.min.css" />
+</head>
+
+<div id="ItemResults">
+    <h1><img src="~/Content/PFC_Logo_128px.png" width="100" height="100">        Purchase Log Summary</h1>
+    <br />
+    <table id="results" class="display text-nowrap compact" style="width:100%">
+        <thead>
+            <tr>
+                <th>Subdepartment</th>
+                <th>Location</th>
+                <th>Week Start</th>
+                <th>Total Amount</th>
+                <th>Reconciled Amount</th>
+                <th>Difference</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.Subdept)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Location)</td>
+                            <td>@Html.DisplayFor(modelItem => item.WeekStart)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SalesTotal)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SalesReconciled)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SalesDifferent)</td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+@section scripts{
+    <script type="text/javascript" charset="utf-8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+
+            $.ajax({
+                type: 'GET',
+                dataType: 'html',
+                url: '@Html.Raw(Url.Action("GetPurchasesSummary","Reports"))',
+                success: function (data) {
+                    $('#ItemResults').replaceWith($('#ItemResults', data));
+
+                    $.fn.dataTable.moment('M/D/YYYY h:mm:ss A');
+
+                    $('#results').DataTable({
+                        // Default table lengths
+                        lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                        dom: '<"floatRight"B><"clear">lfrtip',
+                        order: [[2, "desc"]],
+                        buttons: [{
+                            extend: 'collection',
+                            text: 'Export',
+                            autoClose: true,
+                            buttons: [
+                                'copy',
+                                'excel',
+                                'csv',
+                                'pdf',
+                                'print'
+                            ]
+                        }]
+                    });
+                }
+            });
+        });
+    </script>
+}

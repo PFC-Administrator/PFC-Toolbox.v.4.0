@@ -786,5 +786,81 @@ namespace PFC_Toolbox.v._4._0.Controllers
                 return null;
             }
         }
+
+
+        /*******************************************************************************************************************************************************************************************************************/
+
+
+        // GET: /Reports/PurchasesSummary
+        public ActionResult PurchasesSummary()
+        {
+            return View();
+        }
+
+        public ActionResult GetPUrchasesSummary()
+        {
+            // Create local objects
+            SqlDataReader reader = null;
+            List<PurchasesSummaryModel> report = new List<PurchasesSummaryModel>();
+            PurchasesSummaryModel item = null;
+
+            // Connect to Host SMS and run Toolbox-ISTBySubdepartmentReport stored procedure
+            using (SqlConnection con = new SqlConnection { ConnectionString = ConfigurationManager.ConnectionStrings["ToolboxConnection"].ConnectionString })
+            {
+                using (SqlCommand cmd = new SqlCommand("[Toolbox-PurchasesSummary]", con))
+                {
+                    // Set the command type as a stored procedure
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    // Open connection to SQL server and set a timeout of 1000 incase report takes a while
+                    con.Open();
+                    cmd.CommandTimeout = 1000;
+
+                    // Execute cmd against server and store in reader object
+                    reader = cmd.ExecuteReader();
+
+                    // Save query results to list
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            // Temp variables for TryParse
+                            decimal tempDecimal;
+
+                            // Store results in PurchasesSummaryModel model
+                            item = new PurchasesSummaryModel();
+                            item.Subdept = reader["Subdepartment"].ToString();
+                            item.Location = reader["Location"].ToString();
+                            item.WeekStart = reader["WeekStart"].ToString();
+
+                            if (Decimal.TryParse(reader["TotalAmount"].ToString(), out tempDecimal))
+                            {
+                                item.SalesTotal = tempDecimal;
+                            }
+                            else item.SalesTotal = 0;
+                            if (Decimal.TryParse(reader["ReconciledAmount"].ToString(), out tempDecimal))
+                            {
+                                item.SalesReconciled = tempDecimal;
+                            }
+                            else item.SalesReconciled = 0;
+                            if (Decimal.TryParse(reader["AmountDifferent"].ToString(), out tempDecimal))
+                            {
+                                item.SalesDifferent = tempDecimal;
+                            }
+                            else item.SalesDifferent = 0;
+
+                            // Add results to list
+                            report.Add(item);
+                        }
+                    }
+
+                    // Close connection to SQL server
+                    con.Close();
+                }
+            }
+
+            // Return results to report display
+            return PartialView("PurchasesSummary", report);
+        }
     }
 }
