@@ -8,6 +8,7 @@
 ## Requests / Ideas:
 <ol>
   <li>Include report totals in exports.</li>
+  <li>Use cookies to copy last product request entered into new product request.</li>
   <li>New Vendor request forms.</li>
   <li>Add multiple UPC's in Product Update forms.</li>
   <li>Add multiple amounts and subdepartments in Purchases.</li>
