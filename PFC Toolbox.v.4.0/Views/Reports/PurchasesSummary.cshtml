@@ -70,33 +70,36 @@
 
         $(document).ready(function () {
 
-            $.ajax({
-                type: 'GET',
-                dataType: 'html',
-                url: '@Html.Raw(Url.Action("GetPurchasesSummary","Reports"))',
-                success: function (data) {
-                    $('#ItemResults').replaceWith($('#ItemResults', data));
+            $.fn.dataTable.moment('M/D/YYYY h:mm:ss A');
 
-                    $.fn.dataTable.moment('M/D/YYYY h:mm:ss A');
-
-                    $('#results').DataTable({
-                        // Default table lengths
-                        lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-                        dom: '<"floatRight"B><"clear">lfrtip',
-                        order: [[2, "desc"]],
-                        buttons: [{
-                            extend: 'collection',
-                            text: 'Export',
-                            autoClose: true,
-                            buttons: [
-                                'copy',
-                                'excel',
-                                'csv',
-                                'pdf',
-                                'print'
-                            ]
-                        }]
-                    });
+            $('#results').DataTable({
+                ajax: {
+                    url: '@Html.Raw(Url.Action("GetPurchasesSummary","Reports"))',
+                    type: 'GET',
+                    dataType: 'html',
+                    success: function (data) {
+                        $('#ItemResults').replaceWith($('#ItemResults', data));
+                
+                        $.fn.dataTable.moment('M/D/YYYY h:mm:ss A');
+                        $('#results').DataTable({
+                            // Default table lengths
+                            lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                            dom: '<"floatRight"B><"clear">lfrtip',
+                            order: [[2, "desc"]],
+                            buttons: [{
+                                extend: 'collection',
+                                text: 'Export',
+                                autoClose: true,
+                                buttons: [
+                                    'copy',
+                                    'excel',
+                                    'csv',
+                                    'pdf',
+                                    'print'
+                                ]
+                            }]
+                        });
+                    }
                 }
             });
         });
