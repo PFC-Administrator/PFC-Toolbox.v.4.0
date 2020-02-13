@@ -70,8 +70,6 @@
 
         $(document).ready(function () {
 
-            $.fn.dataTable.moment('M/D/YYYY h:mm:ss A');
-
             $('#results').DataTable({
                 ajax: {
                     url: '@Html.Raw(Url.Action("GetPurchasesSummary","Reports"))',
