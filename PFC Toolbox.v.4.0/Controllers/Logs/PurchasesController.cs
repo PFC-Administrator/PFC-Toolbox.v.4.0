@@ -33,12 +33,12 @@ namespace PFC_Toolbox.v._4._0.Controllers
                     )
                     .Field(new Field("Purchases.vendorID")
                     .Options(new Options()
-                    .Table("Vendors")
-                    .Value("vendorID")
-                    .Label("vendorName"))
+                    .Table("SMSVendors")
+                    .Value("F27")
+                    .Label("F334"))
                     .Validator(Validation.NotEmpty())
                     )
-                    .Field(new Field("Vendors.vendorname")
+                    .Field(new Field("SMSVendors.F334")
                     .Validator(Validation.NotEmpty())
                     )
                     .Field(new Field("Purchases.purchaseamount")
@@ -82,12 +82,12 @@ namespace PFC_Toolbox.v._4._0.Controllers
                     )
                     .LeftJoin("Subdepartments", "Subdepartments.subdepartmentID", "=", "Purchases.subdepartmentID"
                     )
-                    .LeftJoin("Vendors", "Vendors.vendorID", "=", "Purchases.vendorID"
+                    .LeftJoin("SMSVendors", "SMSVendors.F27", "=", "Purchases.vendorID"
                     )
 
                     // Where statements
                     .Where(q => q.Where("PurchaseID", "(SELECT TOP 2000 PurchaseID FROM Purchases ORDER BY PurchaseID DESC)", "IN", false))
-                    //.Where( q => q.Where("Purchases.purchasedate", "DATEADD(year, -1, GETDATE())", ">=", false))
+                     //.Where( q => q.Where("Purchases.purchasedate", "DATEADD(year, -1, GETDATE())", ">=", false))
                      .Process(request)
                     .Data();
 
