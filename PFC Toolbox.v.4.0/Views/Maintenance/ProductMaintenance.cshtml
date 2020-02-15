@@ -60,8 +60,8 @@
 
         var currentUser = "@CreatedBy";
         var role = "@Role";
-        var editorNP;
-        var editor;
+        var lastNPRetrieved, lastPURetrieved;
+        var editorNP, editor;
         $(document).ready(function () {
 
             $.fn.dataTable.moment('M/D/YYYY h:mm:ss A');
@@ -287,10 +287,12 @@
                         def: getDate()
                     }, {
                         label: "Date completed:",
-                        name: "ProductUpdates.completeddate"
+                        name: "ProductUpdates.completeddate",
+                        type: "hidden"
                     }, {
                         label: "Completed by:",
-                        name: "ProductUpdates.completedby"
+                        name: "ProductUpdates.completedby",
+                        type: "hidden"
                     }, {
                         label: "Last updated on:",
                         name: "ProductUpdates.lastupdatedon",
@@ -1396,9 +1398,78 @@
                             [
                                 { text: 'Cancel', action: function () { this.close(); } },
                                 'Create',
-                                { text: 'Submit Another', action: function () { this.submit(); editorNP.create(); } },
+                                {
+                                    text: 'Submit Another', action: function () {
+                                    
+                                        // Creates lastNewProduct object to store current forms data to be called later
+                                        var lastNewProduct = {
+                                            'requesttypeID': editorNP.field('ProductUpdates.requesttypeID').val(),
+                                            'locationID': editorNP.field('ProductUpdates.locationID').val(),
+                                            'ismettlerrequired': editorNP.field('ProductUpdates.ismettlerrequired').val(),
+                                            'labelID': editorNP.field('ProductUpdates.labelID').val(),
+                                            'COST_TAB_F27': editorNP.field('ProductUpdates.COST_TAB_F27').val(),
+                                            'OBJ_TAB_F155': editorNP.field('ProductUpdates.OBJ_TAB_F155').val(),
+                                            'OBJ_TAB_F29': editorNP.field('ProductUpdates.OBJ_TAB_F29').val(),
+                                            'OBJ_TAB_F22': editorNP.field('ProductUpdates.OBJ_TAB_F22').val(),
+                                            'OBJ_TAB_F255': editorNP.field('ProductUpdates.OBJ_TAB_F255').val(),
+                                            'POS_TAB_F04': editorNP.field('ProductUpdates.POS_TAB_F04').val(),
+                                            'OBJ_TAB_F17': editorNP.field('ProductUpdates.OBJ_TAB_F17').val(),
+                                            'OBJ_TAB_F18': editorNP.field('ProductUpdates.OBJ_TAB_F18').val(),
+                                            'POS_TAB_F79': editorNP.field('ProductUpdates.POS_TAB_F79').val(),
+                                            'POS_TAB_F82': editorNP.field('ProductUpdates.POS_TAB_F82').val(),
+                                            'POS_TAB_F81': editorNP.field('ProductUpdates.POS_TAB_F81').val(),
+                                            'POS_TAB_F178': editorNP.field('ProductUpdates.POS_TAB_F178').val(),
+                                            'AdditionalRequestNotes': editorNP.field('ProductUpdates.AdditionalRequestNotes').val(),
+                                            'ScaleItemTypeID': editorNP.field('ProductUpdates.ScaleItemTypeID').val(),
+                                            'TareNetWeight': editorNP.field('ProductUpdates.TareNetWeight').val(),
+                                            'ShelfLife': editorNP.field('ProductUpdates.ShelfLife').val(),
+                                            'IngredientList': editorNP.field('ProductUpdates.IngredientList').val(),
+                                            'createdby': editorNP.field('ProductUpdates.createdby').val()
+                                        };
+
+                                        // Puts the object into local storage
+                                        localStorage.setItem('lastNewProduct', JSON.stringify(lastNewProduct));
+
+                                        // Retrieve the object from storage
+                                        lastNPRetrieved = localStorage.getItem('lastNewProduct');
+
+                                        this.submit();
+                                        editorNP.create();
+                                    }
+                                },
                                 { text: 'Clear', action: function () { fields = editorNP.displayed(); for (field in fields) { editorNP.field(fields[field]).val(''); }; } },
-                                { text: 'Copy', action: function () { var values = editorNP.edit(table.row(':last', { order: 'index' }), false).val(); editorNP.create({}).set(values); } }
+                                {
+                                    text: 'Copy', action: function () {
+
+                                        // Initialize lastProduct variable with object retrieved from storage
+                                        var lastNewProduct = JSON.parse(lastNPRetrieved)
+
+                                        // Assign lastProduct values to their respective fields
+                                        editorNP.field('ProductUpdates.requesttypeID').val(lastNewProduct.requesttypeID);
+                                        editorNP.field('ProductUpdates.locationID').val(lastNewProduct.locationID);
+                                        editorNP.field('ProductUpdates.ismettlerrequired').val(lastNewProduct.ismettlerrequired);
+                                        editorNP.field('ProductUpdates.labelID').val(lastNewProduct.labelID);
+                                        editorNP.field('ProductUpdates.COST_TAB_F27').val(lastNewProduct.COST_TAB_F27);
+                                        editorNP.field('ProductUpdates.OBJ_TAB_F155').val(lastNewProduct.OBJ_TAB_F155);
+                                        editorNP.field('ProductUpdates.OBJ_TAB_F29').val(lastNewProduct.OBJ_TAB_F29);
+                                        editorNP.field('ProductUpdates.OBJ_TAB_F22').val(lastNewProduct.OBJ_TAB_F22);
+                                        editorNP.field('ProductUpdates.OBJ_TAB_F255').val(lastNewProduct.OBJ_TAB_F255);
+                                        editorNP.field('ProductUpdates.POS_TAB_F04').val(lastNewProduct.POS_TAB_F04);
+                                        editorNP.field('ProductUpdates.OBJ_TAB_F17').val(lastNewProduct.OBJ_TAB_F17);
+                                        editorNP.field('ProductUpdates.OBJ_TAB_F18').val(lastNewProduct.OBJ_TAB_F18);
+                                        editorNP.field('ProductUpdates.POS_TAB_F79').val(lastNewProduct.POS_TAB_F79);
+                                        editorNP.field('ProductUpdates.POS_TAB_F82').val(lastNewProduct.POS_TAB_F82);
+                                        editorNP.field('ProductUpdates.POS_TAB_F81').val(lastNewProduct.POS_TAB_F81);
+                                        editorNP.field('ProductUpdates.POS_TAB_F178').val(lastNewProduct.POS_TAB_F178);
+                                        editorNP.field('ProductUpdates.AdditionalRequestNotes').val(lastNewProduct.AdditionalRequestNotes);
+                                        editorNP.field('ProductUpdates.ScaleItemTypeID').val(lastNewProduct.ScaleItemTypeID);
+                                        editorNP.field('ProductUpdates.TareNetWeight').val(lastNewProduct.TareNetWeight);
+                                        editorNP.field('ProductUpdates.ShelfLife').val(lastNewProduct.ShelfLife);
+                                        editorNP.field('ProductUpdates.IngredientList').val(lastNewProduct.IngredientList);
+                                        editorNP.field('ProductUpdates.createdby').val(lastNewProduct.createdby);
+                                        editorNP.field('ProductUpdates.datecreated').val(getDate());
+                                    }
+                                }
                             ]
                     },
                     // Update An Existing Product Form: opens the Update an Existing Product Form
@@ -1407,9 +1478,87 @@
                             [
                                 { text: 'Cancel', action: function () { this.close(); } },
                                 'Create',
-                                { text: 'Submit Another', action: function () { this.submit(); editor.create(); } },
+                                {
+                                    text: 'Submit Another', action: function () {
+                                        
+
+                                        // Creates lastProduct object to store current forms data to be called later
+                                        var lastProductUpdate = {
+                                            'requesttypeID': editor.field('ProductUpdates.requesttypeID').val(),
+                                            'locationID': editor.field('ProductUpdates.locationID').val(),
+                                            'ismettlerrequired': editor.field('ProductUpdates.ismettlerrequired').val(), 
+                                            'labelID': editor.field('ProductUpdates.labelID').val(),
+                                            'COST_TAB_F27': editor.field('ProductUpdates.COST_TAB_F27').val(),
+                                            'promotprprice': editor.field('ProductUpdates.promotprprice').val(),
+                                            'promotprstartdate': editor.field('ProductUpdates.promotprstartdate').val(),
+                                            'promotprenddate': editor.field('ProductUpdates.promotprenddate').val(),
+                                            'signID': editor.field('ProductUpdates.signID').val(),
+                                            'OBJ_TAB_F155': editor.field('ProductUpdates.OBJ_TAB_F155').val(),
+                                            'OBJ_TAB_F29': editor.field('ProductUpdates.OBJ_TAB_F29').val(),
+                                            'OBJ_TAB_F22': editor.field('ProductUpdates.OBJ_TAB_F22').val(),
+                                            'OBJ_TAB_F255': editor.field('ProductUpdates.OBJ_TAB_F255').val(),
+                                            'POS_TAB_F04': editor.field('ProductUpdates.POS_TAB_F04').val(),
+                                            'OBJ_TAB_F17': editor.field('ProductUpdates.OBJ_TAB_F17').val(),
+                                            'OBJ_TAB_F18': editor.field('ProductUpdates.OBJ_TAB_F18').val(),
+                                            'POS_TAB_F79': editor.field('ProductUpdates.POS_TAB_F79').val(),
+                                            'POS_TAB_F82': editor.field('ProductUpdates.POS_TAB_F82').val(),
+                                            'POS_TAB_F81': editor.field('ProductUpdates.POS_TAB_F81').val(),
+                                            'POS_TAB_F178': editor.field('ProductUpdates.POS_TAB_F178').val(),
+                                            'AdditionalRequestNotes': editor.field('ProductUpdates.AdditionalRequestNotes').val(),
+                                            'ScaleItemTypeID': editor.field('ProductUpdates.ScaleItemTypeID').val(),
+                                            'TareNetWeight': editor.field('ProductUpdates.TareNetWeight').val(),
+                                            'ShelfLife': editor.field('ProductUpdates.ShelfLife').val(),
+                                            'IngredientList': editor.field('ProductUpdates.IngredientList').val(),
+                                            'createdby': editor.field('ProductUpdates.createdby').val()
+                                        };
+
+                                        // Puts the object into local storage
+                                        localStorage.setItem('lastProductUpdate', JSON.stringify(lastProductUpdate));
+
+                                        // Retrieve the object from storage
+                                        lastPURetrieved = localStorage.getItem('lastProductUpdate');
+
+                                        this.submit();
+                                        editor.create();
+                                    }
+                                },
                                 { text: 'Clear', action: function () { fields = editor.displayed(); for (field in fields) { editor.field(fields[field]).val(''); }; } },
-                                { text: 'Copy', action: function () { var values = editor.edit(table.row(':last', { order: 'index' }), false).val(); editor.create({}).set(values); } }
+                                {
+                                    text: 'Copy', action: function () {
+                                        
+                                        // Initialize lastProduct variable with object retrieved from storage
+                                        var lastProductUpdate = JSON.parse(lastPURetrieved)
+
+                                        // Assign lastProductUpdate values to their respective fields
+                                        editor.field('ProductUpdates.requesttypeID').val(lastProductUpdate.requesttypeID);
+                                        editor.field('ProductUpdates.locationID').val(lastProductUpdate.locationID);
+                                        editor.field('ProductUpdates.ismettlerrequired').val(lastProductUpdate.ismettlerrequired);
+                                        editor.field('ProductUpdates.labelID').val(lastProductUpdate.labelID);
+                                        editor.field('ProductUpdates.COST_TAB_F27').val(lastProductUpdate.COST_TAB_F27);
+                                        editor.field('ProductUpdates.promotprprice').val(lastProductUpdate.promotprprice);
+                                        editor.field('ProductUpdates.promotprstartdate').val(lastProductUpdate.promotprstartdate);
+                                        editor.field('ProductUpdates.promotprenddate').val(lastProductUpdate.promotprenddate);
+                                        editor.field('ProductUpdates.signID').val(lastProductUpdate.signID);
+                                        editor.field('ProductUpdates.OBJ_TAB_F155').val(lastProductUpdate.OBJ_TAB_F155);
+                                        editor.field('ProductUpdates.OBJ_TAB_F29').val(lastProductUpdate.OBJ_TAB_F29);
+                                        editor.field('ProductUpdates.OBJ_TAB_F22').val(lastProductUpdate.OBJ_TAB_F22);
+                                        editor.field('ProductUpdates.OBJ_TAB_F255').val(lastProductUpdate.OBJ_TAB_F255);
+                                        editor.field('ProductUpdates.POS_TAB_F04').val(lastProductUpdate.POS_TAB_F04);
+                                        editor.field('ProductUpdates.OBJ_TAB_F17').val(lastProductUpdate.OBJ_TAB_F17);
+                                        editor.field('ProductUpdates.OBJ_TAB_F18').val(lastProductUpdate.OBJ_TAB_F18);
+                                        editor.field('ProductUpdates.POS_TAB_F79').val(lastProductUpdate.POS_TAB_F79);
+                                        editor.field('ProductUpdates.POS_TAB_F82').val(lastProductUpdate.POS_TAB_F82);
+                                        editor.field('ProductUpdates.POS_TAB_F81').val(lastProductUpdate.POS_TAB_F81);
+                                        editor.field('ProductUpdates.POS_TAB_F178').val(lastProductUpdate.POS_TAB_F178);
+                                        editor.field('ProductUpdates.AdditionalRequestNotes').val(lastProductUpdate.AdditionalRequestNotes);
+                                        editor.field('ProductUpdates.ScaleItemTypeID').val(lastProductUpdate.ScaleItemTypeID);
+                                        editor.field('ProductUpdates.TareNetWeight').val(lastProductUpdate.TareNetWeight);
+                                        editor.field('ProductUpdates.ShelfLife').val(lastProductUpdate.ShelfLife);
+                                        editor.field('ProductUpdates.IngredientList').val(lastProductUpdate.IngredientList);
+                                        editor.field('ProductUpdates.createdby').val(lastProductUpdate.createdby);
+                                        editor.field('ProductUpdates.datecreated').val(getDate());
+                                    }
+                                }
                             ]
                     },
                     {
