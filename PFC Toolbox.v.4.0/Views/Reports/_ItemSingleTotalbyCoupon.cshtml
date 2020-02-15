@@ -120,15 +120,83 @@
                     text: 'Export',
                     autoClose: true,
                     buttons: [
-                        'copy',
                         {
-                            extend: 'excel',
+                            extend: 'copy',
                             filename: 'ISTBCoupon-"@startDate"-"@endDate"',
                             footer: true
                         },
-                        'csv',
-                        'pdf',
-                        'print'
+                        {
+                            extend: 'excelHtml5',
+                            filename: 'ISTBCoupon-"@startDate"-"@endDate"',
+                            footer: true,
+                            title: '',
+                            customize: function (xlsx) {
+                                var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                                var sheetStyle = xlsx.xl['styles.xml'];
+                                var clR = $('row', sheet);
+                                
+                                // Update cell size to 12
+                                var tagName = sheetStyle.getElementsByTagName('sz');
+                                for (i = 0; i < tagName.length; i++) {
+                                    tagName[i].setAttribute("val", "12")
+                                }
+
+                                // Update Row
+                                var numrows = 3;
+                                var clR = $('row', sheet);
+                                clR.each(function () {
+                                    var attr = $(this).attr('r');
+                                    var ind = parseInt(attr);
+                                    ind = ind + numrows;
+                                    $(this).attr("r", ind);
+                                });
+
+                                // Create row before data
+                                $('row c ', sheet).each(function () {
+                                    var attr = $(this).attr('r');
+                                    var pre = attr.substring(0, 1);
+                                    var ind = parseInt(attr.substring(1, attr.length));
+                                    ind = ind + numrows;
+                                    $(this).attr("r", pre + ind);
+                                });
+
+                                function Addrow(index, data) {
+                                    var msg = '<row r="' + index + '">'
+                                    for (var i = 0; i < data.length; i++) {
+                                        var key = data[i].key;
+                                        var value = data[i].value;
+                                        msg += '<c t="inlineStr" r="' + key + index + '">';
+                                        msg += '<is>';
+                                        msg += '<t>' + value + '</t>';
+                                        msg += '</is>';
+                                        msg += '</c>';
+                                    }
+                                    msg += '</row>';
+                                    return msg;
+                                }
+
+                                // Insert
+                                var r1 = Addrow(1, [{ key: 'A', value: 'Item Single Total by Coupon: @(ViewBag.Store)' }]);
+                                var r2 = Addrow(2, [{ key: 'A', value: '@startDate   to   @endDate' }]);
+                                
+                                sheet.childNodes[0].childNodes[1].innerHTML = r1 + r2 + sheet.childNodes[0].childNodes[1].innerHTML;
+                            }
+                        },
+                        {
+                            extend: 'csv',
+                            filename: 'ISTBCoupon-"@startDate"-"@endDate"',
+                            footer: true
+                        },
+                        {
+                            extend: 'pdf',
+                            filename: 'ISTBCoupon-"@startDate"-"@endDate"',
+                            footer: true
+                        },
+                        {
+                            extend: 'print',
+                            filename: 'ISTBCoupon-"@startDate"-"@endDate"',
+                            footer: true
+                        }
                     ]
                 }],
 
