@@ -1038,6 +1038,7 @@
                     editor.field('ProductUpdates.promotprstartdate').show();
                     editor.field('ProductUpdates.promotprenddate').show();
                     editor.field('ProductUpdates.promotprprice').show();
+                    editor.field('ProductUpdates.PRICE_TAB_F49').show();
                 } else {
                     editor.field('ProductUpdates.signID').hide();
                     editor.field('ProductUpdates.promotprstartdate').hide();
@@ -1267,9 +1268,50 @@
                         });
                     }
 
-                    //if (!editor.field('ProductUpdates.OBJ_TAB_F29').val()) {
-                    //    editor.field('ProductUpdates.OBJ_TAB_F29').error('Required');
-                    //}
+                    // Fields required for PFC & NCG Fresh Deals
+                    if (editor.field('ProductUpdates.requesttypeID').val() == 4 || editor.field('ProductUpdates.requesttypeID').val() == 9) {
+                        
+                        // retail
+                        if (!editor.field('ProductUpdates.price_tab_f30').val()) {
+                            editor.field('ProductUpdates.price_tab_f30').error('Required');
+                        }
+
+                        //margin
+                        if (!editor.field('ProductUpdates.PRICE_TAB_F49').val()) {
+                            editor.field('ProductUpdates.PRICE_TAB_F49').error('Required');
+                            editor.field('ProductUpdates.PRICE_TAB_F49').show();
+                        }
+
+                        //tpr price
+                        if (!editor.field('ProductUpdates.promotprprice').val()) {
+                            editor.field('ProductUpdates.promotprprice').error('Required');
+                        }
+
+                        //tpr start
+                        if (!editor.field('ProductUpdates.promotprstartdate').val()) {
+                            editor.field('ProductUpdates.promotprstartdate').error('Required');
+                        }
+
+                        //tpr end
+                        if (!editor.field('ProductUpdates.promotprenddate').val()) {
+                            editor.field('ProductUpdates.promotprenddate').error('Required');
+                        }
+
+                        // brand
+                        if (!editor.field('ProductUpdates.OBJ_TAB_F155').val()) {
+                            editor.field('ProductUpdates.OBJ_TAB_F155').error('Required');
+                        }
+
+                        //short description
+                        if (!editor.field('ProductUpdates.OBJ_TAB_F29').val()) {
+                            editor.field('ProductUpdates.OBJ_TAB_F29').error('Required');
+                        }
+
+                        //size
+                        if (!editor.field('ProductUpdates.OBJ_TAB_F22').val()) {
+                            editor.field('ProductUpdates.OBJ_TAB_F22').error('Required');
+                        }
+                    }
 
                     // If any error was reported, cancel the submission so it can be corrected
                     if (this.inError()) {
