@@ -5,8 +5,6 @@
 
 <h2>Reports</h2>
 
-<hr />
-
 <h3>SMS Reports</h3>
 <div class="row">
     <div class="col-md-4">
@@ -43,11 +41,32 @@
 
 <hr />
 
+<h3>Item Information</h3>
+<div class="row">
+    <div class="col-md-4">
+        <h4>Item Lookup by UPC</h4>
+        <p></p>
+        <p><a class="btn btn-default" href='@Url.Action("ItemLookupByUPC", "SMS")'>Click here &raquo;</a></p>
+    </div>
+    @*<div class="col-md-4">
+            <h4>Item Lookup by Description</h4>
+            <p></p>
+            <p><a class="btn btn-default" href='@Url.Action("ItemLookupByDescription", "SMS")'>Click here &raquo;</a></p>
+        </div>
+    <div class="col-md-4">
+        <h4>Item Lookup by Description</h4>
+        <p></p>
+        <p><a class="btn btn-default" href='@Url.Action("PurchasesSummary", "Reports")'>Click here &raquo;</a></p>
+    </div>*@
+</div>
+
+<hr />
+
 <h3>Log Summaries</h3>
 <div class="row">
     <div class="col-md-4">
         <h4>Purchases</h4>
-        <p></p>
+        <p>Weekly report of purchases.</p>
         <p><a class="btn btn-default" href='@Url.Action("PurchasesSummary", "Reports")'>Click here &raquo;</a></p>
     </div>
 </div>

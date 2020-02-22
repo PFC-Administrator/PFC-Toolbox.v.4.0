@@ -51,7 +51,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
                     cmd.Parameters.Add("@storeTarget", SqlDbType.VarChar).Value = storeCode;
                     cmd.Parameters.Add("@UPC", SqlDbType.VarChar).Value = UPCs;
 
-                    // Open connection to SQL server and set a timeout of 1000 incase report takes a while
+                    // Open connection to SQL server and set a timeout of 1000 in case report takes a while
                     con.Open();
                     cmd.CommandTimeout = 1000;
 

@@ -1,0 +1,58 @@
+﻿@{
+    ViewBag.Title = "Item Lookup by UPC";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Item Information Lookup by UPC</h2>
+
+@using (Ajax.BeginForm("GetItemCodeInfo", "SMS", new AjaxOptions
+{
+    HttpMethod = "GET",
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "Item Results"
+}))
+{
+<div class="form-group">
+    <form name="add_name" id="add_name">
+
+        <label>UPC:</label>
+        <input type="text" name="UPC" id="UPC" placeholder="Enter a UPC" class="form-control name_list" autocomplete="off" required />
+
+        <br />
+
+        <label>Location:</label>
+        <select class="form-control" name="location" id="location" autocomplete="off" required>
+            <option value="" disabled selected>Select a location</option>
+            <option value="001, La Crosse">La Crosse</option>
+            <option value="002, Rochester">Rochester</option>
+            <option value="PAL, Both stores">Both stores</option>
+        </select>
+
+        <br />
+        <input type="submit" class="btn btn-primary" value="Get Item" />
+    </form>
+
+    <input type="hidden" id="UPCs" name="UPCs">
+</div>
+}
+
+<div id="Item Results"></div>
+
+@section scripts{
+    <script type="text/javascript" charset="utf-8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+    <script>
+
+        // Function to pad numbers with 0's
+        function pad(number, width = 3, z = 0) {
+            return (String(z).repeat(width) + String(number)).slice(String(number).length)
+        };
+
+        // Format
+        $(document).on('submit', function () {
+            var upcString = pad($('#UPC').val(), 13, 0);
+            console.log(upcString);
+            document.getElementById("UPCs").value = upcString;
+        });
+    </script>
+}

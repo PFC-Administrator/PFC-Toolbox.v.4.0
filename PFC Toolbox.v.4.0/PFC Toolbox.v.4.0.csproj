@@ -240,6 +240,7 @@
     <Compile Include="Controllers\Maintenance\SubdepartmentController.cs" />
     <Compile Include="Controllers\Maintenance\UPCController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
+    <Compile Include="Controllers\SMSController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -255,6 +256,8 @@
     <Compile Include="Models\Reports\ItemSingleTotalbyCoupon.cs" />
     <Compile Include="Models\Reports\ItemSingleTotalbyCategoryModel.cs" />
     <Compile Include="Models\Reports\ItemSingleTotalbyBrandModel.cs" />
+    <Compile Include="Models\SMS\ItemLookupByDescriptionModel.cs" />
+    <Compile Include="Models\SMS\ItemLookupByUPCModel.cs" />
     <Compile Include="Models\StoreMultiTotalsModel.cs" />
     <Compile Include="Models\LocationsModel.cs" />
     <Compile Include="Models\Logs\PurchasesModel.cs" />
@@ -405,6 +408,9 @@
     <Content Include="Views\Reports\_ItemSingleTotalbyCoupon.cshtml" />
     <Content Include="Views\Reports\ItemSingleTotalbyCoupon.cshtml" />
     <Content Include="Views\Reports\PurchasesSummary.cshtml" />
+    <Content Include="Views\SMS\ItemLookupByUPC.cshtml" />
+    <Content Include="Views\SMS\_ItemLookupByUPC.cshtml" />
+    <Content Include="Views\SMS\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

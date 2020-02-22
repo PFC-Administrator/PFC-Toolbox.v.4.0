@@ -12,54 +12,54 @@
     UpdateTargetId = "Item Results"
 }))
 {
-<div class="form-group">
-    <form name="add_name" id="add_name">
-
-        <label>Start Date:</label>
-        <input class="form-control"
-               id="startDate"
-               name="startDate"
-               placeholder="M/DD/YYYY"
-               type="text"
-               autocomplete="off"
-               required />
-        <div id="custom-pos"></div>
-        <br />
-
-        <label>End Date:</label>
-        <input class="form-control"
-               id="endDate"
-               name="endDate"
-               placeholder="M/DD/YYYY"
-               type="text"
-               autocomplete="off"
-               required />
-        <br />
-
-        <label>UPC:</label>
-        <table id="dynamic_field">
-            <tr>
-                <td><input type="text" name="UPC" id="UPC" placeholder="Enter a UPC" class="form-control name_list" autocomplete="off" required/></td>
-                <td><button type="button" name="add" id="add">Add More</button></td>
-            </tr>
-        </table>
-
-        <br />
-
-        <label>Location:</label>
-        <select class="form-control" name="location" id="location" autocomplete="off" required>
-            <option value="" disabled selected>Select a location</option>
-            <option value="001, La Crosse">La Crosse</option>
-            <option value="002, Rochester">Rochester</option>
-            <option value="PAL, Both stores">Both stores</option>
-        </select>
-
-        <br />
-        <input type="submit" class="btn btn-primary" value="Run Report" />
-    </form>
-
-    <input type="hidden" id="UPCs" name="UPCs">
-</div>
+    <div class="form-group">
+        <form name="add_name" id="add_name">
+    
+            <label>Start Date:</label>
+            <input class="form-control"
+                   id="startDate"
+                   name="startDate"
+                   placeholder="M/DD/YYYY"
+                   type="text"
+                   autocomplete="off"
+                   required />
+            <div id="custom-pos"></div>
+            <br />
+    
+            <label>End Date:</label>
+            <input class="form-control"
+                   id="endDate"
+                   name="endDate"
+                   placeholder="M/DD/YYYY"
+                   type="text"
+                   autocomplete="off"
+                   required />
+            <br />
+    
+            <label>UPC:</label>
+            <table id="dynamic_field">
+                <tr>
+                    <td><input type="text" name="UPC" id="UPC" placeholder="Enter a UPC" class="form-control name_list" autocomplete="off" required/></td>
+                    <td><button type="button" name="add" id="add">Add More</button></td>
+                </tr>
+            </table>
+    
+            <br />
+    
+            <label>Location:</label>
+            <select class="form-control" name="location" id="location" autocomplete="off" required>
+                <option value="" disabled selected>Select a location</option>
+                <option value="001, La Crosse">La Crosse</option>
+                <option value="002, Rochester">Rochester</option>
+                <option value="PAL, Both stores">Both stores</option>
+            </select>
+    
+            <br />
+            <input type="submit" class="btn btn-primary" value="Run Report" />
+        </form>
+    
+        <input type="hidden" id="UPCs" name="UPCs">
+    </div>
 }
 
 <div id="Item Results"></div>

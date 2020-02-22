@@ -1,0 +1,149 @@
+﻿@{
+    ViewBag.Title = "Item Lookup by UPC";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    @model PFC_Toolbox.v._4._0.Models.ItemLookupByUPCModel
+}
+<head>
+    <link rel="stylesheet" type="text/css" href="~/Content/Custom.css" />
+</head>
+
+<h1 style="float:right;"><img src="~/Content/PFC_Logo_128px.png" width="100" height="100">@(ViewBag.Store)</h1>
+<h2 style="float:left;">Item Information Lookup by UPC</h2>
+<hr style="clear:both" />
+
+<br />
+
+<fieldset title="Item Results">
+
+    <div class="row">
+        <div class="col-md-3">
+            <h3>Main</h3>
+            <hr />
+            <div class="display-label">@Html.LabelFor(model => model.ItemCode)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.ItemCode)
+            </div>
+
+            <div class="display-label">@Html.LabelFor(model => model.ItemBrand)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.ItemBrand)
+            </div>
+
+            <div class="display-label">@Html.LabelFor(model => model.ItemDescription)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.ItemDescription)
+            </div>
+
+            <div class="display-label">@Html.LabelFor(model => model.ItemLongDesc)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.ItemLongDesc)
+            </div>
+
+            <div class="display-label">@Html.LabelFor(model => model.ItemSize)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.ItemSize)
+            </div>
+
+            <div class="display-label">@Html.LabelFor(model => model.ItemCategory)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.ItemCategory)
+            </div>
+
+            <div class="display-label">@Html.LabelFor(model => model.ItemReport)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.ItemReport)
+            </div>
+
+            <div class="display-label">@Html.LabelFor(model => model.ItemSubdepartment)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.ItemSubdepartment)
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <h3>Point of Sale</h3>
+            <hr />
+            <div class="display-label">@Html.LabelFor(model => model.ItemScaled)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.ItemScaled)
+            </div>
+
+            <div class="display-label">@Html.LabelFor(model => model.ItemTaxed)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.ItemTaxed)
+            </div>
+
+            <div class="display-label">@Html.LabelFor(model => model.ItemFoodStamp)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.ItemFoodStamp)
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <h3>Price</h3>
+            <hr />
+            <div class="display-label">@Html.LabelFor(model => model.ItemRegPrice)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.ItemRegPrice)
+            </div>
+
+            <div class="display-label">@Html.LabelFor(model => model.ItemPkgPrice)</div>
+            <div class="display-field">
+                @if (Model.ItemPkgPrice != 0)
+                {@Html.DisplayFor(model => model.ItemPkgPrice)}
+            </div>
+
+            <div class="display-label">@Html.LabelFor(model => model.ItemTPR)</div>
+            <div class="display-field">
+                @if (Model.ItemTPR != 0)
+                {@Html.DisplayFor(model => model.ItemTPR)}
+            </div>
+
+            <div class="display-label">@Html.LabelFor(model => model.ItemStartTPR)</div>
+            <div class="display-field">
+                @if (!Model.ItemStartTPR.Year.Equals(1))
+                {@Html.DisplayFor(model => model.ItemStartTPR)}
+            </div>
+
+            <div class="display-label">@Html.LabelFor(model => model.ItemEndTPR)</div>
+            <div class="display-field">
+                @if (!Model.ItemEndTPR.Year.Equals(1))
+                {@Html.DisplayFor(model => model.ItemEndTPR)}
+            </div>
+
+            <div class="display-label">@Html.LabelFor(model => model.ItemPkgTPR)</div>
+            <div class="display-field">
+                @if (Model.ItemPkgTPR != 0)
+                {@Html.DisplayFor(model => model.ItemPkgTPR)}
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <h3>Cost</h3>
+            <hr />
+            <div class="display-label">@Html.LabelFor(model => model.ItemVendor)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.ItemVendor)
+            </div>
+
+            <div class="display-label">@Html.LabelFor(model => model.ItemVendorCode)</div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.ItemVendorCode)
+            </div>
+
+            <div class="display-label">@Html.LabelFor(model => model.ItemCost)</div>
+            <div class="display-field">
+                @if (Model.ItemCost != 0)
+                {@Html.DisplayFor(model => model.ItemCost)}
+            </div>
+
+            <div class="display-label">@Html.LabelFor(model => model.ItemMargin)</div>
+            <div class="display-field">
+                @if (Model.ItemMargin != 0)
+                {@Html.DisplayFor(model => model.ItemMargin)}
+            </div>
+        </div>
+
+    </div>
+</fieldset>
