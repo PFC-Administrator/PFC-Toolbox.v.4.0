@@ -92,18 +92,18 @@
         <table id="report totals" class="display text-nowrap" style="width:35%">
             <thead>
                 <tr>
-                    <th class="text-center" >Total Weight</th>
-                    <th class="text-center" >Total Sales</th>
-                    <th class="text-center" >Total Units</th>
-                    <th class="text-center" >Total CTM</th>
+                    <th class="text-center">Total Weight</th>
+                    <th class="text-center">Total Sales</th>
+                    <th class="text-center">Total Units</th>
+                    <th class="text-center">Total CTM</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td align="center" >@String.Format("{0}", ViewBag.TotalWeight)</td>
-                    <td align="center" >@String.Format("{0:C}", ViewBag.TotalSales)</td>
-                    <td align="center" >@String.Format("{0}", ViewBag.TotalUnits)</td>
-                    <td align="center" >@String.Format("{0:P2}", ViewBag.TotalCTM)</td>
+                    <td align="center">@String.Format("{0}", ViewBag.TotalWeight)</td>
+                    <td align="center">@String.Format("{0:C}", ViewBag.TotalSales)</td>
+                    <td align="center">@String.Format("{0}", ViewBag.TotalUnits)</td>
+                    <td align="center">@String.Format("{0:P2}", ViewBag.TotalCTM)</td>
                 </tr>
             </tbody>
         </table>
@@ -196,7 +196,7 @@
                 editor.inline(this);
             });
 
-            $('#results').DataTable({
+            table = $('#results').DataTable({
                 responsive: true,
 
                 // Default table lengths
@@ -235,36 +235,72 @@
                             filename: 'CTM-"@startDate"-"@endDate"',
                             footer: true,
                             title: '',
+                            exportOptions: {
+                                rows: ':visible'
+                            },
                             customize: function (xlsx) {
                                 var sheet = xlsx.xl.worksheets['sheet1.xml'];
                                 var sheetStyle = xlsx.xl['styles.xml'];
+                                var rowsDisplayed = table.page.info().length;
+                                var rowsReturned = table.rows().count();
                                 var clR = $('row', sheet);
                                 var lastXfIndex = $('cellXfs xf', sheetStyle).length - 1;
                                 var lastFontIndex = $('fonts font', sheetStyle).length - 1;
+                                var lastBorderIndex = $('borders border', sheetStyle).length - 1;
 
-                                var f12 = '<font><sz val="12" /><name val="Calibri" /></font>'
-                                var f14 = '<font><sz val="14" /><name val="Calibri" /></font>'
-                                var f18 = '<font><sz val="18" /><name val="Calibri" /></font>'
+                                var rows = 0;
+                                if (rowsDisplayed == -1) {
+                                    rows = rowsReturned;
+                                }
+                                else if (rowsDisplayed < rowsReturned) {
+                                    rows = rowsDisplayed;
+                                }
+                                else {
+                                    rows = rowsReturned;
+                                }
+
+                                // Fonts
+                                var f12 = '<font><sz val="12" /><name val="Calibri" /></font>';
+                                var f14 = '<font><sz val="14" /><name val="Calibri" /></font>';
+                                var f18 = '<font><sz val="18" /><name val="Calibri" /></font>';
+
+                                // Borders
+                                var bb = '<border><left/><right/><top/><bottom style="thin"><color indexed="64"/></bottom><diagonal/></border>';
+                                var tb = '<border><left/><right/><top style="thin"><color indexed="64"/></top><bottom/><diagonal/></border>';
+
+                                // Number formats
+                                var nf$ = '<numFmt numFmtId="164" formatCode="_(&quot;$&quot;* #,##0.00_);_(&quot;$&quot;* \[Red](#,##0.00\);_(&quot;$&quot;* &quot;-&quot;??_);"/>';
+                                var nfperc = '<numFmt numFmtId="167" formatCode="#,##0.0%;[Red](#,##0.0%);"/>';
+
+                                // Styles
                                 var xfFont12 = '<xf numFmtId="0" fontId="' + (lastFontIndex + 1) + '" fillId="0" borderId="0" applyFont="1" applyFill = "1" applyBorder = "1" xfId = "0" applyAlignment = "1"/>';
                                 var xfFont14 = '<xf numFmtId="0" fontId="' + (lastFontIndex + 2) + '" fillId="0" borderId="0" applyFont="1" applyFill = "1" applyBorder = "1" xfId = "0" applyAlignment = "1"/>';
                                 var xfFont18 = '<xf numFmtId="0" fontId="' + (lastFontIndex + 3) + '" fillId="0" borderId="0" applyFont="1" applyFill = "1" applyBorder = "1" xfId = "0" applyAlignment = "1"/>';
+                                var xfbB = '<xf numFmtId="0" fontId="0" fillId="0" borderId="' + (lastBorderIndex + 1) + '" xfId="0" applyBorder="1"/>';
+                                var xftB = '<xf numFmtId="0" fontId="0" fillId="0" borderId="' + (lastBorderIndex + 2) + '" xfId="0" applyBorder="1"/>';
+                                var xfPerc = '<xf numFmtId="167" fontId="0" fillId="0" borderId="0" applyFont="1" applyFill="1" applyBorder="1" xfId="0" applyNumberFormat="1"/>';
 
-                                //define the style with the new font (number passed in as a variable) add the new font to the other fonts
-
+                                // Adding the styles
+                                sheetStyle.childNodes[0].childNodes[0].innerHTML += nf$ + nfperc;
                                 sheetStyle.childNodes[0].childNodes[1].innerHTML += f12 + f14 + f18;
-                                sheetStyle.childNodes[0].childNodes[5].innerHTML += xfFont12 + xfFont14 + xfFont18;
+                                sheetStyle.childNodes[0].childNodes[3].innerHTML += bb + tb;
+                                sheetStyle.childNodes[0].childNodes[5].innerHTML += xfFont12 + xfFont14 + xfFont18 + xfbB + xftB + xfPerc;
 
+                                // Creating varaibles withe the styles assigned to them
                                 var font12 = lastXfIndex + 1;
                                 var font14 = lastXfIndex + 2;
                                 var font18 = lastXfIndex + 3;
-                                                                
-                                // Update cell size to 12
-                                var tagName = sheetStyle.getElementsByTagName('sz');
-                                tagName[5].setAttribute("val", "12")
-                                tagName[6].setAttribute("val", "14")
-                                tagName[7].setAttribute("val", "18")
+                                var bottomBorder = lastXfIndex + 4;
+                                var topBorder = lastXfIndex + 5;
+                                var negativePercent = lastXfIndex + 6;
 
-                                // Update Row
+                                // Updating font sizes, so they're not overwritten
+                                var tagName = sheetStyle.getElementsByTagName('sz');
+                                tagName[5].setAttribute("val", "12");
+                                tagName[6].setAttribute("val", "14");
+                                tagName[7].setAttribute("val", "18");
+
+                                // Number of header rows to add
                                 var numrows = 4;
                                 var clR = $('row', sheet);
                                 clR.each(function () {
@@ -283,6 +319,7 @@
                                     $(this).attr("r", pre + ind);
                                 });
 
+                                // Add header rows
                                 function Addrow(index, data) {
                                     var msg = '<row r="' + index + '">'
                                     for (var i = 0; i < data.length; i++) {
@@ -298,16 +335,46 @@
                                     return msg;
                                 }
 
-                                // Insert
+                                // Footer rows
+                                var footerColumns = ['B', 'C', 'G', 'H', 'I', 'J', 'K', 'L', 'N'];
+                                var footer = '<row r="' + (rows + 6) + '">';
+                                for (var i = 0; i < footerColumns.length; i++) {
+                                    footer += '<c r="' + footerColumns[i] + (rows + 6) + '" s="2"><v></v></c>';
+                                }
+                                footer += '</row>';
+
+                                // Insert header rows
                                 var r1 = Addrow(1, [{ key: 'A', value: 'Contribution to Margin by Sub-department: @(ViewBag.Store)' }]);
                                 var r2 = Addrow(2, [{ key: 'A', value: '@(ViewBag.SdpCode) - @(ViewBag.SdpDesc)' }]);
                                 var r3 = Addrow(3, [{ key: 'A', value: '@startDate   to   @endDate' }]);
-                                
-                                sheet.childNodes[0].childNodes[1].innerHTML = r1 + r2 + r3 + sheet.childNodes[0].childNodes[1].innerHTML;
+                                var r4 = Addrow(5, [{ key: 'N', value: '' }]);
+
+                                sheet.childNodes[0].childNodes[1].innerHTML = r1 + r2 + r3 + r4 + sheet.childNodes[0].childNodes[1].innerHTML + footer;
 
                                 $('row c[r="A1"]', sheet).attr('s', font18);
                                 $('row c[r="A2"]', sheet).attr('s', font14);
                                 $('row c[r="A3"]', sheet).attr('s', font12);
+
+                                var headerColumns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N'];
+                                for (var i = 0; i < headerColumns.length; i++) {
+                                    $('row c[r="' + headerColumns[i] + '5"]', sheet).attr('s', bottomBorder);
+                                    $('row c[r="' + headerColumns[i] + (rows + 6) + '"]', sheet).attr('s', topBorder);
+                                }
+
+                                var col = $('col', sheet);
+                                $(col[6]).attr('width', 10);
+                                $(col[7]).attr('width', 10);
+
+                                var percentColumns = ['K', 'L', 'M'];
+                                for (var i = 0; i < percentColumns.length; i++) {
+                                    // Loop over the cells in column `C`
+                                    $('row c[r^="' + percentColumns[i] + '"]', sheet).each(function () {
+                                        // Get the value
+                                        if ($('is t', this).prevObject[0].textContent < 0) {
+                                            $(this).attr('s', negativePercent);
+                                        }
+                                    });
+                                }
                             }
                         },
                         {
