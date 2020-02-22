@@ -76,16 +76,16 @@
         <table id="report totals" class="display text-nowrap" style="width:25%">
             <thead>
                 <tr>
-                    <th class="text-center" >Total Weight</th>
-                    <th class="text-center" >Total Sales</th>
-                    <th class="text-center" >Total Units</th>
+                    <th class="text-center">Total Weight</th>
+                    <th class="text-center">Total Sales</th>
+                    <th class="text-center">Total Units</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td align="center" >@String.Format("{0}", ViewBag.TotalWeight)</td>
-                    <td align="center" >@String.Format("{0:C}", ViewBag.TotalSales)</td>
-                    <td align="center" >@String.Format("{0}", ViewBag.TotalUnits)</td>
+                    <td align="center">@String.Format("{0}", ViewBag.TotalWeight)</td>
+                    <td align="center">@String.Format("{0:C}", ViewBag.TotalSales)</td>
+                    <td align="center">@String.Format("{0}", ViewBag.TotalUnits)</td>
                 </tr>
             </tbody>
         </table>
@@ -109,7 +109,7 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#results').DataTable({
+           table = $('#results').DataTable({
 
                 select: true,
                 // Default table lengths
@@ -130,34 +130,58 @@
                             filename: 'ISTBUPC-"@startDate"-"@endDate"',
                             footer: true,
                             title: '',
+                            exportOptions: {
+                                rows: ':visible'
+                            },
                             customize: function (xlsx) {
                                 var sheet = xlsx.xl.worksheets['sheet1.xml'];
                                 var sheetStyle = xlsx.xl['styles.xml'];
+                                var rowsDisplayed = table.page.info().length;
+                                var rowsReturned = table.rows().count();
                                 var clR = $('row', sheet);
                                 var lastXfIndex = $('cellXfs xf', sheetStyle).length - 1;
                                 var lastFontIndex = $('fonts font', sheetStyle).length - 1;
+                                var lastBorderIndex = $('borders border', sheetStyle).length - 1;
 
-                                var f12 = '<font><sz val="12" /><name val="Calibri" /></font>'
-                                var f14 = '<font><sz val="14" /><name val="Calibri" /></font>'
-                                var f18 = '<font><sz val="18" /><name val="Calibri" /></font>'
+                                var rows = 0;
+                                if (rowsDisplayed == -1) {
+                                    rows = rowsReturned;
+                                }
+                                else if (rowsDisplayed < rowsReturned) {
+                                    rows = rowsDisplayed;
+                                }
+                                else {
+                                    rows = rowsReturned;
+                                }
+
+                                console.log(table.page.info().length);
+
+                                var f12 = '<font><sz val="12" /><name val="Calibri" /></font>';
+                                var f14 = '<font><sz val="14" /><name val="Calibri" /></font>';
+                                var f18 = '<font><sz val="18" /><name val="Calibri" /></font>';
+                                var bb = '<border><left/><right/><top/><bottom style="thin"><color indexed="64"/></bottom><diagonal/></border>';
+                                var tb = '<border><left/><right/><top style="thin"><color indexed="64"/></top><bottom/><diagonal/></border>';
                                 var xfFont12 = '<xf numFmtId="0" fontId="' + (lastFontIndex + 1) + '" fillId="0" borderId="0" applyFont="1" applyFill = "1" applyBorder = "1" xfId = "0" applyAlignment = "1"/>';
                                 var xfFont14 = '<xf numFmtId="0" fontId="' + (lastFontIndex + 2) + '" fillId="0" borderId="0" applyFont="1" applyFill = "1" applyBorder = "1" xfId = "0" applyAlignment = "1"/>';
                                 var xfFont18 = '<xf numFmtId="0" fontId="' + (lastFontIndex + 3) + '" fillId="0" borderId="0" applyFont="1" applyFill = "1" applyBorder = "1" xfId = "0" applyAlignment = "1"/>';
-
-                                //define the style with the new font (number passed in as a variable) add the new font to the other fonts
+                                var xfbB = '<xf numFmtId="0" fontId="0" fillId="0" borderId="' + (lastBorderIndex + 1) + '" xfId="0" applyBorder="1"/>';
+                                var xftB = '<xf numFmtId="0" fontId="0" fillId="0" borderId="' + (lastBorderIndex + 2) + '" xfId="0" applyBorder="1"/>';
 
                                 sheetStyle.childNodes[0].childNodes[1].innerHTML += f12 + f14 + f18;
-                                sheetStyle.childNodes[0].childNodes[5].innerHTML += xfFont12 + xfFont14 + xfFont18;
+                                sheetStyle.childNodes[0].childNodes[3].innerHTML += bb + tb;
+                                sheetStyle.childNodes[0].childNodes[5].innerHTML += xfFont12 + xfFont14 + xfFont18 + xfbB + xftB;
 
                                 var font12 = lastXfIndex + 1;
                                 var font14 = lastXfIndex + 2;
                                 var font18 = lastXfIndex + 3;
-                                                                
+                                var bottomBorder = lastXfIndex + 4;
+                                var topBorder = lastXfIndex + 5;
+
                                 // Update cell size to 12
                                 var tagName = sheetStyle.getElementsByTagName('sz');
-                                tagName[5].setAttribute("val", "12")
-                                tagName[6].setAttribute("val", "14")
-                                tagName[7].setAttribute("val", "18")
+                                tagName[5].setAttribute("val", "12");
+                                tagName[6].setAttribute("val", "14");
+                                tagName[7].setAttribute("val", "18");
 
                                 // Update Row
                                 var numrows = 3;
@@ -193,14 +217,28 @@
                                     return msg;
                                 }
 
+                                var footerColumns = ['B', 'C', 'D', 'E', 'I'];
+                                var footer = '<row r="' + (rows + 5) + '">';
+                                for (var i = 0; i < footerColumns.length; i++) {
+                                    footer += '<c r="' + footerColumns[i] + (rows + 5) + '" s="2"><v></v></c>';
+                                }
+                                footer += '</row>';
+
                                 // Insert
                                 var r1 = Addrow(1, [{ key: 'A', value: 'Item Single Total by UPC: @(ViewBag.Store)' }]);
                                 var r2 = Addrow(2, [{ key: 'A', value: '@startDate   to   @endDate' }]);
+                                var r3 = Addrow(4, [{ key: 'I', value: '' }]);
 
-                                sheet.childNodes[0].childNodes[1].innerHTML = r1 + r2 + sheet.childNodes[0].childNodes[1].innerHTML;
+                                sheet.childNodes[0].childNodes[1].innerHTML = r1 + r2 + r3 + sheet.childNodes[0].childNodes[1].innerHTML + footer;
 
                                 $('row c[r="A1"]', sheet).attr('s', font18);
                                 $('row c[r="A2"]', sheet).attr('s', font14);
+
+                                var headerColumns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
+                                for (var i = 0; i < headerColumns.length; i++) {
+                                    $('row c[r="' + headerColumns[i] + '4"]', sheet).attr('s', bottomBorder);
+                                    $('row c[r="' + headerColumns[i] + (rows + 5) + '"]', sheet).attr('s', topBorder);
+                                }
                             }
                         },
                         {
