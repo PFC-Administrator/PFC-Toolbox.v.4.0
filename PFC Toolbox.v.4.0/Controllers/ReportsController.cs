@@ -862,5 +862,70 @@ namespace PFC_Toolbox.v._4._0.Controllers
             // Return results to report display
             return PartialView("PurchasesSummary", report);
         }
+
+        /*******************************************************************************************************************************************************************************************************************/
+
+
+        // GET: /Reports/WriteoffsSummary
+        public ActionResult WriteoffsSummary()
+        {
+            return View();
+        }
+
+        public ActionResult GetWriteoffsSummary()
+        {
+            // Create local objects
+            SqlDataReader reader = null;
+            List<WriteoffsSummaryModel> report = new List<WriteoffsSummaryModel>();
+            WriteoffsSummaryModel item = null;
+
+            // Connect to Host SMS and run Toolbox-ISTBySubdepartmentReport stored procedure
+            using (SqlConnection con = new SqlConnection { ConnectionString = ConfigurationManager.ConnectionStrings["ToolboxConnection"].ConnectionString })
+            {
+                using (SqlCommand cmd = new SqlCommand("[Toolbox-WriteoffsSummary]", con))
+                {
+                    // Set the command type as a stored procedure
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    // Open connection to SQL server and set a timeout of 1000 incase report takes a while
+                    con.Open();
+                    cmd.CommandTimeout = 1000;
+
+                    // Execute cmd against server and store in reader object
+                    reader = cmd.ExecuteReader();
+
+                    // Save query results to list
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            // Temp variables for TryParse
+                            decimal tempDecimal;
+
+                            // Store results in WriteoffsSummaryModel model
+                            item = new WriteoffsSummaryModel();
+                            item.Subdept = reader["Subdepartment"].ToString();
+                            item.Location = reader["Location"].ToString();
+                            item.WeekStart = reader["WeekStart"].ToString();
+
+                            if (Decimal.TryParse(reader["TotalAmount"].ToString(), out tempDecimal))
+                            {
+                                item.SalesTotal = tempDecimal;
+                            }
+                            else item.SalesTotal = 0;
+
+                            // Add results to list
+                            report.Add(item);
+                        }
+                    }
+
+                    // Close connection to SQL server
+                    con.Close();
+                }
+            }
+
+            // Return results to report display
+            return PartialView("WriteoffsSummary", report);
+        }
     }
 }
