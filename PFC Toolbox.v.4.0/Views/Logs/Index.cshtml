@@ -8,6 +8,7 @@
 
 <hr />
 
+<h3>Log Entry</h3>
 <div class="row">
     <div class="col-md-4">
         <h4>Purchases</h4>
@@ -20,8 +21,24 @@
         <p><a class="btn btn-default" href='@Url.Action("CreateWriteoffs", "Logs")'>Click here &raquo;</a></p>
     </div>
     @*<div class="col-md-4">
-        <h4>Expirations</h4>
-        <p>Record expirations.</p>
-        <p><a class="btn btn-default" href='@Url.Action("CreateExpirations", "Logs")'>Click here &raquo;</a></p>
-    </div>*@
+            <h4>Expirations</h4>
+            <p>Record expirations.</p>
+            <p><a class="btn btn-default" href='@Url.Action("CreateExpirations", "Logs")'>Click here &raquo;</a></p>
+        </div>*@
+</div>
+
+<hr />
+
+<h3>Log Summaries</h3>
+<div class="row">
+    <div class="col-md-4">
+        <h4>Purchases</h4>
+        <p>Weekly report of purchases.</p>
+        <p><a class="btn btn-default" href='@Url.Action("PurchasesSummary", "Reports")'>Click here &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h4>Writeoffs</h4>
+        <p>Weekly report of writeoffs.</p>
+        <p><a class="btn btn-default" href='@Url.Action("WriteoffsSummary", "Reports")'>Click here &raquo;</a></p>
+    </div>
 </div>
