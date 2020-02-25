@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace PFC_Toolbox.v._4._0.Models.SMS
+namespace PFC_Toolbox.v._4._0.Models
 {
     public class ItemLookupByDescriptionModel
     {
@@ -47,12 +47,10 @@ namespace PFC_Toolbox.v._4._0.Models.SMS
         public decimal ItemTPR { get; set; }
 
         [DisplayAttribute(Name = "TPR Start")]
-        [DisplayFormat(DataFormatString = "{0:d}")]
-        public DateTime ItemStartTPR { get; set; }
+        public string ItemStartTPR { get; set; }
 
         [DisplayAttribute(Name = "TPR End")]
-        [DisplayFormat(DataFormatString = "{0:d}")]
-        public DateTime ItemEndTPR { get; set; }
+        public string ItemEndTPR { get; set; }
 
         [DisplayAttribute(Name = "TPR Package")]
         [DisplayFormat(DataFormatString = "{0:C}")]

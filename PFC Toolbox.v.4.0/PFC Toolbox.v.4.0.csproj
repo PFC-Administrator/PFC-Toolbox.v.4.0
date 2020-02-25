@@ -413,6 +413,8 @@
     <Content Include="Views\SMS\_ItemLookupByUPC.cshtml" />
     <Content Include="Views\SMS\Index.cshtml" />
     <Content Include="Views\Reports\WriteoffsSummary.cshtml" />
+    <Content Include="Views\SMS\_ItemLookupByDescription.cshtml" />
+    <Content Include="Views\SMS\ItemLookupByDescription.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

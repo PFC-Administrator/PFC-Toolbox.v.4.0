@@ -1,0 +1,42 @@
+﻿@{
+    ViewBag.Title = "Item Lookup by Description";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Item Information Lookup by Description</h2>
+
+@using (Ajax.BeginForm("GetItemCodeInfoByDescription", "SMS", new AjaxOptions
+{
+    HttpMethod = "GET",
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "Item Results"
+}))
+{
+    <div class="form-group">
+        <form name="add_name" id="add_name">
+
+            <label>Description:</label>
+            <input type="text" name="description" id="description" placeholder="Enter a description" class="form-control name_list" autocomplete="off" required />
+
+            <br />
+
+            <label>Location:</label>
+            <select class="form-control" name="location" id="location" autocomplete="off" required>
+                <option value="" disabled selected>Select a location</option>
+                <option value="001, La Crosse">La Crosse</option>
+                <option value="002, Rochester">Rochester</option>
+            </select>
+
+            <br />
+            <input type="submit" class="btn btn-primary" value="Get Item" />
+        </form>
+
+        <input type="hidden" id="descriptions" name="descriptions">
+    </div>
+}
+
+<div id="Item Results"></div>
+
+@section scripts{
+    <script type="text/javascript" charset="utf-8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+}
