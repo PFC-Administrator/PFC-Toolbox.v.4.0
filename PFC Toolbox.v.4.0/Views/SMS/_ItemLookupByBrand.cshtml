@@ -1,0 +1,128 @@
+﻿@{
+    ViewBag.Title = "Item Lookup by Brand";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    @model List<PFC_Toolbox.v._4._0.Models.ItemLookupByBrandModel>
+}
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+    <title>Item Information Lookup by Brand</title>
+
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://editor.datatables.net/extensions/Editor/css/editor.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/Custom.css" />
+</head>
+
+<h1 style="float:right;"><img src="~/Content/PFC_Logo_128px.png" width="100" height="100">@(ViewBag.Store)</h1>
+<h2 style="float:left;">Item Information Lookup by Brand</h2>
+<hr style="clear:both" />
+
+<br />
+
+<div>
+    <fieldset title="Item Results">
+        <table id="results" class="display text-nowrap compact" style="width:100%">
+            <thead>
+                <tr>
+                    <th class="all">Item Code</th>
+                    <th class="all">Brand</th>
+                    <th class="all">Description</th>
+                    <th class="all">Long Description</th>
+                    <th class="all">Size</th>
+                    <th class="all">Category</th>
+                    <th class="all">Report Code</th>
+                    <th class="all">Subdepartment</th>
+                    @*<th class="none">Scalable</th>
+                        <th class="none">Taxable</th>
+                        <th class="all">SNAP</th>
+                        <th class="all">Retail</th>
+                        <th class="all">TPR</th>
+                        <th class="all">TPR Start</th>
+                        <th class="all">TPR End</th>
+                        <th class="all">Pacakage TPR</th>
+                        <th class="all">Package Price</th>
+                        <th class="all">Vendor</th>
+                        <th class="all">Vendor Code</th>
+                        <th class="all">Cost</th>
+                        <th class="all">Margin</th>*@
+                </tr>
+            </thead>
+            <tbody>
+                @{if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.ItemCode)</td>
+                                <td>@Html.DisplayFor(modelItem => item.ItemBrand)</td>
+                                <td>@Html.DisplayFor(modelItem => item.ItemDescription)</td>
+                                <td>@Html.DisplayFor(modelItem => item.ItemLongDesc)</td>
+                                <td>@Html.DisplayFor(modelItem => item.ItemSize)</td>
+                                <td>@Html.DisplayFor(modelItem => item.ItemCategory)</td>
+                                <td>@Html.DisplayFor(modelItem => item.ItemReport)</td>
+                                <td>@Html.DisplayFor(modelItem => item.ItemSubdepartment)</td>
+                                @*<td>@Html.DisplayFor(modelItem => item.ItemScaled)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.ItemTaxed)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.ItemFoodStamp)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.ItemRegPrice)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.ItemTPR)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.ItemStartTPR)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.ItemEndTPR)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.ItemPkgTPR)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.ItemPkgPrice)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.ItemVendor)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.ItemVendorCode)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.ItemCost)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.ItemMargin)</td>*@
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </fieldset>
+</div>
+
+@section scripts{
+    <script type="text/javascript" charset="utf-8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            $('#results').DataTable({
+                // Default table lengths
+                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                dom: '<"floatRight"B><"clear">lfrtip',
+                order: [[2, "desc"]],
+                buttons: [{
+                    extend: 'collection',
+                    text: 'Export',
+                    autoClose: true,
+                    buttons: [
+                        'copy',
+                        'excel',
+                        'csv',
+                        'pdf',
+                        'print'
+                    ]
+                }]
+            });
+        });
+    </script>
+}

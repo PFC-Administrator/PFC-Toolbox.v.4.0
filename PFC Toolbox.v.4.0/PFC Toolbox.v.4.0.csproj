@@ -257,6 +257,7 @@
     <Compile Include="Models\Reports\ItemSingleTotalbyCoupon.cs" />
     <Compile Include="Models\Reports\ItemSingleTotalbyCategoryModel.cs" />
     <Compile Include="Models\Reports\ItemSingleTotalbyBrandModel.cs" />
+    <Compile Include="Models\SMS\ItemLookupByBrandModel.cs" />
     <Compile Include="Models\SMS\ItemLookupByDescriptionModel.cs" />
     <Compile Include="Models\SMS\ItemLookupByUPCModel.cs" />
     <Compile Include="Models\StoreMultiTotalsModel.cs" />
@@ -415,6 +416,8 @@
     <Content Include="Views\Reports\WriteoffsSummary.cshtml" />
     <Content Include="Views\SMS\_ItemLookupByDescription.cshtml" />
     <Content Include="Views\SMS\ItemLookupByDescription.cshtml" />
+    <Content Include="Views\SMS\_ItemLookupByBrand.cshtml" />
+    <Content Include="Views\SMS\ItemLookupByBrand.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
