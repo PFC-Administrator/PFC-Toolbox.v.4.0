@@ -71,6 +71,7 @@
         };
 
         var currentUser = "@CreatedBy";
+        var lastNIRetrieved;
         var editor;
         $(document).ready(function () {
 
@@ -191,7 +192,51 @@
                 dom: '<"floatRight"B><"clear">lfrtip',
                 order: [[9, "desc"]],
                 buttons: [
-                    { extend: 'create', editor: editor },
+                    // New Product Form: opens the New Product form
+                    { text: 'New', formTitle: 'Add a New Invoice', extend: 'create', editor: editor,
+                        formButtons:
+                            [
+                                { text: 'Cancel', action: function () { this.close(); } },
+                                'Create',
+                                {
+                                    text: 'Submit Another', action: function () {
+                                    
+                                        // Creates lastNewInvoice object to store current forms data to be called later
+                                        var lastNewInvoice = {
+                                            'invoicenumber': editor.field('Purchases.invoicenumber').val(),
+                                            'purchasedate': editor.field('Purchases.purchasedate').val(),
+                                            'vendorID': editor.field('Purchases.vendorID').val(),
+                                            'locationID': editor.field('Purchases.locationID').val(),
+                                            'CreatedBy': editor.field('Purchases.CreatedBy').val()
+                                        }
+
+                                        // Puts the object into local storage
+                                        localStorage.setItem('lastNewInvoice', JSON.stringify(lastNewInvoice));
+
+                                        // Retrieve the object from storage
+                                        lastNIRetrieved = localStorage.getItem('lastNewInvoice');
+                                        console.log(lastNIRetrieved);
+                                        this.submit();
+                                        editor.create();
+                                    }
+                                },
+                                { text: 'Clear', action: function () { fields = editor.displayed(); for (field in fields) { editor.field(fields[field]).val(''); }; } },
+                                {
+                                    text: 'Copy', action: function () {
+
+                                        // Initialize lastInvoice variable with object retrieved from storage
+                                        var lastNewInvoice = JSON.parse(lastNIRetrieved);
+                                        console.log(lastNewInvoice);
+                                        // Assign lastInvoice values to their respective fields
+                                        editor.field('Purchases.invoicenumber').val(lastNewInvoice.invoicenumber);
+                                        editor.field('Purchases.purchasedate').val(lastNewInvoice.purchasedate);
+                                        editor.field('Purchases.vendorID').val(lastNewInvoice.vendorID);
+                                        editor.field('Purchases.locationID').val(lastNewInvoice.locationID);
+                                        editor.field('Purchases.CreatedBy').val(lastNewInvoice.CreatedBy);
+                                    }
+                                }
+                            ]
+                    },
                     { extend: 'edit', editor: editor },
                     { extend: 'remove', editor: editor },
                     {
