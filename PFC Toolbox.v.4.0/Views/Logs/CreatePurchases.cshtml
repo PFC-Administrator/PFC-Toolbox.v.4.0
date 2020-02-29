@@ -75,6 +75,13 @@
         var editor;
         $(document).ready(function () {
 
+            // Disable autocomplete on form fields
+            $.extend(true, $.fn.dataTable.Editor.Field.defaults, {
+                attr: {
+                    autocomplete: 'off'
+                }
+            });
+
             $.fn.dataTable.moment('M/D/YYYY h:mm:ss A');
 
             editor = new $.fn.dataTable.Editor({
@@ -100,13 +107,123 @@
                     },
                     {
                         "label": "Amount:",
-                        "name": "Purchases.purchaseamount"
+                        "name": "Purchases.purchaseamount",
+                        id: "addAmount"
                     },
                     {
                         "label": "Subdepartment:",
                         "name": "Purchases.subdepartmentID",
                         "type": "select",
                         "placeholder": "Select a subdepartment"
+                    },
+                    {
+                        "label": "Amount:",
+                        "name": "Purchases.purchaseamount2",
+                        id: "purchaseamount2"
+                    },
+                    {
+                        "label": "Subdepartment:",
+                        "name": "Purchases.subdepartmentID2",
+                        "type": "select",
+                        "placeholder": "Select a subdepartment",
+                        id: "subdepartmentID2"
+                    },
+                    {
+                        "label": "Amount:",
+                        "name": "Purchases.purchaseamount3",
+                        id: "purchaseamount3"
+                    },
+                    {
+                        "label": "Subdepartment:",
+                        "name": "Purchases.subdepartmentID3",
+                        "type": "select",
+                        "placeholder": "Select a subdepartment",
+                        id: "subdepartmentID3"
+                    },
+                    {
+                        "label": "Amount:",
+                        "name": "Purchases.purchaseamount4",
+                        id: "purchaseamount4"
+                    },
+                    {
+                        "label": "Subdepartment:",
+                        "name": "Purchases.subdepartmentID4",
+                        "type": "select",
+                        "placeholder": "Select a subdepartment",
+                        id: "subdepartmentID4"
+                    },
+                    {
+                        "label": "Amount:",
+                        "name": "Purchases.purchaseamount5",
+                        id: "purchaseamount5"
+                    },
+                    {
+                        "label": "Subdepartment:",
+                        "name": "Purchases.subdepartmentID5",
+                        "type": "select",
+                        "placeholder": "Select a subdepartment",
+                        id: "subdepartmentID5"
+                    },
+                    {
+                        "label": "Amount:",
+                        "name": "Purchases.purchaseamount6",
+                        id: "purchaseamount6"
+
+                    },
+                    {
+                        "label": "Subdepartment:",
+                        "name": "Purchases.subdepartmentID6",
+                        "type": "select",
+                        "placeholder": "Select a subdepartment",
+                        id: "subdepartmentID6"
+                    },
+                    {
+                        "label": "Amount:",
+                        "name": "Purchases.purchaseamount7",
+                        id: "purchaseamount7"
+                    },
+                    {
+                        "label": "Subdepartment:",
+                        "name": "Purchases.subdepartmentID7",
+                        "type": "select",
+                        "placeholder": "Select a subdepartment",
+                        id: "subdepartmentID7"
+                    },
+                    {
+                        "label": "Amount:",
+                        "name": "Purchases.purchaseamount8",
+                        id: "purchaseamount8"
+                    },
+                    {
+                        "label": "Subdepartment:",
+                        "name": "Purchases.subdepartmentID8",
+                        "type": "select",
+                        "placeholder": "Select a subdepartment",
+                        id: "subdepartmentID8"
+                    },
+                    {
+                        "label": "Amount:",
+                        "name": "Purchases.purchaseamount9",
+                        id: "purchaseamount9"
+                    },
+                    {
+                        "label": "Subdepartment:",
+                        "name": "Purchases.subdepartmentID9",
+                        "type": "select",
+                        "placeholder": "Select a subdepartment",
+                        id: "subdepartmentID9"
+                    },
+                    {
+                        "label": "Amount:",
+                        "name": "Purchases.purchaseamount10",
+                        id: "purchaseamount10"
+                    },
+                    {
+                        "label": "Subdepartment:",
+                        "name": "Purchases.subdepartmentID10",
+                        "type": "select",
+                        "placeholder": "Select a subdepartment",
+                        id: "subdepartmentID10"
                     },
                     {
                         "label": "Location:",
@@ -140,6 +257,109 @@
                         def: getDate()
                     }
                 ]
+            });
+
+            // Number of total Purchase amount and invoice fields
+            var numberOfFields = 10;
+
+            // Hide extra purchase amount and subdepartment fields.
+            for (var i = 2; i <= numberOfFields; i++){
+                editor.field('Purchases.purchaseamount' + i).hide();
+                editor.field('Purchases.subdepartmentID' + i).hide();
+            };
+
+            // Append "Add More" button to the end of purchase amount field.
+            $('<button name="add" id="add" style="position:absolute;top:20%;right:8.3%">Add More</button>').insertAfter(
+                editor.field('Purchases.purchaseamount').input()
+            );
+
+            // Append "Add More" button to the end of purchase amount field.
+            for (var i = 2; i <= numberOfFields; i++) {
+                $('<button name="remove" id="' + i + '" class="btn btn-danger btn_remove" style="position:absolute;top:9.5%;right:13.25%">X</button>').insertAfter(
+                    editor.field('Purchases.purchaseamount' + i).input()
+                );
+            }
+
+            // On New Purchase form edit
+            editor.on('initEdit', function () {
+                for (i = 0; i < editor.fields().length; i++) {
+
+                    // If fields contain a value, show them
+                    if (editor.field(editor.fields()[i]).val()) {
+                        editor.field(editor.fields()[i]).show();
+                    }
+
+                    // If fields are null, empty, or undefined; hide them
+                    if (!editor.field(editor.fields()[i]).val()) {
+                        editor.field(editor.fields()[i]).hide();
+
+                        // These fields should always be visible
+                        editor.field('Purchases.vendorID').show();
+                        editor.field('Purchases.CreatedBy').show();
+                        editor.field('Purchases.purchasememo').show();
+                    }
+                }
+            });
+
+
+            // On New Purchase form open
+            editor.on('open', function () {
+
+                // If "Add More" button is clicked increment counter and show another pair of purchase amount and subdepartment fields
+                $(document).unbind('click').on('click', '#add', function () {
+
+                    // Get all displayed fields in Purchase form and create an array
+                    var fields = [];
+                    temp = editor.displayed();
+                    for (i = 0; i < temp.length; i++) {
+                        fields[i] = temp[i];
+                    }
+
+                    // Get all displayed purchaseamount fields and create an array
+                    var used = [];
+                    for (i = 2; i <= numberOfFields; i++) {
+                        var notOpen = fields.indexOf('Purchases.purchaseamount' + i);
+                        if (fields[notOpen]) {
+                            var displayed = parseInt(fields[notOpen].replace(/[^\d]/g, ''));
+                            used[i] = displayed;
+                        }
+                    }
+
+                    // Generates array of all numbers between range.
+                    var range = [];
+                    for (i = 2; i <= numberOfFields; i++) {
+                        range.push(i);
+                    };
+
+                    // Create array of unused values in range
+                    var unused = _.difference(range, used);
+
+                    if (unused.length != 0) {
+                        editor.field('Purchases.purchaseamount' + unused[0]).show();
+                        editor.field('Purchases.subdepartmentID' + unused[0]).show();
+                    }
+
+                });
+
+                // Remove the last new UPC field generated
+                $(document).on('click', '.btn_remove', function () {
+                    var button_id = $(this).attr("id");
+
+                    editor.field('Purchases.purchaseamount' + button_id).val();
+                    editor.field('Purchases.subdepartmentID' + button_id).val();
+
+                    editor.field('Purchases.purchaseamount' + button_id).hide();
+                    editor.field('Purchases.subdepartmentID' + button_id).hide();
+                });
+
+                // On close, hide all purchase amount fields again.
+                editor.on('close', function () {
+                    for (var i = 2; i <= numberOfFields; i++){
+                        editor.field('Purchases.purchaseamount' + i).hide();
+                        editor.field('Purchases.subdepartmentID' + i).hide();
+                    };
+                });
+
             });
 
             var table = $('#Purchases').DataTable({
@@ -192,7 +412,7 @@
                 dom: '<"floatRight"B><"clear">lfrtip',
                 order: [[9, "desc"]],
                 buttons: [
-                    // New Product Form: opens the New Product form
+                    
                     { text: 'New', formTitle: 'Add a New Invoice', extend: 'create', editor: editor,
                         formButtons:
                             [
@@ -215,7 +435,6 @@
 
                                         // Retrieve the object from storage
                                         lastNIRetrieved = localStorage.getItem('lastNewInvoice');
-                                        console.log(lastNIRetrieved);
                                         this.submit();
                                         editor.create();
                                     }
@@ -226,7 +445,7 @@
 
                                         // Initialize lastInvoice variable with object retrieved from storage
                                         var lastNewInvoice = JSON.parse(lastNIRetrieved);
-                                        console.log(lastNewInvoice);
+
                                         // Assign lastInvoice values to their respective fields
                                         editor.field('Purchases.invoicenumber').val(lastNewInvoice.invoicenumber);
                                         editor.field('Purchases.purchasedate').val(lastNewInvoice.purchasedate);

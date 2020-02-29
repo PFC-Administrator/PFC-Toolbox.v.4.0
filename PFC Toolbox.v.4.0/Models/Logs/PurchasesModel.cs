@@ -9,6 +9,10 @@ namespace PFC_Toolbox.v._4._0.Models
 
         public string purchaseamount { get; set; }
 
+        public string purchaseamount2 { get; set; }
+
+        public string purchaseamount3 { get; set; }
+
         public string purchasereconciled { get; set; }
 
         public string purchasememo { get; set; }
