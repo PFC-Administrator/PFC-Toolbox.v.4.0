@@ -21,6 +21,8 @@
   <li>Allow people to request or create new Operator codes.</li>
   <li>Implementation of Co-op Deals or Bidfile?</li>
   <li>Only display fields with values in Product Update form.</li>
+  <li>Tab to auto complete date fields</li>
+  <li>New brands show id instead of description</li>
 </ol>
 
 ## Notes:
