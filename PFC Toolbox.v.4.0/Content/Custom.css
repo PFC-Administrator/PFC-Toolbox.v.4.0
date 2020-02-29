@@ -1,7 +1,7 @@
 ﻿
 /* Export button tweak */
 .floatRight {
-    padding-left: 10px;
+    padding-left: .5%;
     position: relative;
     float: right;
 }
@@ -15,9 +15,13 @@
 
 /* Edits overall width of Toolbox display*/
 .container {
-    /*width: 1500px;*/
-    width: 95%;
+    width: 97%;
+}
 
+.container.body-content {
+    width: 100%;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 /**/
 
@@ -56,11 +60,11 @@
     color: white;
 }
 
-    .btn-primary:focus, .btn-default:focus {
-        background-color: #224f23;
-        border-color: #2a5f2b;
-        color: white;
-    }
+.btn-primary:focus, .btn-default:focus {
+    background-color: #224f23;
+    border-color: #2a5f2b;
+    color: white;
+}
 
 .btn-primary:hover, .btn-default:hover {
     background-color: #224f23;
