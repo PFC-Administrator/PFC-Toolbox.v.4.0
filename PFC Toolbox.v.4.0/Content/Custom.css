@@ -52,33 +52,16 @@
     border-color: #2a5f2b;
 }
 
-.btn-primary:hover {
-    background-color: #224f23;
-    border-color: #2a5f2b;
-}
+    .btn-primary:hover, .btn-primary:active, .btn-primary:focus, .btn-primary:visited {
+        background-color: #224f23;
+        border-color: #2a5f2b;
+    }
 
-.btn-primary:active {
-    background-color: #224f23;
-    border-color: #2a5f2b;
-}
-
-.btn-default {
-    background-color: #3c763d;
-    border-color: #2a5f2b;
-    color: white;
-}
-
-.btn-default:hover {
-    background-color: #224f23;
-    border-color: #2a5f2b;
-    color: white;
-}
-
-.btn-default:active {
-    background-color: #224f23;
-    border-color: #2a5f2b;
-    color: white;
-}
+    .btn-default, .btn-default:hover, .btn-default:active, .btn-default:focus {
+        background-color: #224f23;
+        border-color: #2a5f2b;
+        color: white;
+    }
 /**/
 
 
