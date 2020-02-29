@@ -1,4 +1,5 @@
-﻿/* Export button tweak */
+﻿
+/* Export button tweak */
 .floatRight {
     padding-left: 10px;
     position: relative;
@@ -14,7 +15,9 @@
 
 /* Edits overall width of Toolbox display*/
 .container {
-    width: 1500px;
+    /*width: 1500px;*/
+    width: 95%;
+
 }
 /**/
 
@@ -46,24 +49,31 @@
 }
 /**/
 
-/* Custom button colors*/
-.btn-primary {
+/* Custom button colors -- LVHFA */
+.btn-primary, .btn-default {
     background-color: #3c763d;
     border-color: #2a5f2b;
+    color: white;
 }
 
-    .btn-primary:hover, .btn-primary:active, .btn-primary:focus, .btn-primary:visited {
-        background-color: #224f23;
-        border-color: #2a5f2b;
-    }
-
-    .btn-default, .btn-default:hover, .btn-default:active, .btn-default:focus {
+    .btn-primary:focus, .btn-default:focus {
         background-color: #224f23;
         border-color: #2a5f2b;
         color: white;
     }
-/**/
 
+.btn-primary:hover, .btn-default:hover {
+    background-color: #224f23;
+    border-color: #2a5f2b;
+    color: white;
+}
+
+.btn-primary:active, .btn-default:active {
+    background-color: #224f23 !important;
+    border-color: #2a5f2b !important;
+    color: white !important;
+}
+/**/
 
 h1 {
     margin-top: -5px;
@@ -77,12 +87,6 @@ span.show-ellipsis:after {
     content: "...";
 }
 
-/* Formats DataTables Forms */
-
-.DTE_Body_Content {
-    max-height: 553px !important;
-}
-
 /**/
 
 label {
@@ -92,45 +96,3 @@ label {
 body {
     margin: 27px;
 }
-
-/* Custom Update An Existing Product Form*/
-/*#customForm {
-    display: flex;
-    flex-flow: row wrap;
-}
-
-    #customForm fieldset {
-        flex: 1;
-        border: 1px solid #aaa;
-        margin: 0.5em;
-    }
-
-        #customForm fieldset legend {
-            padding: 5px 20px;
-            border: 1px solid #aaa;
-            font-weight: bold;
-        }
-
-        #customForm fieldset.name {
-            flex: 2 100%;
-        }
-
-        #customForm fieldset.hr {
-            flex: 2 100%;
-        }
-
-        #customForm fieldset.name legend {
-            background: #bfffbf;
-        }
-
-        #customForm fieldset.office legend {
-            background: #ffffbf;
-        }
-
-        #customForm fieldset.hr legend {
-            background: #ffbfbf;
-        }
-
-    #customForm div.DTE_Field {
-        padding: 5px;
-    }*/
