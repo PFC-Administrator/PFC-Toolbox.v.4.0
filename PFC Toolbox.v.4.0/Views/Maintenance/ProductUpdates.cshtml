@@ -80,6 +80,11 @@
                 }
             });
 
+            // Form padding
+            $.extend($.fn.dataTable.Editor.display.lightbox.conf, {
+                windowPadding: 66
+            });
+
             // Promotion Report Form
             var editorPR = new $.fn.dataTable.Editor({
                 ajax: '/api/ProductUpdates',
@@ -406,17 +411,6 @@
                 }
             });
 
-            // Update An Existing Product Form: hides cost info on load
-            //editor.field('ProductUpdates.POS_TAB_F04').input().on('change', function () {
-            //    editor.field('ProductUpdates.COST_TAB_F27').hide();
-            //    editor.field('ProductUpdates.COST_TAB_F26').hide();
-            //    editor.field('ProductUpdates.PRICE_TAB_F49').hide();
-            //    editor.field('ProductUpdates.COST_TAB_F19').hide();
-
-            //    // Hide calculate button
-            //    document.getElementById('calculate').style.visibility = 'hidden';
-            //});
-
             // Update An Existing Product Form: hides TPR related fields unless a promotional request type is selected
             editor.field('ProductUpdates.requesttypeID').input().on('change', function () {
                 if (editor.field('ProductUpdates.requesttypeID').val() == '2' || editor.field('ProductUpdates.requesttypeID').val() == '3' || editor.field('ProductUpdates.requesttypeID').val() == '4' || editor.field('ProductUpdates.requesttypeID').val() == '5' || editor.field('ProductUpdates.requesttypeID').val() == '7' || editor.field('ProductUpdates.requesttypeID').val() == '8' || editor.field('ProductUpdates.requesttypeID').val() == '9') {
@@ -602,7 +596,7 @@
             //    editor.field('ProductUpdates.price_tab_f30').input()
             //);
 
-                        // Update An Existing Product Form: SRP button
+            // Update An Existing Product Form: SRP button
             $('<button id="srpcalculator" style="position:absolute;top:20%;right:12%">SRP</button>').insertAfter(
                 editor.field('ProductUpdates.price_tab_f30').input()
             );
@@ -697,6 +691,34 @@
             $(document).on('keydown', '#likecodePU', function (event) {
                 if (event.keyCode == 8 || event.keyCode == 46) {
                     editor.field('ProductUpdates.LIKE_TAB_F122').val(null);
+                }
+            });
+
+            // Update An Existing Product Form: show fields with values or hide fields with nothing
+            editor.on('initEdit', function () {
+                for (i = 0; i < editor.fields().length; i++) {
+
+                    // If fields contain a value, show them
+                    if (editor.field(editor.fields()[i]).val()) {
+                        editor.field(editor.fields()[i]).show();
+
+                        // Never show these fields!
+                        editor.field('ProductUpdates.POS_TAB_F96').hide();
+                        editor.field('ProductUpdates.POS_TAB_F150').hide();
+                        editor.field('ProductUpdates.POS_TAB_F83').hide();
+                        editor.field('ProductUpdates.POS_TAB_F171').hide();
+                        editor.field('ProductUpdates.createdby').hide();
+                        editor.field('ProductUpdates.datecreated').hide();
+                        editor.field('ProductUpdates.completeddate').hide();
+                        editor.field('ProductUpdates.completedby').hide();
+                        editor.field('ProductUpdates.lastupdatedon').hide();
+                        editor.field('ProductUpdates.lastupdatedby').hide();
+                    }
+
+                    // If fields are null, empty, or undefined; hide them
+                    if (!editor.field(editor.fields()[i]).val()) {
+                        editor.field(editor.fields()[i]).hide();
+                    }
                 }
             });
 

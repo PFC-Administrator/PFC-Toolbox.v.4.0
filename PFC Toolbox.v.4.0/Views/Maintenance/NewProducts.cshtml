@@ -71,6 +71,11 @@
                 }
             });
 
+            // Form padding
+            $.extend($.fn.dataTable.Editor.display.lightbox.conf, {
+                windowPadding: 66
+            });
+
             // New Product Form
             var editorNP = new $.fn.dataTable.Editor({
                 ajax: '/api/NewProducts',

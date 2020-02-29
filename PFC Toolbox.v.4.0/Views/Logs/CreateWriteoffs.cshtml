@@ -73,6 +73,11 @@
 
             $.fn.dataTable.moment('M/D/YYYY h:mm:ss A');
 
+            // Form padding
+            $.extend($.fn.dataTable.Editor.display.lightbox.conf, {
+                windowPadding: 66
+            });
+
             var editor = new $.fn.dataTable.Editor({
                 ajax: '/api/Writeoffs',
                 table: '#Writeoffs',

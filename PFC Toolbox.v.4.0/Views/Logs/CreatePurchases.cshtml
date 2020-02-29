@@ -82,6 +82,11 @@
                 }
             });
 
+            // Form padding
+            $.extend($.fn.dataTable.Editor.display.lightbox.conf, {
+                windowPadding: 66
+            });
+
             $.fn.dataTable.moment('M/D/YYYY h:mm:ss A');
 
             editor = new $.fn.dataTable.Editor({
@@ -300,7 +305,6 @@
                     }
                 }
             });
-
 
             // On New Purchase form open
             editor.on('open', function () {
