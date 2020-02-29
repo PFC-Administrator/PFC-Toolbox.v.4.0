@@ -71,6 +71,13 @@
         var editor;
         $(document).ready(function () {
 
+            //Disable autocomplete on form fields
+            $.extend(true, $.fn.dataTable.Editor.Field.defaults, {
+                attr: {
+                    autocomplete: 'off'
+                }
+            });
+
             $.fn.dataTable.moment('M/D/YYYY h:mm:ss A');
 
             var editor = new $.fn.dataTable.Editor({
