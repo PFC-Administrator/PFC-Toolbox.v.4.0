@@ -11,7 +11,7 @@ function titleCase(string) {
         function (txt) {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
         }
-    ).replace(/[^a-zA-Z0-9 ]/g, "")
+    ).replace(/[^a-zA-Z0-9& ]/g, "")
         .replace("Rbgh", "rBGH")
         .replace("Bbq", "BBQ")
         .replace("Ipa", "IPA")
