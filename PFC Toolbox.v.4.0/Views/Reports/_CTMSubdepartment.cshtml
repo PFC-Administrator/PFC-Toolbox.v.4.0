@@ -196,6 +196,13 @@
                 editor.inline(this);
             });
 
+            var editIcon = function (data, type, row) {
+                if (type === 'display') {
+                    return data + ' <i class="fa fa-pencil"/>';
+                }
+                return data;
+            };
+
             table = $('#results').DataTable({
                 responsive: true,
 
@@ -208,10 +215,10 @@
                     { data: "SalesWeight", width: '50px' },
                     { data: "SalesQuantity", width: '60px' },
                     { data: "SalesAmount", width: '80px' },
-                    { data: "SalesRetail", className: 'editable', width: '60px', render: $.fn.dataTable.render.number(',', '.', 2, '$') },
-                    { data: "SalesCost", className: 'editable', width: '60px', render: $.fn.dataTable.render.number(',', '.', 2, '$') },
-                    { data: "SalesVendorID", className: 'editable', width: '60px' },
-                    { data: "SalesReorder", className: 'editable', width: '60px' },
+                    { data: "SalesRetail", className: 'editable', width: '60px', render: $.fn.dataTable.render.number(',', '.', 2, '$'), render: editIcon  },
+                    { data: "SalesCost", className: 'editable', width: '60px', render: $.fn.dataTable.render.number(',', '.', 2, '$'), render: editIcon  },
+                    { data: "SalesVendorID", className: 'editable', width: '60px', render: editIcon  },
+                    { data: "SalesReorder", className: 'editable', width: '60px', render: editIcon  },
                     { data: "SalesPercent", width: '80px' },
                     { data: "SalesAppliedMargin", width: '110px' },
                     { data: "SalesCTM", width: '50px' }
