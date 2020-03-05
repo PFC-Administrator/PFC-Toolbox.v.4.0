@@ -123,7 +123,7 @@
                         type: "select",
                         placeholder: "Select a brand"
                     }, {
-                        label: "Receipt Description:",
+                        label: "Shelf Tag & Receipt Description:",
                         name: "ProductUpdates.OBJ_TAB_F29"
                     }, {
                         label: "Size:",
@@ -495,7 +495,10 @@
                         editorNP.field('ProductUpdates.OBJ_TAB_F155').update(optionsA);
                     });
 
-                    editorNP.field('ProductUpdates.OBJ_TAB_F155').val("row_" + brand);
+                    //editorNP.field('ProductUpdates.OBJ_TAB_F155').val("row_" + brand);
+
+                    var finalBrand = "row_" + brand;
+                    editorNP.field('ProductUpdates.OBJ_TAB_F155').val(finalBrand);
                 }
             });
 
@@ -820,7 +823,7 @@
                         placeholder: "Select a brand",
                         id: "brandPU"
                     }, {
-                        label: "Receipt Description:",
+                        label: "Shelf Tag & Receipt Description:",
                         name: "ProductUpdates.OBJ_TAB_F29"
                     }, {
                         label: "Size:",
