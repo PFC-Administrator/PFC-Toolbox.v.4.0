@@ -211,7 +211,7 @@
                         placeholder: "Select a brand",
                         id: "brandPU"
                     }, {
-                        label: "Receipt Description:",
+                        label: "Shelf Tag & Receipt Description:",
                         name: "ProductUpdates.OBJ_TAB_F29"
                     }, {
                         label: "Size:",
@@ -725,6 +725,7 @@
             // Create the DataTables table
             var table = $('#ProductUpdates').DataTable({
                 //serverSide: true,
+                select: true,
                 deferRender: true,
                 autoWidth: false,
                 // This is the default view showing uncompleted requests
@@ -922,6 +923,9 @@
                             columns: [0, 3, 4, 5, 6, 10, 9, 17, 7, 8, 11, 15, 16, 12, 14]
                         },
                         action: function (e, dt, node, config) {
+
+                            // Deselect any selected row on export.
+                            table.rows({ selected: true }).deselect();
 
                             // Order columns by location and deselect any selected row, so all data is exported.
                             table.column(14).order('asc').draw().rows().deselect();
