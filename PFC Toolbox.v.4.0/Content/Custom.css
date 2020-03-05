@@ -18,10 +18,18 @@
     width: 97%;
 }
 
-.container.body-content {
-    width: 100%;
-    padding-left: 0px;
-    padding-right: 0px;
+    .container.body-content {
+        width: 100%;
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+div.DTE_Body div.DTE_Body_Content div.DTE_Field {
+    position: relative;
+    zoom: 1;
+    clear: both;
+    padding: 6px 10% !important;
+    border: 1px solid transparent;
 }
 /**/
 
@@ -37,7 +45,8 @@
     padding-right: 25px;
     padding-left: 25px;
 }
-.container.jumbotronContainer{
+
+.container.jumbotronContainer {
     padding-right: 60px;
     padding-left: 60px;
     padding-top: 20px;
@@ -60,23 +69,23 @@
     color: white;
 }
 
-.btn-primary:focus, .btn-default:focus {
-    background-color: #224f23;
-    border-color: #2a5f2b;
-    color: white;
-}
+    .btn-primary:focus, .btn-default:focus {
+        background-color: #224f23;
+        border-color: #2a5f2b;
+        color: white;
+    }
 
-.btn-primary:hover, .btn-default:hover {
-    background-color: #224f23;
-    border-color: #2a5f2b;
-    color: white;
-}
+    .btn-primary:hover, .btn-default:hover {
+        background-color: #224f23;
+        border-color: #2a5f2b;
+        color: white;
+    }
 
-.btn-primary:active, .btn-default:active {
-    background-color: #224f23 !important;
-    border-color: #2a5f2b !important;
-    color: white !important;
-}
+    .btn-primary:active, .btn-default:active {
+        background-color: #224f23 !important;
+        border-color: #2a5f2b !important;
+        color: white !important;
+    }
 /**/
 
 h1 {
