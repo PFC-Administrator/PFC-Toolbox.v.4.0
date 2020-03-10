@@ -458,7 +458,7 @@
                     txt = "User cancelled the prompt.";
                 } else {
 
-                    brand = newbrand.toUpperCase();
+                    brand = newbrand.toUpperCase().replace(/[^a-zA-Z0-9- ]/g, "");
 
                     var CreateNewBrand = $.ajax({
                         url: "api/CreateNewBrand",
