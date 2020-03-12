@@ -453,20 +453,31 @@
 
             // New Product Form: enter new Brand
             $(document).on('click', '#newbrand', function () {
-                var newbrand = prompt("Please enter the new brand:");
+                var newbrand = prompt("Please enter the new brand without special characters:");
+
+                var format = /[^a-zA-Z0-9- ]/g;
+                while (format.test(newbrand)) {
+                    newbrand = prompt("No special characters...");
+                }
+
                 if (newbrand == null || newbrand == "") {
                     txt = "User cancelled the prompt.";
                 } else {
+                    var format = /[^a-zA-Z0-9- ]/g;
+                    if (format.test(newbrand)) {
+                        
+                    }
+                    else {
 
-                    brand = newbrand.toUpperCase().replace(/[^a-zA-Z0-9- ]/g, "");
+                        brand = newbrand.toUpperCase().replace(/[^a-zA-Z0-9- ]/g, "");
 
-                    var CreateNewBrand = $.ajax({
-                        url: "/api/CreateNewBrand",
-                        type: "POST",
-                        dataType: "json",
-                        data: {
-                            action: 'create',
-                            'data[0][Brands][Brand]': brand
+                        var CreateNewBrand = $.ajax({
+                            url: "/api/CreateNewBrand",
+                            type: "POST",
+                            dataType: "json",
+                            data: {
+                                action: 'create',
+                                'data[0][Brands][Brand]': brand
                         },
                         error: function (error) {
                             console.log(`Error ${error}`);
@@ -493,10 +504,13 @@
                             option = {};
                         };
                         editorNP.field('ProductUpdates.OBJ_TAB_F155').update(optionsA);
+                        console.log(optionsA);
                     });
 
                     var finalBrand = "row_" + brand;
-                    editorNP.field('ProductUpdates.OBJ_TAB_F155').set(finalBrand);
+                    console.log(finalBrand)
+                    editorNP.field('ProductUpdates.OBJ_TAB_F155').set(finalBrand);   
+                    }
                 }
             });
 
