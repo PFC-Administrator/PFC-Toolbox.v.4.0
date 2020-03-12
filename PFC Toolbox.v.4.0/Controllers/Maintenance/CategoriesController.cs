@@ -9,7 +9,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
 {
     public class CategoriesController : ApiController
     {
-        // GET: Categories
+        // POST: Categories -- cascading select fields in Product Maintenance forms.
         [Route("api/Categories")]
         [HttpPost]
         public IHttpActionResult CategoryOptions()
@@ -33,6 +33,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
             }
         }
 
+        // GET:  Categories
         [Route("api/GetCategories")]
         [HttpGet]
         public IHttpActionResult GetCategories()

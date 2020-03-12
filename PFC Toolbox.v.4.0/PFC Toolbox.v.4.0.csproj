@@ -231,7 +231,6 @@
     <Compile Include="Controllers\Logs\WriteoffsController.cs" />
     <Compile Include="Controllers\MaintenanceController.cs" />
     <Compile Include="Controllers\Maintenance\CategoriesController.cs" />
-    <Compile Include="Controllers\Maintenance\NewBrandController.cs" />
     <Compile Include="Controllers\Maintenance\NewProductController.cs" />
     <Compile Include="Controllers\Maintenance\PLUController.cs" />
     <Compile Include="Controllers\Maintenance\ProductUpdatesController.cs" />

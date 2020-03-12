@@ -461,7 +461,7 @@
                     brand = newbrand.toUpperCase().replace(/[^a-zA-Z0-9- ]/g, "");
 
                     var CreateNewBrand = $.ajax({
-                        url: "api/CreateNewBrand",
+                        url: "/api/CreateNewBrand",
                         type: "POST",
                         dataType: "json",
                         data: {
@@ -495,10 +495,8 @@
                         editorNP.field('ProductUpdates.OBJ_TAB_F155').update(optionsA);
                     });
 
-                    //editorNP.field('ProductUpdates.OBJ_TAB_F155').val("row_" + brand);
-
                     var finalBrand = "row_" + brand;
-                    editorNP.field('ProductUpdates.OBJ_TAB_F155').val(finalBrand);
+                    editorNP.field('ProductUpdates.OBJ_TAB_F155').set(finalBrand);
                 }
             });
 
