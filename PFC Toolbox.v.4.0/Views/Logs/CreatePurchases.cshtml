@@ -71,7 +71,7 @@
         };
 
         var currentUser = "@CreatedBy";
-        var lastNIRetrieved;
+        var lastNIRetrieved, newInvoice;
         var editor;
         $(document).ready(function () {
 
@@ -268,15 +268,15 @@
             var numberOfFields = 10;
 
             // Hide extra purchase amount and subdepartment fields.
-            for (var i = 2; i <= numberOfFields; i++){
+            for (var i = 2; i <= numberOfFields; i++) {
                 editor.field('Purchases.purchaseamount' + i).hide();
                 editor.field('Purchases.subdepartmentID' + i).hide();
             };
 
             // Append "Add More" button to the end of purchase amount field.
-            //$('<button name="add" id="add" style="position:absolute;top:20%;right:8.3%">Add More</button>').insertAfter(
-            //    editor.field('Purchases.purchaseamount').input()
-            //);
+            $('<button name="add" id="add" style="position:absolute;top:20%;right:8.3%">Add More</button>').insertAfter(
+                editor.field('Purchases.purchaseamount').input()
+            );
 
             // Append "Add More" button to the end of purchase amount field.
             for (var i = 2; i <= numberOfFields; i++) {
@@ -358,7 +358,7 @@
 
                 // On close, hide all purchase amount fields again.
                 editor.on('close', function () {
-                    for (var i = 2; i <= numberOfFields; i++){
+                    for (var i = 2; i <= numberOfFields; i++) {
                         editor.field('Purchases.purchaseamount' + i).hide();
                         editor.field('Purchases.subdepartmentID' + i).hide();
                     };
@@ -416,49 +416,48 @@
                 dom: '<"floatRight"B><"clear">lfrtip',
                 order: [[9, "desc"]],
                 buttons: [
-                    
-                    { text: 'New', formTitle: 'Add a New Invoice', extend: 'create', editor: editor,
-                        formButtons:
-                            [
-                                { text: 'Cancel', action: function () { this.close(); } },
-                                'Create',
-                                {
-                                    text: 'Submit Another', action: function () {
-                                    
-                                        // Creates lastNewInvoice object to store current forms data to be called later
-                                        var lastNewInvoice = {
-                                            'invoicenumber': editor.field('Purchases.invoicenumber').val(),
-                                            'purchasedate': editor.field('Purchases.purchasedate').val(),
-                                            'vendorID': editor.field('Purchases.vendorID').val(),
-                                            'locationID': editor.field('Purchases.locationID').val(),
-                                            'CreatedBy': editor.field('Purchases.CreatedBy').val()
-                                        }
+                    {
+                        text: 'New', formTitle: 'Add a New Invoice', extend: 'create', editor: editor,
+                        formButtons: [
+                            { text: 'Cancel', action: function () { this.close(); } },
+                            { text: 'Create', action: function () { this.submit(); } },
+                            { text: 'Clear', action: function () { fields = editor.displayed(); for (field in fields) { editor.field(fields[field]).val(''); }; } },
+                            {
+                                text: 'Submit Another', action: function () {
 
-                                        // Puts the object into local storage
-                                        localStorage.setItem('lastNewInvoice', JSON.stringify(lastNewInvoice));
-
-                                        // Retrieve the object from storage
-                                        lastNIRetrieved = localStorage.getItem('lastNewInvoice');
-                                        this.submit();
-                                        editor.create();
+                                    // Creates lastNewInvoice object to store current forms data to be called later
+                                    var lastNewInvoice = {
+                                        'invoicenumber': editor.field('Purchases.invoicenumber').val(),
+                                        'purchasedate': editor.field('Purchases.purchasedate').val(),
+                                        'vendorID': editor.field('Purchases.vendorID').val(),
+                                        'locationID': editor.field('Purchases.locationID').val(),
+                                        'CreatedBy': editor.field('Purchases.CreatedBy').val()
                                     }
-                                },
-                                { text: 'Clear', action: function () { fields = editor.displayed(); for (field in fields) { editor.field(fields[field]).val(''); }; } },
-                                {
-                                    text: 'Copy', action: function () {
 
-                                        // Initialize lastInvoice variable with object retrieved from storage
-                                        var lastNewInvoice = JSON.parse(lastNIRetrieved);
+                                    // Puts the object into local storage
+                                    localStorage.setItem('lastNewInvoice', JSON.stringify(lastNewInvoice));
 
-                                        // Assign lastInvoice values to their respective fields
-                                        editor.field('Purchases.invoicenumber').val(lastNewInvoice.invoicenumber);
-                                        editor.field('Purchases.purchasedate').val(lastNewInvoice.purchasedate);
-                                        editor.field('Purchases.vendorID').val(lastNewInvoice.vendorID);
-                                        editor.field('Purchases.locationID').val(lastNewInvoice.locationID);
-                                        editor.field('Purchases.CreatedBy').val(lastNewInvoice.CreatedBy);
-                                    }
+                                    // Retrieve the object from storage
+                                    lastNIRetrieved = localStorage.getItem('lastNewInvoice');
+                                    this.submit();
+                                    editor.create();
                                 }
-                            ]
+                            },
+                            {
+                                text: 'Copy', action: function () {
+
+                                    // Initialize lastInvoice variable with object retrieved from storage
+                                    var lastNewInvoice = JSON.parse(lastNIRetrieved);
+
+                                    // Assign lastInvoice values to their respective fields
+                                    editor.field('Purchases.invoicenumber').val(lastNewInvoice.invoicenumber);
+                                    editor.field('Purchases.purchasedate').val(lastNewInvoice.purchasedate);
+                                    editor.field('Purchases.vendorID').val(lastNewInvoice.vendorID);
+                                    editor.field('Purchases.locationID').val(lastNewInvoice.locationID);
+                                    editor.field('Purchases.CreatedBy').val(lastNewInvoice.CreatedBy);
+                                }
+                            }
+                        ]
                     },
                     { extend: 'edit', editor: editor },
                     { extend: 'remove', editor: editor },
@@ -487,6 +486,97 @@
                 rowCallback: function (row, data) {
                     // Set the checked state of the checkbox in the table
                     $('input.editor-active', row).prop('checked', data.Purchases.purchasereconciled == "True");
+                }
+            });
+
+            // Hide or show "Add More" button dependendent on create or edit form opened.
+            editor.on('open', function (e, data, action) {
+                if (action === 'edit') {
+                    document.getElementById('add').style.visibility = 'hidden';
+                }
+
+                if (action === 'create') {
+                    document.getElementById('add').style.visibility = 'visible';
+                }
+            });
+
+            // Arrays to be used in the entry of multiple purchase amounts and their subdepartments.
+            var purchaseAmounts = [];
+            var subdepartmentIDs = [];
+
+            // Before submitting verify if there are multiple purchase amounts being entered and manipulate them to create a new row for each.
+            editor.on('preSubmit', function (e, data, action) {
+                if (action === 'create') {
+
+                    // Gather data from filled out Editor form and store in array.
+                    var oData = [];
+                    oData = Object.values(data.data[0].Purchases);
+
+                    // Loop through specific fields in data array to create purchaseAmounts array
+                    // with data that will be different between each new row created.
+                    var temp = {};
+                    var purchases = [];
+                    for (i = 3; i < 23; i += 2) {
+                        if (oData[i]) {
+                            temp.purchaseamount = oData[i];
+                            temp.subdepartmentID = oData[i + 1];
+
+                            purchases.push(temp);
+                            temp = {};
+                        }
+                    }
+
+                    // Temp array to hold all purchases
+                    var tempPurchases = [];
+                    for (i = 0; i < purchases.length; i++) {
+                        tempPurchases.push(purchases[i].purchaseamount);
+                    }
+
+                    // Temp array to hold all subdepartments
+                    var tempSubdepartments = [];
+                    for (i = 0; i < purchases.length; i++) {
+                        tempSubdepartments.push(purchases[i].subdepartmentID);
+                    }
+
+                    // If more than 1 purchase amount is entered enter this statement.
+                    if (tempPurchases.length > 1) {
+
+                        // Remote and return the last value in the tempPurchases and tempSubdepartments arrays to be used to create a new row.
+                        data.data[0].Purchases.purchaseamount = tempPurchases.pop();
+                        data.data[0].Purchases.subdepartmentID = tempSubdepartments.pop();
+
+                        // Clear out all additional purchase amount and subdepartments for initial record to be created.
+                        for (i = 10; i > 0; i--) {
+                            data.data[0].Purchases["purchaseamount" + i] = "";
+                            data.data[0].Purchases["subdepartmentID" + i] = "";
+                        }
+
+                        // Update purchaseAmounts and SubdepartmentID arrays.
+                        purchaseAmounts = tempPurchases;
+                        subdepartmentIDs = tempSubdepartments;
+                    }
+                }
+
+                return true;
+            });
+
+            // On submission, create multiple new records
+            editor.on('submitComplete', function (e, json, data, action) {
+                if (action === 'create') {
+                    if (purchaseAmounts.length > 0) {
+                        editor.create(false)
+                            .set('Purchases.invoicenumber', data.Purchases.invoicenumber)
+                            .set('Purchases.purchasedate', data.Purchases.purchasedate)
+                            .set('Purchases.vendorID', data.Purchases.vendorID)
+                            .set('Purchases.purchaseamount', purchaseAmounts.pop())
+                            .set('Purchases.subdepartmentID', subdepartmentIDs.pop())
+                            .set('Purchases.locationID', data.Purchases.locationID)
+                            .set('Purchases.purchasereconciled', data.Purchases.purchasereconciled)
+                            .set('Purchases.purchasememo', data.Purchases.purchasememo)
+                            .set('Purchases.CreatedBy', data.Purchases.CreatedBy)
+                            .set('Purchases.DateCreated', data.Purchases.DateCreated)
+                            .submit();
+                    }
                 }
             });
 

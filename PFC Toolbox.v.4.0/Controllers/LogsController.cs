@@ -17,6 +17,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
         }
 
         // GET: /Logs/CreatePurchases
+        [Authorize] // Restricts the page to logged in users only
         public ActionResult CreatePurchases()
         {
             return View();
