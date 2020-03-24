@@ -687,8 +687,8 @@
                 }
             });
 
-            // Update An Existing Product Form: clear like code select field
-            $(document).on('keydown', '#likecodePU', function (event) {
+            // New Product Form: clear like code select field
+            $(document).on('keydown', '#likePU', function (event) {
                 if (event.keyCode == 8 || event.keyCode == 46) {
                     editor.field('ProductUpdates.LIKE_TAB_F122').val(null);
                 }
