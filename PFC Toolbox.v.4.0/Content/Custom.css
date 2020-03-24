@@ -13,6 +13,13 @@
 }
 /**/
 
+/* New Purchase Form <hr> */
+.hrPurchaseForm {
+    margin-bottom: 20px !important;
+    margin-top: -5px !important;
+}
+/**/
+
 /* Edits overall width of Toolbox display*/
 .container {
     width: 97%;
