@@ -53,19 +53,8 @@
     <script src="~/Content/Editor-1.8.1/js/dataTables.editor.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
-      
-    <script>
 
-        // Function to get today's date
-        function getDate() {
-            today = new Date().getMonth() + 1
-            + "/" + new Date().getDate()
-            + "/" + new Date().getFullYear()
-            + " " + new Date().getHours()
-            + ":" + new Date().getMinutes()
-            + ":" + new Date().getSeconds()
-            return today;
-        };
+    <script>
 
         var currentUser = "@CreatedBy";
         var editor;
@@ -123,7 +112,8 @@
                     },
                     {
                         label: "Notes:",
-                        name: "Writeoffs.writeoffmemo"
+                        name: "Writeoffs.writeoffmemo",
+                        type: "textarea"
                     },
                     {
                         label: "Created by:",
@@ -133,7 +123,7 @@
                     {
                         label: "Date created:",
                         name: "Writeoffs.DateCreated",
-                        type: "readonly",
+                        type: "hidden",
                         def: getDate()
                     }
                 ]
@@ -142,30 +132,31 @@
             var table = $('#Writeoffs').DataTable({
                 deferRender: true,
                 select: true,
-                lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "All"]],
+                lengthMenu: [[15, 25, 50, 100, -1], [15, 25, 50, 100, "All"]],
                 ajax: '/api/Writeoffs',
                 columns: [
                     {
-                        "data": "Writeoffs.writeoffitemname"
+                        data: "Writeoffs.writeoffitemname"
                     },
                     {
-                        "data": "Writeoffs.writeofftotalprice",
-                        "render": $.fn.dataTable.render.number(',', '.', 2, '$')
+                        data: "Writeoffs.writeofftotalprice",
+                        render: $.fn.dataTable.render.number(',', '.', 2, '$')
                     },
                     {
-                        "data": "Locations.locationname"
+                        data: "Locations.locationname"
                     },
                     {
-                        "data": "Subdepartments.subdepartmentname"
+                        data: "Subdepartments.subdepartmentname"
                     },
                     {
-                        "data": "Writeoffs.writeoffmemo"
+                        data: "Writeoffs.writeoffmemo"
                     },
                     {
-                        "data": "Writeoffs.CreatedBy"
+                        data: "Writeoffs.CreatedBy"
                     },
                     {
-                        "data": "Writeoffs.DateCreated", "render": function (value) {
+                        data: "Writeoffs.DateCreated",
+                        render: function (value) {
                             if (value === null) return "";
                             return window.moment(value).format('M/D/YYYY h:mm:ss A');
                         }
@@ -174,7 +165,7 @@
                 dom: '<"floatRight"B><"clear">lfrtip',
                 order: [[6, "desc"]],
                 buttons: [
-                    { extend: 'create', editor: editor },
+                    { text: 'New', formTitle: 'Add a New Writeoff', extend: 'create', editor: editor},
                     { extend: 'edit', editor: editor },
                     { extend: 'remove', editor: editor },
                     {
