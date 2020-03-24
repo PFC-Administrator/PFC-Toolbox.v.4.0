@@ -7,7 +7,7 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
-    <title>Purchases</title>
+    <title>@ViewBag.Title</title>
 
     <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
@@ -18,7 +18,7 @@
 </head>
 <body class="dataTables">
     <div class="container">
-        <h1><img src="~/Content/PFC_Logo_128px.png" width="100" height="100">        Purchases</h1>
+        <h1><img src="~/Content/PFC_Logo_128px.png" width="100" height="100">        @ViewBag.Title</h1>
         <br />
         <table id="Purchases" class="display text-nowrap compact" style="width:100%">
             <thead>
@@ -59,196 +59,187 @@
 
     <script>
 
-        // Function to get today's date
-        function getDate() {
-            today = new Date().getMonth() + 1
-            + "/" + new Date().getDate()
-            + "/" + new Date().getFullYear()
-            + " " + new Date().getHours()
-            + ":" + new Date().getMinutes()
-            + ":" + new Date().getSeconds()
-            return today;
-        };
-
         var currentUser = "@CreatedBy";
         var lastNIRetrieved, newInvoice;
         var editor;
         $(document).ready(function () {
 
-            // Disable autocomplete on form fields
+            // New Purchase Form: disable autocomplete on fields.
             $.extend(true, $.fn.dataTable.Editor.Field.defaults, {
                 attr: {
                     autocomplete: 'off'
                 }
             });
 
-            // Form padding
+            // New Purchase Form: fit form to window size.
             $.extend($.fn.dataTable.Editor.display.lightbox.conf, {
                 windowPadding: 66
             });
 
+            // New Purchase Form: moment data foramtter.
             $.fn.dataTable.moment('M/D/YYYY h:mm:ss A');
 
+            // New Purchase Form
             editor = new $.fn.dataTable.Editor({
                 ajax: '/api/Purchases',
                 table: '#Purchases',
                 fields: [
                     {
-                        "label": "Invoice:",
-                        "name": "Purchases.invoicenumber"
+                        label: "Invoice:",
+                        name: "Purchases.invoicenumber"
                     },
                     {
-                        "label": "Date:",
-                        "name": "Purchases.purchasedate",
-                        "type": "datetime",
-                        "def": function () { return new Date(); },
-                        "format": 'M/D/YYYY'
+                        label: "Date:",
+                        name: "Purchases.purchasedate",
+                        type: "datetime",
+                        format: 'M/D/YYYY',
+                        def: function () { return new Date(); }
                     },
                     {
-                        "label": "Vendor:",
-                        "name": "Purchases.vendorID",
-                        "type": "select",
-                        "placeholder": "Select a vendor"
+                        label: "Vendor:",
+                        name: "Purchases.vendorID",
+                        type: "select",
+                        placeholder: "Select a vendor"
                     },
                     {
-                        "label": "Amount:",
-                        "name": "Purchases.purchaseamount",
+                        label: "Amount:",
+                        name: "Purchases.purchaseamount",
                         id: "addAmount"
                     },
                     {
-                        "label": "Subdepartment:",
-                        "name": "Purchases.subdepartmentID",
-                        "type": "select",
-                        "placeholder": "Select a subdepartment"
+                        label: "Subdepartment:",
+                        name: "Purchases.subdepartmentID",
+                        type: "select",
+                        placeholder: "Select a subdepartment"
                     },
                     {
-                        "label": "Amount:",
-                        "name": "Purchases.purchaseamount2",
+                        label: "Amount:",
+                        name: "Purchases.purchaseamount2",
                         id: "purchaseamount2"
                     },
                     {
-                        "label": "Subdepartment:",
-                        "name": "Purchases.subdepartmentID2",
-                        "type": "select",
-                        "placeholder": "Select a subdepartment",
+                        label: "Subdepartment:",
+                        name: "Purchases.subdepartmentID2",
+                        type: "select",
+                        placeholder: "Select a subdepartment",
                         id: "subdepartmentID2"
                     },
                     {
-                        "label": "Amount:",
-                        "name": "Purchases.purchaseamount3",
+                        label: "Amount:",
+                        name: "Purchases.purchaseamount3",
                         id: "purchaseamount3"
                     },
                     {
-                        "label": "Subdepartment:",
-                        "name": "Purchases.subdepartmentID3",
-                        "type": "select",
-                        "placeholder": "Select a subdepartment",
+                        label: "Subdepartment:",
+                        name: "Purchases.subdepartmentID3",
+                        type: "select",
+                        placeholder: "Select a subdepartment",
                         id: "subdepartmentID3"
                     },
                     {
-                        "label": "Amount:",
-                        "name": "Purchases.purchaseamount4",
+                        label: "Amount:",
+                        name: "Purchases.purchaseamount4",
                         id: "purchaseamount4"
                     },
                     {
-                        "label": "Subdepartment:",
-                        "name": "Purchases.subdepartmentID4",
-                        "type": "select",
-                        "placeholder": "Select a subdepartment",
+                        label: "Subdepartment:",
+                        name: "Purchases.subdepartmentID4",
+                        type: "select",
+                        placeholder: "Select a subdepartment",
                         id: "subdepartmentID4"
                     },
                     {
-                        "label": "Amount:",
-                        "name": "Purchases.purchaseamount5",
+                        label: "Amount:",
+                        name: "Purchases.purchaseamount5",
                         id: "purchaseamount5"
                     },
                     {
-                        "label": "Subdepartment:",
-                        "name": "Purchases.subdepartmentID5",
-                        "type": "select",
-                        "placeholder": "Select a subdepartment",
+                        label: "Subdepartment:",
+                        name: "Purchases.subdepartmentID5",
+                        type: "select",
+                        placeholder: "Select a subdepartment",
                         id: "subdepartmentID5"
                     },
                     {
-                        "label": "Amount:",
-                        "name": "Purchases.purchaseamount6",
+                        label: "Amount:",
+                        name: "Purchases.purchaseamount6",
                         id: "purchaseamount6"
-
                     },
                     {
-                        "label": "Subdepartment:",
-                        "name": "Purchases.subdepartmentID6",
-                        "type": "select",
-                        "placeholder": "Select a subdepartment",
+                        label: "Subdepartment:",
+                        name: "Purchases.subdepartmentID6",
+                        type: "select",
+                        placeholder: "Select a subdepartment",
                         id: "subdepartmentID6"
                     },
                     {
-                        "label": "Amount:",
-                        "name": "Purchases.purchaseamount7",
+                        label: "Amount:",
+                        name: "Purchases.purchaseamount7",
                         id: "purchaseamount7"
                     },
                     {
-                        "label": "Subdepartment:",
-                        "name": "Purchases.subdepartmentID7",
-                        "type": "select",
-                        "placeholder": "Select a subdepartment",
+                        label: "Subdepartment:",
+                        name: "Purchases.subdepartmentID7",
+                        type: "select",
+                        placeholder: "Select a subdepartment",
                         id: "subdepartmentID7"
                     },
                     {
-                        "label": "Amount:",
-                        "name": "Purchases.purchaseamount8",
+                        label: "Amount:",
+                        name: "Purchases.purchaseamount8",
                         id: "purchaseamount8"
                     },
                     {
-                        "label": "Subdepartment:",
-                        "name": "Purchases.subdepartmentID8",
-                        "type": "select",
-                        "placeholder": "Select a subdepartment",
+                        label: "Subdepartment:",
+                        name: "Purchases.subdepartmentID8",
+                        type: "select",
+                        placeholder: "Select a subdepartment",
                         id: "subdepartmentID8"
                     },
                     {
-                        "label": "Amount:",
-                        "name": "Purchases.purchaseamount9",
+                        label: "Amount:",
+                        name: "Purchases.purchaseamount9",
                         id: "purchaseamount9"
                     },
                     {
-                        "label": "Subdepartment:",
-                        "name": "Purchases.subdepartmentID9",
-                        "type": "select",
-                        "placeholder": "Select a subdepartment",
+                        label: "Subdepartment:",
+                        name: "Purchases.subdepartmentID9",
+                        type: "select",
+                        placeholder: "Select a subdepartment",
                         id: "subdepartmentID9"
                     },
                     {
-                        "label": "Amount:",
-                        "name": "Purchases.purchaseamount10",
+                        label: "Amount:",
+                        name: "Purchases.purchaseamount10",
                         id: "purchaseamount10"
                     },
                     {
-                        "label": "Subdepartment:",
-                        "name": "Purchases.subdepartmentID10",
-                        "type": "select",
-                        "placeholder": "Select a subdepartment",
+                        label: "Subdepartment:",
+                        name: "Purchases.subdepartmentID10",
+                        type: "select",
+                        placeholder: "Select a subdepartment",
                         id: "subdepartmentID10"
                     },
                     {
-                        "label": "Location:",
-                        "name": "Purchases.locationID",
-                        "type": "select",
-                        "placeholder": "Select a location"
+                        label: "Location:",
+                        name: "Purchases.locationID",
+                        type: "select",
+                        placeholder: "Select a location"
                     },
                     {
-                        "label": "Reconciled:",
-                        "name": "Purchases.purchasereconciled",
-                        "type": "checkbox",
-                        "options": [
-                            { "label": "", "value": "True" }
+                        label: "Reconciled:",
+                        name: "Purchases.purchasereconciled",
+                        type: "checkbox",
+                        options: [
+                            { label: "", "value": "True" }
                         ],
-                        "separator": "|",
-                        "unselectedValue": "False"
+                        separator: "|",
+                        unselectedValue: "False"
                     },
                     {
-                        "label": "Notes:",
-                        "name": "Purchases.purchasememo"
+                        label: "Notes:",
+                        name: "Purchases.purchasememo",
+                        type: "textarea"
                     },
                     {
                         label: "Created by:",
@@ -258,7 +249,7 @@
                     {
                         label: "Date created:",
                         name: "Purchases.DateCreated",
-                        type: "readonly",
+                        type: "hidden",
                         def: getDate()
                     }
                 ]
@@ -274,20 +265,23 @@
             };
 
             // Append "Add More" button to the end of purchase amount field.
-            $('<button name="add" id="add" style="position:absolute;top:20%;right:8.3%">Add More</button>').insertAfter(
+            $('<button name="add" id="add" style="position:absolute;top:42%;right:8.3%">Add More</button>').insertAfter(
                 editor.field('Purchases.purchaseamount').input()
             );
 
-            // Append "Add More" button to the end of purchase amount field.
+            // New Puchase Form: append "Add More" button to the end of purchase amount field.
             for (var i = 2; i <= numberOfFields; i++) {
-                $('<button name="remove" id="' + i + '" class="btn btn-danger btn_remove" style="position:absolute;top:9.5%;right:13.25%">X</button>').insertAfter(
+                $('<button name="remove" id="' + i + '"class="btn btn-danger btn_remove" style="position:absolute;top:9.5%;right:13.25%">X</button>').insertAfter(
                     editor.field('Purchases.purchaseamount' + i).input()
                 );
             }
 
-            // On New Purchase form edit
+            // New Purchase Form: on edit
             editor.on('initEdit', function () {
                 for (i = 0; i < editor.fields().length; i++) {
+
+                    // Always hide DateCreate field.
+                    editor.field('Purchases.DateCreated').hide();
 
                     // If fields contain a value, show them
                     if (editor.field(editor.fields()[i]).val()) {
@@ -306,8 +300,21 @@
                 }
             });
 
-            // On New Purchase form open
+            // New Purchase Form:
             editor.on('open', function () {
+
+                // New Purchase Form: add a themtaic break after Vendor ID field.
+                $('<hr class="hrPurchaseForm">').insertBefore(
+                    editor.field('Purchases.purchaseamount').input()
+                );
+
+                // New Purchase Form: add a themtaic break after Subdepartment field.
+                $('<hr class="hrPurchaseForm">').insertBefore(
+                    editor.field('Purchases.locationID').input()
+                );
+
+                // Always hide DateCreated field.
+                editor.field('Purchases.DateCreated').hide();
 
                 // If "Add More" button is clicked increment counter and show another pair of purchase amount and subdepartment fields
                 $(document).unbind('click').on('click', '#add', function () {
@@ -342,26 +349,30 @@
                         editor.field('Purchases.purchaseamount' + unused[0]).show();
                         editor.field('Purchases.subdepartmentID' + unused[0]).show();
                     }
-
                 });
 
                 // Remove the last new UPC field generated
                 $(document).on('click', '.btn_remove', function () {
                     var button_id = $(this).attr("id");
 
-                    editor.field('Purchases.purchaseamount' + button_id).val();
-                    editor.field('Purchases.subdepartmentID' + button_id).val();
+                    editor.field('Purchases.purchaseamount' + button_id).val('');
+                    editor.field('Purchases.subdepartmentID' + button_id).val('');
 
                     editor.field('Purchases.purchaseamount' + button_id).hide();
                     editor.field('Purchases.subdepartmentID' + button_id).hide();
                 });
 
-                // On close, hide all purchase amount fields again.
+                // New Purchase Form: on form close, hide and remove certain fields.
                 editor.on('close', function () {
+
+                    // Hide all displayed purchase amount and subdepartmentID fields.
                     for (var i = 2; i <= numberOfFields; i++) {
                         editor.field('Purchases.purchaseamount' + i).hide();
                         editor.field('Purchases.subdepartmentID' + i).hide();
                     };
+
+                    // New Purchase Form: remove all thematic breaks on form close.
+                    $(document).find('.hrPurchaseForm').remove();
                 });
 
             });
@@ -369,29 +380,30 @@
             var table = $('#Purchases').DataTable({
                 deferRender: true,
                 select: true,
-                lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "All"]],
+                lengthMenu: [[15, 25, 50, 100, -1], [15, 25, 50, 100, "All"]],
                 ajax: '/api/Purchases',
                 columns: [
                     {
-                        "data": "Purchases.invoicenumber"
+                        data: "Purchases.invoicenumber"
                     },
                     {
-                        "data": "Purchases.purchasedate"
+                        data: "Purchases.purchasedate"
                     },
                     {
-                        "data": "SMSVendors.F334"
+                        data: "SMSVendors.F334"
                     },
                     {
-                        "data": "Purchases.purchaseamount", "render": $.fn.dataTable.render.number(',', '.', 2, '$')
+                        data: "Purchases.purchaseamount",
+                        render: $.fn.dataTable.render.number(',', '.', 2, '$')
                     },
                     {
-                        "data": "Subdepartments.subdepartmentname"
+                        data: "Subdepartments.subdepartmentname"
                     },
                     {
-                        "data": "Locations.locationname"
+                        data: "Locations.locationname"
                     },
                     {
-                        "data": "Purchases.purchasereconciled",
+                        data: "Purchases.purchasereconciled",
                         render: function (data, type, row) {
                             if (type === 'display') {
                                 return '<input type="checkbox" class="editor-active">';
@@ -401,13 +413,14 @@
                         className: "dt-body-center"
                     },
                     {
-                        "data": "Purchases.purchasememo"
+                        data: "Purchases.purchasememo"
                     },
                     {
-                        "data": "Purchases.CreatedBy"
+                        data: "Purchases.CreatedBy"
                     },
                     {
-                        "data": "Purchases.DateCreated", "render": function (value) {
+                        data: "Purchases.DateCreated",
+                        render: function (value) {
                             if (value === null) return "";
                             return window.moment(value).format('M/D/YYYY h:mm:ss A');
                         }
@@ -421,7 +434,16 @@
                         formButtons: [
                             { text: 'Cancel', action: function () { this.close(); } },
                             { text: 'Create', action: function () { this.submit(); } },
-                            { text: 'Clear', action: function () { fields = editor.displayed(); for (field in fields) { editor.field(fields[field]).val(''); }; } },
+                            {
+                                text: 'Clear', action: function () {
+                                    fields = editor.displayed();
+                                    for (field in fields) {
+                                        if ((editor.field(fields[field]).name() !== "Purchases.CreatedBy") && (editor.field(fields[field]).name() !== 'Purchases.DateCreated')) {
+                                            editor.field(fields[field]).val('');
+                                        }
+                                    };
+                                }
+                            },
                             {
                                 text: 'Submit Another', action: function () {
 
@@ -489,12 +511,15 @@
                 }
             });
 
-            // Hide or show "Add More" button dependendent on create or edit form opened.
+            // New Purchase Form: hide or show "Add More" button dependendent on create or edit form opened.
             editor.on('open', function (e, data, action) {
+
+                // If editing a record, hide "Add More" button.
                 if (action === 'edit') {
                     document.getElementById('add').style.visibility = 'hidden';
                 }
 
+                // If creating a new record, display "Add More" button.
                 if (action === 'create') {
                     document.getElementById('add').style.visibility = 'visible';
                 }
@@ -504,9 +529,85 @@
             var purchaseAmounts = [];
             var subdepartmentIDs = [];
 
-            // Before submitting verify if there are multiple purchase amounts being entered and manipulate them to create a new row for each.
+            // New Purchase Form: before submitting, verify if there are multiple purchase amounts being entered and manipulate them to create a new row for each.
             editor.on('preSubmit', function (e, data, action) {
                 if (action === 'create') {
+
+                    // New Purchase Form: field validation
+                    // Invoice number
+                    if (!editor.field('Purchases.invoicenumber').val()) {
+                        editor.field('Purchases.invoicenumber').error('Required');
+                    }
+
+                    // Purchase date
+                    if (!editor.field('Purchases.purchasedate').val()) {
+                        editor.field('Purchases.purchasedate').error('Required');
+                    }
+
+                    // Vendor ID
+                    if (!editor.field('Purchases.vendorID').val()) {
+                        editor.field('Purchases.vendorID').error('Required');
+                    }
+
+                    // Purchase amount
+                    if (!editor.field('Purchases.purchaseamount').val()) {
+                        editor.field('Purchases.purchaseamount').error('Required');
+                    }
+
+                    // Subdepartment ID
+                    if (!editor.field('Purchases.subdepartmentID').val()) {
+                        editor.field('Purchases.subdepartmentID').error('Required');
+                    }
+
+                    //*****************************************************************************//
+
+                    // New Purchase Form: get all displayed fields in Purchase form and create an array.
+                    var fields = [];
+                    temp = editor.displayed();
+                    for (i = 0; i < temp.length; i++) {
+                        fields[i] = temp[i];
+                    }
+
+                    // New Purchase Form: get all displayed purchaseamount and subdepartmentID fields and
+                    // and display and required message if they are not filled out.
+                    for (i = 2; i <= numberOfFields; i++) {
+                        var purchaseAmount = fields.indexOf('Purchases.purchaseamount' + i);
+                        var subdepartmentID = fields.indexOf('Purchases.subdepartmentID' + i);
+                        if (fields[purchaseAmount]) {
+
+                            // Purchase amount
+                            if (!editor.field(fields[purchaseAmount]).val()) {
+                                editor.field(fields[purchaseAmount]).error('Required');
+                            }
+
+                            // Subdepartment ID
+                            if (!editor.field(fields[subdepartmentID]).val()) {
+                                editor.field(fields[subdepartmentID]).error('Required');
+                            }
+                        }
+                    }
+
+                    //*****************************************************************************//
+
+                    // Location ID
+                    if (!editor.field('Purchases.locationID').val()) {
+                        editor.field('Purchases.locationID').error('Required');
+                    }
+
+                    // Created By
+                    if (!editor.field('Purchases.CreatedBy').val()) {
+                        editor.field('Purchases.CreatedBy').error('Required');
+                    }
+
+                    // Date Created
+                    if (!editor.field('Purchases.DateCreated').val()) {
+                        editor.field('Purchases.DateCreated').error('Required');
+                    }
+
+                    // If any error was reported, cancel the submission so it can be corrected
+                    if (this.inError()) {
+                        return false;
+                    }
 
                     // Gather data from filled out Editor form and store in array.
                     var oData = [];
@@ -560,7 +661,8 @@
                 return true;
             });
 
-            // On submission, create multiple new records
+            // New Purchase Form: on submission, create multiple new records dependent on how many
+            // purchase amount and subdepartment pairs were completed.
             editor.on('submitComplete', function (e, json, data, action) {
                 if (action === 'create') {
                     if (purchaseAmounts.length > 0) {
@@ -580,6 +682,7 @@
                 }
             });
 
+            // Submit check of purchase reconciled box to server for updating.
             $('#Purchases').on('change', 'input.editor-active', function () {
                 editor
                     .edit($(this).closest('tr'), false)
