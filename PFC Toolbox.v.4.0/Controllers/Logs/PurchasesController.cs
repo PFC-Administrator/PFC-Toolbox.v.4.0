@@ -23,10 +23,16 @@ namespace PFC_Toolbox.v._4._0.Controllers
                     .Validator(Validation.NotEmpty())
                     )
                     .Field(new Field("Purchases.invoicenumber")
-                    .Validator(Validation.NotEmpty())
+                    .Validator(Validation.NotEmpty(new ValidationOpts
+                    {
+                        Message = "Required"
+                    }))
                     )
                     .Field(new Field("Purchases.purchasedate")
-                    .Validator(Validation.NotEmpty())
+                    .Validator(Validation.NotEmpty(new ValidationOpts
+                    {
+                        Message = "Required"
+                    }))
                     .Validator(Validation.DateFormat("M/d/yyyy"))
                     .GetFormatter(Format.DateTime("M/d/yyyy", "M/d/yyyy"))
                     .SetFormatter(Format.DateTime("M/d/yyyy", "M/d/yyyy"))
@@ -36,13 +42,19 @@ namespace PFC_Toolbox.v._4._0.Controllers
                     .Table("SMSVendors")
                     .Value("F27")
                     .Label("F334"))
-                    .Validator(Validation.NotEmpty())
+                    .Validator(Validation.NotEmpty(new ValidationOpts
+                    {
+                        Message = "Required"
+                    }))
                     )
                     .Field(new Field("SMSVendors.F334")
                     .Validator(Validation.NotEmpty())
                     )
                     .Field(new Field("Purchases.purchaseamount")
-                    .Validator(Validation.NotEmpty())
+                    .Validator(Validation.NotEmpty(new ValidationOpts
+                    {
+                        Message = "Required"
+                    }))
                     .Validator(Validation.Numeric())
                     )
                     .Field(new Field("Purchases.subdepartmentID")
@@ -50,7 +62,10 @@ namespace PFC_Toolbox.v._4._0.Controllers
                     .Table("Subdepartments")
                     .Value("subdepartmentID")
                     .Label("subdepartmentName"))
-                    .Validator(Validation.NotEmpty())
+                    .Validator(Validation.NotEmpty(new ValidationOpts
+                    {
+                        Message = "Required"
+                    }))
                     )
                     .Field(new Field("Subdepartments.subdepartmentname")
                     .Validator(Validation.NotEmpty())
@@ -60,7 +75,10 @@ namespace PFC_Toolbox.v._4._0.Controllers
                     .Table("Locations")
                     .Value("locationID")
                     .Label("locationName"))
-                    .Validator(Validation.NotEmpty())
+                    .Validator(Validation.NotEmpty(new ValidationOpts
+                    {
+                        Message = "Required"
+                    }))
                     )
                     .Field(new Field("Locations.locationname")
                     .Validator(Validation.NotEmpty())
@@ -71,7 +89,10 @@ namespace PFC_Toolbox.v._4._0.Controllers
                     .Field(new Field("Purchases.purchasememo")
                     )
                     .Field(new Field("Purchases.CreatedBy")
-                    .Validator(Validation.NotEmpty())
+                    .Validator(Validation.NotEmpty(new ValidationOpts
+                    {
+                        Message = "Required"
+                    }))
                     )
                     .Field(new Field("Purchases.DateCreated")
                     .Validator(Validation.NotEmpty())
