@@ -121,7 +121,8 @@
                         label: "Brand:",
                         name: "ProductUpdates.OBJ_TAB_F155",
                         type: "select",
-                        placeholder: "Select a brand"
+                        placeholder: "Select a brand",
+                        def: "Select a brand"
                     }, {
                         label: "Shelf Tag & Receipt Description:",
                         name: "ProductUpdates.OBJ_TAB_F29"
@@ -463,21 +464,15 @@
                 if (newbrand == null || newbrand == "") {
                     txt = "User cancelled the prompt.";
                 } else {
-                    var format = /[^a-zA-Z0-9- ]/g;
-                    if (format.test(newbrand)) {
-                        
-                    }
-                    else {
+                    brand = newbrand.toUpperCase().replace(/[^a-zA-Z0-9- ]/g, "");
 
-                        brand = newbrand.toUpperCase().replace(/[^a-zA-Z0-9- ]/g, "");
-
-                        var CreateNewBrand = $.ajax({
-                            url: "/api/CreateNewBrand",
-                            type: "POST",
-                            dataType: "json",
-                            data: {
-                                action: 'create',
-                                'data[0][Brands][Brand]': brand
+                    var CreateNewBrand = $.ajax({
+                        url: "/api/CreateNewBrand",
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            action: 'create',
+                            'data[0][Brands][Brand]': brand
                         },
                         error: function (error) {
                             console.log(`Error ${error}`);
@@ -499,18 +494,13 @@
                         var option = {};
                         for ($i = 0; $i < data.data.length; $i++) {
                             option.label = data.data[$i].Brands.Brand
-                            option.value = data.data[$i].DT_RowId
+                            //option.value = data.data[$i].DT_RowId
                             optionsA.push(option);
                             option = {};
                         };
                         editorNP.field('ProductUpdates.OBJ_TAB_F155').update(optionsA);
-                        console.log(optionsA);
                     });
-
-                    var finalBrand = "row_" + brand;
-                    console.log(finalBrand)
-                    editorNP.field('ProductUpdates.OBJ_TAB_F155').set(finalBrand);   
-                    }
+                    editorNP.field('ProductUpdates.OBJ_TAB_F155').set(brand);
                 }
             });
 
@@ -833,6 +823,7 @@
                         name: "ProductUpdates.OBJ_TAB_F155",
                         type: "select",
                         placeholder: "Select a brand",
+                        def: "Select a brand",
                         id: "brandPU"
                     }, {
                         label: "Shelf Tag & Receipt Description:",
@@ -1290,7 +1281,7 @@
 
                     // Fields required for PFC & NCG Fresh Deals
                     if (editor.field('ProductUpdates.requesttypeID').val() == 4 || editor.field('ProductUpdates.requesttypeID').val() == 9) {
-                        
+
                         // retail
                         if (!editor.field('ProductUpdates.price_tab_f30').val()) {
                             editor.field('ProductUpdates.price_tab_f30').error('Required');
@@ -1462,7 +1453,7 @@
                                 'Create',
                                 {
                                     text: 'Submit Another', action: function () {
-                                    
+
                                         // Creates lastNewProduct object to store current forms data to be called later
                                         var lastNewProduct = {
                                             'requesttypeID': editorNP.field('ProductUpdates.requesttypeID').val(),
@@ -1542,12 +1533,12 @@
                                 'Create',
                                 {
                                     text: 'Submit Another', action: function () {
-                                        
+
                                         // Creates lastProduct object to store current forms data to be called later
                                         var lastProductUpdate = {
                                             'requesttypeID': editor.field('ProductUpdates.requesttypeID').val(),
                                             'locationID': editor.field('ProductUpdates.locationID').val(),
-                                            'ismettlerrequired': editor.field('ProductUpdates.ismettlerrequired').val(), 
+                                            'ismettlerrequired': editor.field('ProductUpdates.ismettlerrequired').val(),
                                             'labelID': editor.field('ProductUpdates.labelID').val(),
                                             'COST_TAB_F27': editor.field('ProductUpdates.COST_TAB_F27').val(),
                                             'promotprprice': editor.field('ProductUpdates.promotprprice').val(),
@@ -1586,7 +1577,7 @@
                                 { text: 'Clear', action: function () { fields = editor.displayed(); for (field in fields) { editor.field(fields[field]).val(''); }; } },
                                 {
                                     text: 'Copy', action: function () {
-                                        
+
                                         // Initialize lastProduct variable with object retrieved from storage
                                         var lastProductUpdate = JSON.parse(lastPURetrieved)
 
