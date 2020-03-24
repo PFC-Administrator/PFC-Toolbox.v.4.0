@@ -20,7 +20,7 @@ function titleCase(string) {
 
 // Function to format size field
 function sizeFormatter(string) {
-    return string.replace(/[^.a-zA-Z0-9 ]/g, "")
+    return string.replace(/[^.a-zA-Z0-9- ]/g, "")
         .replace("count", "ct.")
         .replace("Ea", "ea")
         .replace("each", "ea")
@@ -29,7 +29,10 @@ function sizeFormatter(string) {
         .replace("pounds", "lbs.")
         .replace("pound", "lb.")
         .replace("ounces", "oz.")
-        .replace("ounce", "oz.");
+        .replace("ounce", "oz.")
+        .replace("liters", "L.")
+        .replace("liter", "L.")
+        .replace("Liter", "L.");
 };
 
 // Function to limit field length
