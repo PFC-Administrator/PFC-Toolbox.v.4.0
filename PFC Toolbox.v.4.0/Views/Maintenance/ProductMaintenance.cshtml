@@ -506,16 +506,20 @@
 
             // New Product Form: get New PLU
             $(document).on('click', '#getplu', function () {
+                // If subdepartment has NOT been chosen, display alert.
                 if (!editorNP.field('ProductUpdates.POS_TAB_F04').val()) {
                     alert('Please select a subdepartment!');
                 }
+                // If mettler select option has NOT been selected, display alert.
                 else if (!editorNP.field('ProductUpdates.ismettlerrequired').val()) {
                     alert('Select yes or no to Mettler Product!');
                 }
+                // If it's a mettler product request.
                 else if (editorNP.field('ProductUpdates.ismettlerrequired').val() == 'Yes') {
-                    // Gathers subdepartment code
+                    // Get current subdepartment code selected.
                     var subdepartment = editorNP.field('ProductUpdates.POS_TAB_F04').val();
 
+                    // Get subdepartment bounds from server dependent on selected subdepartment.
                     var GetSubdepartmentBounds = $.ajax({
                         url: "api/GetSubdepartmentBounds",
                         type: "GET",
@@ -525,20 +529,26 @@
                             console.log(`Error ${error}`);
                         }
                     }),
-                        GetUsedUPCs = GetSubdepartmentBounds.then(function (data) {
+                        // Then get all used UPC's within subdepartment range in SMS.
+                        GetUsedSMSUPCs = GetSubdepartmentBounds.then(function (data) {
+
+                            // Loops through Subdepartment's attributes to find the correct bounds.
                             for ($i = 0; $i < data.data.length; $i++) {
                                 var lowerTemp = (data.data[$i].SMSSubdepartments.lowerBound);
                                 var upperTemp = (data.data[$i].SMSSubdepartments.upperBound);
                             };
 
+                            // Turn bounds into random weight UPC bounds.
                             lowerBound = '002' + lowerTemp + '00000';
                             upperBound = '002' + upperTemp + '00000';
 
+                            // Start and end ranges for UPC's to check for availability.
                             startRange = lowerTemp;
                             endRange = upperTemp;
 
+                            // Return all UPC's within specified range.
                             return $.ajax({
-                                url: "api/GetNewPLU",
+                                url: "/api/GetPLUUPCs",
                                 type: "GET",
                                 dataType: "json",
                                 data: { 'lowerBound': lowerBound, 'upperBound': upperBound },
@@ -546,41 +556,87 @@
                                     console.log(`Error ${error}`);
                                 }
                             });
-                        });
+                        }),
+                            // Then get all open UPC's within subdepartment range in SMS.
+                            GetOpenSMSUPC = GetUsedSMSUPCs.then(function (data) {
+                                // Creates an array of all used random weight UPC's in SMS.
+                                var used = [];
+                                for ($i = 0; $i < data.data.length; $i++) {
+                                    used.push(data.data[$i].OBJ_TAB.F01);
+                                };
 
-                    GetUsedUPCs.done(function (data) {
-                        var used = [];
-                        for ($i = 0; $i < data.data.length; $i++) {
-                            used.push(data.data[$i].OBJ_TAB.F01);
+                                // Generates array of all numbers between range.
+                                var range = [];
+                                for ($i = startRange; $i < endRange; $i++) {
+                                    range.push('002' + $i + '00000');
+                                };
+
+                                // All available PLU/UPC's in SMS
+                                var unused = _.difference(range, used);
+
+                                return { "UPC": unused };
+                            });
+
+                    // Get all used UPC's in Toolbox
+                    var GetUsedToolboxUPCs = $.ajax({
+                        url: "/api/GetReferenceUPCs",
+                        type: "GET",
+                        dataType: "json",
+                        error: function (error) {
+                            console.log(`Error ${error}`);
                         }
-
-                        // Generates array of all numbers between range.
-                        var range = [];
-                        for ($i = startRange; $i < endRange; $i++) {
-                            range.push('002' + $i + '00000');
-                        };
-
-                        // All available PLU/UPC's in SMS
-                        var unused = _.difference(range, used);
-
-                        // If subdepartment is meat related, remove subdepartment prefix to create a 4 digit PLU
-                        if (subdepartment == 41 || subdepartment == 53 || subdepartment == 54 || subdepartment == 55) {
-                            var MPLUUnused = ((unused[0]).slice(4, -5)).replace(/^0+/, '');
-                        }
-                        else {
-                            var MPLUUnused = (unused[0]).slice(3, -5);
-                        }
-
-                        // Set form fields to generated values
-                        editorNP.field('ProductUpdates.F01').val(unused[0]);
-                        editorNP.field('ProductUpdates.ScalePLU').val(MPLUUnused);
                     });
 
+                    // Execute chained AJAX requests to get all open SMS UPC's within range.
+                    GetOpenSMSUPC.done(function (smsData) {
+                        GetUsedToolboxUPCs.done(function (toolboxData) {
+
+                            // Create array with all used UPCs within Toolbox
+                            toolboxUPCs = [];
+                            for (i = 0; i < toolboxData.data.length; i++) {
+                                toolboxUPCs.push(toolboxData.data[i].ReferenceUPCs.F01);
+                            }
+
+                            // All available PLU/UPC's
+                            var unused = _.difference(smsData.UPC, toolboxUPCs);
+
+                            // If subdepartment is meat related, remove subdepartment prefix to create a 4 digit PLU
+                            var MPLUUnused;
+                            if (subdepartment == 41 || subdepartment == 53 || subdepartment == 54 || subdepartment == 55) {
+                                MPLUUnused = ((unused[0]).slice(4, -5)).replace(/^0+/, '');
+                            }
+                            else {
+                                MPLUUnused = (unused[0]).slice(3, -5);
+                            }
+
+                            // Add new PLU to reference PLU table to make it unavailable for future use.
+                            $.ajax({
+                                url: "/api/CreateReferenceUPC",
+                                type: "POST",
+                                dataType: "json",
+                                data: {
+                                    action: 'create',
+                                    'data[0][ReferenceUPCs][F01]': unused[0],
+                                    'data[1][ReferenceUPCs][F01]': MPLUUnused
+                                },
+                                error: function (error) {
+                                    console.log(`Error ${error}`);
+                                }
+                            });
+
+                            // Set form fields to generated values
+                            editorNP.field('ProductUpdates.F01').val(unused[0]);
+                            editorNP.field('ProductUpdates.ScalePLU').val(MPLUUnused);
+                        });
+                    });
+
+                // If it's a POS PLU request
                 } else if (editorNP.field('ProductUpdates.ismettlerrequired').val() == 'No') {
 
                     // Gathers subdepartment code
                     var subdepartment = editorNP.field('ProductUpdates.POS_TAB_F04').val();
 
+                    // Get subdepartment bounds from server dependent on selected subdepartment.
                     var GetSubdepartmentBounds = $.ajax({
                         url: "api/GetSubdepartmentBounds",
                         type: "GET",
@@ -590,20 +646,26 @@
                             console.log(`Error ${error}`);
                         }
                     }),
-                        GetUsedUPCs = GetSubdepartmentBounds.then(function (data) {
+                        // Then get all used UPC's within subdepartment range in SMS.
+                        GetUsedSMSUPCs = GetSubdepartmentBounds.then(function (data) {
+
+                            // Loops through Subdepartment's attributes to find the correct bounds.
                             for ($i = 0; $i < data.data.length; $i++) {
                                 var lowerTemp = (data.data[$i].SMSSubdepartments.lowerBound);
                                 var upperTemp = (data.data[$i].SMSSubdepartments.upperBound);
                             };
 
+                            // Turn bounds into random weight UPC bounds.
                             lowerBound = '00000000' + lowerTemp;
                             upperBound = '00000000' + upperTemp;
 
+                            // Start and end ranges for UPC's to check for availability.
                             startRange = lowerTemp;
                             endRange = upperTemp;
 
+                            // Return all UPC's within specified range.
                             return $.ajax({
-                                url: "api/GetNewPLU",
+                                url: "/api/GetPLUUPCs",
                                 type: "GET",
                                 dataType: "json",
                                 data: { 'lowerBound': lowerBound, 'upperBound': upperBound },
@@ -611,26 +673,74 @@
                                     console.log(`Error ${error}`);
                                 }
                             });
-                        });
+                        }),
+                            // Then get all open UPC's within subdepartment range in SMS.
+                            GetOpenSMSUPC = GetUsedSMSUPCs.then(function (data) {
+                                // Creates an array of all used random weight UPC's in SMS.
+                                var used = [];
+                                for ($i = 0; $i < data.data.length; $i++) {
+                                    used.push(data.data[$i].OBJ_TAB.F01);
+                                }
 
-                    GetUsedUPCs.done(function (data) {
-                        var used = [];
-                        for ($i = 0; $i < data.data.length; $i++) {
-                            used.push(data.data[$i].OBJ_TAB.F01);
+                                // Generates array of all numbers between range.
+                                var range = [];
+                                for ($i = startRange; $i < endRange; $i++) {
+                                    range.push('00000000' + $i);
+                                };
+
+                                // All available PLU/UPC's in SMS
+                                var unused = _.difference(range, used);
+
+                                return { "UPC": unused };
+                            });
+
+                    // Get all used UPC's in Toolbox
+                    var GetUsedToolboxUPCs = $.ajax({
+                        url: "/api/GetReferenceUPCs",
+                        type: "GET",
+                        dataType: "json",
+                        error: function (error) {
+                            console.log(`Error ${error}`);
                         }
+                    });
 
-                        // Generates array of all numbers between range.
-                        var range = [];
-                        for ($i = startRange; $i < endRange; $i++) {
-                            range.push('00000000' + $i);
-                        };
+                    // Execute chained AJAX requests to get all open SMS UPC's within range.
+                    GetOpenSMSUPC.done(function (smsData) {
+                        GetUsedToolboxUPCs.done(function (toolboxData) {
 
-                        var unused = _.difference(range, used);
+                            // Create array with all used UPCs within Toolbox
+                            toolboxUPCs = [];
+                            for (i = 0; i < toolboxData.data.length; i++) {
+                                toolboxUPCs.push(toolboxData.data[i].ReferenceUPCs.F01);
+                            }
 
-                        editorNP.field('ProductUpdates.F01').val(unused[0]);
+                            // All available PLU/UPC's
+                            var unused = _.difference(smsData.UPC, toolboxUPCs);
+
+                            // If subdepartment is meat related, remove subdepartment prefix to create a 4 digit PLU
+                            var MPLUUnused = '002' + unused[0].replace(/^0+/, '') + '00000'
+
+                            // Add new PLU to reference PLU table to make it unavailable for future use.
+                            $.ajax({
+                                url: "/api/CreateReferenceUPC",
+                                type: "POST",
+                                dataType: "json",
+                                data: {
+                                    action: 'create',
+                                    'data[0][ReferenceUPCs][F01]': unused[0],
+                                    'data[1][ReferenceUPCs][F01]': MPLUUnused
+                                },
+                                error: function (error) {
+                                    console.log(`Error ${error}`);
+                                }
+                            });
+
+                            // Set form fields to generated values
+                            editorNP.field('ProductUpdates.F01').val(unused[0]);
+                        });
                     });
                 } else {
-                    alert('Uh oh...');
+                    alert('Uh oh, something went wrong...');
                 }
             });
 
