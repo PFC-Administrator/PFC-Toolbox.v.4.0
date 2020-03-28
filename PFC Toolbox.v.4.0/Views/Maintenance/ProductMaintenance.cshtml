@@ -56,7 +56,7 @@
 
     <script>
 
-        // Reference ~/Content/Functions.js for custom functions
+        // Reference ~/Content/Functions.js for other custom functions
 
         var currentUser = "@CreatedBy";
         var role = "@Role";
@@ -492,9 +492,8 @@
                     var optionsA = [];
                     SetNewBrand.done(function (data) {
                         var option = {};
-                        for ($i = 0; $i < data.data.length; $i++) {
-                            option.label = data.data[$i].Brands.Brand
-                            //option.value = data.data[$i].DT_RowId
+                        for (i = 0; i < data.data.length; i++) {
+                            option.label = data.data[i].Brands.Brand
                             optionsA.push(option);
                             option = {};
                         };
@@ -516,8 +515,47 @@
                 }
                 // If it's a mettler product request.
                 else if (editorNP.field('ProductUpdates.ismettlerrequired').val() == 'Yes') {
+
+                    // Function to convert random weight UPC's to PLU's according to their subdepartment
+                    // If subdepartment is meat related, remove subdepartment prefix to create a 4 digit PLU.
+                    function convertUPCtoPLU(UPC, subdepartment) {
+                        var PLU;
+                        if (subdepartment == 41 || subdepartment == 53 || subdepartment == 54 || subdepartment == 55) {
+                            PLU = pad((UPC.slice(4, -5)).replace(/^0+/, ''), 13, 0);
+                        }
+                        else {
+                            PLU = pad(UPC.slice(3, -5), 13, 0);
+                        }
+
+                        return PLU;
+                    };
+
+                    // Function to convert PLU's to random weight UPC's to their subdepartment
+                    // If subdepartment is meat related, remove subdepartment prefix to create a 4 digit PLU
+                    function convertPLUtoUPC(PLU, subdepartment) {
+                        var randomWeightUPC;
+                        if (subdepartment == 41 || subdepartment == 53 || subdepartment == 54 || subdepartment == 55) {
+                            randomWeightUPC = '0022' + pad(PLU.replace(/^0+/, ''), 4, 0) + '00000';
+                        }
+                        else {
+                            randomWeightUPC = '002' + PLU.replace(/^0+/, '') + '00000';
+                        }
+
+                        return randomWeightUPC;
+                    };
+
                     // Get current subdepartment code selected.
                     var subdepartment = editorNP.field('ProductUpdates.POS_TAB_F04').val();
+
+                    // Get all used UPC's in Toolbox
+                    var GetUsedToolboxUPCs = $.ajax({
+                        url: "/api/GetReferenceUPCs",
+                        type: "GET",
+                        dataType: "json",
+                        error: function (error) {
+                            console.log(`Error ${error}`);
+                        }
+                    });
 
                     // Get subdepartment bounds from server dependent on selected subdepartment.
                     var GetSubdepartmentBounds = $.ajax({
@@ -533,25 +571,34 @@
                         GetUsedSMSUPCs = GetSubdepartmentBounds.then(function (data) {
 
                             // Loops through Subdepartment's attributes to find the correct bounds.
-                            for ($i = 0; $i < data.data.length; $i++) {
-                                var lowerTemp = (data.data[$i].SMSSubdepartments.lowerBound);
-                                var upperTemp = (data.data[$i].SMSSubdepartments.upperBound);
+                            for (i = 0; i < data.data.length; i++) {
+                                var tempLowerBound = (data.data[i].SMSSubdepartments.lowerBound);
+                                var tempUpperBound = (data.data[i].SMSSubdepartments.upperBound);
                             };
 
                             // Turn bounds into random weight UPC bounds.
-                            lowerBound = '002' + lowerTemp + '00000';
-                            upperBound = '002' + upperTemp + '00000';
+                            lowerUPCBound = '002' + tempLowerBound + '00000';
+                            upperUPCBound = '002' + tempUpperBound + '00000';
+
+                            // Turn bounds into PLU bounds.
+                            lowerPLUBound = '00000000' + tempLowerBound;
+                            upperPLUBound = '00000000' + tempUpperBound;
 
                             // Start and end ranges for UPC's to check for availability.
-                            startRange = lowerTemp;
-                            endRange = upperTemp;
+                            startRange = tempLowerBound;
+                            endRange = tempUpperBound;
 
                             // Return all UPC's within specified range.
                             return $.ajax({
                                 url: "/api/GetPLUUPCs",
                                 type: "GET",
                                 dataType: "json",
-                                data: { 'lowerBound': lowerBound, 'upperBound': upperBound },
+                                data: {
+                                    'lowerBound': lowerUPCBound,
+                                    'upperBound': upperUPCBound,
+                                    'lowerBound2': lowerPLUBound,
+                                    'upperBound2': upperPLUBound
+                                },
                                 error: function (error) {
                                     console.log(`Error ${error}`);
                                 }
@@ -559,33 +606,76 @@
                         }),
                             // Then get all open UPC's within subdepartment range in SMS.
                             GetOpenSMSUPC = GetUsedSMSUPCs.then(function (data) {
+
+                                // Creates array of all used random weight UPCs within Toolbox
+                                usedToolboxUPCs = [];
+                                GetUsedToolboxUPCs.done(function (data) {
+                                    for (i = 0; i < data.data.length; i++) {
+                                        usedToolboxUPCs.push(data.data[i].ReferenceUPCs.F01);
+                                    }
+                                });
+
                                 // Creates an array of all used random weight UPC's in SMS.
-                                var used = [];
-                                for ($i = 0; $i < data.data.length; $i++) {
-                                    used.push(data.data[$i].OBJ_TAB.F01);
+                                var usedSMSUPCs = [];
+                                for (i = 0; i < data.data.length; i++) {
+                                    // If PLU push and convert to UPC.
+                                    if (data.data[i].OBJ_TAB.F01[2] == 0) {
+                                        usedSMSUPCs.push(data.data[i].OBJ_TAB.F01);
+                                        usedSMSUPCs.push(convertPLUtoUPC(data.data[i].OBJ_TAB.F01, subdepartment));
+                                    }
+
+                                    // If random weight UPC push and convert to PLU.
+                                    if (data.data[i].OBJ_TAB.F01[2] == 2) {
+                                        usedSMSUPCs.push(data.data[i].OBJ_TAB.F01);
+                                        usedSMSUPCs.push(convertUPCtoPLU(data.data[i].OBJ_TAB.F01, subdepartment));
+                                    }
                                 };
+
+                                // Sort usedSMSUPCs in ascending order
+                                usedSMSUPCs.sort(function (a, b) { return a - b });
+
+                                // Creates an array of all used random weight UPC's that exist in SMS and not Toolbox.
+                                updateReferenceUPCs = _.difference(usedSMSUPCs, usedToolboxUPCs);
+
+                                // Recursive function to Update ReferenceUPCs table with any random weight UPC and its according PLU.
+                                function processItem() {
+                                    // Check length, if 0 quit loop...
+                                    if (updateReferenceUPCs.length) {
+                                        // Make a call always referencing results[0] since we're shfiting the array results...
+                                        $.ajax({
+                                            url: "/api/CreateReferenceUPC",
+                                            type: 'POST',
+                                            data: {
+                                                action: 'create',
+                                                'data[0][ReferenceUPCs][F01]': updateReferenceUPCs[0]
+                                            },
+                                            error: function (error) {
+                                                console.log(`Error ${error}`);
+                                            },
+                                            success: function () {
+
+                                                updateReferenceUPCs.shift();
+                                                processItem();
+                                            }
+                                        });
+                                    }
+                                }
+
+                                // Call to the processItem() function.
+                                processItem();
 
                                 // Generates array of all numbers between range.
                                 var range = [];
-                                for ($i = startRange; $i < endRange; $i++) {
-                                    range.push('002' + $i + '00000');
+                                for (i = startRange; i < endRange; i++) {
+                                    range.push('002' + i + '00000');
                                 };
 
-                                // All available PLU/UPC's in SMS
-                                var unused = _.difference(range, used);
+                                // Creates an array of all unused random weight UPCs in SMS
+                                var unusedSMSUPCs = _.difference(range, usedSMSUPCs);
 
-                                return { "UPC": unused };
+                                // Return object of unusedSMSUPCs for later use.
+                                return { "UPC": unusedSMSUPCs };
                             });
-
-                    // Get all used UPC's in Toolbox
-                    var GetUsedToolboxUPCs = $.ajax({
-                        url: "/api/GetReferenceUPCs",
-                        type: "GET",
-                        dataType: "json",
-                        error: function (error) {
-                            console.log(`Error ${error}`);
-                        }
-                    });
 
                     // Execute chained AJAX requests to get all open SMS UPC's within range.
                     GetOpenSMSUPC.done(function (smsData) {
@@ -601,13 +691,7 @@
                             var unused = _.difference(smsData.UPC, toolboxUPCs);
 
                             // If subdepartment is meat related, remove subdepartment prefix to create a 4 digit PLU
-                            var MPLUUnused;
-                            if (subdepartment == 41 || subdepartment == 53 || subdepartment == 54 || subdepartment == 55) {
-                                MPLUUnused = ((unused[0]).slice(4, -5)).replace(/^0+/, '');
-                            }
-                            else {
-                                MPLUUnused = (unused[0]).slice(3, -5);
-                            }
+                            var mettlerPLU = convertUPCtoPLU(unused[0], subdepartment);
 
                             // Add new PLU to reference PLU table to make it unavailable for future use.
                             $.ajax({
@@ -616,8 +700,8 @@
                                 dataType: "json",
                                 data: {
                                     action: 'create',
-                                    'data[0][ReferenceUPCs][F01]': unused[0],
-                                    'data[1][ReferenceUPCs][F01]': MPLUUnused
+                                    'data[0][ReferenceUPCs][F01]': mettlerPLU,
+                                    'data[1][ReferenceUPCs][F01]': unused[0]
                                 },
                                 error: function (error) {
                                     console.log(`Error ${error}`);
@@ -626,15 +710,52 @@
 
                             // Set form fields to generated values
                             editorNP.field('ProductUpdates.F01').val(unused[0]);
-                            editorNP.field('ProductUpdates.ScalePLU').val(MPLUUnused);
+                            editorNP.field('ProductUpdates.ScalePLU').val(mettlerPLU);
                         });
                     });
-
-                // If it's a POS PLU request
+                    // If it's a POS PLU request
                 } else if (editorNP.field('ProductUpdates.ismettlerrequired').val() == 'No') {
+
+                    // Function to convert random weight UPC's to PLU's according to their subdepartment
+                    // If subdepartment is meat related, remove subdepartment prefix to create a 4 digit PLU.
+                    function convertUPCtoPLU(UPC, subdepartment) {
+                        var PLU;
+                        if (subdepartment == 41 || subdepartment == 53 || subdepartment == 54 || subdepartment == 55) {
+                            PLU = pad((UPC.slice(4, -5)).replace(/^0+/, ''), 13, 0);
+                        }
+                        else {
+                            PLU = pad(UPC.slice(3, -5), 13, 0);
+                        }
+
+                        return PLU;
+                    };
+
+                    // Function to convert PLU's to random weight UPC's to their subdepartment
+                    // If subdepartment is meat related, remove subdepartment prefix to create a 4 digit PLU
+                    function convertPLUtoUPC(PLU, subdepartment) {
+                        var randomWeightUPC;
+                        if (subdepartment == 41 || subdepartment == 53 || subdepartment == 54 || subdepartment == 55) {
+                            randomWeightUPC = '0022' + pad(PLU.replace(/^0+/, ''), 4, 0) + '00000';
+                        }
+                        else {
+                            randomWeightUPC = '002' + PLU.replace(/^0+/, '') + '00000';
+                        }
+
+                        return randomWeightUPC;
+                    };
 
                     // Gathers subdepartment code
                     var subdepartment = editorNP.field('ProductUpdates.POS_TAB_F04').val();
+
+                    // Get all used UPC's in Toolbox
+                    var GetUsedToolboxUPCs = $.ajax({
+                        url: "/api/GetReferenceUPCs",
+                        type: "GET",
+                        dataType: "json",
+                        error: function (error) {
+                            console.log(`Error ${error}`);
+                        }
+                    });
 
                     // Get subdepartment bounds from server dependent on selected subdepartment.
                     var GetSubdepartmentBounds = $.ajax({
@@ -649,26 +770,35 @@
                         // Then get all used UPC's within subdepartment range in SMS.
                         GetUsedSMSUPCs = GetSubdepartmentBounds.then(function (data) {
 
-                            // Loops through Subdepartment's attributes to find the correct bounds.
-                            for ($i = 0; $i < data.data.length; $i++) {
-                                var lowerTemp = (data.data[$i].SMSSubdepartments.lowerBound);
-                                var upperTemp = (data.data[$i].SMSSubdepartments.upperBound);
+                            // Loops through Subdepartment's attributes to find the correct subdepartment bounds.
+                            for (i = 0; i < data.data.length; i++) {
+                                var tempLowerBound = (data.data[i].SMSSubdepartments.lowerBound);
+                                var tempUpperBound = (data.data[i].SMSSubdepartments.upperBound);
                             };
 
-                            // Turn bounds into random weight UPC bounds.
-                            lowerBound = '00000000' + lowerTemp;
-                            upperBound = '00000000' + upperTemp;
+                            // Turn bounds into PLU bounds.
+                            lowerPLUBound = '00000000' + tempLowerBound;
+                            upperPLUBound = '00000000' + tempUpperBound;
 
-                            // Start and end ranges for UPC's to check for availability.
-                            startRange = lowerTemp;
-                            endRange = upperTemp;
+                            // Turn bounds into random weight UPC bounds.
+                            lowerUPCBound = '002' + tempLowerBound + '00000';
+                            upperUPCBound = '002' + tempUpperBound + '00000';
+
+                            // Start and end ranges for PLU's to check for availability.
+                            startRange = tempLowerBound;
+                            endRange = tempUpperBound;
 
                             // Return all UPC's within specified range.
                             return $.ajax({
                                 url: "/api/GetPLUUPCs",
                                 type: "GET",
                                 dataType: "json",
-                                data: { 'lowerBound': lowerBound, 'upperBound': upperBound },
+                                data: {
+                                    'lowerBound': lowerPLUBound,
+                                    'upperBound': upperPLUBound,
+                                    'lowerBound2': lowerUPCBound,
+                                    'upperBound2': upperUPCBound
+                                },
                                 error: function (error) {
                                     console.log(`Error ${error}`);
                                 }
@@ -676,33 +806,81 @@
                         }),
                             // Then get all open UPC's within subdepartment range in SMS.
                             GetOpenSMSUPC = GetUsedSMSUPCs.then(function (data) {
+
+                                // Creates array of all used random weight UPCs within Toolbox
+                                usedToolboxUPCs = [];
+                                GetUsedToolboxUPCs.done(function (data) {
+                                    for (i = 0; i < data.data.length; i++) {
+                                        console.log(data.data[i].ReferenceUPCs.F01)
+                                        usedToolboxUPCs.push(data.data[i].ReferenceUPCs.F01);
+                                    }
+                                });
+
                                 // Creates an array of all used random weight UPC's in SMS.
-                                var used = [];
-                                for ($i = 0; $i < data.data.length; $i++) {
-                                    used.push(data.data[$i].OBJ_TAB.F01);
+                                var usedSMSUPCs = [];
+                                for (i = 0; i < data.data.length; i++) {
+                                    // If PLU push and convert to UPC.
+                                    if (data.data[i].OBJ_TAB.F01[2] == 0) {
+                                        usedSMSUPCs.push(data.data[i].OBJ_TAB.F01);
+                                        usedSMSUPCs.push(convertPLUtoUPC(data.data[i].OBJ_TAB.F01, subdepartment));
+                                    }
+
+                                    // If random weight UPC push and convert to PLU.
+                                    if (data.data[i].OBJ_TAB.F01[2] == 2) {
+                                        usedSMSUPCs.push(data.data[i].OBJ_TAB.F01);
+                                        usedSMSUPCs.push(convertUPCtoPLU(data.data[i].OBJ_TAB.F01, subdepartment));
+                                    }
+                                };
+
+                                // Sort usedSMSUPCs in ascending order
+                                usedSMSUPCs.sort(function (a, b) { return a - b });
+
+
+                                console.log(usedSMSUPCs);
+                                console.log(usedToolboxUPCs);
+
+                                // Creates an array of all used random weight UPC's that exist in SMS and not Toolbox.
+                                updateReferenceUPCs = _.difference(usedSMSUPCs, usedToolboxUPCs);
+
+                                // Recursive function to Update ReferenceUPCs table with any random weight UPC and its according PLU.
+                                function processItem() {
+                                    // Check length, if 0 quit loop...
+                                    if (updateReferenceUPCs.length) {
+                                        // Make a call always referencing results[0] since we're shfiting the array results...
+                                        $.ajax({
+                                            url: "/api/CreateReferenceUPC",
+                                            type: 'POST',
+                                            data: {
+                                                action: 'create',
+                                                'data[0][ReferenceUPCs][F01]': updateReferenceUPCs[0]
+                                            },
+                                            error: function (error) {
+                                                console.log(`Error ${error}`);
+                                            },
+                                            success: function () {
+
+                                                updateReferenceUPCs.shift();
+                                                processItem();
+                                            }
+                                        });
+                                    }
                                 }
+
+                                // Call to the processItem() function.
+                                processItem();
 
                                 // Generates array of all numbers between range.
                                 var range = [];
-                                for ($i = startRange; $i < endRange; $i++) {
-                                    range.push('00000000' + $i);
+                                for (i = startRange; i < endRange; i++) {
+                                    range.push('00000000' + i);
                                 };
 
-                                // All available PLU/UPC's in SMS
-                                var unused = _.difference(range, used);
+                                // Creates an array of all unused random weight UPCs in SMS
+                                var unusedSMSUPCs = _.difference(range, usedSMSUPCs);
 
-                                return { "UPC": unused };
+                                // Return object of unusedSMSUPCs for later use.
+                                return { "UPC": unusedSMSUPCs };
                             });
-
-                    // Get all used UPC's in Toolbox
-                    var GetUsedToolboxUPCs = $.ajax({
-                        url: "/api/GetReferenceUPCs",
-                        type: "GET",
-                        dataType: "json",
-                        error: function (error) {
-                            console.log(`Error ${error}`);
-                        }
-                    });
 
                     // Execute chained AJAX requests to get all open SMS UPC's within range.
                     GetOpenSMSUPC.done(function (smsData) {
@@ -718,7 +896,7 @@
                             var unused = _.difference(smsData.UPC, toolboxUPCs);
 
                             // If subdepartment is meat related, remove subdepartment prefix to create a 4 digit PLU
-                            var MPLUUnused = '002' + unused[0].replace(/^0+/, '') + '00000'
+                            var randomWeightUPC = convertPLUtoUPC(unused[0], subdepartment);
 
                             // Add new PLU to reference PLU table to make it unavailable for future use.
                             $.ajax({
@@ -728,7 +906,7 @@
                                 data: {
                                     action: 'create',
                                     'data[0][ReferenceUPCs][F01]': unused[0],
-                                    'data[1][ReferenceUPCs][F01]': MPLUUnused
+                                    'data[1][ReferenceUPCs][F01]': randomWeightUPC
                                 },
                                 error: function (error) {
                                     console.log(`Error ${error}`);
@@ -773,12 +951,12 @@
 
                         CheckUPC.done(function (data) {
                             var used = [];
-                            for ($i = 0; $i < data.data.length; $i++) {
-                                used.push(data.data[$i].OBJ_TAB.F01);
+                            for (i = 0; i < data.data.length; i++) {
+                                used.push(data.data[i].OBJ_TAB.F01);
                             }
 
-                            for ($i = 0; $i < used.length; $i++) {
-                                if (UPC == used[$i]) {
+                            for (i = 0; i < used.length; i++) {
+                                if (UPC == used[i]) {
                                     editorNP.field('ProductUpdates.F01').error("UPC/PLU already exists in SMS");
                                 }
                             }
@@ -1372,13 +1550,13 @@
 
                         CheckUPC.done(function (data) {
                             var used = [];
-                            for ($i = 0; $i < data.data.length; $i++) {
-                                used.push(data.data[$i].OBJ_TAB.F01);
+                            for (i = 0; i < data.data.length; i++) {
+                                used.push(data.data[i].OBJ_TAB.F01);
                             }
 
                             var count = 0;
-                            for ($i = 0; $i < used.length; $i++) {
-                                if (UPC == used[$i]) {
+                            for (i = 0; i < used.length; i++) {
+                                if (UPC == used[i]) {
                                     count++
                                 }
                             }
