@@ -629,13 +629,13 @@
                                         usedSMSUPCs.push(data.data[i].OBJ_TAB.F01);
                                         usedSMSUPCs.push(convertUPCtoPLU(data.data[i].OBJ_TAB.F01, subdepartment));
                                     }
-                                };
+                                }
 
                                 // Sort usedSMSUPCs in ascending order
                                 usedSMSUPCs.sort(function (a, b) { return a - b });
 
                                 // Creates an array of all used random weight UPC's that exist in SMS and not Toolbox.
-                                updateReferenceUPCs = _.difference(usedSMSUPCs, usedToolboxUPCs);
+                                var updateReferenceUPCs = _.difference(usedSMSUPCs, usedToolboxUPCs);
 
                                 // Recursive function to Update ReferenceUPCs table with any random weight UPC and its according PLU.
                                 function processItem() {
@@ -811,7 +811,6 @@
                                 usedToolboxUPCs = [];
                                 GetUsedToolboxUPCs.done(function (data) {
                                     for (i = 0; i < data.data.length; i++) {
-                                        console.log(data.data[i].ReferenceUPCs.F01)
                                         usedToolboxUPCs.push(data.data[i].ReferenceUPCs.F01);
                                     }
                                 });
@@ -835,12 +834,8 @@
                                 // Sort usedSMSUPCs in ascending order
                                 usedSMSUPCs.sort(function (a, b) { return a - b });
 
-
-                                console.log(usedSMSUPCs);
-                                console.log(usedToolboxUPCs);
-
                                 // Creates an array of all used random weight UPC's that exist in SMS and not Toolbox.
-                                updateReferenceUPCs = _.difference(usedSMSUPCs, usedToolboxUPCs);
+                                var updateReferenceUPCs = _.difference(usedSMSUPCs, usedToolboxUPCs);
 
                                 // Recursive function to Update ReferenceUPCs table with any random weight UPC and its according PLU.
                                 function processItem() {
