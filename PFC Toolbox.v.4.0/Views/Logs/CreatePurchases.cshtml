@@ -18,7 +18,9 @@
 </head>
 <body class="dataTables">
     <div class="container">
-        <h1><img src="~/Content/PFC_Logo_128px.png" width="100" height="100">        @ViewBag.Title</h1>
+        <button name="add" id="addanewinvoice" class="btn btn-default" style="float:right;">Help</button>
+        <h1 style="float:left;"><img src="~/Content/PFC_Logo_128px.png" width="100" height="100">        @ViewBag.Title</h1>
+        @*<h1><img src="~/Content/PFC_Logo_128px.png" width="100" height="100">        @ViewBag.Title</h1>*@
         <br />
         <table id="Purchases" class="display text-nowrap compact" style="width:100%">
             <thead>
@@ -504,6 +506,14 @@
                                 .column(9).order('desc').draw()
                         }
                     }
+                    @*,
+                    {
+                        // Help button!
+                        text: 'Help', attr: { id: 'addanewinvoice', class: "btn btn-default" }, action: function () {
+                            window.location = '@Url.Content("~/Content/Documentation/addanewinvoice.mp4")';
+                        }
+                    }*@
+
                 ],
                 rowCallback: function (row, data) {
                     // Set the checked state of the checkbox in the table
@@ -689,6 +699,11 @@
                     .set('Purchases.purchasereconciled', $(this).prop('checked') ? "True" : "False")
                     .submit();
             });
+
+            // Go to Add A New Invoice Video Guide
+            $('#addanewinvoice').click(function () {
+                window.location.href = '@Url.Content("~/Content/Documentation/addanewinvoice.mp4")';
+            })
         });
 
     </script>
