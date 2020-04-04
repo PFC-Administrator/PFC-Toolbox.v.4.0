@@ -57,6 +57,12 @@
     <script>
 
         // Reference ~/Content/Functions.js for other custom functions
+        // Function to format case cost field
+        function caseCostFormatter(string) {
+            return string.replace(/[^0-9.]/g, "")
+                .replace("NA", "")
+                .replace("na", "");
+        };
 
         var currentUser = "@CreatedBy";
         var role = "@Role";
@@ -335,6 +341,13 @@
                 editorNP.field('ProductUpdates.OBJ_TAB_F255').val(productName);
             });
 
+            // Update An Existing Product Form: removes all charactesr from case cost field
+            editorNP.field('ProductUpdates.COST_TAB_F38').input().on('blur', function () {
+                var caseCost = editorNP.field('ProductUpdates.COST_TAB_F38').val();
+                caseCost = caseCostFormatter(caseCost);
+                editorNP.field('ProductUpdates.COST_TAB_F38').val(caseCost);
+            });
+
             // New Product Form: hides Family Button unless Hackberry's Brand is selected
             editorNP.field('ProductUpdates.OBJ_TAB_F155').input().on('change', function () {
                 if (editorNP.field('ProductUpdates.OBJ_TAB_F155').val() == "HACKBERRYS" || editorNP.field('ProductUpdates.OBJ_TAB_F155').val() == "HACKBERRY'S") {
@@ -438,7 +451,7 @@
             });
 
             // New Product Form: New Brand button
-            $('<button id="newbrand" style="position:absolute;top:20%;right:5%">New Brand</button>').insertAfter(
+            $('<button id="newbrand" style="position:absolute;top:20%;right:7.25%">New Brand</button>').insertAfter(
                 editorNP.field('ProductUpdates.OBJ_TAB_F155').input()
             );
 
@@ -451,6 +464,11 @@
             $('<button id="calculateNP" style="position:absolute;top:20%;right:8%">Calculate</button>').insertAfter(
                 editorNP.field('ProductUpdates.COST_TAB_F38').input()
             );
+
+            // New Product Form: Like code x button
+            $('<i id="clearLikeCode" class="fa fa-close"></i>').insertAfter(
+                editorNP.field('ProductUpdates.LIKE_TAB_F122').input()
+            )
 
             // New Product Form: enter new Brand
             $(document).on('click', '#newbrand', function () {
@@ -1003,6 +1021,11 @@
                 }
             });
 
+            // New Product Form: clear like code select field
+            $(document).on('click', '#clearLikeCode', function () {
+                    editorNP.field('ProductUpdates.LIKE_TAB_F122').val(null);
+            });
+
 
             /***********************************************************************************************************************/
 
@@ -1285,6 +1308,13 @@
                 editor.field('ProductUpdates.OBJ_TAB_F255').val(productName);
             });
 
+            // Update An Existing Product Form: removes all charactesr from case cost field
+            editor.field('ProductUpdates.COST_TAB_F38').input().on('blur', function () {
+                var caseCost = editor.field('ProductUpdates.COST_TAB_F38').val();
+                caseCost = caseCostFormatter(caseCost);
+                editor.field('ProductUpdates.COST_TAB_F38').val(caseCost);
+            });
+
             // Update An Existing Product Form: shows completed by info if product is marked as complete
             editor.on('open', function () {
                 if (editor.field('ProductUpdates.productstatusID').val() == 4) {
@@ -1495,6 +1525,11 @@
                 editor.field('ProductUpdates.COST_TAB_F38').input()
             );
 
+            // Update An Existing Product Form: Like code x button
+            $('<i id="clearLikeCode" class="fa fa-close"></i>').insertAfter(
+                editor.field('ProductUpdates.LIKE_TAB_F122').input()
+            );
+
             // Update An Existing Product Form: field validation
             editor.on('preSubmit', function (e, o, action) {
                 if (action !== 'remove') {
@@ -1637,6 +1672,11 @@
                 if (event.keyCode == 8 || event.keyCode == 46) {
                     editor.field('ProductUpdates.LIKE_TAB_F122').val(null);
                 }
+            });
+
+            // Update An Existing Product Form: clear like code select field
+            $(document).on('click', '#clearLikeCode', function () {
+                editor.field('ProductUpdates.LIKE_TAB_F122').val(null);
             });
 
 

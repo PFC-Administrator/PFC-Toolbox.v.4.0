@@ -20,6 +20,24 @@
 }
 /**/
 
+/* New Purchase Form tag quantity field */
+#tagquantity {
+    max-width: 5%;
+    max-height: 47%;
+    position: absolute;
+    top: 20%;
+    right: 23.5%
+}
+/**/
+
+/* New Purchase Form tag quantity field */
+#clearLikeCode {
+    position: absolute;
+    top: 28%;
+    right: 24%
+}
+/**/
+
 /* Edits overall width of Toolbox display*/
 .container {
     width: 97%;

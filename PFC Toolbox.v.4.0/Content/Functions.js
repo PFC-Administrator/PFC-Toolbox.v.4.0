@@ -18,6 +18,13 @@ function titleCase(string) {
         .replace("Cbd", "CBD");
 };
 
+// Function to format case cost field
+function caseCostFormatter(string) {
+    return string.replace(/[^0-9.]/g, "")
+        .replace("NA", "")
+        .replace("na", "");
+};
+
 // Function to format size field
 function sizeFormatter(string) {
     return string.replace(/[^.a-zA-Z0-9- ]/g, "")

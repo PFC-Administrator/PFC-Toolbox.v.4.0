@@ -57,6 +57,12 @@
     <script>
 
         // Reference ~/Content/Functions.js for custom functions
+        // Function to format case cost field
+        function caseCostFormatter(string) {
+            return string.replace(/[^0-9.]/g, "")
+                .replace("NA", "")
+                .replace("na", "");
+        };
 
         var currentUser = "@CreatedBy";
         var editorNP;
@@ -316,6 +322,13 @@
                 editorNP.field('ProductUpdates.OBJ_TAB_F22').val(size);
             });
 
+            // Update An Existing Product Form: removes all characters from case cost field
+            editorNP.field('ProductUpdates.COST_TAB_F38').input().on('blur', function () {
+                var caseCost = editorNP.field('ProductUpdates.COST_TAB_F38').val();
+                caseCost = caseCostFormatter(caseCost);
+                editorNP.field('ProductUpdates.COST_TAB_F38').val(caseCost);
+            });
+
             // New Product Form: converts signage descriptions to title case
             editorNP.field('ProductUpdates.OBJ_TAB_F255').input().on('blur', function () {
                 var productName = editorNP.field('ProductUpdates.OBJ_TAB_F255').val();
@@ -414,11 +427,21 @@
                 editorNP.field('ProductUpdates.lastupdatedby').val(currentUser);
             });
 
+            // New Product Form: Like code x button
+            $('<i id="clearLikeCode" class="fa fa-close"></i>').insertAfter(
+                editorNP.field('ProductUpdates.LIKE_TAB_F122').input()
+            )
+
             // New Product Form: clear like code select field
             $(document).on('keydown', '#likecodeNP', function (event) {
                 if (event.keyCode == 8 || event.keyCode == 46) {
                     editorNP.field('ProductUpdates.LIKE_TAB_F122').val(null);
                 }
+            });
+
+            // New Product Form: clear like code select field
+            $(document).on('click', '#clearLikeCode', function () {
+                editorNP.field('ProductUpdates.LIKE_TAB_F122').val(null);
             });
 
             // Create the DataTables table

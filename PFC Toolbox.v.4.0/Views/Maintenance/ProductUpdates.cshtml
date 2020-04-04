@@ -65,6 +65,12 @@
     <script>
 
         // Reference ~/Content/Functions.js for custom functions
+        // Function to format case cost field
+        function caseCostFormatter(string) {
+            return string.replace(/[^0-9.]/g, "")
+                .replace("NA", "")
+                .replace("na", "");
+        };
 
         var currentUser = "@CreatedBy";
         var editorPR;
@@ -252,7 +258,7 @@
                         name: "ProductUpdates.LIKE_TAB_F122",
                         type: "select",
                         placeholder: "Select a like code",
-                        id: "likePU"
+                        id: "likecodePU"
                     }, {
                         label: "SNAP:",
                         name: "ProductUpdates.POS_TAB_F79",
@@ -606,6 +612,11 @@
                 editor.field('ProductUpdates.COST_TAB_F38').input()
             );
 
+            // Update An Existing Product Form: Like code x button
+            $('<i id="clearLikeCode" class="fa fa-close"></i>').insertAfter(
+                editor.field('ProductUpdates.LIKE_TAB_F122').input()
+            );
+
             // Update An Existing Product Form: activate an inline edit on click of a table cell that has the className attribute "editable" set to it
             $('#ProductUpdates').on('click', 'tbody td.editable', function (e) {
                 editor.inline(this, {
@@ -687,11 +698,16 @@
                 }
             });
 
-            // New Product Form: clear like code select field
-            $(document).on('keydown', '#likePU', function (event) {
+            // Update An Existing Product Form: clear like code select field
+            $(document).on('keydown', '#likecodePU', function (event) {
                 if (event.keyCode == 8 || event.keyCode == 46) {
                     editor.field('ProductUpdates.LIKE_TAB_F122').val(null);
                 }
+            });
+
+            // Update An Existing Product Form: clear like code select field
+            $(document).on('click', '#clearLikeCode', function () {
+                editor.field('ProductUpdates.LIKE_TAB_F122').val(null);
             });
 
             // Update An Existing Product Form: show fields with values or hide fields with nothing
