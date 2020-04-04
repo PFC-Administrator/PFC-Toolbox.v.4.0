@@ -20,7 +20,6 @@
     <div class="container">
         <button name="add" id="addanewinvoice" class="btn btn-default" style="float:right;">Help</button>
         <h1 style="float:left;"><img src="~/Content/PFC_Logo_128px.png" width="100" height="100">        @ViewBag.Title</h1>
-        @*<h1><img src="~/Content/PFC_Logo_128px.png" width="100" height="100">        @ViewBag.Title</h1>*@
         <br />
         <table id="Purchases" class="display text-nowrap compact" style="width:100%">
             <thead>
@@ -80,6 +79,9 @@
 
             // New Purchase Form: moment data foramtter.
             $.fn.dataTable.moment('M/D/YYYY h:mm:ss A');
+
+            // Number of total purchase and subdepartment fields
+            var numberOfFields = 20;
 
             // New Purchase Form
             editor = new $.fn.dataTable.Editor({
@@ -223,6 +225,126 @@
                         id: "subdepartmentID10"
                     },
                     {
+                        label: "Amount:",
+                        name: "Purchases.purchaseamount11",
+                        id: "purchaseamount11"
+                    },
+                    {
+                        label: "Subdepartment:",
+                        name: "Purchases.subdepartmentID11",
+                        type: "select",
+                        placeholder: "Select a subdepartment",
+                        id: "subdepartmentID11"
+                    },
+                    {
+                        label: "Amount:",
+                        name: "Purchases.purchaseamount12",
+                        id: "purchaseamount12"
+                    },
+                    {
+                        label: "Subdepartment:",
+                        name: "Purchases.subdepartmentID12",
+                        type: "select",
+                        placeholder: "Select a subdepartment",
+                        id: "subdepartmentID12"
+                    },
+                    {
+                        label: "Amount:",
+                        name: "Purchases.purchaseamount13",
+                        id: "purchaseamount13"
+                    },
+                    {
+                        label: "Subdepartment:",
+                        name: "Purchases.subdepartmentID13",
+                        type: "select",
+                        placeholder: "Select a subdepartment",
+                        id: "subdepartmentID13"
+                    },
+                    {
+                        label: "Amount:",
+                        name: "Purchases.purchaseamount14",
+                        id: "purchaseamount14"
+                    },
+                    {
+                        label: "Subdepartment:",
+                        name: "Purchases.subdepartmentID14",
+                        type: "select",
+                        placeholder: "Select a subdepartment",
+                        id: "subdepartmentID14"
+                    },
+                    {
+                        label: "Amount:",
+                        name: "Purchases.purchaseamount15",
+                        id: "purchaseamount15"
+                    },
+                    {
+                        label: "Subdepartment:",
+                        name: "Purchases.subdepartmentID15",
+                        type: "select",
+                        placeholder: "Select a subdepartment",
+                        id: "subdepartmentID15"
+                    },
+                    {
+                        label: "Amount:",
+                        name: "Purchases.purchaseamount16",
+                        id: "purchaseamount16"
+                    },
+                    {
+                        label: "Subdepartment:",
+                        name: "Purchases.subdepartmentID16",
+                        type: "select",
+                        placeholder: "Select a subdepartment",
+                        id: "subdepartmentID16"
+                    },
+                    {
+                        label: "Amount:",
+                        name: "Purchases.purchaseamount17",
+                        id: "purchaseamount17"
+                    },
+                    {
+                        label: "Subdepartment:",
+                        name: "Purchases.subdepartmentID17",
+                        type: "select",
+                        placeholder: "Select a subdepartment",
+                        id: "subdepartmentID17"
+                    },
+                    {
+                        label: "Amount:",
+                        name: "Purchases.purchaseamount18",
+                        id: "purchaseamount18"
+                    },
+                    {
+                        label: "Subdepartment:",
+                        name: "Purchases.subdepartmentID18",
+                        type: "select",
+                        placeholder: "Select a subdepartment",
+                        id: "subdepartmentID18"
+                    },
+                    {
+                        label: "Amount:",
+                        name: "Purchases.purchaseamount19",
+                        id: "purchaseamount19"
+                    },
+                    {
+                        label: "Subdepartment:",
+                        name: "Purchases.subdepartmentID19",
+                        type: "select",
+                        placeholder: "Select a subdepartment",
+                        id: "subdepartmentID19"
+                    },
+                    {
+                        label: "Amount:",
+                        name: "Purchases.purchaseamount20",
+                        id: "purchaseamount20"
+                    },
+                    {
+                        label: "Subdepartment:",
+                        name: "Purchases.subdepartmentID20",
+                        type: "select",
+                        placeholder: "Select a subdepartment",
+                        id: "subdepartmentID20"
+                    },
+                    {
                         label: "Location:",
                         name: "Purchases.locationID",
                         type: "select",
@@ -257,9 +379,6 @@
                 ]
             });
 
-            // Number of total Purchase amount and invoice fields
-            var numberOfFields = 10;
-
             // Hide extra purchase amount and subdepartment fields.
             for (var i = 2; i <= numberOfFields; i++) {
                 editor.field('Purchases.purchaseamount' + i).hide();
@@ -271,7 +390,7 @@
                 editor.field('Purchases.purchaseamount').input()
             );
 
-            // New Puchase Form: append "Add More" button to the end of purchase amount field.
+            // New Puchase Form: append "X" button to the end of purchase amount field.
             for (var i = 2; i <= numberOfFields; i++) {
                 $('<button name="remove" id="' + i + '"class="btn btn-danger btn_remove" style="position:absolute;top:9.5%;right:13.25%">X</button>').insertAfter(
                     editor.field('Purchases.purchaseamount' + i).input()
@@ -302,7 +421,7 @@
                 }
             });
 
-            // New Purchase Form:
+            // New Purchase Form: on open
             editor.on('open', function () {
 
                 // New Purchase Form: add a themtaic break after Vendor ID field.
@@ -326,7 +445,7 @@
                     temp = editor.displayed();
                     for (i = 0; i < temp.length; i++) {
                         fields[i] = temp[i];
-                    }
+                    };
 
                     // Get all displayed purchaseamount fields and create an array
                     var used = [];
@@ -336,7 +455,7 @@
                             var displayed = parseInt(fields[notOpen].replace(/[^\d]/g, ''));
                             used[i] = displayed;
                         }
-                    }
+                    };
 
                     // Generates array of all numbers between range.
                     var range = [];
@@ -350,7 +469,7 @@
                     if (unused.length != 0) {
                         editor.field('Purchases.purchaseamount' + unused[0]).show();
                         editor.field('Purchases.subdepartmentID' + unused[0]).show();
-                    }
+                    };
                 });
 
                 // Remove the last new UPC field generated
@@ -506,13 +625,6 @@
                                 .column(9).order('desc').draw()
                         }
                     }
-                    @*,
-                    {
-                        // Help button!
-                        text: 'Help', attr: { id: 'addanewinvoice', class: "btn btn-default" }, action: function () {
-                            window.location = '@Url.Content("~/Content/Documentation/addanewinvoice.mp4")';
-                        }
-                    }*@
 
                 ],
                 rowCallback: function (row, data) {
@@ -627,7 +739,7 @@
                     // with data that will be different between each new row created.
                     var temp = {};
                     var purchases = [];
-                    for (i = 3; i < 23; i += 2) {
+                    for (i = 3; i < 23 + numberOfFields; i += 2) {
                         if (oData[i]) {
                             temp.purchaseamount = oData[i];
                             temp.subdepartmentID = oData[i + 1];
@@ -657,7 +769,7 @@
                         data.data[0].Purchases.subdepartmentID = tempSubdepartments.pop();
 
                         // Clear out all additional purchase amount and subdepartments for initial record to be created.
-                        for (i = 10; i > 0; i--) {
+                        for (i = numberOfFields; i > 0; i--) {
                             data.data[0].Purchases["purchaseamount" + i] = "";
                             data.data[0].Purchases["subdepartmentID" + i] = "";
                         }
