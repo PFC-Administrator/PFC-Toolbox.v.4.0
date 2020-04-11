@@ -13,6 +13,16 @@
 }
 /**/
 
+/* New Product Page: Change selected row background color.*/
+#NewProducts tr.selected {
+    background-color: whitesmoke !important;
+}
+
+#NewProducts .sorting_1 {
+    background-color: whitesmoke !important;
+}
+/**/
+
 /* New Purchase Form <hr> */
 .hrPurchaseForm {
     margin-bottom: 20px !important;

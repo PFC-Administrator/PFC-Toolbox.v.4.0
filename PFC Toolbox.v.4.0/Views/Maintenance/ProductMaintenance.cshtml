@@ -277,7 +277,7 @@
                             { label: "Standard pack", value: "2" }
                         ]
                     }, {
-                        label: "Tare / Net Weight:",
+                        label: "Tare:",
                         name: "ProductUpdates.TareNetWeight"
                     }, {
                         label: "Shelf Life:",
@@ -375,6 +375,9 @@
                     editorNP.field('ProductUpdates.TareNetWeight').show();
                     editorNP.field('ProductUpdates.ShelfLife').show();
                     editorNP.field('ProductUpdates.IngredientList').show();
+
+                    // Force price
+                    editorNP.field('ProductUpdates.POS_TAB_F83').val(1);
                 } else {
                     editorNP.field('ProductUpdates.ScalePLU').hide();
                     editorNP.field('ProductUpdates.ScaleItemTypeID').hide();
@@ -701,7 +704,7 @@
                         var unused = _.difference(unusedSMSUPCs, usedToolboxUPCs);
 
                         // If subdepartment is meat related, remove subdepartment prefix to create a 4 digit PLU
-                        var mettlerPLU = convertUPCtoPLU(unused[0], subdepartment);
+                        var mettlerPLU = parseInt(convertUPCtoPLU(unused[0], subdepartment));
 
                         // Add new PLU to reference PLU table to make it unavailable for future use.
                         $.ajax({
@@ -911,7 +914,7 @@
                         });
 
                         // Set form fields to generated values
-                            editorNP.field('ProductUpdates.F01').val(unused[0]);
+                        editorNP.field('ProductUpdates.F01').val(parseInt(unused[0]));
                     });
                 } else {
                     alert('Uh oh, something went wrong...');
@@ -1246,7 +1249,7 @@
                             { label: "Standard pack", value: "2" }
                         ]
                     }, {
-                        label: "Tare / Net Weight:",
+                        label: "Tare:",
                         name: "ProductUpdates.TareNetWeight"
                     }, {
                         label: "Shelf Life:",
