@@ -317,6 +317,37 @@
                 ]
             });
 
+            // New Product Form: tooltips that appear when a form field is hovered over.
+            $(editorNP.field('ProductUpdates.locationID').node()).attr("data-toggle", "tooltip").attr("title", 'Location of where the new product is to be sold.');
+            $(editorNP.field('ProductUpdates.ismettlerrequired').node()).attr("data-toggle", "tooltip").attr("title", 'Is the product going to be weighed or labeled at a Mettler Toledo scale?');
+            $(editorNP.field('ProductUpdates.labelID').node()).attr("data-toggle", "tooltip").attr("title", 'Shelf tag to be queued up on SMS.');
+            $(editorNP.field('ProductUpdates.F01').node()).attr("data-toggle", "tooltip").attr("title", 'Enter all digits of the UPC except for the last number (check digit) or click "Get New PLU" and follow the prompts to generate a PLU.');
+            $(editorNP.field('ProductUpdates.ScalePLU').node()).attr("data-toggle", "tooltip").attr("title", 'PLU that is typed in at a Mettler Toledo scale.');
+            $(editorNP.field('ProductUpdates.OBJ_TAB_F155').node()).attr("data-toggle", "tooltip").attr("title", 'Brand of the product. If no there is no brand, enter the vendor or manufacturer.');
+            $(editorNP.field('ProductUpdates.OBJ_TAB_F29').node()).attr("data-toggle", "tooltip").attr("title", 'Enter the product description in a backwards fashion so similar items are grouped together in SMS. e.g. "Organic Vanilla Greek Yogurt" would be entered as "Greek Yogurt Vanilla Org". This description will appear at the POS and reports.');
+            $(editorNP.field('ProductUpdates.OBJ_TAB_F22').node()).attr("data-toggle", "tooltip").attr("title", 'Abbreviate the unit of measure. For multiple pack items, use an "x" to separate the count from the size. e.g. a 12 pack of 12 oz cans would be "12 x 12 oz.".');
+            $(editorNP.field('ProductUpdates.OBJ_TAB_F255').node()).attr("data-toggle", "tooltip").attr("title", 'Enter the description in common language using the full description. This description will appear on sale signage. There is no need to type the brand name here. Do NOT enter brand name or size.');
+            $(editorNP.field('ProductUpdates.POS_TAB_F04').node()).attr("data-toggle", "tooltip").attr("title", 'Subdepartment that will receive the sales for this item.');
+            $(editorNP.field('ProductUpdates.POS_TAB_F79').node()).attr("data-toggle", "tooltip").attr("title", 'Check the box if the product is SNAP/EBT/Food stamp eligible.');
+            $(editorNP.field('ProductUpdates.POS_TAB_F82').node()).attr("data-toggle", "tooltip").attr("title", 'Check the box if the product is to be weighed at a scale.');
+            $(editorNP.field('ProductUpdates.POS_TAB_F81').node()).attr("data-toggle", "tooltip").attr("title", 'Check the box if the product is taxable.');
+            $(editorNP.field('ProductUpdates.POS_TAB_F178').node()).attr("data-toggle", "tooltip").attr("title", 'Check the box if the product is WIC eligible.');
+            $(editorNP.field('ProductUpdates.OBJ_TAB_F17').node()).attr("data-toggle", "tooltip").attr("title", 'Categories are used to organize a subdepartment into smaller groups. Used for category margin management and reporting.');
+            $(editorNP.field('ProductUpdates.OBJ_TAB_F18').node()).attr("data-toggle", "tooltip").attr("title", 'Report codes are used identify if a product is organic or local (produced within a 200 mile radius of either or both stores). Use "Conventional" if none of the available report codes apply.');
+            $(editorNP.field('ProductUpdates.OBJ_TAB_F16').node()).attr("data-toggle", "tooltip").attr("title", 'Family codes are used in Hackberrys Bistro to organize buttons at the register.');
+            $(editorNP.field('ProductUpdates.LIKE_TAB_F122').node()).attr("data-toggle", "tooltip").attr("title", 'Like codes are used to group UPCs & PLUs together to facilitate quicker price changes.');
+            $(editorNP.field('ProductUpdates.COST_TAB_F27').node()).attr("data-toggle", "tooltip").attr("title", 'Vendor that the product is ordered from.');
+            $(editorNP.field('ProductUpdates.COST_TAB_F26').node()).attr("data-toggle", "tooltip").attr("title", 'Re-order code that the vendor uses for orders.');
+            $(editorNP.field('ProductUpdates.PRICE_TAB_F49').node()).attr("data-toggle", "tooltip").attr("title", 'Target margin of the product that is used for updating prices in the future.');
+            $(editorNP.field('ProductUpdates.COST_TAB_F19').node()).attr("data-toggle", "tooltip").attr("title", 'Number of items in a case. If using unit cost, enter a "1".');
+            $(editorNP.field('ProductUpdates.COST_TAB_F38').node()).attr("data-toggle", "tooltip").attr("title", 'Case cost or unit cost.');
+            $(editorNP.field('ProductUpdates.price_tab_f30').node()).attr("data-toggle", "tooltip").attr("title", 'Retail price the product will be sold at.');
+            $(editorNP.field('ProductUpdates.AdditionalRequestNotes').node()).attr("data-toggle", "tooltip").attr("title", 'Additional information that needs to be conveyed.');
+            $(editorNP.field('ProductUpdates.ScaleItemTypeID').node()).attr("data-toggle", "tooltip").attr("title", 'Price per pound products have a variable weight. Standard pack products are sold by the each and can have a net weight assigned to them.');
+            $(editorNP.field('ProductUpdates.TareNetWeight').node()).attr("data-toggle", "tooltip").attr("title", 'Tare weight entered in as a decimal e.g. 0.08.');
+            $(editorNP.field('ProductUpdates.ShelfLife').node()).attr("data-toggle", "tooltip").attr("title", 'Shelf life of the product in days.');
+            $(editorNP.field('ProductUpdates.IngredientList').node()).attr("data-toggle", "tooltip").attr("title", 'Product ingredients, allergens, or country of origin.');
+
             // New Product Form: converts receipt description to title case
             editorNP.field('ProductUpdates.OBJ_TAB_F29').input().on('blur', function () {
                 var productName = editorNP.field('ProductUpdates.OBJ_TAB_F29').val();
@@ -1286,6 +1317,41 @@
                     }
                 ]
             });
+
+            // Update An Existing Product Form: tooltips that appear when a form field is hovered over.
+            $(editor.field('ProductUpdates.locationID').node()).attr("data-toggle", "tooltip").attr("title", 'Location of where this update request should be applied.');
+            $(editor.field('ProductUpdates.ismettlerrequired').node()).attr("data-toggle", "tooltip").attr("title", 'Is the product weighed or labeled at a Mettler Toledo scale?');
+            $(editor.field('ProductUpdates.labelID').node()).attr("data-toggle", "tooltip").attr("title", 'Shelf tag to be queued up on SMS.');
+            $(editor.field('ProductUpdates.F01').node()).attr("data-toggle", "tooltip").attr("title", 'Enter all digits of the UPC except for the last number (check digit).');
+            $(editor.field('ProductUpdates.ScalePLU').node()).attr("data-toggle", "tooltip").attr("title", 'PLU that is typed in at a Mettler Toledo scale.');
+            $(editor.field('ProductUpdates.OBJ_TAB_F155').node()).attr("data-toggle", "tooltip").attr("title", 'Brand of product. If no brand, vendor or manufacturer.');
+            $(editor.field('ProductUpdates.OBJ_TAB_F29').node()).attr("data-toggle", "tooltip").attr("title", 'Enter product description in a backwards fashion to group similar items in SMS. e.g. "Organic Vanilla Greek Yogurt" would be entered as "Greek Yogurt Vanilla Org". This description will appear at the POS and reports.');
+            $(editor.field('ProductUpdates.OBJ_TAB_F22').node()).attr("data-toggle", "tooltip").attr("title", 'Abbreviate the unit of measure. For multiple pack items, use an "x" to separate the count from the size. e.g. a 12 pack of 12 oz cans would be "12 x 12 oz.".');
+            $(editor.field('ProductUpdates.OBJ_TAB_F255').node()).attr("data-toggle", "tooltip").attr("title", 'Enter the description in common language using the full description. This description will appear on sale signage.');
+            $(editor.field('ProductUpdates.POS_TAB_F04').node()).attr("data-toggle", "tooltip").attr("title", 'Subdepartment that receives the sales for this item.');
+            $(editorNP.field('ProductUpdates.POS_TAB_F79').node()).attr("data-toggle", "tooltip").attr("title", 'Check the box if the product is SNAP/EBT/Food stamp eligible.');
+            $(editorNP.field('ProductUpdates.POS_TAB_F82').node()).attr("data-toggle", "tooltip").attr("title", 'Check the box if the product is to be weighed at a scale.');
+            $(editorNP.field('ProductUpdates.POS_TAB_F81').node()).attr("data-toggle", "tooltip").attr("title", 'Check the box if the product is taxable.');
+            $(editorNP.field('ProductUpdates.POS_TAB_F178').node()).attr("data-toggle", "tooltip").attr("title", 'Check the box if the product is WIC eligible.');
+            $(editor.field('ProductUpdates.OBJ_TAB_F17').node()).attr("data-toggle", "tooltip").attr("title", 'Categories used to organize a subdepartment into smaller groups.');
+            $(editor.field('ProductUpdates.OBJ_TAB_F18').node()).attr("data-toggle", "tooltip").attr("title", 'Report codes used to identify if a product is organic or local (produced within a 200 mile radius of either or both stores). Use "Conventional" if none of the available report codes apply.');
+            $(editor.field('ProductUpdates.OBJ_TAB_F16').node()).attr("data-toggle", "tooltip").attr("title", 'Family codes used to organize buttons at the register in Hackberrys Bistro.');
+            $(editor.field('ProductUpdates.LIKE_TAB_F122').node()).attr("data-toggle", "tooltip").attr("title", 'Like codes used to group UPCs & PLUs together to facilitate quicker price changes.');
+            $(editor.field('ProductUpdates.COST_TAB_F27').node()).attr("data-toggle", "tooltip").attr("title", 'Vendor that the product is ordered from.');
+            $(editor.field('ProductUpdates.COST_TAB_F26').node()).attr("data-toggle", "tooltip").attr("title", 'Re-order code that the vendor uses for orders.');
+            $(editor.field('ProductUpdates.PRICE_TAB_F49').node()).attr("data-toggle", "tooltip").attr("title", 'Target margin of the product that is used for updating prices in the future.');
+            $(editor.field('ProductUpdates.COST_TAB_F19').node()).attr("data-toggle", "tooltip").attr("title", 'Number of items in a case. If using unit cost, enter a "1".');
+            $(editor.field('ProductUpdates.COST_TAB_F38').node()).attr("data-toggle", "tooltip").attr("title", 'Case cost or unit cost.');
+            $(editor.field('ProductUpdates.price_tab_f30').node()).attr("data-toggle", "tooltip").attr("title", 'Price the product will be sold at the register.');
+            $(editor.field('ProductUpdates.promotprstartdate').node()).attr("data-toggle", "tooltip").attr("title", 'Temporarily reduced price.');
+            $(editor.field('ProductUpdates.promotprstartdate').node()).attr("data-toggle", "tooltip").attr("title", 'The day the temporarily reduced price will begin.');
+            $(editor.field('ProductUpdates.promotprenddate').node()).attr("data-toggle", "tooltip").attr("title", 'The day the temporarily reduced price will end.');
+            $(editor.field('ProductUpdates.signID').node()).attr("data-toggle", "tooltip").attr("title", 'Signage to be queued up on SMS.');
+            $(editor.field('ProductUpdates.AdditionalRequestNotes').node()).attr("data-toggle", "tooltip").attr("title", 'Additional information that needs to be conveyed.');
+            $(editor.field('ProductUpdates.ScaleItemTypeID').node()).attr("data-toggle", "tooltip").attr("title", 'Price per pound products have a variable weight. Standard pack products are sold by the each and can have a net weight assigned to them.');
+            $(editor.field('ProductUpdates.TareNetWeight').node()).attr("data-toggle", "tooltip").attr("title", 'Price per pound products need a tare weight entered in as a decimal e.g. 0.08 for tare fo 8.');
+            $(editor.field('ProductUpdates.ShelfLife').node()).attr("data-toggle", "tooltip").attr("title", 'Shelf life of the product in days.');
+            $(editor.field('ProductUpdates.IngredientList').node()).attr("data-toggle", "tooltip").attr("title", 'Ingredients, allergens, or country of origins.');
 
             // Update An Existing Product Form: converts receipt description to title case
             editor.field('ProductUpdates.OBJ_TAB_F29').input().on('blur', function () {
