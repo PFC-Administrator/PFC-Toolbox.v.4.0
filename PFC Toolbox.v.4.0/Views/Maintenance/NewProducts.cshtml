@@ -454,8 +454,8 @@
                 // Default view showing incomplete requests
                 initComplete: function (e, dt, node, config) {
                     table
-                        .column(0).search('^New Product$', true, false)
-                        .column(2).search('^3 - Manager Review Completed$', true, false).draw()
+                        .column(1).search('^New Product$', true, false)
+                        .column(3).search('^3 - Manager Review Completed$', true, false).draw()
                 },
                 columnDefs: [{
                     targets: 3,
