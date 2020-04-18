@@ -22,7 +22,7 @@
         <table id="NewProducts" class="display text-nowrap compact" style="width:100%">
             <thead>
                 <tr>
-                    <th></th>
+                    <th class="toggle-all"><i id="select_all" name="select_invoice"></i></th>
                     <th>Request Type</th>
                     <th></th>
                     <th>Status</th>
@@ -445,6 +445,19 @@
                 editorNP.field('ProductUpdates.LIKE_TAB_F122').val(null);
             });
 
+            // New Product Form: adds a drop down arrow next to the product status select list
+            var dropDownArrow = function (data, type, row) {
+                if (type === 'display') {
+                    return data + ' <i class="fa fa-toggle-down style="font-size:18px;color:black""/>';
+                }
+                return data;
+            };
+
+            // New Product Form: activate an inline edit on click of a table cell
+            $('#NewProducts').on('click', 'tbody td.editable', function (e) {
+                editorNP.inline(this);
+            });
+
             // Create the DataTables table
             var table = $('#NewProducts').DataTable({
                 //serverSide: true,
@@ -491,28 +504,28 @@
                         orderable: false,
                         width: "2%"
                     },
-                    { "data": "RequestTypes.requestname", width: "10%" },
+                    { data: "RequestTypes.requestname", width: "10%" },
                     {
-                        "data": null,
+                        data: null,
                         className: "center",
                         defaultContent: '<a href="" class="editor_edit"><i class="fa fa-pencil" style="font-size:18px;color:black"></i></a>',
                         width: "2%"
                     },
-                    { "data": "Status.productupdatestatus", width: "10%" },
-                    { "data": "ProductUpdates.F01", width: "5%" },
-                    { "data": "ProductUpdates.OBJ_TAB_F155", width: "10%" },
-                    { "data": "ProductUpdates.OBJ_TAB_F29" },
-                    { "data": "ProductUpdates.OBJ_TAB_F22", width: "5%" },
-                    { "data": "ProductUpdates.price_tab_f30", width: "5%",
+                    { data: "Status.productupdatestatus", className: "editable", editField: "ProductUpdates.productstatusID", render: dropDownArrow },
+                    { data: "ProductUpdates.F01", width: "5%" },
+                    { data: "ProductUpdates.OBJ_TAB_F155", width: "10%" },
+                    { data: "ProductUpdates.OBJ_TAB_F29" },
+                    { data: "ProductUpdates.OBJ_TAB_F22", width: "5%" },
+                    { data: "ProductUpdates.price_tab_f30", width: "5%",
                         "render": $.fn.dataTable.render.number(',', '.', 2, '$') },
-                    { "data": "ProductUpdates.createdby", width: "10%" },
+                    { data: "ProductUpdates.createdby", width: "10%" },
                     {
-                        "data": "ProductUpdates.datecreated", "render": function (value) {
+                        data: "ProductUpdates.datecreated", "render": function (value) {
                             if (value === null) return "";
                             return window.moment(value).format('M/D/YYYY h:mm:ss A');
                         }, width: "10%"
                     },
-                    { "data": "ProductUpdates.completeddate", visible: false}
+                    { data: "ProductUpdates.completeddate", visible: false}
                 ],
                 select: {
                     style: 'os',
@@ -631,7 +644,12 @@
 
                                     // COST_TAB
                                     tempArray.F27 = data[$i].ProductUpdates.COST_TAB_F27
-                                    tempArray.F26 = data[$i].ProductUpdates.COST_TAB_F26
+                                    if (data[$i].ProductUpdates.COST_TAB_F26 == null || data[$i].ProductUpdates.COST_TAB_F26 == "" || data[$i].ProductUpdates.COST_TAB_F26 == 1) {
+                                        tempArray.F26 = data[$i].ProductUpdates.COST_TAB_F26 = "na";
+                                    }
+                                    else {
+                                        tempArray.F26 = data[$i].ProductUpdates.COST_TAB_F26
+                                    }
                                     if (data[$i].ProductUpdates.COST_TAB_F19 == null || data[$i].ProductUpdates.COST_TAB_F19 == "") {
                                         tempArray.F19 = data[$i].ProductUpdates.COST_TAB_F19 = 1;
                                     }
@@ -895,6 +913,38 @@
                     // Redirects user back to main Product Maintenance page
                     { text: 'Back', action: function () { window.location = 'ProductMaintenance' } }
                 ]
+            });
+
+            // New Products: adds or removes selected class to column with toggle-all class.
+            table.on('select.dt deselect.dt', function (evtObj) {
+                // Amount of currenty displayed rows.
+                var count = table.page.info().end;
+
+                // Amount of currently selected rows.
+                var sel = table.rows(".selected").nodes().length;
+
+                if (count === sel) {
+
+                    $(".toggle-all").closest("tr").addClass("selected");
+                }
+                else {
+
+                    $(".toggle-all").closest("tr").removeClass("selected");
+                }
+
+            });
+
+            // New Products: checks or unchecks all checkboxes in toggle-all column.
+            $('#NewProducts').on('click', '.toggle-all', function () {
+                $(this).closest("tr").toggleClass("selected");
+                if ($(this).closest("tr").hasClass("selected")) {
+                    table.rows({ page: 'current' }).select();
+                    //table.rows().select();
+                }
+                else {
+                    table.rows({ page: 'current' }).deselect();
+                    //table.rows().deselect();
+                }
             });
 
             // New Products: adds edit pencil in each cell
