@@ -1,4 +1,32 @@
-﻿
+﻿/* New Product Page: Format checkboxes */
+table.dataTable tbody td.select-checkbox,
+table.dataTable thead th.select-checkbox {
+    position: relative;
+}
+
+    table.dataTable tbody td.select-checkbox:before,
+    table.dataTable tbody td.select-checkbox:after,
+    table.dataTable thead th.select-checkbox:before,
+    table.dataTable thead th.select-checkbox:after {
+        display: block;
+        position: absolute;
+        top: 1.2em;
+        left: 50%;
+        width: 12px;
+        height: 12px;
+        box-sizing: border-box;
+    }
+
+    table.dataTable tbody td.select-checkbox:before,
+    table.dataTable thead th.select-checkbox:before {
+        content: ' ';
+        margin-top: -6px;
+        margin-left: -6px;
+        border: 1px solid black;
+        border-radius: 3px;
+    }
+/**/
+
 /* Export button tweak */
 .floatRight {
     padding-left: .5%;
@@ -14,8 +42,12 @@
 /**/
 
 /* New Product Page: Change selected row background color.*/
-#NewProducts tr.selected {
-    background-color: whitesmoke !important;
+#NewProducts tr.odd.selected {
+    background-color: whitesmoke;
+}
+
+#NewProducts tr.even.selected {
+    background-color: whitesmoke;
 }
 
 #NewProducts .sorting_1 {
