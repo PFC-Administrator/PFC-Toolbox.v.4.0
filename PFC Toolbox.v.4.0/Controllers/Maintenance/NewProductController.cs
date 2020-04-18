@@ -107,7 +107,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
                     cmd2.ExecuteNonQuery();
                 }
             }
-            
+
             // Executes Toolbox-Add-ScaleInfo stored procedure located on Host SMS SQL Server and provides parameters
             if (Mettler.Equals("Yes"))
             {
@@ -146,114 +146,116 @@ namespace PFC_Toolbox.v._4._0.Controllers
             }
 
             // Executes Toolbox-Queue-Label stored procedure located on store argument given; 1 for La Crosse, 2 for Rochester, or both stores.
-            if (store == 1)
+            if (!Label.Equals("5 - No Label - Do Not Print"))
             {
-                using (SqlConnection con3 = new SqlConnection { ConnectionString = ConfigurationManager.ConnectionStrings["SMSLaxConnection"].ConnectionString })
+                if (store == 1)
                 {
-                    using (SqlCommand cmd3 = new SqlCommand("[Toolbox-Queue-Label]", con3))
+                    using (SqlConnection con3 = new SqlConnection { ConnectionString = ConfigurationManager.ConnectionStrings["SMSLaxConnection"].ConnectionString })
                     {
-                        cmd3.CommandType = CommandType.StoredProcedure;
+                        using (SqlCommand cmd3 = new SqlCommand("[Toolbox-Queue-Label]", con3))
+                        {
+                            cmd3.CommandType = CommandType.StoredProcedure;
 
-                        cmd3.Parameters.Add("@F01", SqlDbType.VarChar).Value = UPC;
-                        cmd3.Parameters.Add("@F155", SqlDbType.VarChar).Value = Brand;
-                        cmd3.Parameters.Add("@F29", SqlDbType.VarChar).Value = ShortDescription;
-                        cmd3.Parameters.Add("@F22", SqlDbType.VarChar).Value = Size;
-                        cmd3.Parameters.Add("@F255", SqlDbType.VarChar).Value = LongDescription;
-                        cmd3.Parameters.Add("@F17", SqlDbType.Int).Value = Category;
-                        cmd3.Parameters.Add("@F18", SqlDbType.Int).Value = Report;
-                        cmd3.Parameters.Add("@F04", SqlDbType.Int).Value = Subdepartment;
-                        cmd3.Parameters.Add("@F02", SqlDbType.VarChar).Value = POSDescription;
-                        cmd3.Parameters.Add("@F82", SqlDbType.VarChar).Value = Scalable;
-                        cmd3.Parameters.Add("@F30", SqlDbType.Money).Value = Retail;
-                        cmd3.Parameters.Add("@F126", SqlDbType.Int).Value = PriceLevel;
-                        cmd3.Parameters.Add("@F31", SqlDbType.Float).Value = Quantity;
-                        cmd3.Parameters.Add("@F95", SqlDbType.VarChar).Value = Label;
+                            cmd3.Parameters.Add("@F01", SqlDbType.VarChar).Value = UPC;
+                            cmd3.Parameters.Add("@F155", SqlDbType.VarChar).Value = Brand;
+                            cmd3.Parameters.Add("@F29", SqlDbType.VarChar).Value = ShortDescription;
+                            cmd3.Parameters.Add("@F22", SqlDbType.VarChar).Value = Size;
+                            cmd3.Parameters.Add("@F255", SqlDbType.VarChar).Value = LongDescription;
+                            cmd3.Parameters.Add("@F17", SqlDbType.Int).Value = Category;
+                            cmd3.Parameters.Add("@F18", SqlDbType.Int).Value = Report;
+                            cmd3.Parameters.Add("@F04", SqlDbType.Int).Value = Subdepartment;
+                            cmd3.Parameters.Add("@F02", SqlDbType.VarChar).Value = POSDescription;
+                            cmd3.Parameters.Add("@F82", SqlDbType.VarChar).Value = Scalable;
+                            cmd3.Parameters.Add("@F30", SqlDbType.Money).Value = Retail;
+                            cmd3.Parameters.Add("@F126", SqlDbType.Int).Value = PriceLevel;
+                            cmd3.Parameters.Add("@F31", SqlDbType.Float).Value = Quantity;
+                            cmd3.Parameters.Add("@F95", SqlDbType.VarChar).Value = Label;
 
-                        con3.Open();
-                        cmd3.ExecuteNonQuery();
+                            con3.Open();
+                            cmd3.ExecuteNonQuery();
+                        }
                     }
                 }
-            }
-            else if (store == 2)
-            {
-                using (SqlConnection con4 = new SqlConnection { ConnectionString = ConfigurationManager.ConnectionStrings["SMSRochConnection"].ConnectionString })
+                else if (store == 2)
                 {
-                    using (SqlCommand cmd4 = new SqlCommand("[Toolbox-Queue-Label]", con4))
+                    using (SqlConnection con4 = new SqlConnection { ConnectionString = ConfigurationManager.ConnectionStrings["SMSRochConnection"].ConnectionString })
                     {
-                        cmd4.CommandType = CommandType.StoredProcedure;
+                        using (SqlCommand cmd4 = new SqlCommand("[Toolbox-Queue-Label]", con4))
+                        {
+                            cmd4.CommandType = CommandType.StoredProcedure;
 
-                        cmd4.Parameters.Add("@F01", SqlDbType.VarChar).Value = UPC;
-                        cmd4.Parameters.Add("@F155", SqlDbType.VarChar).Value = Brand;
-                        cmd4.Parameters.Add("@F29", SqlDbType.VarChar).Value = ShortDescription;
-                        cmd4.Parameters.Add("@F22", SqlDbType.VarChar).Value = Size;
-                        cmd4.Parameters.Add("@F255", SqlDbType.VarChar).Value = LongDescription;
-                        cmd4.Parameters.Add("@F17", SqlDbType.Int).Value = Category;
-                        cmd4.Parameters.Add("@F18", SqlDbType.Int).Value = Report;
-                        cmd4.Parameters.Add("@F04", SqlDbType.Int).Value = Subdepartment;
-                        cmd4.Parameters.Add("@F02", SqlDbType.VarChar).Value = POSDescription;
-                        cmd4.Parameters.Add("@F82", SqlDbType.VarChar).Value = Scalable;
-                        cmd4.Parameters.Add("@F30", SqlDbType.Money).Value = Retail;
-                        cmd4.Parameters.Add("@F126", SqlDbType.Int).Value = PriceLevel;
-                        cmd4.Parameters.Add("@F31", SqlDbType.Float).Value = Quantity;
-                        cmd4.Parameters.Add("@F95", SqlDbType.VarChar).Value = Label;
+                            cmd4.Parameters.Add("@F01", SqlDbType.VarChar).Value = UPC;
+                            cmd4.Parameters.Add("@F155", SqlDbType.VarChar).Value = Brand;
+                            cmd4.Parameters.Add("@F29", SqlDbType.VarChar).Value = ShortDescription;
+                            cmd4.Parameters.Add("@F22", SqlDbType.VarChar).Value = Size;
+                            cmd4.Parameters.Add("@F255", SqlDbType.VarChar).Value = LongDescription;
+                            cmd4.Parameters.Add("@F17", SqlDbType.Int).Value = Category;
+                            cmd4.Parameters.Add("@F18", SqlDbType.Int).Value = Report;
+                            cmd4.Parameters.Add("@F04", SqlDbType.Int).Value = Subdepartment;
+                            cmd4.Parameters.Add("@F02", SqlDbType.VarChar).Value = POSDescription;
+                            cmd4.Parameters.Add("@F82", SqlDbType.VarChar).Value = Scalable;
+                            cmd4.Parameters.Add("@F30", SqlDbType.Money).Value = Retail;
+                            cmd4.Parameters.Add("@F126", SqlDbType.Int).Value = PriceLevel;
+                            cmd4.Parameters.Add("@F31", SqlDbType.Float).Value = Quantity;
+                            cmd4.Parameters.Add("@F95", SqlDbType.VarChar).Value = Label;
 
-                        con4.Open();
-                        cmd4.ExecuteNonQuery();
+                            con4.Open();
+                            cmd4.ExecuteNonQuery();
+                        }
                     }
                 }
-            }
-            else
-            {
-                using (SqlConnection con5 = new SqlConnection { ConnectionString = ConfigurationManager.ConnectionStrings["SMSLaxConnection"].ConnectionString })
+                else
                 {
-                    using (SqlCommand cmd5 = new SqlCommand("[Toolbox-Queue-Label]", con5))
+                    using (SqlConnection con5 = new SqlConnection { ConnectionString = ConfigurationManager.ConnectionStrings["SMSLaxConnection"].ConnectionString })
                     {
-                        cmd5.CommandType = CommandType.StoredProcedure;
+                        using (SqlCommand cmd5 = new SqlCommand("[Toolbox-Queue-Label]", con5))
+                        {
+                            cmd5.CommandType = CommandType.StoredProcedure;
 
-                        cmd5.Parameters.Add("@F01", SqlDbType.VarChar).Value = UPC;
-                        cmd5.Parameters.Add("@F155", SqlDbType.VarChar).Value = Brand;
-                        cmd5.Parameters.Add("@F29", SqlDbType.VarChar).Value = ShortDescription;
-                        cmd5.Parameters.Add("@F22", SqlDbType.VarChar).Value = Size;
-                        cmd5.Parameters.Add("@F255", SqlDbType.VarChar).Value = LongDescription;
-                        cmd5.Parameters.Add("@F17", SqlDbType.Int).Value = Category;
-                        cmd5.Parameters.Add("@F18", SqlDbType.Int).Value = Report;
-                        cmd5.Parameters.Add("@F04", SqlDbType.Int).Value = Subdepartment;
-                        cmd5.Parameters.Add("@F02", SqlDbType.VarChar).Value = POSDescription;
-                        cmd5.Parameters.Add("@F82", SqlDbType.VarChar).Value = Scalable;
-                        cmd5.Parameters.Add("@F30", SqlDbType.Money).Value = Retail;
-                        cmd5.Parameters.Add("@F126", SqlDbType.Int).Value = PriceLevel;
-                        cmd5.Parameters.Add("@F31", SqlDbType.Float).Value = Quantity;
-                        cmd5.Parameters.Add("@F95", SqlDbType.VarChar).Value = Label;
+                            cmd5.Parameters.Add("@F01", SqlDbType.VarChar).Value = UPC;
+                            cmd5.Parameters.Add("@F155", SqlDbType.VarChar).Value = Brand;
+                            cmd5.Parameters.Add("@F29", SqlDbType.VarChar).Value = ShortDescription;
+                            cmd5.Parameters.Add("@F22", SqlDbType.VarChar).Value = Size;
+                            cmd5.Parameters.Add("@F255", SqlDbType.VarChar).Value = LongDescription;
+                            cmd5.Parameters.Add("@F17", SqlDbType.Int).Value = Category;
+                            cmd5.Parameters.Add("@F18", SqlDbType.Int).Value = Report;
+                            cmd5.Parameters.Add("@F04", SqlDbType.Int).Value = Subdepartment;
+                            cmd5.Parameters.Add("@F02", SqlDbType.VarChar).Value = POSDescription;
+                            cmd5.Parameters.Add("@F82", SqlDbType.VarChar).Value = Scalable;
+                            cmd5.Parameters.Add("@F30", SqlDbType.Money).Value = Retail;
+                            cmd5.Parameters.Add("@F126", SqlDbType.Int).Value = PriceLevel;
+                            cmd5.Parameters.Add("@F31", SqlDbType.Float).Value = Quantity;
+                            cmd5.Parameters.Add("@F95", SqlDbType.VarChar).Value = Label;
 
-                        con5.Open();
-                        cmd5.ExecuteNonQuery();
+                            con5.Open();
+                            cmd5.ExecuteNonQuery();
+                        }
                     }
-                }
 
-                using (SqlConnection con6 = new SqlConnection { ConnectionString = ConfigurationManager.ConnectionStrings["SMSRochConnection"].ConnectionString })
-                {
-                    using (SqlCommand cmd6 = new SqlCommand("[Toolbox-Queue-Label]", con6))
+                    using (SqlConnection con6 = new SqlConnection { ConnectionString = ConfigurationManager.ConnectionStrings["SMSRochConnection"].ConnectionString })
                     {
-                        cmd6.CommandType = CommandType.StoredProcedure;
+                        using (SqlCommand cmd6 = new SqlCommand("[Toolbox-Queue-Label]", con6))
+                        {
+                            cmd6.CommandType = CommandType.StoredProcedure;
 
-                        cmd6.Parameters.Add("@F01", SqlDbType.VarChar).Value = UPC;
-                        cmd6.Parameters.Add("@F155", SqlDbType.VarChar).Value = Brand;
-                        cmd6.Parameters.Add("@F29", SqlDbType.VarChar).Value = ShortDescription;
-                        cmd6.Parameters.Add("@F22", SqlDbType.VarChar).Value = Size;
-                        cmd6.Parameters.Add("@F255", SqlDbType.VarChar).Value = LongDescription;
-                        cmd6.Parameters.Add("@F17", SqlDbType.Int).Value = Category;
-                        cmd6.Parameters.Add("@F18", SqlDbType.Int).Value = Report;
-                        cmd6.Parameters.Add("@F04", SqlDbType.Int).Value = Subdepartment;
-                        cmd6.Parameters.Add("@F02", SqlDbType.VarChar).Value = POSDescription;
-                        cmd6.Parameters.Add("@F82", SqlDbType.VarChar).Value = Scalable;
-                        cmd6.Parameters.Add("@F30", SqlDbType.Money).Value = Retail;
-                        cmd6.Parameters.Add("@F126", SqlDbType.Int).Value = PriceLevel;
-                        cmd6.Parameters.Add("@F31", SqlDbType.Float).Value = Quantity;
-                        cmd6.Parameters.Add("@F95", SqlDbType.VarChar).Value = Label;
+                            cmd6.Parameters.Add("@F01", SqlDbType.VarChar).Value = UPC;
+                            cmd6.Parameters.Add("@F155", SqlDbType.VarChar).Value = Brand;
+                            cmd6.Parameters.Add("@F29", SqlDbType.VarChar).Value = ShortDescription;
+                            cmd6.Parameters.Add("@F22", SqlDbType.VarChar).Value = Size;
+                            cmd6.Parameters.Add("@F255", SqlDbType.VarChar).Value = LongDescription;
+                            cmd6.Parameters.Add("@F17", SqlDbType.Int).Value = Category;
+                            cmd6.Parameters.Add("@F18", SqlDbType.Int).Value = Report;
+                            cmd6.Parameters.Add("@F04", SqlDbType.Int).Value = Subdepartment;
+                            cmd6.Parameters.Add("@F02", SqlDbType.VarChar).Value = POSDescription;
+                            cmd6.Parameters.Add("@F82", SqlDbType.VarChar).Value = Scalable;
+                            cmd6.Parameters.Add("@F30", SqlDbType.Money).Value = Retail;
+                            cmd6.Parameters.Add("@F126", SqlDbType.Int).Value = PriceLevel;
+                            cmd6.Parameters.Add("@F31", SqlDbType.Float).Value = Quantity;
+                            cmd6.Parameters.Add("@F95", SqlDbType.VarChar).Value = Label;
 
-
-                        con6.Open();
-                        cmd6.ExecuteNonQuery();
+                            con6.Open();
+                            cmd6.ExecuteNonQuery();
+                        }
                     }
                 }
             }
