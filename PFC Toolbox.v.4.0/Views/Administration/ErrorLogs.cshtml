@@ -1,0 +1,156 @@
+﻿@{
+    ViewBag.Title = "Error Logs";
+    var CreatedBy = Request["CreatedBy"];
+    var Role = Request["Role"];
+}
+
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+    <title>Errors</title>
+
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://editor.datatables.net/extensions/Editor/css/editor.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/Custom.css" />
+</head>
+<body class="dataTables">
+    <div class="container">
+        <h1><img src="~/Content/PFC_Logo_128px.png" width="100" height="100">        Error Logs</h1>
+        <br />
+        <table id="Errors" class="display compact" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Host</th>
+                    <th>Code</th>
+                    <th>Type</th>
+                    <th>Error</th>
+                    <th>User</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</body>
+</html>
+
+@section scripts{
+    <script type="text/javascript" charset="utf-8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
+    <script src="~/Content/Editor-1.8.1/js/dataTables.editor.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
+
+    <script>
+
+        var editor;
+        $(document).ready(function () {
+
+            $.fn.dataTable.moment('M/D/YYYY');
+            $.fn.dataTable.moment('h:mm A');
+
+            // Errors Form
+            //var editor = new $.fn.dataTable.Editor({
+            //    ajax: '/api/GetUsers',
+            //    table: '#Errors',
+            //    fields: [
+            //        {
+            //            label: "Host:",
+            //            name: "ELMAH_error.Host",
+            //            type: "readonly"
+            //        },
+            //        {
+            //            label: "Error:",
+            //            name: "ELMAH_error.StatusCode",
+            //            type: "readonly"
+            //        },
+            //        {
+            //            label: "Type:",
+            //            name: "ELMAH_error.Type",
+            //            type: "readonly"
+            //        },
+            //        {
+            //            label: "Message:",
+            //            name: "ELMAH_error.Message",
+            //            type: "readonly",
+            //            type: "textarea"
+            //        },
+            //        {
+            //            label: "User:",
+            //            name: "ELMAH_error.User",
+            //            type: "readonly"
+            //        },
+            //        {
+            //            label: "Date:",
+            //            name: "ELMAH_error.TimeUtc",
+            //            type: "readonly"
+            //        }
+            //    ]
+            //});
+
+            // Create the DataTables table
+            var table = $('#Errors').DataTable({
+                deferRender: true,
+                autoWidth: false,
+                select: true,
+                // Default table lengths
+                lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "All"]],
+                // Table data source
+                ajax: {
+                    url: '/api/GetErrorLogs'
+                },
+                columnDefs: [
+                    {
+                        targets: [0, 5, 6],
+                        className: 'dt-body-nowrap'
+                    }
+                ],
+                // Table columns
+                columns: [
+                    { data: "ELMAH_error.Host" },
+                    { data: "ELMAH_error.StatusCode" },
+                    { data: "ELMAH_error.Type" },
+                    { data: "ELMAH_error.Message" },
+                    { data: "ELMAH_error.User" },
+                    {
+                        data: "ELMAH_error.TimeUtc", "render": function (value) {
+                            if (value === null) return "";
+                            return window.moment(value).format('M/D/YYYY');
+                        }
+                    },
+                    {
+                        data: "ELMAH_error.TimeUtc", "render": function (value) {
+                            if (value === null) return "";
+                            return window.moment(value).format('h:mm A');
+                        } }
+                ],
+                // Control button layout
+                dom: '<"floatRight"B><"clear">lfrtip',
+                // Default table order
+                order: [[5, "desc"], [6, "desc"]],
+                buttons: [
+                    {
+                        // Show default view filter button
+                        text: 'Show Default View', action: function (e, dt, node, config) {
+                            table.search('')
+                                .columns().search('')
+                                .columns().order('')
+                                .page.len(20)
+                                .columns([5, 6]).order('desc').draw();
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
+}

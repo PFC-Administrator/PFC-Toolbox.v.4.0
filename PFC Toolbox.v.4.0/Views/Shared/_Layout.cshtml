@@ -28,7 +28,6 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    @*<li>@Html.ActionLink("Home", "Index", "Home")</li>*@
                     <li>@Html.ActionLink("Maintenance", "ProductMaintenance", "Maintenance")</li>
                     <li>@Html.ActionLink("Reports", "Index", "Reports")</li>
                     <li>@Html.ActionLink("Logs", "Index", "Logs")</li>
@@ -37,7 +36,7 @@
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                     @if (Role == 5)
                     {
-                        <li id="usersLink">@Html.ActionLink("Users", "Users", "Account")</li>
+                        <li id="usersLink">@Html.ActionLink("Administration", "Index", "Administration")</li>
                     }
                 </ul>
                 @Html.Partial("_LoginPartial")
