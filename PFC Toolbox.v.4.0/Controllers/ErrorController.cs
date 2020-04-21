@@ -16,7 +16,6 @@ namespace PFC_Toolbox.v._4._0.Controllers
 
         public ViewResult NotFound()
         {
-            Response.StatusCode = 404;
             return View("NotFound");
         }
 
