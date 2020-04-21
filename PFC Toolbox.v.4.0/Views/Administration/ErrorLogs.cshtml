@@ -125,13 +125,13 @@
                     {
                         data: "ELMAH_error.TimeUtc", "render": function (value) {
                             if (value === null) return "";
-                            return window.moment(value).format('M/D/YYYY');
+                            return window.moment.utc(value).local().format('M/D/YYYY');
                         }
                     },
                     {
                         data: "ELMAH_error.TimeUtc", "render": function (value) {
                             if (value === null) return "";
-                            return window.moment(value).format('h:mm A');
+                            return window.moment.utc(value).local().format('h:mm A');
                         } }
                 ],
                 // Control button layout

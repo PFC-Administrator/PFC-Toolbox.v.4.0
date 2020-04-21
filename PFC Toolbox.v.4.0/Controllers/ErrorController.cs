@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 namespace PFC_Toolbox.v._4._0.Controllers
 {
@@ -12,6 +8,12 @@ namespace PFC_Toolbox.v._4._0.Controllers
         {
             return View("Error");
         }
+
+        public ViewResult Error()
+        {
+            return View("Error");
+        }
+
         public ViewResult NotFound()
         {
             Response.StatusCode = 404;
