@@ -429,6 +429,7 @@
     <Content Include="Views\Administration\Users.cshtml" />
     <Content Include="Views\Administration\ErrorLogs.cshtml" />
     <Content Include="Views\Administration\Index.cshtml" />
+    <Content Include="Views\Error\NotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
