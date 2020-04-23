@@ -346,6 +346,9 @@
                         label: "Tare:",
                         name: "ProductUpdates.TareNetWeight"
                     }, {
+                        label: "Net Weight:",
+                        name: "ProductUpdates.PRICE_TAB_F31"
+                    }, {
                         label: "Shelf Life:",
                         name: "ProductUpdates.ShelfLife"
                     }, {
@@ -463,6 +466,7 @@
                     editor.field('ProductUpdates.ScalePLU').hide();
                     editor.field('ProductUpdates.ScaleItemTypeID').hide();
                     editor.field('ProductUpdates.TareNetWeight').hide();
+                    editor.field('ProductUpdates.PRICE_TAB_F31').hide();
                     editor.field('ProductUpdates.ShelfLife').hide();
                     editor.field('ProductUpdates.IngredientList').hide();
                 }
@@ -473,8 +477,13 @@
                 if (editor.field('ProductUpdates.ScaleItemTypeID').val() == '1') {
                     editor.field('ProductUpdates.POS_TAB_F82').val(1);
                     editor.field('ProductUpdates.OBJ_TAB_F22').val("per lb.")
-                } else {
-                    editor.field('ProductUpdates.POS_TAB_F82').val(2);
+                    editor.field('ProductUpdates.PRICE_TAB_F31').hide();
+                } else if (editor.field('ProductUpdates.ScaleItemTypeID').val() == '2') {
+                    editor.field('ProductUpdates.POS_TAB_F82').val(0);
+                    editor.field('ProductUpdates.PRICE_TAB_F31').show();
+                }
+                else {
+                    editor.field('ProductUpdates.POS_TAB_F82').val(0);
                 }
             });
 
