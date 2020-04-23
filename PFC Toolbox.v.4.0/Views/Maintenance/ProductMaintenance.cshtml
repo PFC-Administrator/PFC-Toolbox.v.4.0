@@ -280,6 +280,9 @@
                         label: "Tare:",
                         name: "ProductUpdates.TareNetWeight"
                     }, {
+                        label: "Net Weight:",
+                        name: "ProductUpdates.PRICE_TAB_F31"
+                    }, {
                         label: "Shelf Life:",
                         name: "ProductUpdates.ShelfLife"
                     }, {
@@ -345,6 +348,7 @@
             $(editorNP.field('ProductUpdates.AdditionalRequestNotes').node()).attr("data-toggle", "tooltip").attr("title", 'Additional information that needs to be conveyed.');
             $(editorNP.field('ProductUpdates.ScaleItemTypeID').node()).attr("data-toggle", "tooltip").attr("title", 'Price per pound products have a variable weight. Standard pack products are sold by the each and can have a net weight assigned to them.');
             $(editorNP.field('ProductUpdates.TareNetWeight').node()).attr("data-toggle", "tooltip").attr("title", 'Tare weight entered in as a decimal e.g. 0.08.');
+            $(editorNP.field('ProductUpdates.PRICE_TAB_F31').node()).attr("data-toggle", "tooltip").attr("title", 'Enter ounces as a whole number, half weights must be rounded. e.g. 3.2 ounces to 3 ounces.');
             $(editorNP.field('ProductUpdates.ShelfLife').node()).attr("data-toggle", "tooltip").attr("title", 'Shelf life of the product in days.');
             $(editorNP.field('ProductUpdates.IngredientList').node()).attr("data-toggle", "tooltip").attr("title", 'Product ingredients, allergens, or country of origin.');
 
@@ -372,7 +376,7 @@
                 editorNP.field('ProductUpdates.OBJ_TAB_F255').val(productName);
             });
 
-            // Update An Existing Product Form: removes all charactesr from case cost field
+            // New Product Form: removes all charactesr from case cost field
             editorNP.field('ProductUpdates.COST_TAB_F38').input().on('blur', function () {
                 var caseCost = editorNP.field('ProductUpdates.COST_TAB_F38').val();
                 caseCost = caseCostFormatter(caseCost);
@@ -413,18 +417,24 @@
                     editorNP.field('ProductUpdates.ScalePLU').hide();
                     editorNP.field('ProductUpdates.ScaleItemTypeID').hide();
                     editorNP.field('ProductUpdates.TareNetWeight').hide();
+                    editorNP.field('ProductUpdates.PRICE_TAB_F31').hide();
                     editorNP.field('ProductUpdates.ShelfLife').hide();
                     editorNP.field('ProductUpdates.IngredientList').hide();
                 }
             });
-
+            
             // New Product Form: set scalable checkbox on Item Type selection
             editorNP.field('ProductUpdates.ScaleItemTypeID').input().on('change', function () {
                 if (editorNP.field('ProductUpdates.ScaleItemTypeID').val() == '1') {
                     editorNP.field('ProductUpdates.POS_TAB_F82').val(1);
                     editorNP.field('ProductUpdates.OBJ_TAB_F22').val("per lb.")
-                } else {
-                    editorNP.field('ProductUpdates.POS_TAB_F82').val(2);
+                    editorNP.field('ProductUpdates.PRICE_TAB_F31').hide();
+                } else if (editorNP.field('ProductUpdates.ScaleItemTypeID').val() == '2') {
+                    editorNP.field('ProductUpdates.POS_TAB_F82').val(0);
+                    editorNP.field('ProductUpdates.PRICE_TAB_F31').show();
+                }
+                else {
+                    editorNP.field('ProductUpdates.POS_TAB_F82').val(0);
                 }
             });
 
@@ -1286,6 +1296,9 @@
                         label: "Tare:",
                         name: "ProductUpdates.TareNetWeight"
                     }, {
+                        label: "Net Weight:",
+                        name: "ProductUpdates.PRICE_TAB_F31"
+                    }, {
                         label: "Shelf Life:",
                         name: "ProductUpdates.ShelfLife"
                     }, {
@@ -1352,7 +1365,8 @@
             $(editor.field('ProductUpdates.signID').node()).attr("data-toggle", "tooltip").attr("title", 'Signage to be queued up on SMS.');
             $(editor.field('ProductUpdates.AdditionalRequestNotes').node()).attr("data-toggle", "tooltip").attr("title", 'Additional information that needs to be conveyed.');
             $(editor.field('ProductUpdates.ScaleItemTypeID').node()).attr("data-toggle", "tooltip").attr("title", 'Price per pound products have a variable weight. Standard pack products are sold by the each and can have a net weight assigned to them.');
-            $(editor.field('ProductUpdates.TareNetWeight').node()).attr("data-toggle", "tooltip").attr("title", 'Price per pound products need a tare weight entered in as a decimal e.g. 0.08 for tare fo 8.');
+            $(editor.field('ProductUpdates.TareNetWeight').node()).attr("data-toggle", "tooltip").attr("title", 'Price per pound products need a tare weight entered in as a decimal e.g. 0.08 for tare for 8.');
+            $(editor.field('ProductUpdates.PRICE_TAB_F31').node()).attr("data-toggle", "tooltip").attr("title", 'Enter ounces as a whole number, half weights must be rounded. e.g. 3.2 ounces to 3 ounces.');
             $(editor.field('ProductUpdates.ShelfLife').node()).attr("data-toggle", "tooltip").attr("title", 'Shelf life of the product in days.');
             $(editor.field('ProductUpdates.IngredientList').node()).attr("data-toggle", "tooltip").attr("title", 'Ingredients, allergens, or country of origins.');
 
@@ -1459,6 +1473,7 @@
                     editor.field('ProductUpdates.ScalePLU').hide();
                     editor.field('ProductUpdates.ScaleItemTypeID').hide();
                     editor.field('ProductUpdates.TareNetWeight').hide();
+                    editor.field('ProductUpdates.PRICE_TAB_F31').hide();
                     editor.field('ProductUpdates.ShelfLife').hide();
                     editor.field('ProductUpdates.IngredientList').hide();
                 }
@@ -1469,7 +1484,12 @@
                 if (editor.field('ProductUpdates.ScaleItemTypeID').val() == '1') {
                     editor.field('ProductUpdates.POS_TAB_F82').val(1);
                     editor.field('ProductUpdates.OBJ_TAB_F22').val("per lb.")
-                } else {
+                    editor.field('ProductUpdates.PRICE_TAB_F31').hide();
+                } else if (editor.field('ProductUpdates.ScaleItemTypeID').val() == '2') {
+                    editor.field('ProductUpdates.POS_TAB_F82').val(0);
+                    editor.field('ProductUpdates.PRICE_TAB_F31').show();
+                }
+                else {
                     editor.field('ProductUpdates.POS_TAB_F82').val(0);
                 }
             });
