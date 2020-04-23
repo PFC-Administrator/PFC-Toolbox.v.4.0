@@ -272,6 +272,9 @@
                         label: "Tare:",
                         name: "ProductUpdates.TareNetWeight"
                     }, {
+                        label: "Net Weight:",
+                        name: "ProductUpdates.PRICE_TAB_F31"
+                    }, {
                         label: "Shelf Life:",
                         name: "ProductUpdates.ShelfLife"
                     }, {
@@ -381,6 +384,7 @@
                     editorNP.field('ProductUpdates.ScalePLU').hide();
                     editorNP.field('ProductUpdates.ScaleItemTypeID').hide();
                     editorNP.field('ProductUpdates.TareNetWeight').hide();
+                    editorNP.field('ProductUpdates.PRICE_TAB_F31').hide();
                     editorNP.field('ProductUpdates.ShelfLife').hide();
                     editorNP.field('ProductUpdates.IngredientList').hide();
                 }
@@ -391,8 +395,13 @@
                 if (editorNP.field('ProductUpdates.ScaleItemTypeID').val() == '1') {
                     editorNP.field('ProductUpdates.POS_TAB_F82').val(1);
                     editorNP.field('ProductUpdates.OBJ_TAB_F22').val("per lb.")
-                } else {
-                    editorNP.field('ProductUpdates.POS_TAB_F82').val(2);
+                    editorNP.field('ProductUpdates.PRICE_TAB_F31').hide();
+                } else if (editorNP.field('ProductUpdates.ScaleItemTypeID').val() == '2') {
+                    editorNP.field('ProductUpdates.POS_TAB_F82').val(0);
+                    editorNP.field('ProductUpdates.PRICE_TAB_F31').show();
+                }
+                else {
+                    editorNP.field('ProductUpdates.POS_TAB_F82').val(0);
                 }
             });
 
@@ -638,8 +647,14 @@
 
                                     // PRICE_TAB
                                     tempArray.F30 = data[$i].ProductUpdates.price_tab_f30
+                                    if (data[$i].ProductUpdates.PRICE_TAB_F31 == null || data[$i].ProductUpdates.PRICE_TAB_F31 == "") {
+                                        tempArray.F31 = data[$i].ProductUpdates.PRICE_TAB_F31 = 1;
+                                    }
+                                    else {
+                                        tempArray.F31 = data[$i].ProductUpdates.PRICE_TAB_F31
+                                        tempArray.F1120 = 'FW';
+                                    }
                                     tempArray.F126 = data[$i].ProductUpdates.PRICE_TAB_F126
-                                    tempArray.F31 = data[$i].ProductUpdates.PRICE_TAB_F31
                                     tempArray.F122 = data[$i].ProductUpdates.LIKE_TAB_F122
 
                                     // COST_TAB
@@ -837,7 +852,7 @@
                                                 // PRICE_TAB
                                                 'Retail': newProductArray[0].F30,
                                                 'PriceLevel': '1',
-                                                'Quantity': '1',
+                                                'Quantity': newProductArray[0].F31,
                                                 'Like': newProductArray[0].F122,
 
                                                 // COST_TAB
