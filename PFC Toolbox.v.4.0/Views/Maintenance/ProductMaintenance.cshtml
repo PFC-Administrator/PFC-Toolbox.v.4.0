@@ -118,7 +118,7 @@
                         type: "select",
                         placeholder: "Select a label size"
                     }, {
-                        label: "UPC/PLU",
+                        label: "UPC/PLU:",
                         name: "ProductUpdates.F01"
                     }, {
                         label: "Mettler PLU:",
@@ -550,6 +550,9 @@
                             option = {};
                         };
                         editorNP.field('ProductUpdates.OBJ_TAB_F155').update(optionsA);
+
+                        // Refresh data for all tables.
+                        table.ajax.reload();
                     });
                     editorNP.field('ProductUpdates.OBJ_TAB_F155').set(brand);
                 }
@@ -1076,7 +1079,7 @@
                 },
                 fields: [
                     {
-                        label: "Product Update Type",
+                        label: "Product Update Type:",
                         name: "ProductUpdates.requesttypeID",
                         type: "select",
                         placeholder: "Select a request type"
@@ -1097,7 +1100,7 @@
                         type: "select",
                         placeholder: "Select a label size"
                     }, {
-                        label: "UPC/PLU",
+                        label: "UPC/PLU:",
                         name: "ProductUpdates.F01",
                         id: "UPC"
                     }, {
@@ -1121,18 +1124,18 @@
                         label: "Case cost:",
                         name: "ProductUpdates.COST_TAB_F38"
                     }, {
-                        label: "Retail Price",
+                        label: "Retail Price:",
                         name: "ProductUpdates.price_tab_f30"
                     }, {
-                        label: "TPR Price",
+                        label: "TPR Price:",
                         name: "ProductUpdates.promotprprice"
                     }, {
-                        label: "TPR Start",
+                        label: "TPR Start:",
                         name: "ProductUpdates.promotprstartdate",
                         type: "datetime",
                         format: "M/DD/YYYY"
                     }, {
-                        label: "TPR End",
+                        label: "TPR End:",
                         name: "ProductUpdates.promotprenddate",
                         type: "datetime",
                         format: "M/DD/YYYY"
@@ -2049,6 +2052,12 @@
             if (!(role >= 4)) {
                 table.button('#ManageNewProducts').disable();
             }
+
+            // Reload table once a minute.
+            setInterval(function () {
+                table.ajax.reload();
+            }, 60000);
+
         });
     </script>
 }
