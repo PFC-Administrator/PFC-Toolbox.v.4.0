@@ -19,7 +19,7 @@
     <div class="productUpdatesContainer">
         <h1><img src="~/Content/PFC_Logo_128px.png" width="100" height="100">        Product Updates</h1>
         <br />
-        <table id="ProductUpdates" class="display text-nowrap compact" style="width:100%">
+        <table id="ProductUpdates" class="display text-nowrap compact" style="width:100%;table-layout:fixed">
             <thead>
                 <tr>
                     <th>Request Type</th>
@@ -61,6 +61,7 @@
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/plug-ins/1.10.20/dataRender/ellipsis.js"></script>
 
     <script>
 
@@ -749,74 +750,72 @@
 
             // Create the DataTables table
             var table = $('#ProductUpdates').DataTable({
-                //serverSide: true,
                 select: true,
                 deferRender: true,
-                autoWidth: false,
+                autoWidth: true,
                 // This is the default view showing uncompleted requests
                 initComplete: function (e, dt, node, config) {
                     table
                         .column(0).search('^((?!(New Product)).)*$', true, false)
                         .column(2).search('^((?!(4 - Completed)).)*$', true, false).draw()
                 },
-                // Hide text overflow with ellipses
-                columnDefs: [{
-                    targets: 3,
-                    render: function (data, type, row) {
-                        if (type === 'display' && data != null) {
-                            data = data.replace(/<(?:.|\\n)*?>/gm, '');
-                            if (data.length > 14) {
-                                return '<span class=\"show-ellipsis\">' + data.substr(0, 14) + '</span><span class=\"no-show\">' + data.substr(14) + '</span>';
-                            } else {
-                                return data;
-                            }
-                        } else {
-                            return data;
-                        }
-                    }
-                }],
                 columnDefs: [
-                    { orderable: false, targets: 1 }
+                    { orderable: false, targets: 1 },
+                    {
+                        // Show up to 14 characters in UPC field then hide with ellipses
+                        targets: 3,
+                        render: $.fn.dataTable.render.ellipsis(14)
+                    },
+                    {
+                        // Show up to 17 characters in brand field then hide with ellipses
+                        targets: 4,
+                        render: $.fn.dataTable.render.ellipsis(17)
+                    }
                 ],
                 // Default table lengths
                 lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "All"]],
                 // Table data source
                 ajax: {
-                    url: '/api/ProductUpdates'//,
-                    //type: 'POST'
+                    url: '/api/ProductUpdates'
                 },
                 // Table columns
                 columns: [
-                    { "data": "RequestTypes.requestname", width: "10%" },
+                    { data: "RequestTypes.requestname", width: "9%" },
                     {
-                        "data": null,
+                        data: null,
                         className: "center",
                         defaultContent: '<a href="" class="editor_edit"><i class="fa fa-pencil" style="font-size:18px;color:black"></i></a>',
-                        width: "2%"
+                        width: "1.5%"
                     },
-                    { "data": "Status.productupdatestatus", className: "editable", editField: "ProductUpdates.productstatusID", render: dropDownArrow},
-                    { "data": "ProductUpdates.F01", width: "5%" },
-                    { "data": "ProductUpdates.OBJ_TAB_F155", width: "10%" },
-                    { "data": "ProductUpdates.OBJ_TAB_F29" },
-                    { "data": "ProductUpdates.OBJ_TAB_F22", width: "5%" },
-                    { "data": "ProductUpdates.promotprstartdate" },
-                    { "data": "ProductUpdates.promotprenddate" },
-                    { "data": "ProductUpdates.promotprprice",
-                        "render": $.fn.dataTable.render.number(',', '.', 2, '$') },
-                    { "data": "ProductUpdates.price_tab_f30",
-                        "render": $.fn.dataTable.render.number(',', '.', 2, '$') },
-                    { "data": "ProductUpdates.createdby" },
+                    { data: "Status.productupdatestatus", className: "editable", editField: "ProductUpdates.productstatusID", render: dropDownArrow, width: "13%" },
+                    { data: "ProductUpdates.F01", width: "7%" },
+                    { data: "ProductUpdates.OBJ_TAB_F155", width: "9.5%" },
+                    { data: "ProductUpdates.OBJ_TAB_F29" },
+                    { data: "ProductUpdates.OBJ_TAB_F22", width: "5%" },
+                    { data: "ProductUpdates.promotprstartdate", width: "5%" },
+                    { data: "ProductUpdates.promotprenddate", width: "5%" },
                     {
-                        "data": "ProductUpdates.datecreated", "render": function (value) {
+                        data: "ProductUpdates.promotprprice",
+                        render: $.fn.dataTable.render.number(',', '.', 2, '$'),
+                        width: "5%"
+                    },
+                    {
+                        data: "ProductUpdates.price_tab_f30",
+                        render: $.fn.dataTable.render.number(',', '.', 2, '$'),
+                        width: "6%"
+                    },
+                    { data: "ProductUpdates.createdby", width: "6%" },
+                    {
+                        data: "ProductUpdates.datecreated", "render": function (value) {
                             if (value === null) return "";
                             return window.moment(value).format('M/D/YYYY h:mm:ss A');
-                        }
+                        }, width: "9%"
                     },
-                    { "data": "ProductUpdates.completeddate", visible: false },
-                    { "data": "Locations.locationname", editField: "ProductUpdates.locationID", visible: false },
-                    { "data": "ProductUpdates.AdditionalRequestNotes", visible: false },
-                    { "data": "ProductUpdates.IngredientList", visible: false },
-                    { "data": "ProductUpdates.PRICE_TAB_F49", visible: false }
+                    { data: "ProductUpdates.completeddate", visible: false },
+                    { data: "Locations.locationname", editField: "ProductUpdates.locationID", visible: false },
+                    { data: "ProductUpdates.AdditionalRequestNotes", visible: false },
+                    { data: "ProductUpdates.IngredientList", visible: false },
+                    { data: "ProductUpdates.PRICE_TAB_F49", visible: false }
                 ],
                 // Change New Products request type background green
                 rowCallback: function (row, data, index) {

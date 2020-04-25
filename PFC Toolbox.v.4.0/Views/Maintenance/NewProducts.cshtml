@@ -19,7 +19,7 @@
     <div class="container">
         <h1><img src="~/Content/PFC_Logo_128px.png" width="100" height="100">        New Products</h1>
         <br />
-        <table id="NewProducts" class="display text-nowrap compact" style="width:100%">
+        <table id="NewProducts" class="display text-nowrap compact" style="width:100%;table-layout:fixed">
             <thead>
                 <tr>
                     <th class="toggle-all"><i id="select_all" name="select_invoice"></i></th>
@@ -54,6 +54,7 @@
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/plug-ins/1.10.20/dataRender/ellipsis.js"></script>
 
     <script>
 
@@ -469,9 +470,8 @@
 
             // Create the DataTables table
             var table = $('#NewProducts').DataTable({
-                //serverSide: true,
                 deferRender: true,
-                autoWidth: false,
+                autoWidth: true,
                 select: true,
                 // Default view showing incomplete requests
                 initComplete: function (e, dt, node, config) {
@@ -479,30 +479,19 @@
                         .column(1).search('^New Product$', true, false)
                         .column(3).search('^3 - Manager Review Completed$', true, false).draw()
                 },
-                columnDefs: [{
-                    targets: 3,
-                    render: function (data, type, row) {
-                        if (type === 'display' && data != null) {
-                            data = data.replace(/<(?:.|\\n)*?>/gm, '');
-                            if (data.length > 14) {
-                                return '<span class=\"show-ellipsis\">' + data.substr(0, 14) + '</span><span class=\"no-show\">' + data.substr(14) + '</span>';
-                            } else {
-                                return data;
-                            }
-                        } else {
-                            return data;
-                        }
-                    }
-                }],
                 columnDefs: [
-                    { orderable: false, targets: 2 }
+                    { orderable: false, targets: 2 },
+                    {
+                        // Show up to 18 characters in brand field then hide with ellipses
+                        targets: 5,
+                        render: $.fn.dataTable.render.ellipsis(18)
+                    }
                 ],
                 // Default table lengths
                 lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "All"]],
                 // Table data source
                 ajax: {
-                    url: '/api/NewProducts'//,
-                    //type: 'POST'
+                    url: '/api/NewProducts'
                 },
                 // Table columns
                 columns: [
@@ -513,21 +502,24 @@
                         orderable: false,
                         width: "2%"
                     },
-                    { data: "RequestTypes.requestname", width: "10%" },
+                    { data: "RequestTypes.requestname", width: "9.5%"},
                     {
                         data: null,
                         className: "center",
                         defaultContent: '<a href="" class="editor_edit"><i class="fa fa-pencil" style="font-size:18px;color:black"></i></a>',
-                        width: "2%"
+                        width: "1.5%"
                     },
-                    { data: "Status.productupdatestatus", className: "editable", editField: "ProductUpdates.productstatusID", render: dropDownArrow },
-                    { data: "ProductUpdates.F01", width: "5%" },
-                    { data: "ProductUpdates.OBJ_TAB_F155", width: "10%" },
+                    { data: "Status.productupdatestatus", className: "editable", editField: "ProductUpdates.productstatusID", render: dropDownArrow, width: "13.5%" },
+                    { data: "ProductUpdates.F01", width: "8%" },
+                    { data: "ProductUpdates.OBJ_TAB_F155", width: "10.5%" },
                     { data: "ProductUpdates.OBJ_TAB_F29" },
-                    { data: "ProductUpdates.OBJ_TAB_F22", width: "5%" },
-                    { data: "ProductUpdates.price_tab_f30", width: "5%",
-                        "render": $.fn.dataTable.render.number(',', '.', 2, '$') },
-                    { data: "ProductUpdates.createdby", width: "10%" },
+                    { data: "ProductUpdates.OBJ_TAB_F22", width: "6%"},
+                    {
+                        data: "ProductUpdates.price_tab_f30",
+                        "render": $.fn.dataTable.render.number(',', '.', 2, '$'),
+                        width: "6%"
+                    },
+                    { data: "ProductUpdates.createdby", width: "6%" },
                     {
                         data: "ProductUpdates.datecreated", "render": function (value) {
                             if (value === null) return "";

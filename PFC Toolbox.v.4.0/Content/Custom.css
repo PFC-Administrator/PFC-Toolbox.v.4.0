@@ -85,11 +85,11 @@ table.dataTable thead th.select-checkbox {
     width: 97%;
 }
 
-    .container.body-content {
-        width: 100%;
-        padding-left: 0px;
-        padding-right: 0px;
-    }
+.container.body-content {
+    width: 100%;
+    padding-left: 0px;
+    padding-right: 0px;
+}
 
 div.DTE_Body div.DTE_Body_Content div.DTE_Field {
     position: relative;
