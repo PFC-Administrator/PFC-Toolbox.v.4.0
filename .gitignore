@@ -3,6 +3,7 @@
 
 # Connection secrets
 *.secrets.config
+*.secrets.mailsettings.config
 
 # User-specific files
 *.suo
