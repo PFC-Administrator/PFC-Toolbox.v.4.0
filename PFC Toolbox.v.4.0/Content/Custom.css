@@ -87,8 +87,8 @@ table.dataTable thead th.select-checkbox {
 
 .container.body-content {
     width: 100%;
-    padding-left: 0px;
-    padding-right: 0px;
+    padding-left: 0%;
+    padding-right: 0%;
 }
 
 div.DTE_Body div.DTE_Body_Content div.DTE_Field {
@@ -155,8 +155,14 @@ div.DTE_Body div.DTE_Body_Content div.DTE_Field {
     }
 /**/
 
+/***/
 h1 {
-    margin-top: -5px;
+    margin-top: -.5%;
+}
+
+element.style {
+    margin-bottom: 0%;
+    margin-top: -.5%;
 }
 
 span.no-show {
