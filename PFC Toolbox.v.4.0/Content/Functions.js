@@ -1,4 +1,18 @@
 ﻿
+// Function to check for integer value.
+function integerCheck(value) {
+    return /^\d+$/.test(value);
+}
+
+// Function to check for float value.
+function floatCheck(value) {
+    if (!isNaN(value)) {
+        if (value % 1 != 0) {
+            return true;
+        }
+    }
+}
+
 // Function to pad numbers with 0's
 function pad(number, width = 3, z = 0) {
     return (String(z).repeat(width) + String(number)).slice(String(number).length)

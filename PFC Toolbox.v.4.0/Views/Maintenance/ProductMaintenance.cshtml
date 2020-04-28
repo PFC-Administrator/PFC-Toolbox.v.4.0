@@ -245,10 +245,16 @@
                         name: "ProductUpdates.COST_TAB_F26"
                     }, {
                         label: "Retail margin:",
-                        name: "ProductUpdates.PRICE_TAB_F49"
+                        name: "ProductUpdates.PRICE_TAB_F49",
+                        attr: {
+                            type: 'number'
+                        }
                     }, {
                         label: "Items per case:",
-                        name: "ProductUpdates.COST_TAB_F19"
+                        name: "ProductUpdates.COST_TAB_F19",
+                        attr: {
+                            type: 'number'
+                        }
                     }, {
                         label: "Case cost:",
                         name: "ProductUpdates.COST_TAB_F38"
@@ -282,10 +288,16 @@
                         name: "ProductUpdates.TareNetWeight"
                     }, {
                         label: "Net Weight:",
-                        name: "ProductUpdates.PRICE_TAB_F31"
+                        name: "ProductUpdates.PRICE_TAB_F31",
+                        attr: {
+                            type: 'number'
+                        }
                     }, {
                         label: "Shelf Life:",
-                        name: "ProductUpdates.ShelfLife"
+                        name: "ProductUpdates.ShelfLife",
+                        attr: {
+                            type: 'number'
+                        }
                     }, {
                         label: "Ingredients:",
                         name: "ProductUpdates.IngredientList",
@@ -1049,10 +1061,28 @@
 
                     if (!editorNP.field('ProductUpdates.COST_TAB_F19').val()) {
                         editorNP.field('ProductUpdates.COST_TAB_F19').error('Required');
+                    } else if (!integerCheck(editorNP.field('ProductUpdates.COST_TAB_F19').val())) {
+                        editorNP.field('ProductUpdates.COST_TAB_F19').error('Please enter a whole number.');
                     }
 
                     if (!editorNP.field('ProductUpdates.COST_TAB_F38').val()) {
                         editorNP.field('ProductUpdates.COST_TAB_F38').error('Required');
+                    }
+
+                    if (editorNP.field('ProductUpdates.TareNetWeight').val() && !floatCheck(editorNP.field('ProductUpdates.TareNetWeight').val())) {
+                        editorNP.field('ProductUpdates.TareNetWeight').error('Please enter a decimal value: e.g. 0.08');
+                    }
+
+                    if (editorNP.field('ProductUpdates.PRICE_TAB_F49').val() && !integerCheck(editorNP.field('ProductUpdates.PRICE_TAB_F49').val())) {
+                        editorNP.field('ProductUpdates.PRICE_TAB_F49').error('Please enter a whole number.');
+                    }
+
+                    if (editorNP.field('ProductUpdates.PRICE_TAB_F31').val() && !integerCheck(editorNP.field('ProductUpdates.PRICE_TAB_F31').val())) {
+                        editorNP.field('ProductUpdates.PRICE_TAB_F31').error('Please enter a whole number.');
+                    }
+
+                    if (editorNP.field('ProductUpdates.ShelfLife').val() && !integerCheck(editorNP.field('ProductUpdates.ShelfLife').val())) {
+                        editorNP.field('ProductUpdates.ShelfLife').error('Please enter a whole number.');
                     }
 
                     // If any error was reported, cancel the submission so it can be corrected
@@ -1671,6 +1701,26 @@
                                 editor.field('ProductUpdates.F01').error("UPC/PLU does not exist in SMS");
                             }
                         });
+                    }
+
+                    if (!integerCheck(editor.field('ProductUpdates.COST_TAB_F19').val())) {
+                        editor.field('ProductUpdates.COST_TAB_F19').error('Please enter a whole number.');
+                    }
+
+                    if (editor.field('ProductUpdates.TareNetWeight').val() && !floatCheck(editor.field('ProductUpdates.TareNetWeight').val())) {
+                        editor.field('ProductUpdates.TareNetWeight').error('Please enter a decimal value: e.g. 0.08');
+                    }
+
+                    if (editor.field('ProductUpdates.PRICE_TAB_F49').val() && !integerCheck(editor.field('ProductUpdates.PRICE_TAB_F49').val())) {
+                        editor.field('ProductUpdates.PRICE_TAB_F49').error('Please enter a whole number.');
+                    }
+
+                    if (editor.field('ProductUpdates.PRICE_TAB_F31').val() && !integerCheck(editor.field('ProductUpdates.PRICE_TAB_F31').val())) {
+                        editor.field('ProductUpdates.PRICE_TAB_F31').error('Please enter a whole number.');
+                    }
+
+                    if (editor.field('ProductUpdates.ShelfLife').val() && !integerCheck(editor.field('ProductUpdates.ShelfLife').val())) {
+                        editor.field('ProductUpdates.ShelfLife').error('Please enter a whole number.');
                     }
 
                     // Fields required for PFC & NCG Fresh Deals
