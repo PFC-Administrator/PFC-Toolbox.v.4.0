@@ -123,7 +123,10 @@
                         name: "ProductUpdates.F01"
                     }, {
                         label: "Mettler PLU:",
-                        name: "ProductUpdates.ScalePLU"
+                        name: "ProductUpdates.ScalePLU",
+                        attr: {
+                            type: 'number'
+                        }
                     }, {
                         label: "Brand:",
                         name: "ProductUpdates.OBJ_TAB_F155",
@@ -159,7 +162,7 @@
                         type: "select",
                         placeholder: "Select a report"
                     }, {
-                        label: "Family button:",
+                        label: "Family Button:",
                         name: "ProductUpdates.OBJ_TAB_F16",
                         type: "select",
                         placeholder: "Select a family button"
@@ -207,7 +210,7 @@
                         unselectedValue: 0,
                         separator: "|"
                     }, {
-                        label: "Stop discount:",
+                        label: "Stop Discount:",
                         name: "ProductUpdates.POS_TAB_F150",
                         type: "checkbox",
                         options: [
@@ -217,7 +220,7 @@
                         unselectedValue: 0,
                         type: "hidden"
                     }, {
-                        label: "Force price:",
+                        label: "Force Price:",
                         name: "ProductUpdates.POS_TAB_F83",
                         type: "checkbox",
                         options: [
@@ -241,28 +244,34 @@
                         type: "select",
                         placeholder: "Select a vendor"
                     }, {
-                        label: "Reorder code:",
+                        label: "Reorder Code:",
                         name: "ProductUpdates.COST_TAB_F26"
                     }, {
-                        label: "Retail margin:",
+                        label: "Retail Margin:",
                         name: "ProductUpdates.PRICE_TAB_F49",
                         attr: {
                             type: 'number'
                         }
                     }, {
-                        label: "Items per case:",
+                        label: "Items Per Case:",
                         name: "ProductUpdates.COST_TAB_F19",
                         attr: {
                             type: 'number'
                         }
                     }, {
-                        label: "Case cost:",
-                        name: "ProductUpdates.COST_TAB_F38"
+                        label: "Case Cost:",
+                        name: "ProductUpdates.COST_TAB_F38",
+                        attr: {
+                            type: 'number'
+                        }
                     }, {
                         label: "Retail Price",
-                        name: "ProductUpdates.price_tab_f30"
+                        name: "ProductUpdates.price_tab_f30",
+                        attr: {
+                            type: 'number'
+                        }
                     }, {
-                        label: "Client age:",
+                        label: "Client Age:",
                         name: "ProductUpdates.POS_TAB_F171",
                         type: "hidden"
                     }, {
@@ -285,7 +294,10 @@
                         ]
                     }, {
                         label: "Tare:",
-                        name: "ProductUpdates.TareNetWeight"
+                        name: "ProductUpdates.TareNetWeight",
+                        attr: {
+                            type: 'number'
+                        }
                     }, {
                         label: "Net Weight:",
                         name: "ProductUpdates.PRICE_TAB_F31",
@@ -303,30 +315,30 @@
                         name: "ProductUpdates.IngredientList",
                         type: "textarea"
                     }, {
-                        label: "Created by:",
+                        label: "Created By:",
                         name: "ProductUpdates.createdby",
                         type: "readonly",
                         type: "hidden",
                         def: currentUser
                     }, {
-                        label: "Date created:",
+                        label: "Date Created:",
                         name: "ProductUpdates.datecreated",
                         type: "hidden",
                         def: getDate()
                     }, {
-                        label: "Date completed:",
+                        label: "Date Completed:",
                         name: "ProductUpdates.completeddate",
                         type: "hidden"
                     }, {
-                        label: "Completed by:",
+                        label: "Completed By:",
                         name: "ProductUpdates.completedby",
                         type: "hidden"
                     }, {
-                        label: "Last updated on:",
+                        label: "Last Updated On:",
                         name: "ProductUpdates.lastupdatedon",
                         type: "hidden"
                     }, {
-                        label: "Last updated by:",
+                        label: "Last Updated By:",
                         name: "ProductUpdates.lastupdatedby",
                         type: "hidden"
                     }
@@ -1069,18 +1081,22 @@
                         editorNP.field('ProductUpdates.COST_TAB_F38').error('Required');
                     }
 
+                    // Tare - if value is present, must be a decimal
                     if (editorNP.field('ProductUpdates.TareNetWeight').val() && !floatCheck(editorNP.field('ProductUpdates.TareNetWeight').val())) {
                         editorNP.field('ProductUpdates.TareNetWeight').error('Please enter a decimal value: e.g. 0.08');
                     }
 
+                    // Retail Margin - if value is present, must be a whole number
                     if (editorNP.field('ProductUpdates.PRICE_TAB_F49').val() && !integerCheck(editorNP.field('ProductUpdates.PRICE_TAB_F49').val())) {
                         editorNP.field('ProductUpdates.PRICE_TAB_F49').error('Please enter a whole number.');
                     }
 
+                    // Net Weight - if value is present, must be a whole number
                     if (editorNP.field('ProductUpdates.PRICE_TAB_F31').val() && !integerCheck(editorNP.field('ProductUpdates.PRICE_TAB_F31').val())) {
                         editorNP.field('ProductUpdates.PRICE_TAB_F31').error('Please enter a whole number.');
                     }
 
+                    // Shelf Life - if value is present, must be a whole number
                     if (editorNP.field('ProductUpdates.ShelfLife').val() && !integerCheck(editorNP.field('ProductUpdates.ShelfLife').val())) {
                         editorNP.field('ProductUpdates.ShelfLife').error('Please enter a whole number.');
                     }
@@ -1146,30 +1162,48 @@
                         id: "UPC"
                     }, {
                         label: "Mettler PLU:",
-                        name: "ProductUpdates.ScalePLU"
+                        name: "ProductUpdates.ScalePLU",
+                        attr: {
+                            type: 'number'
+                        }
                     }, {
                         label: "Vendor:",
                         name: "ProductUpdates.COST_TAB_F27",
                         type: "select",
                         placeholder: "Select a vendor"
                     }, {
-                        label: "Reorder code:",
+                        label: "Reorder Code:",
                         name: "ProductUpdates.COST_TAB_F26"
                     }, {
-                        label: "Retail margin:",
-                        name: "ProductUpdates.PRICE_TAB_F49"
+                        label: "Retail Margin:",
+                        name: "ProductUpdates.PRICE_TAB_F49",
+                        attr: {
+                            type: 'number'
+                        }
                     }, {
-                        label: "Items per case:",
-                        name: "ProductUpdates.COST_TAB_F19"
+                        label: "Items Per Case:",
+                        name: "ProductUpdates.COST_TAB_F19",
+                        attr: {
+                            type: 'number'
+                        }
                     }, {
-                        label: "Case cost:",
-                        name: "ProductUpdates.COST_TAB_F38"
+                        label: "Case Cost:",
+                        name: "ProductUpdates.COST_TAB_F38",
+                        attr: {
+                            type: 'number'
+                        }
                     }, {
                         label: "Retail Price:",
-                        name: "ProductUpdates.price_tab_f30"
+                        name: "ProductUpdates.price_tab_f30",
+                        attr: {
+                            type: 'number'
+                        }
                     }, {
                         label: "TPR Price:",
-                        name: "ProductUpdates.promotprprice"
+                        name: "ProductUpdates.promotprprice",
+                        attr: {
+                            type: 'number'
+                        }
                     }, {
                         label: "TPR Start:",
                         name: "ProductUpdates.promotprstartdate",
@@ -1224,7 +1258,7 @@
                         placeholder: "Select a report",
                         id: "reportPU"
                     }, {
-                        label: "Family button:",
+                        label: "Family Button:",
                         name: "ProductUpdates.OBJ_TAB_F16",
                         type: "select",
                         placeholder: "Select a family button",
@@ -1273,7 +1307,7 @@
                         unselectedValue: 0,
                         separator: "|"
                     }, {
-                        label: "Stop discount:",
+                        label: "Stop Discount:",
                         name: "ProductUpdates.POS_TAB_F150",
                         type: "checkbox",
                         options: [
@@ -1283,7 +1317,7 @@
                         unselectedValue: 0,
                         type: "hidden"
                     }, {
-                        label: "Force price:",
+                        label: "Force Price:",
                         name: "ProductUpdates.POS_TAB_F83",
                         type: "checkbox",
                         options: [
@@ -1302,7 +1336,7 @@
                         separator: "|",
                         unselectedValue: 0
                     }, {
-                        label: "Client age:",
+                        label: "Client Age:",
                         name: "ProductUpdates.POS_TAB_F171",
                         type: "hidden"
                     }, {
@@ -1325,40 +1359,49 @@
                         ]
                     }, {
                         label: "Tare:",
-                        name: "ProductUpdates.TareNetWeight"
+                        name: "ProductUpdates.TareNetWeight",
+                        attr: {
+                            type: 'number'
+                        }
                     }, {
                         label: "Net Weight:",
-                        name: "ProductUpdates.PRICE_TAB_F31"
+                        name: "ProductUpdates.PRICE_TAB_F31",
+                        attr: {
+                            type: 'number'
+                        }
                     }, {
                         label: "Shelf Life:",
-                        name: "ProductUpdates.ShelfLife"
+                        name: "ProductUpdates.ShelfLife",
+                        attr: {
+                            type: 'number'
+                        }
                     }, {
                         label: "Ingredients:",
                         name: "ProductUpdates.IngredientList",
                         type: "textarea"
                     }, {
-                        label: "Created by:",
+                        label: "Created By:",
                         name: "ProductUpdates.createdby",
                         type: "readonly",
                         type: "hidden",
                         def: currentUser
                     }, {
-                        label: "Date created:",
+                        label: "Date Created:",
                         name: "ProductUpdates.datecreated",
                         type: "hidden",
                         def: getDate()
                     }, {
-                        label: "Date completed:",
+                        label: "Date Completed:",
                         name: "ProductUpdates.completeddate"
                     }, {
-                        label: "Completed by:",
+                        label: "Completed By:",
                         name: "ProductUpdates.completedby"
                     }, {
-                        label: "Last updated on:",
+                        label: "Last Updated On:",
                         name: "ProductUpdates.lastupdatedon",
                         type: "hidden"
                     }, {
-                        label: "Last updated by:",
+                        label: "Last Updated By:",
                         name: "ProductUpdates.lastupdatedby",
                         type: "hidden"
                     }
@@ -1657,18 +1700,23 @@
             editor.on('preSubmit', function (e, o, action) {
                 if (action !== 'remove') {
 
+                    /*** Product Info Update required fields ***/
+                    // Request Type - required
                     if (!editor.field('ProductUpdates.requesttypeID').val()) {
                         editor.field('ProductUpdates.requesttypeID').error('Required');
                     }
 
+                    // Location - required
                     if (!editor.field('ProductUpdates.locationID').val()) {
                         editor.field('ProductUpdates.locationID').error('Required');
                     }
 
+                    // Mettler Product - required
                     if (!editor.field('ProductUpdates.ismettlerrequired').val()) {
                         editor.field('ProductUpdates.ismettlerrequired').error('Required');
                     }
 
+                    // UPC - required
                     if (!editor.field('ProductUpdates.F01').val()) {
                         editor.field('ProductUpdates.F01').error('Required');
                     } else {
@@ -1703,66 +1751,72 @@
                         });
                     }
 
-                    if (!integerCheck(editor.field('ProductUpdates.COST_TAB_F19').val())) {
+                    // Items Per Case - if value is present, must be a whole number
+                    if (editor.field('ProductUpdates.COST_TAB_F19').val() && !integerCheck(editor.field('ProductUpdates.COST_TAB_F19').val())) {
                         editor.field('ProductUpdates.COST_TAB_F19').error('Please enter a whole number.');
                     }
 
+                    // Tare - if value is present, must be a decimal
                     if (editor.field('ProductUpdates.TareNetWeight').val() && !floatCheck(editor.field('ProductUpdates.TareNetWeight').val())) {
                         editor.field('ProductUpdates.TareNetWeight').error('Please enter a decimal value: e.g. 0.08');
                     }
 
+                    // Retail Margin - if value is present, must be a whole number
                     if (editor.field('ProductUpdates.PRICE_TAB_F49').val() && !integerCheck(editor.field('ProductUpdates.PRICE_TAB_F49').val())) {
                         editor.field('ProductUpdates.PRICE_TAB_F49').error('Please enter a whole number.');
                     }
 
+                    // Net Weight - if value is present, must be a whole number
                     if (editor.field('ProductUpdates.PRICE_TAB_F31').val() && !integerCheck(editor.field('ProductUpdates.PRICE_TAB_F31').val())) {
                         editor.field('ProductUpdates.PRICE_TAB_F31').error('Please enter a whole number.');
                     }
 
+                    // Shelf Life - if value is present, must be a whole number
                     if (editor.field('ProductUpdates.ShelfLife').val() && !integerCheck(editor.field('ProductUpdates.ShelfLife').val())) {
                         editor.field('ProductUpdates.ShelfLife').error('Please enter a whole number.');
                     }
 
-                    // Fields required for PFC & NCG Fresh Deals
+
+                    /*** PFC & NCG Fresh Deals required fields ***/
                     if (editor.field('ProductUpdates.requesttypeID').val() == 4 || editor.field('ProductUpdates.requesttypeID').val() == 9) {
 
-                        // retail
+                        // Retail - required
                         if (!editor.field('ProductUpdates.price_tab_f30').val()) {
                             editor.field('ProductUpdates.price_tab_f30').error('Required');
                         }
 
-                        //margin
+                        // Retail margin - required
                         if (!editor.field('ProductUpdates.PRICE_TAB_F49').val()) {
                             editor.field('ProductUpdates.PRICE_TAB_F49').error('Required');
                             editor.field('ProductUpdates.PRICE_TAB_F49').show();
                         }
 
-                        //tpr price
+                        // TPR Price - required
                         if (!editor.field('ProductUpdates.promotprprice').val()) {
                             editor.field('ProductUpdates.promotprprice').error('Required');
                         }
 
-                        //tpr start
+                        // TPR Start - required
                         if (!editor.field('ProductUpdates.promotprstartdate').val()) {
                             editor.field('ProductUpdates.promotprstartdate').error('Required');
                         }
 
-                        //tpr end
+                        // TPR End - required
                         if (!editor.field('ProductUpdates.promotprenddate').val()) {
                             editor.field('ProductUpdates.promotprenddate').error('Required');
                         }
 
-                        // brand
+                        // Brand - required
                         if (!editor.field('ProductUpdates.OBJ_TAB_F155').val()) {
                             editor.field('ProductUpdates.OBJ_TAB_F155').error('Required');
                         }
 
-                        //short description
+                        // Short Description - required
                         if (!editor.field('ProductUpdates.OBJ_TAB_F29').val()) {
                             editor.field('ProductUpdates.OBJ_TAB_F29').error('Required');
                         }
 
-                        //size
+                        // Size - required
                         if (!editor.field('ProductUpdates.OBJ_TAB_F22').val()) {
                             editor.field('ProductUpdates.OBJ_TAB_F22').error('Required');
                         }
