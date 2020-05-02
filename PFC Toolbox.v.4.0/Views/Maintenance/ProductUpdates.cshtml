@@ -730,37 +730,38 @@
                     // UPC - required
                     if (!editor.field('ProductUpdates.F01').val()) {
                         editor.field('ProductUpdates.F01').error('Required');
-                    } else {
-                        // Check if UPC doesn't exist in SMS
-                        var UPC = pad(editor.field('ProductUpdates.F01').val(), 13, 0);
-
-                        var CheckUPC = $.ajax({
-                            url: "api/CheckUPC",
-                            type: "GET",
-                            dataType: "json",
-                            error: function (error) {
-                                console.log(`Error ${error}`);
-                            }
-                        });
-
-                        CheckUPC.done(function (data) {
-                            var used = [];
-                            for (i = 0; i < data.data.length; i++) {
-                                used.push(data.data[i].OBJ_TAB.F01);
-                            }
-
-                            var count = 0;
-                            for (i = 0; i < used.length; i++) {
-                                if (UPC == used[i]) {
-                                    count++
-                                }
-                            }
-
-                            if (count == 0) {
-                                editor.field('ProductUpdates.F01').error("UPC/PLU does not exist in SMS");
-                            }
-                        });
                     }
+                    //else {
+                    //    // Check if UPC doesn't exist in SMS
+                    //    var UPC = pad(editor.field('ProductUpdates.F01').val(), 13, 0);
+
+                    //    var CheckUPC = $.ajax({
+                    //        url: "api/CheckUPC",
+                    //        type: "GET",
+                    //        dataType: "json",
+                    //        error: function (error) {
+                    //            console.log(`Error ${error}`);
+                    //        }
+                    //    });
+
+                    //    CheckUPC.done(function (data) {
+                    //        var used = [];
+                    //        for (i = 0; i < data.data.length; i++) {
+                    //            used.push(data.data[i].OBJ_TAB.F01);
+                    //        }
+
+                    //        var count = 0;
+                    //        for (i = 0; i < used.length; i++) {
+                    //            if (UPC == used[i]) {
+                    //                count++
+                    //            }
+                    //        }
+
+                    //        if (count == 0) {
+                    //            editor.field('ProductUpdates.F01').error("UPC/PLU does not exist in SMS");
+                    //        }
+                    //    });
+                    //}
 
                     // Mettler PLU - if value is present, must be a whole number
                     if (editor.field('ProductUpdates.ScalePLU').val() && !integerCheck(editor.field('ProductUpdates.ScalePLU').val())) {
