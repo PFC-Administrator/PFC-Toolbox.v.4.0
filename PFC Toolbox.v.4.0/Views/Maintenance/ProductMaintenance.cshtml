@@ -123,7 +123,10 @@
                         name: "ProductUpdates.F01"
                     }, {
                         label: "Mettler PLU:",
-                        name: "ProductUpdates.ScalePLU"
+                        name: "ProductUpdates.ScalePLU",
+                        attr: {
+                            type: 'number'
+                        }
                     }, {
                         label: "Brand:",
                         name: "ProductUpdates.OBJ_TAB_F155",
@@ -402,11 +405,46 @@
                 editorNP.field('ProductUpdates.OBJ_TAB_F255').val(productName);
             });
 
-            // New Product Form: removes all charactesr from case cost field
+            // New Product Form: removes all characters from case cost field
             editorNP.field('ProductUpdates.COST_TAB_F38').input().on('blur', function () {
                 var caseCost = editorNP.field('ProductUpdates.COST_TAB_F38').val();
                 caseCost = caseCostFormatter(caseCost);
                 editorNP.field('ProductUpdates.COST_TAB_F38').val(caseCost);
+            });
+
+            // New Product Form: only numbers, letters, commas, and spaces allowed
+            editorNP.field('ProductUpdates.F01').input().on('blur', function () {
+                var UPC = editorNP.field('ProductUpdates.F01').val();
+                UPC = UPC.replace(/[^a-zA-Z0-9, ]/g, "");
+                editorNP.field('ProductUpdates.F01').val(UPC);
+            });
+
+            // New Product Form: only numbers, letters, commas, and spaces allowed
+            editorNP.field('ProductUpdates.ScalePLU').input().on('blur', function () {
+                var MPLU = editorNP.field('ProductUpdates.ScalePLU').val();
+                MPLU = MPLU.replace(/[^a-zA-Z0-9, ]/g, "");
+                editorNP.field('ProductUpdates.ScalePLU').val(MPLU);
+            });
+
+            // New Product Form: only numbers, letters, commas, and spaces allowed
+            editorNP.field('ProductUpdates.COST_TAB_F26').input().on('blur', function () {
+                var reordercode = editorNP.field('ProductUpdates.COST_TAB_F26').val();
+                reordercode = reordercode.replace(/[^a-zA-Z0-9, ]/g, "");
+                editorNP.field('ProductUpdates.COST_TAB_F26').val(reordercode);
+            });
+
+            // New Product Form: removes all characters from notes field
+            editorNP.field('ProductUpdates.AdditionalRequestNotes').input().on('blur', function () {
+                var notes = editorNP.field('ProductUpdates.AdditionalRequestNotes').val();
+                notes = removeSpecials(notes);
+                editorNP.field('ProductUpdates.AdditionalRequestNotes').val(notes);
+            });
+
+            // New Product Form: removes all characters from ingredients field
+            editorNP.field('ProductUpdates.IngredientList').input().on('blur', function () {
+                var ingredients = editorNP.field('ProductUpdates.IngredientList').val();
+                ingredients = removeSpecials(ingredients);
+                editorNP.field('ProductUpdates.IngredientList').val(ingredients);
             });
 
             // New Product Form: hides Family Button unless Hackberry's Brand is selected
@@ -446,6 +484,9 @@
                     editorNP.field('ProductUpdates.PRICE_TAB_F31').hide();
                     editorNP.field('ProductUpdates.ShelfLife').hide();
                     editorNP.field('ProductUpdates.IngredientList').hide();
+
+                    // Force price
+                    editorNP.field('ProductUpdates.POS_TAB_F83').val(0);
                 }
             });
 
@@ -1082,6 +1123,11 @@
                         editorNP.field('ProductUpdates.COST_TAB_F38').error('Required');
                     }
 
+                    // Mettler PLU - if value is present, must be a whole number
+                    if (editorNP.field('ProductUpdates.ScalePLU').val() && !integerCheck(editorNP.field('ProductUpdates.ScalePLU').val())) {
+                        editorNP.field('ProductUpdates.ScalePLU').error('Please enter a whole number.');
+                    }
+
                     // Tare - if value is present, must be a decimal
                     if (editorNP.field('ProductUpdates.TareNetWeight').val() && !floatCheck(editorNP.field('ProductUpdates.TareNetWeight').val())) {
                         editorNP.field('ProductUpdates.TareNetWeight').error('Please enter a decimal value: e.g. 0.08');
@@ -1163,7 +1209,10 @@
                         id: "UPC"
                     }, {
                         label: "Mettler PLU:",
-                        name: "ProductUpdates.ScalePLU"
+                        name: "ProductUpdates.ScalePLU",
+                        attr: {
+                            type: 'number'
+                        }
                     }, {
                         label: "Vendor:",
                         name: "ProductUpdates.COST_TAB_F27",
@@ -1477,6 +1526,41 @@
                 editor.field('ProductUpdates.COST_TAB_F38').val(caseCost);
             });
 
+            // Update An Existing Product Form: only numbers, letters, commas, and spaces allowed
+            editor.field('ProductUpdates.F01').input().on('blur', function () {
+                var UPC = editor.field('ProductUpdates.F01').val();
+                UPC = UPC.replace(/[^a-zA-Z0-9, ]/g, "");
+                editor.field('ProductUpdates.F01').val(UPC);
+            });
+
+            // Update An Existing Product Form: only numbers, letters, commas, and spaces allowed
+            editor.field('ProductUpdates.ScalePLU').input().on('blur', function () {
+                var MPLU = editor.field('ProductUpdates.ScalePLU').val();
+                MPLU = MPLU.replace(/[^a-zA-Z0-9, ]/g, "");
+                editor.field('ProductUpdates.ScalePLU').val(MPLU);
+            });
+
+            // Update An Existing Product Form: only numbers, letters, commas, and spaces allowed
+            editor.field('ProductUpdates.COST_TAB_F26').input().on('blur', function () {
+                var reordercode = editor.field('ProductUpdates.COST_TAB_F26').val();
+                reordercode = reordercode.replace(/[^a-zA-Z0-9, ]/g, "");
+                editor.field('ProductUpdates.COST_TAB_F26').val(reordercode);
+            });
+
+            // Update An Existing Product Form: removes all characters from notes field
+            editor.field('ProductUpdates.AdditionalRequestNotes').input().on('blur', function () {
+                var notes = editor.field('ProductUpdates.AdditionalRequestNotes').val();
+                notes = removeSpecials(notes);
+                editor.field('ProductUpdates.AdditionalRequestNotes').val(notes);
+            });
+
+            // Update An Existing Product Form: removes all characters from ingredients field
+            editor.field('ProductUpdates.IngredientList').input().on('blur', function () {
+                var ingredients = editor.field('ProductUpdates.IngredientList').val();
+                ingredients = removeSpecials(ingredients);
+                editor.field('ProductUpdates.IngredientList').val(ingredients);
+            });
+
             // Update An Existing Product Form: shows completed by info if product is marked as complete
             editor.on('open', function () {
                 if (editor.field('ProductUpdates.productstatusID').val() == 4) {
@@ -1537,6 +1621,7 @@
             // Update An Existing Product Form: hides Mettler Ingredients unless Yes to Mettler Product option is selected
             editor.field('ProductUpdates.ismettlerrequired').input().on('change', function () {
                 if (editor.field('ProductUpdates.ismettlerrequired').val() == 'Yes') {
+
                     editor.field('ProductUpdates.ScalePLU').show();
                     editor.field('ProductUpdates.ScaleItemTypeID').show();
                     editor.field('ProductUpdates.TareNetWeight').show();
@@ -1552,6 +1637,9 @@
                     editor.field('ProductUpdates.PRICE_TAB_F31').hide();
                     editor.field('ProductUpdates.ShelfLife').hide();
                     editor.field('ProductUpdates.IngredientList').hide();
+
+                    // Force price
+                    editor.field('ProductUpdates.POS_TAB_F83').val(0);
                 }
             });
 
@@ -1751,6 +1839,11 @@
                                 editor.field('ProductUpdates.F01').error("UPC/PLU does not exist in SMS");
                             }
                         });
+                    }
+
+                    // Mettler PLU - if value is present, must be a whole number
+                    if (editor.field('ProductUpdates.ScalePLU').val() && !integerCheck(editor.field('ProductUpdates.ScalePLU').val())) {
+                        editor.field('ProductUpdates.ScalePLU').error('Please enter a whole number.');
                     }
 
                     // Items Per Case - if value is present, must be a whole number

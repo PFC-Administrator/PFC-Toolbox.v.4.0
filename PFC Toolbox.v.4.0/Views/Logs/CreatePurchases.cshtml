@@ -379,6 +379,13 @@
                 ]
             });
 
+            // Only numbers, letters, commas, and spaces allowed
+            editor.field('Purchases.purchasememo').input().on('blur', function () {
+                var memo = editor.field('Purchases.purchasememo').val();
+                memo = memo.replace(/[^a-zA-Z0-9,. ]/g, "");
+                editor.field('Purchases.purchasememo').val(memo);
+            });
+
             // Hide extra purchase amount and subdepartment fields.
             for (var i = 2; i <= numberOfFields; i++) {
                 editor.field('Purchases.purchaseamount' + i).hide();

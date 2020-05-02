@@ -420,25 +420,67 @@
             // Update An Existing Product Form: converts receipt description to title case
             editor.field('ProductUpdates.OBJ_TAB_F29').input().on('blur', function () {
                 var productName = editor.field('ProductUpdates.OBJ_TAB_F29').val();
-                    productName = titleCase(productName);
-                    productName = limitLength(productName, 32)
+                productName = titleCase(productName);
+                productName = limitLength(productName, 32)
                 editor.field('ProductUpdates.OBJ_TAB_F29').val(productName);
             });
 
             // Update An Existing Product Form: format size field
             editor.field('ProductUpdates.OBJ_TAB_F22').input().on('blur', function () {
                 var size = editor.field('ProductUpdates.OBJ_TAB_F22').val();
-                    size = sizeFormatter(size);
-                    size = limitLength(size, 10)
+                size = sizeFormatter(size);
+                size = limitLength(size, 10)
                 editor.field('ProductUpdates.OBJ_TAB_F22').val(size);
             });
 
             // Update An Existing Product Form: converts signage descriptions to title case
             editor.field('ProductUpdates.OBJ_TAB_F255').input().on('blur', function () {
                 var productName = editor.field('ProductUpdates.OBJ_TAB_F255').val();
-                    productName = titleCase(productName);
-                    productName = limitLength(productName, 64)
+                productName = titleCase(productName);
+                productName = limitLength(productName, 64)
                 editor.field('ProductUpdates.OBJ_TAB_F255').val(productName);
+            });
+
+            // Update An Existing Product Form: removes all charactesr from case cost field
+            editor.field('ProductUpdates.COST_TAB_F38').input().on('blur', function () {
+                var caseCost = editor.field('ProductUpdates.COST_TAB_F38').val();
+                caseCost = caseCostFormatter(caseCost);
+                editor.field('ProductUpdates.COST_TAB_F38').val(caseCost);
+            });
+
+            // Update An Existing Product Form: only numbers, letters, commas, and spaces allowed
+            editor.field('ProductUpdates.F01').input().on('blur', function () {
+                var UPC = editor.field('ProductUpdates.F01').val();
+                UPC = UPC.replace(/[^a-zA-Z0-9, ]/g, "");
+                editor.field('ProductUpdates.F01').val(UPC);
+            });
+
+            // Update An Existing Product Form: only numbers, letters, commas, and spaces allowed
+            editor.field('ProductUpdates.ScalePLU').input().on('blur', function () {
+                var MPLU = editor.field('ProductUpdates.ScalePLU').val();
+                MPLU = MPLU.replace(/[^a-zA-Z0-9, ]/g, "");
+                editor.field('ProductUpdates.ScalePLU').val(MPLU);
+            });
+
+            // Update An Existing Product Form: only numbers, letters, commas, and spaces allowed
+            editor.field('ProductUpdates.COST_TAB_F26').input().on('blur', function () {
+                var reordercode = editor.field('ProductUpdates.COST_TAB_F26').val();
+                reordercode = reordercode.replace(/[^a-zA-Z0-9, ]/g, "");
+                editor.field('ProductUpdates.COST_TAB_F26').val(reordercode);
+            });
+
+            // Update An Existing Product Form: removes all characters from notes field
+            editor.field('ProductUpdates.AdditionalRequestNotes').input().on('blur', function () {
+                var notes = editor.field('ProductUpdates.AdditionalRequestNotes').val();
+                notes = removeSpecials(notes);
+                editor.field('ProductUpdates.AdditionalRequestNotes').val(notes);
+            });
+
+            // Update An Existing Product Form: removes all characters from ingredients field
+            editor.field('ProductUpdates.IngredientList').input().on('blur', function () {
+                var ingredients = editor.field('ProductUpdates.IngredientList').val();
+                ingredients = removeSpecials(ingredients);
+                editor.field('ProductUpdates.IngredientList').val(ingredients);
             });
 
             // Update An Existing Product Form: shows completed by info if product is marked as complete
@@ -495,6 +537,9 @@
                     editor.field('ProductUpdates.TareNetWeight').show();
                     editor.field('ProductUpdates.ShelfLife').show();
                     editor.field('ProductUpdates.IngredientList').show();
+
+                    // Force price
+                    editor.field('ProductUpdates.POS_TAB_F83').val(1);
                 } else {
                     editor.field('ProductUpdates.ScalePLU').hide();
                     editor.field('ProductUpdates.ScaleItemTypeID').hide();
@@ -502,6 +547,9 @@
                     editor.field('ProductUpdates.PRICE_TAB_F31').hide();
                     editor.field('ProductUpdates.ShelfLife').hide();
                     editor.field('ProductUpdates.IngredientList').hide();
+
+                    // Force price
+                    editor.field('ProductUpdates.POS_TAB_F83').val(0);
                 }
             });
 
@@ -712,6 +760,11 @@
                                 editor.field('ProductUpdates.F01').error("UPC/PLU does not exist in SMS");
                             }
                         });
+                    }
+
+                    // Mettler PLU - if value is present, must be a whole number
+                    if (editor.field('ProductUpdates.ScalePLU').val() && !integerCheck(editor.field('ProductUpdates.ScalePLU').val())) {
+                        editor.field('ProductUpdates.ScalePLU').error('Please enter a whole number.');
                     }
 
                     // Items Per Case - if value is present, must be a whole number

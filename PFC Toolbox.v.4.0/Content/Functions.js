@@ -18,6 +18,11 @@ function pad(number, width = 3, z = 0) {
     return (String(z).repeat(width) + String(number)).slice(String(number).length)
 }
 
+// Function to remove special characters
+function removeSpecials(string) {
+    return string.replace(/[^a-zA-Z0-9: ]/g, "");
+};
+
 // Function to convert fields to title case and remove special characters
 function titleCase(string) {
     return string.replace(
@@ -25,7 +30,9 @@ function titleCase(string) {
         function (txt) {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
         }
-    ).replace(/[^a-zA-Z0-9& ]/g, "")
+    ).replace("&", "and")
+        .replace(/[^a-zA-Z0-9 ]/g, "")
+        .replace("And", "and")
         .replace("Rbgh", "rBGH")
         .replace("Bbq", "BBQ")
         .replace("Ipa", "IPA")

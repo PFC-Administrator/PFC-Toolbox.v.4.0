@@ -129,6 +129,13 @@
                 ]
             });
 
+            // Only numbers, letters, commas, and spaces allowed
+            editor.field('Writeoffs.writeoffmemo').input().on('blur', function () {
+                var memo = editor.field('Writeoffs.writeoffmemo').val();
+                memo = memo.replace(/[^a-zA-Z0-9,. ]/g, "");
+                editor.field('Writeoffs.writeoffmemo').val(memo);
+            });
+
             var table = $('#Writeoffs').DataTable({
                 deferRender: true,
                 select: true,

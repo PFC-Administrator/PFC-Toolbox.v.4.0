@@ -341,32 +341,67 @@
             // New Product Form: converts receipt description to title case
             editorNP.field('ProductUpdates.OBJ_TAB_F29').input().on('blur', function () {
                 var productName = editorNP.field('ProductUpdates.OBJ_TAB_F29').val();
-                    productName = titleCase(productName);
-                    productName = limitLength(productName, 32)
+                productName = titleCase(productName);
+                productName = limitLength(productName, 32)
                 editorNP.field('ProductUpdates.OBJ_TAB_F29').val(productName);
             });
 
             // New Product Form: format size field
             editorNP.field('ProductUpdates.OBJ_TAB_F22').input().on('blur', function () {
                 var size = editorNP.field('ProductUpdates.OBJ_TAB_F22').val();
-                    size = sizeFormatter(size);
-                    size = limitLength(size, 10)
+                size = sizeFormatter(size);
+                size = limitLength(size, 10)
                 editorNP.field('ProductUpdates.OBJ_TAB_F22').val(size);
             });
 
-            // Update An Existing Product Form: removes all characters from case cost field
+            // New Product Form: converts signage descriptions to title case
+            editorNP.field('ProductUpdates.OBJ_TAB_F255').input().on('blur', function () {
+                var productName = editorNP.field('ProductUpdates.OBJ_TAB_F255').val();
+                productName = titleCase(productName);
+                productName = limitLength(productName, 64)
+                editorNP.field('ProductUpdates.OBJ_TAB_F255').val(productName);
+            });
+
+            // New Product Form: removes all characters from case cost field
             editorNP.field('ProductUpdates.COST_TAB_F38').input().on('blur', function () {
                 var caseCost = editorNP.field('ProductUpdates.COST_TAB_F38').val();
                 caseCost = caseCostFormatter(caseCost);
                 editorNP.field('ProductUpdates.COST_TAB_F38').val(caseCost);
             });
 
-            // New Product Form: converts signage descriptions to title case
-            editorNP.field('ProductUpdates.OBJ_TAB_F255').input().on('blur', function () {
-                var productName = editorNP.field('ProductUpdates.OBJ_TAB_F255').val();
-                    productName = titleCase(productName);
-                    productName = limitLength(productName, 64)
-                editorNP.field('ProductUpdates.OBJ_TAB_F255').val(productName);
+            // New Product Form: only numbers, letters, commas, and spaces allowed
+            editorNP.field('ProductUpdates.F01').input().on('blur', function () {
+                var UPC = editorNP.field('ProductUpdates.F01').val();
+                UPC = UPC.replace(/[^a-zA-Z0-9, ]/g, "");
+                editorNP.field('ProductUpdates.F01').val(UPC);
+            });
+
+            // New Product Form: only numbers, letters, commas, and spaces allowed
+            editorNP.field('ProductUpdates.ScalePLU').input().on('blur', function () {
+                var MPLU = editorNP.field('ProductUpdates.ScalePLU').val();
+                MPLU = MPLU.replace(/[^a-zA-Z0-9, ]/g, "");
+                editorNP.field('ProductUpdates.ScalePLU').val(MPLU);
+            });
+
+            // New Product Form: only numbers, letters, commas, and spaces allowed
+            editorNP.field('ProductUpdates.COST_TAB_F26').input().on('blur', function () {
+                var reordercode = editorNP.field('ProductUpdates.COST_TAB_F26').val();
+                reordercode = reordercode.replace(/[^a-zA-Z0-9, ]/g, "");
+                editorNP.field('ProductUpdates.COST_TAB_F26').val(reordercode);
+            });
+
+            // New Product Form: removes all characters from notes field
+            editorNP.field('ProductUpdates.AdditionalRequestNotes').input().on('blur', function () {
+                var notes = editorNP.field('ProductUpdates.AdditionalRequestNotes').val();
+                notes = removeSpecials(notes);
+                editorNP.field('ProductUpdates.AdditionalRequestNotes').val(notes);
+            });
+
+            // New Product Form: removes all characters from ingredients field
+            editorNP.field('ProductUpdates.IngredientList').input().on('blur', function () {
+                var ingredients = editorNP.field('ProductUpdates.IngredientList').val();
+                ingredients = removeSpecials(ingredients);
+                editorNP.field('ProductUpdates.IngredientList').val(ingredients);
             });
 
             // New Product Form: shows completed by info if product is marked as complete
@@ -408,6 +443,9 @@
                     editorNP.field('ProductUpdates.TareNetWeight').show();
                     editorNP.field('ProductUpdates.ShelfLife').show();
                     editorNP.field('ProductUpdates.IngredientList').show();
+
+                    // Force price
+                    editorNP.field('ProductUpdates.POS_TAB_F83').val(1);
                 } else {
                     editorNP.field('ProductUpdates.ScalePLU').hide();
                     editorNP.field('ProductUpdates.ScaleItemTypeID').hide();
@@ -415,6 +453,9 @@
                     editorNP.field('ProductUpdates.PRICE_TAB_F31').hide();
                     editorNP.field('ProductUpdates.ShelfLife').hide();
                     editorNP.field('ProductUpdates.IngredientList').hide();
+
+                    // Force price
+                    editorNP.field('ProductUpdates.POS_TAB_F83').val(0);
                 }
             });
 
@@ -575,6 +616,11 @@
                     // Case Cst - required
                     if (!editorNP.field('ProductUpdates.COST_TAB_F38').val()) {
                         editorNP.field('ProductUpdates.COST_TAB_F38').error('Required');
+                    }
+
+                    // Mettler PLU - if value is present, must be a whole number
+                    if (editorNP.field('ProductUpdates.ScalePLU').val() && !integerCheck(editorNP.field('ProductUpdates.ScalePLU').val())) {
+                        editorNP.field('ProductUpdates.ScalePLU').error('Please enter a whole number.');
                     }
 
                     // Tare - if value is present, must be a decimal
