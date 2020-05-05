@@ -673,7 +673,10 @@
 
             // New Product Form: activate an inline edit on click of a table cell
             $('#NewProducts').on('click', 'tbody td.editable', function (e) {
-                editorNP.inline(this);
+                //editorNP.inline(this);
+                editorNP.inline(this, {
+                    submit: 'changed'
+                });
             });
 
             // Create the DataTables table
