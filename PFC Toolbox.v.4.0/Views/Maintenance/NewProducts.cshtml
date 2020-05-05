@@ -1105,11 +1105,13 @@
                                 editorNP.edit(rows, false);
                                 $.each(rows, function (i, rowIdx) {
                                     var row = table.row(rowIdx);
-
+                                    
                                     editorNP.field('ProductUpdates.completeddate').multiSet(row.id(), getDate());
                                     editorNP.field('ProductUpdates.completedby').multiSet(row.id(), currentUser);
                                     editorNP.field('ProductUpdates.productstatusID').multiSet(row.id(), 4);
                                 });
+
+                                // Submit all updated rows.
                                 editorNP.submit();
 
                                 // Display how many records were exported.
