@@ -20,7 +20,7 @@ function pad(number, width = 3, z = 0) {
 
 // Function to remove special characters
 function removeSpecials(string) {
-    return string.replace(/[^a-zA-Z0-9: ]/g, "");
+    return string.replace(/[^a-zA-Z0-9,:- ]/g, "");
 };
 
 // Function to convert fields to title case and remove special characters
