@@ -1018,5 +1018,99 @@ namespace PFC_Toolbox.v._4._0.Controllers
             // Return results to report display
             return PartialView("_PurchasesReport", report);
         }
+
+
+        /*******************************************************************************************************************************************************************************************************************/
+
+
+        // GET: WriteoffsReports
+        public ActionResult WriteoffsReport()
+        {
+            return View();
+        }
+
+        public ActionResult GetWriteoffsReport(string location, string startDate, string endDate)
+        {
+            // Create variables for use within stored procedure and report display
+            string storeCodeStart = location.Split(',')[0];
+            string storeCodeEnd = location.Split(',')[0];
+            string storeDescription = location.Split(',')[1];
+            if (storeCodeStart.Equals("3"))
+            {
+                storeCodeStart = "0";
+                storeCodeEnd = "999";
+            }
+
+            // Create local objects
+            SqlDataReader reader = null;
+            List<WriteoffsReportModel> report = new List<WriteoffsReportModel>();
+            WriteoffsReportModel item = null; ;
+
+            // Connect to Host SMS and run Toolbox-WriteoffsReport stored procedure
+            using (SqlConnection con = new SqlConnection { ConnectionString = ConfigurationManager.ConnectionStrings["ToolboxConnection"].ConnectionString })
+            {
+                using (SqlCommand cmd = new SqlCommand("[Toolbox-WriteoffsReport]", con))
+                {
+                    // Set the command type as a stored procedure
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    // Set the stored procedure parameters
+                    cmd.Parameters.Add("@startDate", SqlDbType.DateTime2).Value = startDate;
+                    cmd.Parameters.Add("@endDate", SqlDbType.DateTime2).Value = endDate;
+                    cmd.Parameters.Add("@storeStart", SqlDbType.VarChar).Value = storeCodeStart;
+                    cmd.Parameters.Add("@storeEnd", SqlDbType.VarChar).Value = storeCodeEnd;
+
+                    // Open connection to SQL server and set a timeout of 1000 in case report takes a while
+                    con.Open();
+                    cmd.CommandTimeout = 1000;
+
+                    // Execute cmd against server and store in reader object
+                    reader = cmd.ExecuteReader();
+
+                    // Save query results to list
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            // Temp variables for TryParse
+                            decimal tempDecimal;
+
+                            // Store results in WriteoffsReportModel model
+                            item = new WriteoffsReportModel();
+                            item.WriteoffCode = reader["Writeoff Code"].ToString();
+                            item.ItemName = reader["Item Name"].ToString();
+                            item.Quantity = reader["Quantity"].ToString();
+                            if (Decimal.TryParse(reader["Unit Price"].ToString(), out tempDecimal))
+                            {
+                                item.UnitPrice = tempDecimal;
+                            }
+                            else item.UnitPrice = 0;
+                            if (Decimal.TryParse(reader["Total Price"].ToString(), out tempDecimal))
+                            {
+                                item.TotalPrice = tempDecimal;
+                            }
+                            else item.TotalPrice = 0;
+                            item.SubdepartmentID = reader["Subdepartment"].ToString();
+                            item.LocationID = reader["Location"].ToString();
+                            item.PurchaseMemo = reader["Memo"].ToString();
+                            item.CreatedBy = reader["Created By"].ToString();
+                            item.DateCreated = reader["Date Created"].ToString();
+
+                            // Add results to list
+                            report.Add(item);
+                        }
+                    }
+
+                    // Close connection to SQL server
+                    con.Close();
+                }
+            }
+
+            // Add totals to ViewBag to be used in report display
+            ViewBag.store = storeDescription;
+
+            // Return results to report display
+            return PartialView("_WriteoffsReport", report);
+        }
     }
 }
