@@ -306,5 +306,26 @@ namespace PFC_Toolbox.v._4._0.Controllers
                 return Json(response);
             }
         }
+
+        // GET: AccountingSubdepartments
+        [Route("api/GetAccountingSubdepartments")]
+        [HttpGet]
+        public IHttpActionResult GetSubdepartments()
+        {
+            var request = HttpContext.Current.Request;
+
+            using (var db1 = new Database("sqlserver", ConfigurationManager.ConnectionStrings["ToolboxConnection"].ConnectionString))
+            {
+                var response = new Editor(db1, "Subdepartments", "SubdepartmentID")
+                    .Field(new Field("Subdepartments.SubdepartmentID")
+                    )
+                    .Field(new Field("Subdepartments.SubdepartmentName")
+                    )
+                    .Process(request)
+                    .Data();
+
+                return Json(response);
+            }
+        }
     }
 }

@@ -6,6 +6,8 @@
 
     var startDate = Request["startDate"];
     var endDate = Request["endDate"];
+    var subdepartmentCode = ViewBag.SdpCode;
+    var subdepartmentDescription = ViewBag.SdpDesc;
 }
 
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
@@ -17,7 +19,7 @@
 <h1 style="float:right;"><img src="~/Content/PFC_Logo_128px.png" width="100" height="100">@(ViewBag.Store)</h1>
 <h2 style="float:left;">Writeoffs Report</h2>
 <hr style="clear:both" />
-<h3>@(ViewBag.brand)</h3>
+<h3>@subdepartmentDescription</h3>
 <h4>@startDate &nbsp;&nbsp; to &nbsp;&nbsp; @endDate</h4>
 
 <br />
@@ -43,18 +45,18 @@
                 @{
                     foreach (var item in Model)
                     {
-                                <tr>
-                                    <td>@Html.DisplayFor(modelItem => item.WriteoffCode)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.ItemName)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.Quantity)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.UnitPrice)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.TotalPrice)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.LocationID)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.SubdepartmentID)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.PurchaseMemo)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.CreatedBy)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.DateCreated)</td>
-                                </tr>
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.WriteoffCode)</td>
+                            <td>@Html.DisplayFor(modelItem => item.ItemName)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Quantity)</td>
+                            <td>@Html.DisplayFor(modelItem => item.UnitPrice)</td>
+                            <td>@Html.DisplayFor(modelItem => item.TotalPrice)</td>
+                            <td>@Html.DisplayFor(modelItem => item.LocationID)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SubdepartmentID)</td>
+                            <td>@Html.DisplayFor(modelItem => item.PurchaseMemo)</td>
+                            <td>@Html.DisplayFor(modelItem => item.CreatedBy)</td>
+                            <td>@Html.DisplayFor(modelItem => item.DateCreated)</td>
+                        </tr>
                     }
                 }
             </tbody>

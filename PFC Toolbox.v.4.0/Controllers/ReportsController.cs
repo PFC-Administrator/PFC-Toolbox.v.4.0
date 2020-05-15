@@ -938,7 +938,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
             return View();
         }
 
-        public ActionResult GetPurchasesReport(string location, string startDate, string endDate)
+        public ActionResult GetPurchasesReport(string location, string subdepartment, string startDate, string endDate)
         {
             // Create variables for use within stored procedure and report display
             string storeCodeStart = location.Split(',')[0];
@@ -948,6 +948,14 @@ namespace PFC_Toolbox.v._4._0.Controllers
             {
                 storeCodeStart = "0";
                 storeCodeEnd = "999";
+            }
+            string subdepartmentStart = subdepartment.Split(',')[0];
+            string subdepartmentEnd = subdepartment.Split(',')[0];
+            string subdepartmentDescription = subdepartment.Split(',')[1];
+            if (subdepartment.Split(',')[0].Equals("0"))
+            {
+                subdepartmentStart = "0";
+                subdepartmentEnd = "999";
             }
 
             // Create local objects
@@ -968,6 +976,8 @@ namespace PFC_Toolbox.v._4._0.Controllers
                     cmd.Parameters.Add("@endDate", SqlDbType.DateTime2).Value = endDate;
                     cmd.Parameters.Add("@storeStart", SqlDbType.VarChar).Value = storeCodeStart;
                     cmd.Parameters.Add("@storeEnd", SqlDbType.VarChar).Value = storeCodeEnd;
+                    cmd.Parameters.Add("@subdepartmentStart", SqlDbType.VarChar).Value = subdepartmentStart;
+                    cmd.Parameters.Add("@subdepartmentEnd", SqlDbType.VarChar).Value = subdepartmentEnd;
 
                     // Open connection to SQL server and set a timeout of 1000 in case report takes a while
                     con.Open();
@@ -1013,6 +1023,8 @@ namespace PFC_Toolbox.v._4._0.Controllers
             }
 
             // Add totals to ViewBag to be used in report display
+            ViewBag.sdpCode = subdepartmentStart;
+            ViewBag.sdpDesc = subdepartmentDescription;
             ViewBag.store = storeDescription;
 
             // Return results to report display
@@ -1029,7 +1041,7 @@ namespace PFC_Toolbox.v._4._0.Controllers
             return View();
         }
 
-        public ActionResult GetWriteoffsReport(string location, string startDate, string endDate)
+        public ActionResult GetWriteoffsReport(string location, string subdepartment, string startDate, string endDate)
         {
             // Create variables for use within stored procedure and report display
             string storeCodeStart = location.Split(',')[0];
@@ -1039,6 +1051,14 @@ namespace PFC_Toolbox.v._4._0.Controllers
             {
                 storeCodeStart = "0";
                 storeCodeEnd = "999";
+            }
+            string subdepartmentStart = subdepartment.Split(',')[0];
+            string subdepartmentEnd = subdepartment.Split(',')[0];
+            string subdepartmentDescription = subdepartment.Split(',')[1];
+            if (subdepartment.Split(',')[0].Equals("0"))
+            {
+                subdepartmentStart = "0";
+                subdepartmentEnd = "999";
             }
 
             // Create local objects
@@ -1059,6 +1079,8 @@ namespace PFC_Toolbox.v._4._0.Controllers
                     cmd.Parameters.Add("@endDate", SqlDbType.DateTime2).Value = endDate;
                     cmd.Parameters.Add("@storeStart", SqlDbType.VarChar).Value = storeCodeStart;
                     cmd.Parameters.Add("@storeEnd", SqlDbType.VarChar).Value = storeCodeEnd;
+                    cmd.Parameters.Add("@subdepartmentStart", SqlDbType.VarChar).Value = subdepartmentStart;
+                    cmd.Parameters.Add("@subdepartmentEnd", SqlDbType.VarChar).Value = subdepartmentEnd;
 
                     // Open connection to SQL server and set a timeout of 1000 in case report takes a while
                     con.Open();
@@ -1107,6 +1129,8 @@ namespace PFC_Toolbox.v._4._0.Controllers
             }
 
             // Add totals to ViewBag to be used in report display
+            ViewBag.sdpCode = subdepartmentStart;
+            ViewBag.sdpDesc = subdepartmentDescription;
             ViewBag.store = storeDescription;
 
             // Return results to report display

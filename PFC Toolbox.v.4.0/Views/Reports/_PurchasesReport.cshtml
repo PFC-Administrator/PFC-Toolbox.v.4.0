@@ -6,6 +6,8 @@
 
     var startDate = Request["startDate"];
     var endDate = Request["endDate"];
+    var subdepartmentCode = ViewBag.SdpCode;
+    var subdepartmentDescription = ViewBag.SdpDesc;
 }
 
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
@@ -17,7 +19,7 @@
 <h1 style="float:right;"><img src="~/Content/PFC_Logo_128px.png" width="100" height="100">@(ViewBag.Store)</h1>
 <h2 style="float:left;">Purchases Report</h2>
 <hr style="clear:both" />
-<h3>@(ViewBag.brand)</h3>
+<h3>@subdepartmentDescription</h3>
 <h4>@startDate &nbsp;&nbsp; to &nbsp;&nbsp; @endDate</h4>
 
 <br />

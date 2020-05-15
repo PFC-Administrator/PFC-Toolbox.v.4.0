@@ -33,14 +33,14 @@
            required />
     <br />
 
-    @*<label>Vendor:</label>
-    <select id="vendor"
+    <label>Subdepartment:</label>
+    <select id="subdepartment"
             class="form-control"
-            name="vendor"
+            name="subdepartment"
             autocomplete="off"
             required>
     </select>
-    <br />*@
+    <br />
 
     <label>Location:</label>
     <select class="form-control" name="location" id="location" autocomplete="off" required>
@@ -75,20 +75,21 @@
             startDate_input.datepicker(options);
             endDate_input.datepicker(options);
 
-            // Populate vendor select list
-            //$.ajax({
-            //    url: "/api/GetVendors",
-            //}).then(function (data) {
-            //    var s = '<option value="" disabled selected>Select a vendor</option>';
+            // Populate subdepartment select list
+            $.ajax({
+                url: "/api/GetAccountingSubdepartments",
+            }).then(function (data) {
+                var s = '<option value="" disabled selected>Select a subdepartment</option>';
 
-            //    s += '<option value="0, ALL VENDORS">ALL VENDORS</option>';
+                s += '<option value="0, ALL SUBDEPARTMENTS">ALL SUBDEPARTMENTS</option>';
 
-            //    for ($i = 0; $i < data.data.length; $i++) {
-            //        s += '<option value="' + data.data[$i].SMSVendors.F27 + '">' + data.data[$i].SMSVendors.F334 + '</option>';
-            //    }
+                for ($i = 0; $i < data.data.length; $i++) {
+                    s += '<option value="' + data.data[$i].Subdepartments.SubdepartmentID + ', ' + data.data[$i].Subdepartments.SubdepartmentName + '">' + data.data[$i].Subdepartments.SubdepartmentName + '</option>';
+                }
 
-            //    $("#vendor").html(s);
-            //});
+                console.log(data.data)
+                $("#subdepartment").html(s);
+            });
         });
     </script>
 }
