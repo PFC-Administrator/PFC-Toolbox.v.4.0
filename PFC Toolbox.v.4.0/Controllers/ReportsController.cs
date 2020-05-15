@@ -927,5 +927,96 @@ namespace PFC_Toolbox.v._4._0.Controllers
             // Return results to report display
             return PartialView("WriteoffsSummary", report);
         }
+
+
+        /*******************************************************************************************************************************************************************************************************************/
+
+
+        // GET: PurchasesReports
+        public ActionResult PurchasesReport()
+        {
+            return View();
+        }
+
+        public ActionResult GetPurchasesReport(string location, string startDate, string endDate)
+        {
+            // Create variables for use within stored procedure and report display
+            string storeCodeStart = location.Split(',')[0];
+            string storeCodeEnd = location.Split(',')[0];
+            string storeDescription = location.Split(',')[1];
+            if (storeCodeStart.Equals("3"))
+            {
+                storeCodeStart = "0";
+                storeCodeEnd = "999";
+            }
+
+            // Create local objects
+            SqlDataReader reader = null;
+            List<PurchasesReportModel> report = new List<PurchasesReportModel>();
+            PurchasesReportModel item = null;;
+
+            // Connect to Host SMS and run Toolbox-PurchasesReport stored procedure
+            using (SqlConnection con = new SqlConnection { ConnectionString = ConfigurationManager.ConnectionStrings["ToolboxConnection"].ConnectionString })
+            {
+                using (SqlCommand cmd = new SqlCommand("[Toolbox-PurchasesReport]", con))
+                {
+                    // Set the command type as a stored procedure
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    // Set the stored procedure parameters
+                    cmd.Parameters.Add("@startDate", SqlDbType.DateTime2).Value = startDate;
+                    cmd.Parameters.Add("@endDate", SqlDbType.DateTime2).Value = endDate;
+                    cmd.Parameters.Add("@storeStart", SqlDbType.VarChar).Value = storeCodeStart;
+                    cmd.Parameters.Add("@storeEnd", SqlDbType.VarChar).Value = storeCodeEnd;
+
+                    // Open connection to SQL server and set a timeout of 1000 in case report takes a while
+                    con.Open();
+                    cmd.CommandTimeout = 1000;
+
+                    // Execute cmd against server and store in reader object
+                    reader = cmd.ExecuteReader();
+
+                    // Save query results to list
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            // Temp variables for TryParse
+                            decimal tempDecimal;
+
+                            // Store results in PurchasesReportModel model
+                            item = new PurchasesReportModel();
+                            item.PurchaseID = reader["Purchase ID"].ToString();
+                            item.InvoiceNumber = reader["Invoice Number"].ToString();
+                            item.VendorID = reader["Vendor ID"].ToString();
+                            item.PurchaseDate = reader["Purchase Date"].ToString();
+                            if (Decimal.TryParse(reader["Purchase Amount"].ToString(), out tempDecimal))
+                            {
+                                item.PurchaseAmount = tempDecimal;
+                            }
+                            else item.PurchaseAmount = 0;
+                            item.PurchaseReconciled = reader["Purchase Reconciled"].ToString();
+                            item.SubdepartmentID = reader["Subdepartment"].ToString();
+                            item.LocationID = reader["Location"].ToString();
+                            item.PurchaseMemo = reader["Memo"].ToString();
+                            item.CreatedBy = reader["Created By"].ToString();
+                            item.DateCreated = reader["Date Created"].ToString();
+
+                            // Add results to list
+                            report.Add(item);
+                        }
+                    }
+
+                    // Close connection to SQL server
+                    con.Close();
+                }
+            }
+
+            // Add totals to ViewBag to be used in report display
+            ViewBag.store = storeDescription;
+
+            // Return results to report display
+            return PartialView("_PurchasesReport", report);
+        }
     }
 }

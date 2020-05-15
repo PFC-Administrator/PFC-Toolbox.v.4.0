@@ -287,5 +287,24 @@ namespace PFC_Toolbox.v._4._0.Controllers
                 return Json(response);
             }
         }
+
+        // GET: Vendors
+        [Route("api/GetVendors")]
+        [HttpGet]
+        public IHttpActionResult GetVendors()
+        {
+            var request = HttpContext.Current.Request;
+
+            using (var db1 = new Database("sqlserver", ConfigurationManager.ConnectionStrings["ToolboxConnection"].ConnectionString))
+            {
+                var response = new Editor(db1, "SMSVendors", "F27")
+                    .Field(new Field("SMSVendors.F334")
+                    )
+                    .Process(request)
+                    .Data();
+
+                return Json(response);
+            }
+        }
     }
 }
