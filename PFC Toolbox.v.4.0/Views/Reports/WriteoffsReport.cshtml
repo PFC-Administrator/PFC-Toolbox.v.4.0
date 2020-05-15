@@ -1,0 +1,94 @@
+﻿@{
+    ViewBag.Title = "Writeoffs Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Writeoffs Report</h2>
+
+@using (Ajax.BeginForm("GetWriteoffsReport", "Reports", new AjaxOptions
+{
+    HttpMethod = "GET",
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "Item Results"
+}))
+{
+    <label>Start Date:</label>
+    <input class="form-control"
+           id="startDate"
+           name="startDate"
+           placeholder="M/DD/YYYY"
+           type="text"
+           autocomplete="off"
+           required />
+    <div id="custom-pos"></div>
+    <br />
+
+    <label>End Date:</label>
+    <input class="form-control"
+           id="endDate"
+           name="endDate"
+           placeholder="M/DD/YYYY"
+           type="text"
+           autocomplete="off"
+           required />
+    <br />
+
+    @*<label>Vendor:</label>
+    <select id="vendor"
+            class="form-control"
+            name="vendor"
+            autocomplete="off"
+            required>
+    </select>
+    <br />*@
+
+    <label>Location:</label>
+    <select class="form-control" name="location" id="location" autocomplete="off" required>
+        <option value="" disabled selected>Select a location</option>
+        <option value="1, La Crosse">La Crosse</option>
+        <option value="2, Rochester">Rochester</option>
+        <option value="3, Both stores">Both stores</option>
+    </select>
+    <br />
+
+    <input type="submit" class="btn btn-primary" value="Run Report" />
+}
+
+<div id="Item Results"></div>
+
+@section scripts{
+    <script type="text/javascript" charset="utf-8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            // Date picker
+            var startDate_input = $('input[name="startDate"]');
+            var endDate_input = $('input[name="endDate"]');
+            var options = {
+                format: 'm/dd/yyyy',
+                container: '#custom-pos',
+                todayHighlight: true,
+                orientation: "left top",
+                autoclose: true,
+            };
+            startDate_input.datepicker(options);
+            endDate_input.datepicker(options);
+
+            // Populate vendor select list
+            //$.ajax({
+            //    url: "/api/GetVendors",
+            //}).then(function (data) {
+            //    var s = '<option value="" disabled selected>Select a vendor</option>';
+
+            //    s += '<option value="0, ALL VENDORS">ALL VENDORS</option>';
+
+            //    for ($i = 0; $i < data.data.length; $i++) {
+            //        s += '<option value="' + data.data[$i].SMSVendors.F27 + '">' + data.data[$i].SMSVendors.F334 + '</option>';
+            //    }
+
+            //    $("#vendor").html(s);
+            //});
+        });
+    </script>
+}
