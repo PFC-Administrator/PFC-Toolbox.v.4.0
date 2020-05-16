@@ -256,6 +256,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Extensions.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Reports\ItemSingleTotalbySubdepartmentbyPeriodModel.cs" />
     <Compile Include="Models\Reports\WriteoffsReportModel.cs" />
     <Compile Include="Models\Reports\PurchasesReportModel.cs" />
     <Compile Include="Models\Reports\WriteoffsSummaryModel.cs" />
@@ -436,6 +437,8 @@
     <Content Include="Views\Reports\_PurchasesReport.cshtml" />
     <Content Include="Views\Reports\WriteoffsReport.cshtml" />
     <Content Include="Views\Reports\_WriteoffsReport.cshtml" />
+    <Content Include="Views\Reports\ItemSingleTotalbySubdepartmentbyPeriod.cshtml" />
+    <Content Include="Views\Reports\_ItemSingleTotalbySubdepartmentbyPeriod.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
