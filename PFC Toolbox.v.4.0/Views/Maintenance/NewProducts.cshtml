@@ -24,7 +24,7 @@
                 <tr>
                     <th class="toggle-all"><i id="select_all" name="select_invoice"></i></th>
                     <th>Request Type</th>
-                    <th></th>
+                    @*<th></th>*@
                     <th>Status</th>
                     <th>Item Code</th>
                     <th>Brand</th>
@@ -511,145 +511,145 @@
                 editorNP.field('ProductUpdates.LIKE_TAB_F122').input()
             );
 
-            // New Product Form: field validation
-            editorNP.on('preSubmit', function (e, o, action) {
-                if (action !== 'remove') {
+            //// New Product Form: field validation
+            //editorNP.on('preSubmit', function (e, o, action) {
+            //    if (action !== 'remove') {
 
-                    /*** New Product required fields ***/
-                    // Location - required
-                    if (!editorNP.field('ProductUpdates.locationID').val()) {
-                        editorNP.field('ProductUpdates.locationID').error('Required');
-                    }
+            //        /*** New Product required fields ***/
+            //        // Location - required
+            //        if (!editorNP.field('ProductUpdates.locationID').val()) {
+            //            editorNP.field('ProductUpdates.locationID').error('Required');
+            //        }
 
-                    // Mettler Product - required
-                    if (!editorNP.field('ProductUpdates.ismettlerrequired').val()) {
-                        editorNP.field('ProductUpdates.ismettlerrequired').error('Required');
-                    }
+            //        // Mettler Product - required
+            //        if (!editorNP.field('ProductUpdates.ismettlerrequired').val()) {
+            //            editorNP.field('ProductUpdates.ismettlerrequired').error('Required');
+            //        }
 
-                    // UPC - required
-                    if (!editorNP.field('ProductUpdates.F01').val()) {
-                        editorNP.field('ProductUpdates.F01').error('Required');
-                    }
-                    //else {
-                    //    // Check if UPC already exists in SMS
-                    //    var UPC = pad(editorNP.field('ProductUpdates.F01').val(), 13, 0);
+            //        // UPC - required
+            //        if (!editorNP.field('ProductUpdates.F01').val()) {
+            //            editorNP.field('ProductUpdates.F01').error('Required');
+            //        }
+            //        //else {
+            //        //    // Check if UPC already exists in SMS
+            //        //    var UPC = pad(editorNP.field('ProductUpdates.F01').val(), 13, 0);
 
-                    //    var CheckUPC = $.ajax({
-                    //        url: "api/CheckUPC",
-                    //        type: "GET",
-                    //        dataType: "json",
-                    //        error: function (error) {
-                    //            console.log(`Error ${error}`);
-                    //        }
-                    //    });
+            //        //    var CheckUPC = $.ajax({
+            //        //        url: "api/CheckUPC",
+            //        //        type: "GET",
+            //        //        dataType: "json",
+            //        //        error: function (error) {
+            //        //            console.log(`Error ${error}`);
+            //        //        }
+            //        //    });
 
-                    //    CheckUPC.done(function (data) {
-                    //        var used = [];
-                    //        for (i = 0; i < data.data.length; i++) {
-                    //            used.push(data.data[i].OBJ_TAB.F01);
-                    //        }
+            //        //    CheckUPC.done(function (data) {
+            //        //        var used = [];
+            //        //        for (i = 0; i < data.data.length; i++) {
+            //        //            used.push(data.data[i].OBJ_TAB.F01);
+            //        //        }
 
-                    //        for (i = 0; i < used.length; i++) {
-                    //            if (UPC == used[i]) {
-                    //                editorNP.field('ProductUpdates.F01').error("UPC/PLU already exists in SMS");
-                    //            }
-                    //        }
-                    //    });
-                    //}
+            //        //        for (i = 0; i < used.length; i++) {
+            //        //            if (UPC == used[i]) {
+            //        //                editorNP.field('ProductUpdates.F01').error("UPC/PLU already exists in SMS");
+            //        //            }
+            //        //        }
+            //        //    });
+            //        //}
 
-                    // Label - required
-                    if (!editorNP.field('ProductUpdates.labelID').val()) {
-                        editorNP.field('ProductUpdates.labelID').error('Required');
-                    }
+            //        // Label - required
+            //        if (!editorNP.field('ProductUpdates.labelID').val()) {
+            //            editorNP.field('ProductUpdates.labelID').error('Required');
+            //        }
 
-                    // Brand - required
-                    if (!editorNP.field('ProductUpdates.OBJ_TAB_F155').val()) {
-                        editorNP.field('ProductUpdates.OBJ_TAB_F155').error('Required');
-                    }
+            //        // Brand - required
+            //        if (!editorNP.field('ProductUpdates.OBJ_TAB_F155').val()) {
+            //            editorNP.field('ProductUpdates.OBJ_TAB_F155').error('Required');
+            //        }
 
-                    // Short Description - required
-                    if (!editorNP.field('ProductUpdates.OBJ_TAB_F29').val()) {
-                        editorNP.field('ProductUpdates.OBJ_TAB_F29').error('Required');
-                    }
+            //        // Short Description - required
+            //        if (!editorNP.field('ProductUpdates.OBJ_TAB_F29').val()) {
+            //            editorNP.field('ProductUpdates.OBJ_TAB_F29').error('Required');
+            //        }
 
-                    // Size - required
-                    if (!editorNP.field('ProductUpdates.OBJ_TAB_F22').val()) {
-                        editorNP.field('ProductUpdates.OBJ_TAB_F22').error('Required');
-                    }
+            //        // Size - required
+            //        if (!editorNP.field('ProductUpdates.OBJ_TAB_F22').val()) {
+            //            editorNP.field('ProductUpdates.OBJ_TAB_F22').error('Required');
+            //        }
 
-                    // Long Description - required
-                    if (!editorNP.field('ProductUpdates.OBJ_TAB_F255').val()) {
-                        editorNP.field('ProductUpdates.OBJ_TAB_F255').error('Required');
-                    }
+            //        // Long Description - required
+            //        if (!editorNP.field('ProductUpdates.OBJ_TAB_F255').val()) {
+            //            editorNP.field('ProductUpdates.OBJ_TAB_F255').error('Required');
+            //        }
 
-                    // Subdepartment - required
-                    if (!editorNP.field('ProductUpdates.POS_TAB_F04').val()) {
-                        editorNP.field('ProductUpdates.POS_TAB_F04').error('Required');
-                    }
+            //        // Subdepartment - required
+            //        if (!editorNP.field('ProductUpdates.POS_TAB_F04').val()) {
+            //            editorNP.field('ProductUpdates.POS_TAB_F04').error('Required');
+            //        }
 
-                    // Category - required
-                    if (!editorNP.field('ProductUpdates.OBJ_TAB_F17').val()) {
-                        editorNP.field('ProductUpdates.OBJ_TAB_F17').error('Required');
-                    }
+            //        // Category - required
+            //        if (!editorNP.field('ProductUpdates.OBJ_TAB_F17').val()) {
+            //            editorNP.field('ProductUpdates.OBJ_TAB_F17').error('Required');
+            //        }
 
-                    // Report Code - required
-                    if (!editorNP.field('ProductUpdates.OBJ_TAB_F18').val()) {
-                        editorNP.field('ProductUpdates.OBJ_TAB_F18').error('Required');
-                    }
+            //        // Report Code - required
+            //        if (!editorNP.field('ProductUpdates.OBJ_TAB_F18').val()) {
+            //            editorNP.field('ProductUpdates.OBJ_TAB_F18').error('Required');
+            //        }
 
-                    // Retail Price - required
-                    if (!editorNP.field('ProductUpdates.price_tab_f30').val()) {
-                        editorNP.field('ProductUpdates.price_tab_f30').error('Required');
-                    }
+            //        // Retail Price - required
+            //        if (!editorNP.field('ProductUpdates.price_tab_f30').val()) {
+            //            editorNP.field('ProductUpdates.price_tab_f30').error('Required');
+            //        }
 
-                    // Vendor - required
-                    if (!editorNP.field('ProductUpdates.COST_TAB_F27').val()) {
-                        editorNP.field('ProductUpdates.COST_TAB_F27').error('Required');
-                    }
+            //        // Vendor - required
+            //        if (!editorNP.field('ProductUpdates.COST_TAB_F27').val()) {
+            //            editorNP.field('ProductUpdates.COST_TAB_F27').error('Required');
+            //        }
 
-                    // Items Per Case - required
-                    if (!editorNP.field('ProductUpdates.COST_TAB_F19').val()) {
-                        editorNP.field('ProductUpdates.COST_TAB_F19').error('Required');
-                    } else if (!integerCheck(editorNP.field('ProductUpdates.COST_TAB_F19').val())) {
-                        editorNP.field('ProductUpdates.COST_TAB_F19').error('Please enter a whole number.');
-                    }
+            //        // Items Per Case - required
+            //        if (!editorNP.field('ProductUpdates.COST_TAB_F19').val()) {
+            //            editorNP.field('ProductUpdates.COST_TAB_F19').error('Required');
+            //        } else if (!integerCheck(editorNP.field('ProductUpdates.COST_TAB_F19').val())) {
+            //            editorNP.field('ProductUpdates.COST_TAB_F19').error('Please enter a whole number.');
+            //        }
 
-                    // Case Cst - required
-                    if (!editorNP.field('ProductUpdates.COST_TAB_F38').val()) {
-                        editorNP.field('ProductUpdates.COST_TAB_F38').error('Required');
-                    }
+            //        // Case Cst - required
+            //        if (!editorNP.field('ProductUpdates.COST_TAB_F38').val()) {
+            //            editorNP.field('ProductUpdates.COST_TAB_F38').error('Required');
+            //        }
 
-                    // Mettler PLU - if value is present, must be a whole number
-                    if (editorNP.field('ProductUpdates.ScalePLU').val() && !integerCheck(editorNP.field('ProductUpdates.ScalePLU').val())) {
-                        editorNP.field('ProductUpdates.ScalePLU').error('Please enter a whole number.');
-                    }
+            //        // Mettler PLU - if value is present, must be a whole number
+            //        if (editorNP.field('ProductUpdates.ScalePLU').val() && !integerCheck(editorNP.field('ProductUpdates.ScalePLU').val())) {
+            //            editorNP.field('ProductUpdates.ScalePLU').error('Please enter a whole number.');
+            //        }
 
-                    // Tare - if value is present, must be a decimal
-                    if (editorNP.field('ProductUpdates.TareNetWeight').val() && !floatCheck(editorNP.field('ProductUpdates.TareNetWeight').val())) {
-                        editorNP.field('ProductUpdates.TareNetWeight').error('Please enter a decimal value: e.g. 0.08');
-                    }
+            //        // Tare - if value is present, must be a decimal
+            //        if (editorNP.field('ProductUpdates.TareNetWeight').val() && !floatCheck(editorNP.field('ProductUpdates.TareNetWeight').val())) {
+            //            editorNP.field('ProductUpdates.TareNetWeight').error('Please enter a decimal value: e.g. 0.08');
+            //        }
 
-                    // Retail Margin - if value is present, must be a whole number
-                    if (editorNP.field('ProductUpdates.PRICE_TAB_F49').val() && !integerCheck(editorNP.field('ProductUpdates.PRICE_TAB_F49').val())) {
-                        editorNP.field('ProductUpdates.PRICE_TAB_F49').error('Please enter a whole number.');
-                    }
+            //        // Retail Margin - if value is present, must be a whole number
+            //        if (editorNP.field('ProductUpdates.PRICE_TAB_F49').val() && !integerCheck(editorNP.field('ProductUpdates.PRICE_TAB_F49').val())) {
+            //            editorNP.field('ProductUpdates.PRICE_TAB_F49').error('Please enter a whole number.');
+            //        }
 
-                    // Net Weight - if value is present, must be a whole number
-                    if (editorNP.field('ProductUpdates.PRICE_TAB_F31').val() && !integerCheck(editorNP.field('ProductUpdates.PRICE_TAB_F31').val())) {
-                        editorNP.field('ProductUpdates.PRICE_TAB_F31').error('Please enter a whole number.');
-                    }
+            //        // Net Weight - if value is present, must be a whole number
+            //        if (editorNP.field('ProductUpdates.PRICE_TAB_F31').val() && !integerCheck(editorNP.field('ProductUpdates.PRICE_TAB_F31').val())) {
+            //            editorNP.field('ProductUpdates.PRICE_TAB_F31').error('Please enter a whole number.');
+            //        }
 
-                    // Shelf Life - if value is present, must be a whole number
-                    if (editorNP.field('ProductUpdates.ShelfLife').val() && !integerCheck(editorNP.field('ProductUpdates.ShelfLife').val())) {
-                        editorNP.field('ProductUpdates.ShelfLife').error('Please enter a whole number.');
-                    }
+            //        // Shelf Life - if value is present, must be a whole number
+            //        if (editorNP.field('ProductUpdates.ShelfLife').val() && !integerCheck(editorNP.field('ProductUpdates.ShelfLife').val())) {
+            //            editorNP.field('ProductUpdates.ShelfLife').error('Please enter a whole number.');
+            //        }
 
-                    // If any error was reported, cancel the submission so it can be corrected
-                    if (this.inError()) {
-                        return false;
-                    }
-                }
-            });
+            //        // If any error was reported, cancel the submission so it can be corrected
+            //        if (this.inError()) {
+            //            return false;
+            //        }
+            //    }
+            //});
 
             // New Product Form: clear like code select field
             $(document).on('keydown', '#likecodeNP', function (event) {
@@ -673,7 +673,6 @@
 
             // New Product Form: activate an inline edit on click of a table cell
             $('#NewProducts').on('click', 'tbody td.editable', function (e) {
-                //editorNP.inline(this);
                 editorNP.inline(this, {
                     submit: 'changed'
                 });
@@ -688,13 +687,13 @@
                 initComplete: function (e, dt, node, config) {
                     table
                         .column(1).search('^New Product$', true, false)
-                        .column(3).search('^3 - Manager Review Completed$', true, false).draw()
+                        .column(2).search('^3 - Manager Review Completed$', true, false).draw()
                 },
                 columnDefs: [
-                    { orderable: false, targets: 2 },
+                    //{ orderable: false, targets: 2 },
                     {
                         // Show up to 18 characters in brand field then hide with ellipses
-                        targets: 5,
+                        targets: 4,
                         render: $.fn.dataTable.render.ellipsis(18)
                     }
                 ],
@@ -714,12 +713,12 @@
                         width: "2%"
                     },
                     { data: "RequestTypes.requestname", width: "9.5%"},
-                    {
-                        data: null,
-                        className: "center",
-                        defaultContent: '<a href="" class="editor_edit"><i class="fa fa-pencil" style="font-size:18px;color:black"></i></a>',
-                        width: "1.5%"
-                    },
+                    //{
+                    //    data: null,
+                    //    className: "center",
+                    //    defaultContent: '<a href="" class="editor_edit"><i class="fa fa-pencil" style="font-size:18px;color:black"></i></a>',
+                    //    width: "1.5%"
+                    //},
                     { data: "Status.productupdatestatus", className: "editable", editField: "ProductUpdates.productstatusID", render: dropDownArrow, width: "13.5%" },
                     { data: "ProductUpdates.F01", width: "8%" },
                     { data: "ProductUpdates.OBJ_TAB_F155", width: "10.5%" },
@@ -752,7 +751,7 @@
                 // Control button layout
                 dom: '<"floatRight"B><"clear">lfrtip',
                 // Default table order
-                order: [[10, "desc"]],
+                order: [[9, "desc"]],
                 buttons: [
                     { extend: 'remove', editor: editorNP },
                     {
@@ -762,8 +761,8 @@
                                 .columns().search('')
                                 .columns().order('')
                                 .column(1).search('^New Product$', true, false)
-                                .column(3).search('^4 - Completed$', true, false)
-                                .column(11).search(new Date().getMonth() + 1 + "/" + new Date().getDate() + "/" + new Date().getFullYear(), true, false).column(10).order('desc').draw()
+                                .column(2).search('^4 - Completed$', true, false)
+                                .column(10).search(new Date().getMonth() + 1 + "/" + new Date().getDate() + "/" + new Date().getFullYear(), true, false).column(9).order('desc').draw()
 
                             // Deselect any selected rows.
                             table.rows({ selected: true }).deselect();
@@ -777,7 +776,7 @@
                                 .columns().order('')
                                 .page.len(20)
                                 .column(1).search('^New Product$', true, false)
-                                .column(3).search('^3 - Manager Review Completed$', true, false).column(10).order('desc').draw()
+                                .column(2).search('^3 - Manager Review Completed$', true, false).column(9).order('desc').draw()
 
                             // Deselect any selected rows.
                             table.rows({ selected: true }).deselect();
@@ -790,7 +789,7 @@
                                 .columns().search('')
                                 .columns().order('')
                                 .column(1).search('^New Product$', true, false)
-                                .column(3).search('^3 - Manager Review Completed$|^4 - Completed$', true, false).column(10).order('desc').draw()
+                                .column(2).search('^3 - Manager Review Completed$|^4 - Completed$', true, false).column(9).order('desc').draw()
 
                             // Deselect any selected rows.
                             table.rows({ selected: true }).deselect();
