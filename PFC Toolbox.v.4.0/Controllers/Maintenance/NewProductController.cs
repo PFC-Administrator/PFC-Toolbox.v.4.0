@@ -108,27 +108,6 @@ namespace PFC_Toolbox.v._4._0.Controllers
                 }
             }
 
-            // Executes Toolbox-Add-NewOBJ stored procedure located on Host SMS SQL Server and provides parameters
-            //using (SqlConnection con = new SqlConnection { ConnectionString = ConfigurationManager.ConnectionStrings["SMSHostConnection"].ConnectionString })
-            //{
-            //    using (SqlCommand cmd = new SqlCommand("[Toolbox-Add-NewOBJ]", con))
-            //    {
-            //        cmd.CommandType = CommandType.StoredProcedure;
-
-            //        cmd.Parameters.Add("@F01", SqlDbType.VarChar).Value = UPC;
-            //        cmd.Parameters.Add("@F155", SqlDbType.VarChar).Value = Brand;
-            //        cmd.Parameters.Add("@F29", SqlDbType.VarChar).Value = ShortDescription;
-            //        cmd.Parameters.Add("@F22", SqlDbType.VarChar).Value = Size;
-            //        cmd.Parameters.Add("@F255", SqlDbType.VarChar).Value = LongDescription;
-            //        cmd.Parameters.Add("@F17", SqlDbType.Int).Value = Category;
-            //        cmd.Parameters.Add("@F16", SqlDbType.Int).Value = Family;
-            //        cmd.Parameters.Add("@F18", SqlDbType.Int).Value = Report;
-
-            //        con.Open();
-            //        cmd.ExecuteNonQuery();
-            //    }
-            //}
-
             // Executes Toolbox-Add-ScaleInfo stored procedure located on Host SMS SQL Server and provides parameters
             if (Mettler.Equals("Yes"))
             {
