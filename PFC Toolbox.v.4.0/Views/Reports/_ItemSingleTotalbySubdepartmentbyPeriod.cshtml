@@ -1,0 +1,402 @@
+﻿@{
+    ViewBag.Title = "Item Single Total by Subdepartment by Period";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    @model List<PFC_Toolbox.v._4._0.Models.ItemSingleTotalbySubdepartmentbyPeriodModel>
+
+    var startDate = Request["startDate"];
+    var endDate = Request["endDate"];
+    var startDate2 = Request["startDate2"];
+    var endDate2 = Request["endDate2"];
+    var startDate3 = Request["startDate3"];
+    var endDate3 = Request["endDate3"];
+    var subdepartmentCode = ViewBag.SdpCode;
+    var subdepartmentDescription = ViewBag.SdpDesc;
+}
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.4/css/buttons.dataTables.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.2.7/css/select.dataTables.min.css" />
+<link rel="stylesheet" type="text/css" href="https://editor.datatables.net/extensions/Editor/css/editor.dataTables.min.css" />
+<link rel="stylesheet" type="text/css" href="~/Content/Custom.css" />
+
+<h1 style="float:right;"><img src="~/Content/PFC_Logo_128px.png" width="100" height="100">@(ViewBag.Store)</h1>
+<h2 style="float:left;">Item Single Total by Subdepartment by Period</h2>
+<hr style="clear:both" />
+@if (subdepartmentCode.Equals("0"))
+{<h3>@subdepartmentDescription</h3>}
+else
+{<h3>@subdepartmentCode - @subdepartmentDescription</h3>}
+
+<br />
+
+<div>
+    <fieldset title="Item Results">
+        <table id="results" class="display text-nowrap compact" style="width:100%">
+            
+            <thead>
+                <tr>
+                    <th colspan="6" style="border-bottom:none"></th>
+                    <th colspan="3" class="text-center">Period 1</th>
+                    <th style="border-bottom:none"></th>
+                    <th colspan="3" class="text-center">Period 2</th>
+                    <th style="border-bottom:none"></th>
+                    <th colspan="3" class="text-center">Period 3</th>
+                </tr>
+                <tr>
+                    <th>Item Code</th>
+                    <th>Subdepartment</th>
+                    <th>Brand</th>
+                    <th>Description</th>
+                    <th>Size</th>
+                    <th></th>
+                    <th>Weight</th>
+                    <th>Total Sales</th>
+                    <th>Units</th>
+                    <th></th>
+                    <th>Weight</th>
+                    <th>Total Sales</th>
+                    <th>Units</th>
+                    <th></th>
+                    <th>Weight</th>
+                    <th>Total Sales</th>
+                    <th>Units</th>
+                    <th></th>
+                    <th>Trend</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.ItemCode)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Subdept)</td>
+                            <td>@Html.DisplayFor(modelItem => item.ItemBrand)</td>
+                            <td>@Html.DisplayFor(modelItem => item.ItemDescription)</td>
+                            <td>@Html.DisplayFor(modelItem => item.ItemSize)</td>
+                            <td></td>
+                            <td>@Html.DisplayFor(modelItem => item.SalesWeight)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SalesTotal)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SalesQuantity)</td>
+                            <td></td>
+                            <td>@Html.DisplayFor(modelItem => item.SalesWeight2)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SalesTotal2)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SalesQuantity2)</td>
+                            <td></td>
+                            <td>@Html.DisplayFor(modelItem => item.SalesWeight3)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SalesTotal3)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SalesQuantity3)</td>
+                            <td></td>
+                            <td>@Html.DisplayFor(modelItem => item.SalesTrend)</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th style="text-align:center">Total:</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+    </fieldset>
+</div>
+
+<br />
+<br />
+
+<div class="row">
+    <div class="col-lg-3" style="width:33%;">
+        <h3 class="text-center">@startDate &nbsp;&nbsp; to &nbsp;&nbsp; @endDate</h3>
+        <hr id="hrJumbotron" />
+        <fieldset title="Report Totals">
+            <table id="report totals" class="display text-nowrap" style="width:100%;table-layout:fixed">
+                <thead>
+                    <tr>
+                        <th class="text-center">Total Weight</th>
+                        <th class="text-center">Total Sales</th>
+                        <th class="text-center">Total Units</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td align="center">@String.Format("{0}", ViewBag.TotalWeight)</td>
+                        <td align="center">@String.Format("{0:C}", ViewBag.TotalSales)</td>
+                        <td align="center">@String.Format("{0}", ViewBag.TotalUnits)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </fieldset>
+    </div>
+    <div class="col-lg-3" style="width: 33%;">
+        <h3 class="text-center">@startDate2 &nbsp;&nbsp; to &nbsp;&nbsp; @endDate2</h3>
+        <hr id="hrJumbotron" />
+        <fieldset title="Report Totals">
+            <table id="report totals" class="display text-nowrap" style="width:100%;table-layout:fixed">
+                <thead>
+                    <tr>
+                        <th class="text-center">Total Weight</th>
+                        <th class="text-center">Total Sales</th>
+                        <th class="text-center">Total Units</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td align="center">@String.Format("{0}", ViewBag.TotalWeight2)</td>
+                        <td align="center">@String.Format("{0:C}", ViewBag.TotalSales2)</td>
+                        <td align="center">@String.Format("{0}", ViewBag.TotalUnits2)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </fieldset>
+    </div>
+    <div class="col-lg-3" style="width:33%;">
+        <h3 class="text-center">@startDate3 &nbsp;&nbsp; to &nbsp;&nbsp; @endDate3</h3>
+        <hr id="hrJumbotron" />
+        <fieldset title="Report Totals">
+            <table id="report totals" class="display text-nowrap" style="width:100%;table-layout:fixed">
+                <thead>
+                    <tr>
+                        <th class="text-center">Total Weight</th>
+                        <th class="text-center">Total Sales</th>
+                        <th class="text-center">Total Units</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td align="center">@String.Format("{0}", ViewBag.TotalWeight3)</td>
+                        <td align="center">@String.Format("{0:C}", ViewBag.TotalSales3)</td>
+                        <td align="center">@String.Format("{0}", ViewBag.TotalUnits3)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </fieldset>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.4/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/select/1.2.7/js/dataTables.select.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
+    <script src="~/Content/Editor-1.8.1/js/dataTables.editor.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            table = $('#results').DataTable({
+                columnDefs: [
+                    { orderable: false, targets: [5, 9, 13, 17] },
+                ],
+                columns: [
+                    { data: "ItemCode" },
+                    { data: "Subdepartment" },
+                    { data: "Brand" },
+                    { data: "Description" },
+                    { data: "Size" },
+                    { width: "2%" },
+                    { data: "SalesWeight" },
+                    { data: "SalesQuantity" },
+                    { data: "SalesAmount" },
+                    { width: "2%" },
+                    { data: "SalesWeight2" },
+                    { data: "SalesQuantity2" },
+                    { data: "SalesAmount2" },
+                    { width: "2%" },
+                    { data: "SalesWeight3" },
+                    { data: "SalesQuantity3" },
+                    { data: "SalesAmount#" },
+                    { width: "2%" },
+                    { data: "SalesTrend" }
+                ],
+                // Default table lengths
+                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                dom: '<"floatRight"B><"clear">lfrtip',
+                buttons: [{
+                    extend: 'collection',
+                    text: 'Export',
+                    autoClose: true,
+                    buttons: [
+                        {
+                            extend: 'copy',
+                            filename: 'ISTBSubdepartment-"@startDate"-"@endDate"',
+                            footer: true
+                        },
+                        {
+                            extend: 'excelHtml5',
+                            filename: 'ISTBSubdepartment-"@startDate"-"@endDate"',
+                            footer: true
+                        },
+                        {
+                            extend: 'csv',
+                            filename: 'ISTBSubdepartment-"@startDate"-"@endDate"',
+                            footer: true
+                        },
+                        {
+                            extend: 'pdf',
+                            filename: 'ISTBSubdepartment-"@startDate"-"@endDate"',
+                            footer: true
+                        },
+                        {
+                            extend: 'print',
+                            filename: 'ISTBSubdepartment-"@startDate"-"@endDate"',
+                            footer: true
+                        }
+                    ]
+                }],
+
+                // Footer Totals
+                "footerCallback": function (row, data, start, end, display) {
+
+                    var api = this.api(), data;
+
+                    // Remove the formatting to get integer data for summation
+                    var intVal = function (i) {
+                        return typeof i === 'string' ?
+                            i.replace(/[)\$,]/g, '').replace(/[(]/g, '-') * 1 :
+                            typeof i === 'number' ?
+                                i : 0;
+                    };
+
+                    // Remove formatting to get float data for summation
+                    var decVal = function (i) {
+                        return typeof i === 'string' ?
+                            i.replace(/[)\$,]/g, '').replace(/[(]/g, '-') :
+                            typeof i === 'number' ?
+                                i : 0;
+                    };
+
+                /********************************************************************/
+
+                    // Sum weight column
+                    pageTotalWeight = api
+                        .column(6, { page: 'current' })
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    // Update footer
+                    $(api.column(6).footer()).html(pageTotalWeight.toFixed(3));
+
+                    // Sum quantity column
+                    pageTotalUnits = api
+                        .column(8, { page: 'current' })
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    // Update footer
+                    $(api.column(8).footer()).html(pageTotalUnits.toFixed(2));
+
+                    // Sum sales column
+                    pageTotalSales = api
+                        .column(7, { page: 'current' })
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    // Update footer
+                    $(api.column(7).footer()).html('$' + pageTotalSales.toFixed(2));
+
+                    /********************************************************************/
+
+                    // Sum weight column
+                    pageTotalWeight = api
+                        .column(10, { page: 'current' })
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    // Update footer
+                    $(api.column(10).footer()).html(pageTotalWeight.toFixed(3));
+
+                    // Sum quantity column
+                    pageTotalUnits = api
+                        .column(12, { page: 'current' })
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    // Update footer
+                    $(api.column(12).footer()).html(pageTotalUnits.toFixed(2));
+
+                    // Sum sales column
+                    pageTotalSales = api
+                        .column(11, { page: 'current' })
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    // Update footer
+                    $(api.column(11).footer()).html('$' + pageTotalSales.toFixed(2));
+
+                /********************************************************************/
+
+                    // Sum weight column
+                    pageTotalWeight = api
+                        .column(14, { page: 'current' })
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    // Update footer
+                    $(api.column(14).footer()).html(pageTotalWeight.toFixed(3));
+
+                    // Sum quantity column
+                    pageTotalUnits = api
+                        .column(16, { page: 'current' })
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    // Update footer
+                    $(api.column(16).footer()).html(pageTotalUnits.toFixed(2));
+
+                    // Sum sales column
+                    pageTotalSales = api
+                        .column(15, { page: 'current' })
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    // Update footer
+                    $(api.column(15).footer()).html('$' + pageTotalSales.toFixed(2));
+                }
+            });
+        });
+    </script>
+}

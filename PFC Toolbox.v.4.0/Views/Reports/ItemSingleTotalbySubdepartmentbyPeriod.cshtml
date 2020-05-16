@@ -1,0 +1,147 @@
+﻿@{
+    ViewBag.Title = "Item Single Total by Subdepartment by Period";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Item Single Total by Subdepartment by Period</h2>
+
+@using (Ajax.BeginForm("GetItemSingleTotalbySubdepartmentbyPeriod", "Reports", new AjaxOptions
+{
+    HttpMethod = "GET",
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "Item Results"
+}))
+{
+    <hr />
+
+    <h4>Period 1</h4>
+    <div class="row">
+        <div class="col-lg-3" style="width:17%;">
+            <label>Start:</label>
+            <input class="form-control"
+                   id="startDate"
+                   name="startDate"
+                   placeholder="M/DD/YYYY"
+                   type="text"
+                   autocomplete="off"
+                   required />
+            <div id="custom-pos"></div>
+        </div>
+        <label>End:</label>
+        <input class="form-control"
+               id="endDate"
+               name="endDate"
+               placeholder="M/DD/YYYY"
+               type="text"
+               autocomplete="off"
+               required />
+        <br />
+    </div>
+
+    <h4>Period 2</h4>
+    <div class="row">
+        <div class="col-lg-3" style="width:17%;">
+            <label>Start:</label>
+            <input class="form-control"
+                   id="startDate2"
+                   name="startDate2"
+                   placeholder="M/DD/YYYY"
+                   type="text"
+                   autocomplete="off"
+                   required />
+            <div id="custom-pos"></div>
+        </div>
+        <label>End:</label>
+        <input class="form-control"
+               id="endDate2"
+               name="endDate2"
+               placeholder="M/DD/YYYY"
+               type="text"
+               autocomplete="off"
+               required />
+        <br />
+    </div>
+
+    <h4>Period 3</h4>
+    <div class="row">
+        <div class="col-lg-3" style="width:17%;">
+            <label>Start:</label>
+            <input class="form-control"
+                   id="startDate3"
+                   name="startDate3"
+                   placeholder="M/DD/YYYY"
+                   type="text"
+                   autocomplete="off"
+                   required />
+            <div id="custom-pos"></div>
+        </div>
+        <label>End:</label>
+        <input class="form-control"
+               id="endDate3"
+               name="endDate3"
+               placeholder="M/DD/YYYY"
+               type="text"
+               autocomplete="off"
+               required />
+        <br />
+    </div>
+
+    <label>Subdepartment:</label>
+    <select id="subdepartment"
+            class="form-control"
+            name="subdepartment"
+            autocomplete="off"
+            required>
+    </select>
+    <br />
+
+    <label>Location:</label>
+    <select class="form-control" name="location" id="location" autocomplete="off" required>
+        <option value="" disabled selected>Select a location</option>
+        <option value="001, La Crosse">La Crosse</option>
+        <option value="002, Rochester">Rochester</option>
+        <option value="PAL, Both stores">Both stores</option>
+    </select>
+    <br />
+
+    <input type="submit" class="btn btn-primary" value="Run Report" />
+}
+
+<div id="Item Results"></div>
+
+@section scripts{
+    <script type="text/javascript" charset="utf-8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            // Date picker
+            var startDate_input = $('input[name="startDate"]');
+            var endDate_input = $('input[name="endDate"]');
+            var options = {
+                format: 'm/dd/yyyy',
+                container: '#custom-pos',
+                todayHighlight: true,
+                orientation: "left top",
+                autoclose: true,
+            };
+            startDate_input.datepicker(options);
+            endDate_input.datepicker(options);
+
+            // Populate subdepartment select list
+            $.ajax({
+                url: "/api/GetSubdepartments",
+            }).then(function (data) {
+                var s = '<option value="" disabled selected>Select a subdepartment</option>';
+
+                for ($i = 0; $i < data.data.length; $i++) {
+                    s += '<option value="' + data.data[$i].SMSSubdepartments.F04 + ', ' + data.data[$i].SMSSubdepartments.F1022 + '">' + data.data[$i].SMSSubdepartments.F1022 + '</option>';
+                }
+
+                s += '<option value="0, ALL SUBDEPARTMENTS">ALL SUBDEPARTMENTS</option>';
+
+                $("#subdepartment").html(s);
+            });
+        });
+    </script>
+}

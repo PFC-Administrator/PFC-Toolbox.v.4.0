@@ -12,9 +12,11 @@
     UpdateTargetId = "Item Results"
 }))
 {
+    <hr />
+
     <div class="form-group">
         <form name="add_name" id="add_name">
-    
+
             <label>Start Date:</label>
             <input class="form-control"
                    id="startDate"
@@ -25,7 +27,7 @@
                    required />
             <div id="custom-pos"></div>
             <br />
-    
+
             <label>End Date:</label>
             <input class="form-control"
                    id="endDate"
@@ -35,17 +37,17 @@
                    autocomplete="off"
                    required />
             <br />
-    
+
             <label>UPC:</label>
             <table id="dynamic_field">
                 <tr>
-                    <td><input type="text" name="UPC" id="UPC" placeholder="Enter a UPC" class="form-control name_list" autocomplete="off" required/></td>
+                    <td><input type="text" name="UPC" id="UPC" placeholder="Enter a UPC" class="form-control name_list" autocomplete="off" required /></td>
                     <td><button type="button" class="btn btn-primary" name="add" id="add">Add More</button></td>
                 </tr>
             </table>
-    
+
             <br />
-    
+
             <label>Location:</label>
             <select class="form-control" name="location" id="location" autocomplete="off" required>
                 <option value="" disabled selected>Select a location</option>
@@ -53,11 +55,11 @@
                 <option value="002, Rochester">Rochester</option>
                 <option value="PAL, Both stores">Both stores</option>
             </select>
-    
+
             <br />
             <input type="submit" class="btn btn-primary" value="Run Report" />
         </form>
-    
+
         <input type="hidden" id="UPCs" name="UPCs">
     </div>
 }
@@ -102,7 +104,7 @@
             $('#row' + button_id + '').remove();
         });
 
-        // Format 
+        // Format
         $(document).on('submit', function () {
             var upcString;
 

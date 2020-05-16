@@ -531,6 +531,172 @@ namespace PFC_Toolbox.v._4._0.Controllers
         /*******************************************************************************************************************************************************************************************************************/
 
 
+        // GET: /Reports/ItemSingleTotalbySubdepartmentbyPeriod
+        public ActionResult ItemSingleTotalbySubdepartmentbyPeriod()
+        {
+            return View();
+        }
+
+        public ActionResult GetItemSingleTotalbySubdepartmentbyPeriod(string location, string subdepartment, string startDate, string endDate, string startDate2, string endDate2, string startDate3, string endDate3)
+        {
+            // Create variables for use within stored procedure and report display
+            string subdepartmentStart = subdepartment.Split(',')[0];
+            string subdepartmentEnd = subdepartment.Split(',')[0];
+            if (subdepartment.Split(',')[0].Equals("0"))
+            {
+                subdepartmentStart = "0";
+                subdepartmentEnd = "999";
+            }
+
+            string subdepartmentDescription = subdepartment.Split(',')[1];
+            string storeCode = location.Split(',')[0];
+            string storeDescription = location.Split(',')[1];
+
+            // Create local objects
+            SqlDataReader reader = null;
+            List<ItemSingleTotalbySubdepartmentbyPeriodModel> report = new List<ItemSingleTotalbySubdepartmentbyPeriodModel>();
+            ItemSingleTotalbySubdepartmentbyPeriodModel item = null;
+            decimal totalSales = 0, totalSales2 = 0, totalSales3 = 0; ;
+            double totalWeight = 0, totalUnits = 0, totalWeight2 = 0, totalUnits2 = 0, totalWeight3 = 0, totalUnits3 = 0;
+
+            // Connect to Host SMS and run Toolbox-ISTBySubdepartmentReport stored procedure
+            using (SqlConnection con = new SqlConnection { ConnectionString = ConfigurationManager.ConnectionStrings["SMSHostConnection"].ConnectionString })
+            {
+                using (SqlCommand cmd = new SqlCommand("[Toolbox-ISTBySubdepartmentPeriodReport]", con))
+                {
+                    // Set the command type as a stored procedure
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    // Set the stored procedure parameters
+                    cmd.Parameters.Add("@startDate", SqlDbType.DateTime).Value = startDate;
+                    cmd.Parameters.Add("@endDate", SqlDbType.DateTime).Value = endDate;
+                    cmd.Parameters.Add("@startDate2", SqlDbType.DateTime).Value = startDate2;
+                    cmd.Parameters.Add("@endDate2", SqlDbType.DateTime).Value = endDate2;
+                    cmd.Parameters.Add("@startDate3", SqlDbType.DateTime).Value = startDate3;
+                    cmd.Parameters.Add("@endDate3", SqlDbType.DateTime).Value = endDate3;
+                    cmd.Parameters.Add("@storeTarget", SqlDbType.VarChar).Value = storeCode;
+                    cmd.Parameters.Add("@subdepartmentStart", SqlDbType.Int).Value = subdepartmentStart;
+                    cmd.Parameters.Add("@subdepartmentEnd", SqlDbType.Int).Value = subdepartmentEnd;
+
+                    // Open connection to SQL server and set a timeout of 1000 incase report takes a while
+                    con.Open();
+                    cmd.CommandTimeout = 1000;
+
+                    // Execute cmd against server and store in reader object
+                    reader = cmd.ExecuteReader();
+
+                    // Save query results to list
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            // Temp variables for TryParse
+                            decimal tempDecimal;
+                            double tempDouble;
+
+                            // Store results in ItemSingleTotalbySubdepartmentbyPeriodModel model
+                            item = new ItemSingleTotalbySubdepartmentbyPeriodModel();
+                            item.ItemCode = reader["UPC"].ToString();
+                            item.Subdept = reader["Subdepartment"].ToString();
+                            item.ItemBrand = reader["Brand"].ToString();
+                            item.ItemDescription = reader["Description"].ToString();
+                            item.ItemSize = reader["Size"].ToString();
+                            if (Double.TryParse(reader["Weight"].ToString(), out tempDouble))
+                            {
+                                item.SalesWeight = tempDouble;
+                            }
+                            else item.SalesWeight = 0;
+                            if (Decimal.TryParse(reader["Total Sales"].ToString(), out tempDecimal))
+                            {
+                                item.SalesTotal = tempDecimal;
+                            }
+                            else item.SalesTotal = 0;
+                            if (Double.TryParse(reader["Quantity"].ToString(), out tempDouble))
+                            {
+                                item.SalesQuantity = tempDouble;
+                            }
+                            else item.SalesQuantity = 0;
+
+                            if (Double.TryParse(reader["Weight2"].ToString(), out tempDouble))
+                            {
+                                item.SalesWeight2 = tempDouble;
+                            }
+                            else item.SalesWeight2 = 0;
+                            if (Decimal.TryParse(reader["Total Sales2"].ToString(), out tempDecimal))
+                            {
+                                item.SalesTotal2 = tempDecimal;
+                            }
+                            else item.SalesTotal2 = 0;
+                            if (Double.TryParse(reader["Quantity2"].ToString(), out tempDouble))
+                            {
+                                item.SalesQuantity2 = tempDouble;
+                            }
+                            else item.SalesQuantity2 = 0;
+
+                            if (Double.TryParse(reader["Weight3"].ToString(), out tempDouble))
+                            {
+                                item.SalesWeight3 = tempDouble;
+                            }
+                            else item.SalesWeight3 = 0;
+                            if (Decimal.TryParse(reader["Total Sales3"].ToString(), out tempDecimal))
+                            {
+                                item.SalesTotal3 = tempDecimal;
+                            }
+                            else item.SalesTotal3 = 0;
+                            if (Double.TryParse(reader["Quantity3"].ToString(), out tempDouble))
+                            {
+                                item.SalesQuantity3 = tempDouble;
+                            }
+                            else item.SalesQuantity3 = 0;
+                            if (Decimal.TryParse(reader["Trend"].ToString(), out tempDecimal))
+                            {
+                                item.SalesTrend = tempDecimal;
+                            }
+                            else item.SalesTrend = 0;
+
+                            // Sum totals
+                            totalWeight = totalWeight + item.SalesWeight;
+                            totalSales = totalSales + item.SalesTotal;
+                            totalUnits = totalUnits + item.SalesQuantity;
+                            totalWeight2 = totalWeight2 + item.SalesWeight2;
+                            totalSales2 = totalSales2 + item.SalesTotal2;
+                            totalUnits2 = totalUnits2 + item.SalesQuantity2;
+                            totalWeight3 = totalWeight3 + item.SalesWeight3;
+                            totalSales3 = totalSales3 + item.SalesTotal3;
+                            totalUnits3 = totalUnits3 + item.SalesQuantity3;
+
+                            // Add results to list
+                            report.Add(item);
+                        }
+                    }
+
+                    // Close connection to SQL server
+                    con.Close();
+                }
+            }
+
+            // Add totals to ViewBag to be used in report display
+            ViewBag.totalWeight = totalWeight;
+            ViewBag.totalSales = totalSales;
+            ViewBag.totalUnits = totalUnits;
+            ViewBag.totalWeight2 = totalWeight2;
+            ViewBag.totalSales2 = totalSales2;
+            ViewBag.totalUnits2 = totalUnits2;
+            ViewBag.totalWeight3 = totalWeight3;
+            ViewBag.totalSales3 = totalSales3;
+            ViewBag.totalUnits3 = totalUnits3;
+            ViewBag.sdpCode = subdepartmentStart;
+            ViewBag.sdpDesc = subdepartmentDescription;
+            ViewBag.store = storeDescription;
+
+            // Return results to report display
+            return PartialView("_ItemSingleTotalbySubdepartmentbyPeriod", report);
+        }
+        
+        
+        /*******************************************************************************************************************************************************************************************************************/
+
+
         // GET: /Reports/CTMSubdepartment
         public ActionResult CTMSubdepartment()
         {
