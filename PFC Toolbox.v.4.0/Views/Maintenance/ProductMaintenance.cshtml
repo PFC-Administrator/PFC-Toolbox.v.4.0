@@ -1675,24 +1675,24 @@
                 }
             });
 
-            // Update An Existing Product Form: hides TPR related fields unless a promotional request type is selected
+
+            // Update An Existing Product Form: on request type change
             editor.field('ProductUpdates.requesttypeID').input().on('change', function () {
+
+                // Hides TPR related fields unless a promotional request type is selected
                 if (editor.field('ProductUpdates.requesttypeID').val() == '2' || editor.field('ProductUpdates.requesttypeID').val() == '3' || editor.field('ProductUpdates.requesttypeID').val() == '4' || editor.field('ProductUpdates.requesttypeID').val() == '5' || editor.field('ProductUpdates.requesttypeID').val() == '7' || editor.field('ProductUpdates.requesttypeID').val() == '8' || editor.field('ProductUpdates.requesttypeID').val() == '9') {
                     editor.field('ProductUpdates.signID').show();
                     editor.field('ProductUpdates.promotprstartdate').show();
                     editor.field('ProductUpdates.promotprenddate').show();
                     editor.field('ProductUpdates.promotprprice').show();
-                    editor.field('ProductUpdates.PRICE_TAB_F49').show();
                 } else {
                     editor.field('ProductUpdates.signID').hide();
                     editor.field('ProductUpdates.promotprstartdate').hide();
                     editor.field('ProductUpdates.promotprenddate').hide();
                     editor.field('ProductUpdates.promotprprice').hide();
                 }
-            });
 
-            // Update An Existing Product Form: hides Family Button unless Hackberry's Brand is selected
-            editor.field('ProductUpdates.requesttypeID').input().on('change', function () {
+                // Hides Family Button unless Hackberry's Brand is selected
                 if (editor.field('ProductUpdates.requesttypeID').val() == '10') {
                     editor.field('ProductUpdates.OBJ_TAB_F16').show();
                 } else {
