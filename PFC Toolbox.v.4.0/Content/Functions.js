@@ -13,6 +13,12 @@ function floatCheck(value) {
     }
 }
 
+// Function to truncate decimals without rounding
+function toFixed(num, fixed) {
+    var re = new RegExp('^-?\\d+(?:\.\\d{0,' + (fixed || -1) + '})?');
+    return num.toString().match(re)[0];
+}
+
 // Function to pad numbers with 0's
 function pad(number, width = 3, z = 0) {
     return (String(z).repeat(width) + String(number)).slice(String(number).length)
