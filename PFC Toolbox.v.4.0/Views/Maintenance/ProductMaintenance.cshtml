@@ -1675,7 +1675,6 @@
                 }
             });
 
-
             // Update An Existing Product Form: on request type change
             editor.field('ProductUpdates.requesttypeID').input().on('change', function () {
 
@@ -1814,6 +1813,24 @@
                 }
             });
 
+            // Update An Existing Product Form: % TRP Calculator
+            $(document).on('click', '#calculatePTPR', function () {
+
+                if (editor.field('ProductUpdates.price_tab_f30').val() == null || editor.field('ProductUpdates.price_tab_f30').val() == "") {
+                    alert('Please enter the regular retail.');
+                }
+                else {
+
+                    percentage = prompt("Please enter the percent discount...");
+
+                    regRetail = editor.field('ProductUpdates.price_tab_f30').val();
+
+                    ptpr = regRetail * (1 - (percentage / 100));
+
+                    editor.field('ProductUpdates.promotprprice').val(toFixed(ptpr,2));
+                }
+            });
+
             // Update An Existing Product Form: Cost button
             $('<button title="Click here to display all cost fields." id="cost" style="position:absolute;top:20%;right:12.5%">Cost</button>').insertAfter(
                 editor.field('ProductUpdates.price_tab_f30').input()
@@ -1827,6 +1844,11 @@
             // Update An Existing Product Form: Calculate button
             $('<button title="Click here to calculate unit cost." id="calculate" style="position:absolute;top:20%;right:8.5%">Calculate</button>').insertAfter(
                 editor.field('ProductUpdates.COST_TAB_F38').input()
+            );
+
+            // Update An Existing Product Form: Calculate % TPR button
+            $('<button title="Click here to calculate TPR by percentage." id="calculatePTPR" style="position:absolute;top:20%;right:10.5%">% TPR</button>').insertAfter(
+                editor.field('ProductUpdates.promotprprice').input()
             );
 
             // Update An Existing Product Form: Like code x button
@@ -1973,49 +1995,49 @@
                 }
             });
 
-            // Update An Existing Product Form: clear brand select field
+            // Update An Existing Product Form: clear brand select field on backspace or delete
             $(document).on('keydown', '#brandPU', function (event) {
                 if (event.keyCode == 8 || event.keyCode == 46) {
                     editor.field('ProductUpdates.OBJ_TAB_F155').val(null);
                 }
             });
 
-            // Update An Existing Product Form: clear subdepartment select field
+            // Update An Existing Product Form: clear subdepartment select field on backspace or delete
             $(document).on('keydown', '#subdepartmentPU', function (event) {
                 if (event.keyCode == 8 || event.keyCode == 46) {
                     editor.field('ProductUpdates.POS_TAB_F04').val(null);
                 }
             });
 
-            // Update An Existing Product Form: clear category select field
+            // Update An Existing Product Form: clear category select field on backspace or delete
             $(document).on('keydown', '#categoryPU', function (event) {
                 if (event.keyCode == 8 || event.keyCode == 46) {
                     editor.field('ProductUpdates.OBJ_TAB_F17').val(null);
                 }
             });
 
-            // Update An Existing Product Form: clear report select field
+            // Update An Existing Product Form: clear report select field on backspace or delete
             $(document).on('keydown', '#reportPU', function (event) {
                 if (event.keyCode == 8 || event.keyCode == 46) {
                     editor.field('ProductUpdates.OBJ_TAB_F18').val(null);
                 }
             });
 
-            // Update An Existing Product Form: clear family select field
+            // Update An Existing Product Form: clear family select field on backspace or delete
             $(document).on('keydown', '#familyPU', function (event) {
                 if (event.keyCode == 8 || event.keyCode == 46) {
                     editor.field('ProductUpdates.OBJ_TAB_F16').val(null);
                 }
             });
 
-            // Update An Existing Product Form: clear like code select field
+            // Update An Existing Product Form: clear like code select field on backspace or delete
             $(document).on('keydown', '#likecodePU', function (event) {
                 if (event.keyCode == 8 || event.keyCode == 46) {
                     editor.field('ProductUpdates.LIKE_TAB_F122').val(null);
                 }
             });
 
-            // Update An Existing Product Form: clear like code select field
+            // Update An Existing Product Form: clear like code select field on button press
             $(document).on('click', '#clearLikeCode', function () {
                 editor.field('ProductUpdates.LIKE_TAB_F122').val(null);
             });
