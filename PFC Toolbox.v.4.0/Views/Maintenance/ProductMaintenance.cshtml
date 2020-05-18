@@ -616,7 +616,7 @@
 
                             srp = ((Math.round(((costPerCase / itemsPerCase) / (1 - (targetMargin / 100))) * 10) / 10) - .01);
 
-                            editorNP.field('ProductUpdates.price_tab_f30').val(srp)
+                            editorNP.field('ProductUpdates.price_tab_f30').val(toFixed(srp, 2));
                         }
                     }
                 }
@@ -1807,7 +1807,7 @@
 
                             srp = ((Math.round(((costPerCase / itemsPerCase) / (1 - (targetMargin / 100))) * 10) / 10) - .01);
 
-                            editor.field('ProductUpdates.price_tab_f30').val(srp)
+                            editor.field('ProductUpdates.price_tab_f30').val(toFixed(srp,2));
                         }
                     }
                 }
