@@ -623,17 +623,17 @@
             });
 
             // New Product Form: New Brand button
-            $('<button id="newbrand" style="position:absolute;top:20%;right:7.25%">New Brand</button>').insertAfter(
+            $('<button title="Click here to add a new brand." id="newbrand" style="position:absolute;top:20%;right:7.25%">New Brand</button>').insertAfter(
                 editorNP.field('ProductUpdates.OBJ_TAB_F155').input()
             );
 
             // New Product Form: Get New PLU Button
-            $('<button id="getplu" style="position:absolute;top:20%;right:5%">Get New PLU</button>').insertAfter(
+            $('<button title="Click here to generate a new PLU." id="getplu" style="position:absolute;top:20%;right:5%">Get New PLU</button>').insertAfter(
                 editorNP.field('ProductUpdates.F01').input()
             );
 
             // New Product Form: Calculate button
-            $('<button id="calculateNP" style="position:absolute;top:20%;right:8%">Calculate</button>').insertAfter(
+            $('<button title="Click here to calculate unit cost." id="calculateNP" style="position:absolute;top:20%;right:8.5%">Calculate</button>').insertAfter(
                 editorNP.field('ProductUpdates.COST_TAB_F38').input()
             );
 
@@ -1558,10 +1558,10 @@
             $(editor.field('ProductUpdates.OBJ_TAB_F22').node()).attr("data-toggle", "tooltip").attr("title", 'Abbreviate the unit of measure. For multiple pack items, use an "x" to separate the count from the size. e.g. a 12 pack of 12 oz cans would be "12 x 12 oz.".');
             $(editor.field('ProductUpdates.OBJ_TAB_F255').node()).attr("data-toggle", "tooltip").attr("title", 'Enter the description in common language using the full description. This description will appear on sale signage.');
             $(editor.field('ProductUpdates.POS_TAB_F04').node()).attr("data-toggle", "tooltip").attr("title", 'Subdepartment that receives the sales for this item.');
-            $(editorNP.field('ProductUpdates.POS_TAB_F79').node()).attr("data-toggle", "tooltip").attr("title", 'Check the box if the product is SNAP/EBT/Food stamp eligible.');
-            $(editorNP.field('ProductUpdates.POS_TAB_F82').node()).attr("data-toggle", "tooltip").attr("title", 'Check the box if the product is to be weighed at a scale.');
-            $(editorNP.field('ProductUpdates.POS_TAB_F81').node()).attr("data-toggle", "tooltip").attr("title", 'Check the box if the product is taxable.');
-            $(editorNP.field('ProductUpdates.POS_TAB_F178').node()).attr("data-toggle", "tooltip").attr("title", 'Check the box if the product is WIC eligible.');
+            $(editor.field('ProductUpdates.POS_TAB_F79').node()).attr("data-toggle", "tooltip").attr("title", 'Check the box if the product is SNAP/EBT/Food stamp eligible.');
+            $(editor.field('ProductUpdates.POS_TAB_F82').node()).attr("data-toggle", "tooltip").attr("title", 'Check the box if the product is to be weighed at a scale.');
+            $(editor.field('ProductUpdates.POS_TAB_F81').node()).attr("data-toggle", "tooltip").attr("title", 'Check the box if the product is taxable.');
+            $(editor.field('ProductUpdates.POS_TAB_F178').node()).attr("data-toggle", "tooltip").attr("title", 'Check the box if the product is WIC eligible.');
             $(editor.field('ProductUpdates.OBJ_TAB_F17').node()).attr("data-toggle", "tooltip").attr("title", 'Categories used to organize a subdepartment into smaller groups.');
             $(editor.field('ProductUpdates.OBJ_TAB_F18').node()).attr("data-toggle", "tooltip").attr("title", 'Report codes used to identify if a product is organic or local (produced within a 200 mile radius of either or both stores). Use "Conventional" if none of the available report codes apply.');
             $(editor.field('ProductUpdates.OBJ_TAB_F16').node()).attr("data-toggle", "tooltip").attr("title", 'Family codes used to organize buttons at the register in Hackberrys Bistro.');
@@ -1651,8 +1651,20 @@
 
             // Update An Existing Product Form: shows completed by info if product is marked as complete
             editor.on('open', function () {
+
+                // Hides cost info on load
+                editor.field('ProductUpdates.COST_TAB_F27').hide();
+                editor.field('ProductUpdates.COST_TAB_F26').hide();
+                editor.field('ProductUpdates.PRICE_TAB_F49').hide();
+                editor.field('ProductUpdates.COST_TAB_F19').hide();
+
+                // Hide calculate button
+                $("#calculate").hide();
+
+                // Get current time each time form is opened
                 editor.field('ProductUpdates.datecreated').val(getDate());
 
+                // If request is complete show completed date and created by; else, hide
                 if (editor.field('ProductUpdates.productstatusID').val() == 4) {
                     editor.field('ProductUpdates.completeddate').show();
                     editor.field('ProductUpdates.completedby').show();
@@ -1661,17 +1673,6 @@
                     editor.field('ProductUpdates.completeddate').hide();
                     editor.field('ProductUpdates.completedby').hide();
                 }
-            });
-
-            // Update An Existing Product Form: hides cost info on load
-            editor.field('ProductUpdates.POS_TAB_F04').input().on('change', function () {
-                editor.field('ProductUpdates.COST_TAB_F27').hide();
-                editor.field('ProductUpdates.COST_TAB_F26').hide();
-                editor.field('ProductUpdates.PRICE_TAB_F49').hide();
-                editor.field('ProductUpdates.COST_TAB_F19').hide();
-
-                // Hide calculate button
-                document.getElementById('calculate').style.visibility = 'hidden';
             });
 
             // Update An Existing Product Form: hides TPR related fields unless a promotional request type is selected
@@ -1775,55 +1776,12 @@
             });
 
             // Update An Existing Product Form: display cost info when cost button is clicked
-            var costCounter = 0;
             $(document).on('click', '#cost', function () {
-                if (costCounter == 0) {
-                    editor.field('ProductUpdates.COST_TAB_F27').show();
-                    editor.field('ProductUpdates.COST_TAB_F26').show();
-                    editor.field('ProductUpdates.PRICE_TAB_F49').show();
-                    editor.field('ProductUpdates.COST_TAB_F19').show();
-                    editor.field('ProductUpdates.COST_TAB_F38').show();
-
-                    // Show calculate button
-                    document.getElementById('calculate').style.visibility = 'visible';
-
-                    costCounter = 1
-                } else {
-                    editor.field('ProductUpdates.COST_TAB_F27').hide();
-                    editor.field('ProductUpdates.COST_TAB_F26').hide();
-                    editor.field('ProductUpdates.PRICE_TAB_F49').hide();
-                    editor.field('ProductUpdates.COST_TAB_F19').hide();
-                    editor.field('ProductUpdates.COST_TAB_F38').hide();
-
-                    // Hide calculate button
-                    document.getElementById('calculate').style.visibility = 'hidden';
-
-                    costCounter = 0
-                }
-            });
-
-            // Update An Existing Product Form: display SRP calculator info when cost button is clicked
-            var srpCounter = 0;
-            $(document).on('click', '#srpcalculator', function () {
-                if (srpCounter == 0) {
-                    editor.field('ProductUpdates.COST_TAB_F19').show();
-                    editor.field('ProductUpdates.COST_TAB_F38').show();
-                    editor.field('ProductUpdates.PRICE_TAB_F49').show();
-
-                    // Show calculate button
-                    document.getElementById('calculate').style.visibility = 'visible';
-
-                    srpCounter = 1
-                } else {
-                    editor.field('ProductUpdates.COST_TAB_F19').hide();
-                    editor.field('ProductUpdates.COST_TAB_F38').hide();
-                    editor.field('ProductUpdates.PRICE_TAB_F49').hide();
-
-                    // Hide calculate button
-                    document.getElementById('calculate').style.visibility = 'hidden';
-
-                    srpCounter = 0
-                }
+                $(editor.node('ProductUpdates.COST_TAB_F27')).toggle();
+                $(editor.node('ProductUpdates.COST_TAB_F26')).toggle();
+                $(editor.node('ProductUpdates.PRICE_TAB_F49')).toggle();
+                $(editor.node('ProductUpdates.COST_TAB_F19')).toggle();
+                $('#calculate').toggle();
             });
 
             // Update An Existing Product Form: SRP Calculator
@@ -1857,17 +1815,17 @@
             });
 
             // Update An Existing Product Form: Cost button
-            $('<button id="cost" style="position:absolute;top:20%;right:12.5%">Cost</button>').insertAfter(
+            $('<button title="Click here to display all cost fields." id="cost" style="position:absolute;top:20%;right:12.5%">Cost</button>').insertAfter(
                 editor.field('ProductUpdates.price_tab_f30').input()
             );
 
             // Update An Existing Product Form: SRP button
-            $('<button id="srpcalculator" style="position:absolute;top:20%;right:5%">SRP</button>').insertAfter(
+            $('<button title="Click here to calculate the suggested retail price." id="srpcalculator" style="position:absolute;top:20%;right:5%">SRP</button>').insertAfter(
                 editor.field('ProductUpdates.price_tab_f30').input()
             );
 
             // Update An Existing Product Form: Calculate button
-            $('<button id="calculate" style="position:absolute;top:20%;right:8%">Calculate</button>').insertAfter(
+            $('<button title="Click here to calculate unit cost." id="calculate" style="position:absolute;top:20%;right:8.5%">Calculate</button>').insertAfter(
                 editor.field('ProductUpdates.COST_TAB_F38').input()
             );
 
