@@ -9,6 +9,7 @@
 
     <title>New Products</title>
 
+    @*Imported CSS libraries*@
     <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css" />
@@ -41,6 +42,7 @@
 </html>
 
 @section scripts{
+    @*Imported JavaScript libraries*@
     <script type="text/javascript" charset="utf-8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
@@ -58,18 +60,13 @@
 
     <script>
 
-        // Reference ~/Content/Functions.js for custom functions
-        // Function to format case cost field
-        function caseCostFormatter(string) {
-            return string.replace(/[^0-9.]/g, "")
-                .replace("NA", "")
-                .replace("na", "");
-        };
-
+        // Current logged in user's name
         var currentUser = "@CreatedBy";
-        var editorNP;
+
+        // Activates all code inside when DOM of page is loaded
         $(document).ready(function () {
 
+            // Moment date format
             $.fn.dataTable.moment('M/D/YYYY h:mm:ss A');
 
             // Disable autocomplete on form fields
@@ -338,6 +335,9 @@
                 ]
             });
 
+            /***********************************************************/
+            // Field formatting and filtering
+
             // New Product Form: converts receipt description to title case
             editorNP.field('ProductUpdates.OBJ_TAB_F29').input().on('blur', function () {
                 var productName = editorNP.field('ProductUpdates.OBJ_TAB_F29').val();
@@ -402,18 +402,6 @@
                 var ingredients = editorNP.field('ProductUpdates.IngredientList').val();
                 ingredients = removeSpecials(ingredients);
                 editorNP.field('ProductUpdates.IngredientList').val(ingredients);
-            });
-
-            // New Product Form: shows completed by info if product is marked as complete
-            editorNP.on('open', function () {
-                if (editorNP.field('ProductUpdates.productstatusID').val() == 4) {
-                    editorNP.field('ProductUpdates.completeddate').show();
-                    editorNP.field('ProductUpdates.completedby').show();
-                }
-                else {
-                    editorNP.field('ProductUpdates.completeddate').hide();
-                    editorNP.field('ProductUpdates.completedby').hide();
-                }
             });
 
             // New Product Form: hides Family Button unless Hackberry's Brand is selected
@@ -500,156 +488,21 @@
                 });
             });
 
-            // New Product Form: set last updated date and last updated by upon edit
-            editorNP.field('ProductUpdates.productstatusID').input().on('edit', function () {
-                editorNP.field('ProductUpdates.lastupdatedon').val(getDate());
-                editorNP.field('ProductUpdates.lastupdatedby').val(currentUser);
-            });
+            /***********************************************************/
+            // Buttons
 
             // New Product Form: Like code x button
             $('<i id="clearLikeCode" class="fa fa-close"></i>').insertAfter(
                 editorNP.field('ProductUpdates.LIKE_TAB_F122').input()
             );
 
-            //// New Product Form: field validation
-            //editorNP.on('preSubmit', function (e, o, action) {
-            //    if (action !== 'remove') {
+            // New Product Form: clear like code select field
+            $(document).on('click', '#clearLikeCode', function () {
+                editorNP.field('ProductUpdates.LIKE_TAB_F122').val(null);
+            });
 
-            //        /*** New Product required fields ***/
-            //        // Location - required
-            //        if (!editorNP.field('ProductUpdates.locationID').val()) {
-            //            editorNP.field('ProductUpdates.locationID').error('Required');
-            //        }
-
-            //        // Mettler Product - required
-            //        if (!editorNP.field('ProductUpdates.ismettlerrequired').val()) {
-            //            editorNP.field('ProductUpdates.ismettlerrequired').error('Required');
-            //        }
-
-            //        // UPC - required
-            //        if (!editorNP.field('ProductUpdates.F01').val()) {
-            //            editorNP.field('ProductUpdates.F01').error('Required');
-            //        }
-            //        //else {
-            //        //    // Check if UPC already exists in SMS
-            //        //    var UPC = pad(editorNP.field('ProductUpdates.F01').val(), 13, 0);
-
-            //        //    var CheckUPC = $.ajax({
-            //        //        url: "api/CheckUPC",
-            //        //        type: "GET",
-            //        //        dataType: "json",
-            //        //        error: function (error) {
-            //        //            console.log(`Error ${error}`);
-            //        //        }
-            //        //    });
-
-            //        //    CheckUPC.done(function (data) {
-            //        //        var used = [];
-            //        //        for (i = 0; i < data.data.length; i++) {
-            //        //            used.push(data.data[i].OBJ_TAB.F01);
-            //        //        }
-
-            //        //        for (i = 0; i < used.length; i++) {
-            //        //            if (UPC == used[i]) {
-            //        //                editorNP.field('ProductUpdates.F01').error("UPC/PLU already exists in SMS");
-            //        //            }
-            //        //        }
-            //        //    });
-            //        //}
-
-            //        // Label - required
-            //        if (!editorNP.field('ProductUpdates.labelID').val()) {
-            //            editorNP.field('ProductUpdates.labelID').error('Required');
-            //        }
-
-            //        // Brand - required
-            //        if (!editorNP.field('ProductUpdates.OBJ_TAB_F155').val()) {
-            //            editorNP.field('ProductUpdates.OBJ_TAB_F155').error('Required');
-            //        }
-
-            //        // Short Description - required
-            //        if (!editorNP.field('ProductUpdates.OBJ_TAB_F29').val()) {
-            //            editorNP.field('ProductUpdates.OBJ_TAB_F29').error('Required');
-            //        }
-
-            //        // Size - required
-            //        if (!editorNP.field('ProductUpdates.OBJ_TAB_F22').val()) {
-            //            editorNP.field('ProductUpdates.OBJ_TAB_F22').error('Required');
-            //        }
-
-            //        // Long Description - required
-            //        if (!editorNP.field('ProductUpdates.OBJ_TAB_F255').val()) {
-            //            editorNP.field('ProductUpdates.OBJ_TAB_F255').error('Required');
-            //        }
-
-            //        // Subdepartment - required
-            //        if (!editorNP.field('ProductUpdates.POS_TAB_F04').val()) {
-            //            editorNP.field('ProductUpdates.POS_TAB_F04').error('Required');
-            //        }
-
-            //        // Category - required
-            //        if (!editorNP.field('ProductUpdates.OBJ_TAB_F17').val()) {
-            //            editorNP.field('ProductUpdates.OBJ_TAB_F17').error('Required');
-            //        }
-
-            //        // Report Code - required
-            //        if (!editorNP.field('ProductUpdates.OBJ_TAB_F18').val()) {
-            //            editorNP.field('ProductUpdates.OBJ_TAB_F18').error('Required');
-            //        }
-
-            //        // Retail Price - required
-            //        if (!editorNP.field('ProductUpdates.price_tab_f30').val()) {
-            //            editorNP.field('ProductUpdates.price_tab_f30').error('Required');
-            //        }
-
-            //        // Vendor - required
-            //        if (!editorNP.field('ProductUpdates.COST_TAB_F27').val()) {
-            //            editorNP.field('ProductUpdates.COST_TAB_F27').error('Required');
-            //        }
-
-            //        // Items Per Case - required
-            //        if (!editorNP.field('ProductUpdates.COST_TAB_F19').val()) {
-            //            editorNP.field('ProductUpdates.COST_TAB_F19').error('Required');
-            //        } else if (!integerCheck(editorNP.field('ProductUpdates.COST_TAB_F19').val())) {
-            //            editorNP.field('ProductUpdates.COST_TAB_F19').error('Please enter a whole number.');
-            //        }
-
-            //        // Case Cst - required
-            //        if (!editorNP.field('ProductUpdates.COST_TAB_F38').val()) {
-            //            editorNP.field('ProductUpdates.COST_TAB_F38').error('Required');
-            //        }
-
-            //        // Mettler PLU - if value is present, must be a whole number
-            //        if (editorNP.field('ProductUpdates.ScalePLU').val() && !integerCheck(editorNP.field('ProductUpdates.ScalePLU').val())) {
-            //            editorNP.field('ProductUpdates.ScalePLU').error('Please enter a whole number.');
-            //        }
-
-            //        // Tare - if value is present, must be a decimal
-            //        if (editorNP.field('ProductUpdates.TareNetWeight').val() && !floatCheck(editorNP.field('ProductUpdates.TareNetWeight').val())) {
-            //            editorNP.field('ProductUpdates.TareNetWeight').error('Please enter a decimal value: e.g. 0.08');
-            //        }
-
-            //        // Retail Margin - if value is present, must be a whole number
-            //        if (editorNP.field('ProductUpdates.PRICE_TAB_F49').val() && !integerCheck(editorNP.field('ProductUpdates.PRICE_TAB_F49').val())) {
-            //            editorNP.field('ProductUpdates.PRICE_TAB_F49').error('Please enter a whole number.');
-            //        }
-
-            //        // Net Weight - if value is present, must be a whole number
-            //        if (editorNP.field('ProductUpdates.PRICE_TAB_F31').val() && !integerCheck(editorNP.field('ProductUpdates.PRICE_TAB_F31').val())) {
-            //            editorNP.field('ProductUpdates.PRICE_TAB_F31').error('Please enter a whole number.');
-            //        }
-
-            //        // Shelf Life - if value is present, must be a whole number
-            //        if (editorNP.field('ProductUpdates.ShelfLife').val() && !integerCheck(editorNP.field('ProductUpdates.ShelfLife').val())) {
-            //            editorNP.field('ProductUpdates.ShelfLife').error('Please enter a whole number.');
-            //        }
-
-            //        // If any error was reported, cancel the submission so it can be corrected
-            //        if (this.inError()) {
-            //            return false;
-            //        }
-            //    }
-            //});
+            /***********************************************************/
+            // Clear fields on backspace or delete key press
 
             // New Product Form: clear like code select field
             $(document).on('keydown', '#likecodeNP', function (event) {
@@ -658,10 +511,8 @@
                 }
             });
 
-            // New Product Form: clear like code select field
-            $(document).on('click', '#clearLikeCode', function () {
-                editorNP.field('ProductUpdates.LIKE_TAB_F122').val(null);
-            });
+            /***********************************************************/
+            // Form functions
 
             // New Product Form: adds a drop down arrow next to the product status select list
             var dropDownArrow = function (data, type, row) {
@@ -678,17 +529,48 @@
                 });
             });
 
-            // Create the DataTables table
+            // New Product Form: shows completed by info if product is marked as complete
+            editorNP.on('open', function () {
+                if (editorNP.field('ProductUpdates.productstatusID').val() == 4) {
+                    editorNP.field('ProductUpdates.completeddate').show();
+                    editorNP.field('ProductUpdates.completedby').show();
+                }
+                else {
+                    editorNP.field('ProductUpdates.completeddate').hide();
+                    editorNP.field('ProductUpdates.completedby').hide();
+                }
+            });
+
+            // New Product Form: set last updated date and last updated by upon edit
+            editorNP.field('ProductUpdates.productstatusID').input().on('edit', function () {
+                editorNP.field('ProductUpdates.lastupdatedon').val(getDate());
+                editorNP.field('ProductUpdates.lastupdatedby').val(currentUser);
+            });
+
+
+            /***********************************************************************************************************************/
+
+
+            // DataTables table initilazation
             var table = $('#NewProducts').DataTable({
+                // Enable or disable rendering of only necessary HTML elements
                 deferRender: true,
+                // Enable or disable automatic column width calculation.
                 autoWidth: true,
+                // Enable or disable the ability to select a row
                 select: true,
-                // Default view showing incomplete requests
+                select: {
+                    style: 'os',
+                    style: 'multi',
+                    selector: 'td:first-child'
+                },
+                // Default view showing only incomplete requests
                 initComplete: function (e, dt, node, config) {
                     table
                         .column(1).search('^New Product$', true, false)
                         .column(2).search('^3 - Manager Review Completed$', true, false).draw()
                 },
+                // Column default settings
                 columnDefs: [
                     //{ orderable: false, targets: 2 },
                     {
@@ -697,8 +579,15 @@
                         render: $.fn.dataTable.render.ellipsis(18)
                     }
                 ],
+                // Change New Products request type background green
+                rowCallback: function (row, data, index) {
+                    if (data.RequestTypes.requestname == "New Product") { $(row).find('td:eq(1)').css('background-color', '#FAC090'); }
+                    if (data.RequestTypes.requestname !== "New Product") { $(row).find('td:eq(1)').css('background-color', '#E6EDD7'); }
+                },
                 // Default table lengths
                 lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "All"]],
+                // Default table order
+                order: [[9, "desc"]],
                 // Table data source
                 ajax: {
                     url: '/api/NewProducts'
@@ -738,20 +627,9 @@
                     },
                     { data: "ProductUpdates.completeddate", visible: false}
                 ],
-                select: {
-                    style: 'os',
-                    style: 'multi',
-                    selector: 'td:first-child'
-                },
-                // Change New Products request type background green
-                "rowCallback": function (row, data, index) {
-                    if (data.RequestTypes.requestname == "New Product") { $(row).find('td:eq(1)').css('background-color', '#FAC090'); }
-                    if (data.RequestTypes.requestname !== "New Product") { $(row).find('td:eq(1)').css('background-color', '#E6EDD7'); }
-                },
                 // Control button layout
                 dom: '<"floatRight"B><"clear">lfrtip',
-                // Default table order
-                order: [[9, "desc"]],
+                // Buttons
                 buttons: [
                     { extend: 'remove', editor: editorNP },
                     {
@@ -795,9 +673,8 @@
                             table.rows({ selected: true }).deselect();
                         }
                     },
-
-                    // Creates an Export New Products button and executes AJAX requests
                     {
+                        // Creates an Export New Products button and executes AJAX requests
                         text: 'Export', action: function (e, dt, node, config) {
 
                             if ( confirm( 'Export ' + table.rows('.selected').count() + ' product(s)?' ) ) {
@@ -1107,7 +984,7 @@
                                 editorNP.edit(rows, false);
                                 $.each(rows, function (i, rowIdx) {
                                     var row = table.row(rowIdx);
-                                    
+
                                     editorNP.field('ProductUpdates.completeddate').multiSet(row.id(), getDate());
                                     editorNP.field('ProductUpdates.completedby').multiSet(row.id(), currentUser);
                                     editorNP.field('ProductUpdates.productstatusID').multiSet(row.id(), 4);
@@ -1128,9 +1005,10 @@
                         },
 
                     },
-
-                    // Redirects user back to main Product Maintenance page
-                    { text: 'Back', action: function () { window.location = 'ProductMaintenance' } }
+                    {
+                        // Redirects user back to main Product Maintenance page
+                        text: 'Back', action: function () { window.location = 'ProductMaintenance' }
+                    }
                 ]
             });
 

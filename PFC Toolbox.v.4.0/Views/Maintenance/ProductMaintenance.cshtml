@@ -10,6 +10,7 @@
 
     <title>Product Maintenance</title>
 
+    @*Imported CSS libraries*@
     <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css" />
@@ -40,6 +41,7 @@
 </html>
 
 @section scripts{
+    @*Imported JavaScript libraries*@
     <script type="text/javascript" charset="utf-8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
@@ -57,20 +59,19 @@
 
     <script>
 
-        // Reference ~/Content/Functions.js for other custom functions
-        // Function to format case cost field
-        function caseCostFormatter(string) {
-            return string.replace(/[^0-9.]/g, "")
-                .replace("NA", "")
-                .replace("na", "");
-        };
-
+        // Current logged in user's name
         var currentUser = "@CreatedBy";
+
+        // Current logged in user's role
         var role = "@Role";
+
+        // Used in the submit another and copy functions of the New Product and Update An Existing Product forms
         var lastNPRetrieved, lastPURetrieved;
-        var editorNP, editor;
+
+        // Activates all code inside when DOM of page is loaded
         $(document).ready(function () {
 
+            // Moment date format
             $.fn.dataTable.moment('M/D/YYYY h:mm:ss A');
 
             // Disable autocomplete on form fields
@@ -85,7 +86,7 @@
                 windowPadding: 66
             });
 
-            // New Product Form
+            // DataTables New Product Form
             var editorNP = new $.fn.dataTable.Editor({
                 ajax: '/api/NewProducts',
                 table: '#ProductMaintenance',
@@ -381,43 +382,15 @@
             $(editorNP.field('ProductUpdates.ShelfLife').node()).attr("data-toggle", "tooltip").attr("title", 'Shelf life of the product in days.');
             $(editorNP.field('ProductUpdates.IngredientList').node()).attr("data-toggle", "tooltip").attr("title", 'Product ingredients, allergens, or country of origin.');
 
-            // New Product Form: converts receipt description to title case
-            editorNP.field('ProductUpdates.OBJ_TAB_F29').input().on('blur', function () {
-                var productName = editorNP.field('ProductUpdates.OBJ_TAB_F29').val();
-                productName = titleCase(productName);
-                productName = limitLength(productName, 32)
-                editorNP.field('ProductUpdates.OBJ_TAB_F29').val(productName);
-            });
-
-            // New Product Form: format size field
-            editorNP.field('ProductUpdates.OBJ_TAB_F22').input().on('blur', function () {
-                var size = editorNP.field('ProductUpdates.OBJ_TAB_F22').val();
-                size = sizeFormatter(size);
-                size = limitLength(size, 10)
-                editorNP.field('ProductUpdates.OBJ_TAB_F22').val(size);
-            });
-
-            // New Product Form: converts signage descriptions to title case
-            editorNP.field('ProductUpdates.OBJ_TAB_F255').input().on('blur', function () {
-                var productName = editorNP.field('ProductUpdates.OBJ_TAB_F255').val();
-                productName = titleCase(productName);
-                productName = limitLength(productName, 64)
-                editorNP.field('ProductUpdates.OBJ_TAB_F255').val(productName);
-            });
-
-            // New Product Form: removes all characters from case cost field
-            editorNP.field('ProductUpdates.COST_TAB_F38').input().on('blur', function () {
-                var caseCost = editorNP.field('ProductUpdates.COST_TAB_F38').val();
-                caseCost = caseCostFormatter(caseCost);
-                editorNP.field('ProductUpdates.COST_TAB_F38').val(caseCost);
-            });
+            /***********************************************************/
+            // Field formatting and filtering
 
             // New Product Form: on keydown in UPC field display processing icon
             editorNP.field('ProductUpdates.F01').input().on('keydown', function () {
                 editorNP.field('ProductUpdates.F01').processing(true);
             });
 
-            // New Product Form: only numbers, letters, commas, and spaces allowed
+            // New Product Form: removes special characters and checks if PLU/UPC already exists in SMS
             editorNP.field('ProductUpdates.F01').input().on('blur', function () {
 
                 // Hide error message if already displayed.
@@ -477,7 +450,32 @@
                     });
                 }
 
+                // Remove loading icon next to UPC field.
                 editorNP.field('ProductUpdates.F01').processing(false);
+            });
+
+            // New Product Form: converts receipt description to title case
+            editorNP.field('ProductUpdates.OBJ_TAB_F29').input().on('blur', function () {
+                var productName = editorNP.field('ProductUpdates.OBJ_TAB_F29').val();
+                productName = titleCase(productName);
+                productName = limitLength(productName, 32)
+                editorNP.field('ProductUpdates.OBJ_TAB_F29').val(productName);
+            });
+
+            // New Product Form: formats size field
+            editorNP.field('ProductUpdates.OBJ_TAB_F22').input().on('blur', function () {
+                var size = editorNP.field('ProductUpdates.OBJ_TAB_F22').val();
+                size = sizeFormatter(size);
+                size = limitLength(size, 10)
+                editorNP.field('ProductUpdates.OBJ_TAB_F22').val(size);
+            });
+
+            // New Product Form: converts signage descriptions to title case
+            editorNP.field('ProductUpdates.OBJ_TAB_F255').input().on('blur', function () {
+                var productName = editorNP.field('ProductUpdates.OBJ_TAB_F255').val();
+                productName = titleCase(productName);
+                productName = limitLength(productName, 64)
+                editorNP.field('ProductUpdates.OBJ_TAB_F255').val(productName);
             });
 
             // New Product Form: only numbers, letters, commas, and spaces allowed
@@ -560,151 +558,30 @@
                 } else if (editorNP.field('ProductUpdates.ScaleItemTypeID').val() == '2') {
                     editorNP.field('ProductUpdates.POS_TAB_F82').val(0);
                     editorNP.field('ProductUpdates.PRICE_TAB_F31').show();
-                }
-                else {
+                } else {
                     editorNP.field('ProductUpdates.POS_TAB_F82').val(0);
                 }
             });
 
-            // New Product Form: filter available categories on subdepartment selection
-            editorNP.dependent('ProductUpdates.POS_TAB_F04', '/api/Categories');
-
-            // New Product Form: set default POS attributes
-            editorNP.dependent('ProductUpdates.POS_TAB_F04', function () {
-                var subdepartment = editorNP.field('ProductUpdates.POS_TAB_F04').val();
-
-                var GetSubdepartmentAttributes = $.ajax({
-                    url: "api/GetSubdepartmentBounds",
-                    type: "GET",
-                    dataType: "json",
-                    data: { 'F04': subdepartment },
-                    error: function (error) {
-                        console.log(`Error ${error}`);
-                    }
-                });
-
-                GetSubdepartmentAttributes.then(function (data) {
-                    editorNP.field('ProductUpdates.POS_TAB_F79').val(data.data[0].SMSSubdepartments.F79);
-                    editorNP.field('ProductUpdates.POS_TAB_F178').val(data.data[0].SMSSubdepartments.F178);
-                    editorNP.field('ProductUpdates.POS_TAB_F81').val(data.data[0].SMSSubdepartments.F81);
-                    editorNP.field('ProductUpdates.POS_TAB_F171').val(data.data[0].SMSSubdepartments.F171);
-                    editorNP.field('ProductUpdates.POS_TAB_F150').val(data.data[0].SMSSubdepartments.F150);
-                });
-            });
-
-            // New Product Form: SRP Calculator
-            $(document).on('click', '#calculateNP', function () {
-                var srp;
-
-                if (editorNP.field('ProductUpdates.PRICE_TAB_F49').val() == null || editorNP.field('ProductUpdates.PRICE_TAB_F49').val() == "") {
-                    alert('Please enter the target margin.');
-                }
-                else {
-                    var targetMargin = editorNP.field('ProductUpdates.PRICE_TAB_F49').val();
-
-                    if (editorNP.field('ProductUpdates.COST_TAB_F19').val() == null || editorNP.field('ProductUpdates.COST_TAB_F19').val() == "") {
-                        alert('Please enter the number of items per case or a 1.');
-                    }
-                    else {
-                        var itemsPerCase = editorNP.field('ProductUpdates.COST_TAB_F19').val();
-
-                        if (editorNP.field('ProductUpdates.COST_TAB_F38').val() == null || editorNP.field('ProductUpdates.COST_TAB_F38').val() == "") {
-                            alert('Please enter a cost per case.');
-                        }
-                        else {
-                            var costPerCase = editorNP.field('ProductUpdates.COST_TAB_F38').val();
-
-                            srp = ((Math.round(((costPerCase / itemsPerCase) / (1 - (targetMargin / 100))) * 10) / 10) - .01);
-
-                            editorNP.field('ProductUpdates.price_tab_f30').val(toFixed(srp, 2));
-                        }
-                    }
-                }
-            });
-
-            // New Product Form: New Brand button
-            $('<button title="Click here to add a new brand." id="newbrand" style="position:absolute;top:20%;right:7.25%">New Brand</button>').insertAfter(
-                editorNP.field('ProductUpdates.OBJ_TAB_F155').input()
-            );
+            /***********************************************************/
+            // Buttons
 
             // New Product Form: Get New PLU Button
             $('<button title="Click here to generate a new PLU." id="getplu" style="position:absolute;top:20%;right:5%">Get New PLU</button>').insertAfter(
                 editorNP.field('ProductUpdates.F01').input()
             );
 
-            // New Product Form: Calculate button
-            $('<button title="Click here to calculate unit cost." id="calculateNP" style="position:absolute;top:20%;right:8.5%">Calculate</button>').insertAfter(
-                editorNP.field('ProductUpdates.COST_TAB_F38').input()
-            );
-
-            // New Product Form: Like code x button
-            $('<i id="clearLikeCode" class="fa fa-close"></i>').insertAfter(
-                editorNP.field('ProductUpdates.LIKE_TAB_F122').input()
-            )
-
-            // New Product Form: enter new Brand
-            $(document).on('click', '#newbrand', function () {
-                var newbrand = prompt("Please enter the new brand without special characters:");
-
-                var format = /[^a-zA-Z0-9- ]/g;
-                while (format.test(newbrand)) {
-                    newbrand = prompt("No special characters...");
-                }
-
-                if (newbrand == null || newbrand == "") {
-                    txt = "User cancelled the prompt.";
-                } else {
-                    brand = newbrand.toUpperCase().replace(/[^a-zA-Z0-9- ]/g, "");
-
-                    var CreateNewBrand = $.ajax({
-                        url: "/api/CreateNewBrand",
-                        type: "POST",
-                        dataType: "json",
-                        data: {
-                            action: 'create',
-                            'data[0][Brands][Brand]': brand
-                        },
-                        error: function (error) {
-                            console.log(`Error ${error}`);
-                        }
-                    }),
-                        SetNewBrand = CreateNewBrand.then(function (data) {
-                            return $.ajax({
-                                url: "/api/GetBrands",
-                                type: "GET",
-                                dataType: "json",
-                                error: function (error) {
-                                    console.log(`Error ${error}`);
-                                }
-                            });
-                        });
-
-                    var optionsA = [];
-                    SetNewBrand.done(function (data) {
-                        var option = {};
-                        for (i = 0; i < data.data.length; i++) {
-                            option.label = data.data[i].Brands.Brand
-                            optionsA.push(option);
-                            option = {};
-                        };
-                        editorNP.field('ProductUpdates.OBJ_TAB_F155').update(optionsA);
-
-                        // Refresh data for all tables.
-                        //table.ajax.reload();
-                    });
-                    editorNP.field('ProductUpdates.OBJ_TAB_F155').set(brand);
-                }
-            });
-
-            // New Product Form: get New PLU
+            // New Product Form: New PLU generator
             $(document).on('click', '#getplu', function () {
                 // If subdepartment has NOT been chosen, display alert.
                 if (!editorNP.field('ProductUpdates.POS_TAB_F04').val()) {
                     alert('Please select a subdepartment!');
+                    editorNP.field('ProductUpdates.POS_TAB_F04').focus();
                 }
                 // If mettler select option has NOT been selected, display alert.
                 else if (!editorNP.field('ProductUpdates.ismettlerrequired').val()) {
                     alert('Select yes or no to Mettler Product!');
+                    editorNP.field('ProductUpdates.ismettlerrequired').focus();
                 }
                 // If it's a mettler product request.
                 else if (editorNP.field('ProductUpdates.ismettlerrequired').val() == 'Yes') {
@@ -768,106 +645,106 @@
                                 }
                             })
                         }),
-                            // Then get all used UPC's within subdepartment range in SMS.
-                            GetUsedSMSUPCs = GetSubdepartmentBounds.then(function (data) {
+                        // Then get all used UPC's within subdepartment range in SMS.
+                        GetUsedSMSUPCs = GetSubdepartmentBounds.then(function (data) {
 
-                                // Loops through Subdepartment's attributes to find the correct bounds.
-                                for (i = 0; i < data.data.length; i++) {
-                                    var tempLowerBound = (data.data[i].SMSSubdepartments.lowerBound);
-                                    var tempUpperBound = (data.data[i].SMSSubdepartments.upperBound);
-                                };
+                            // Loops through Subdepartment's attributes to find the correct bounds.
+                            for (i = 0; i < data.data.length; i++) {
+                                var tempLowerBound = (data.data[i].SMSSubdepartments.lowerBound);
+                                var tempUpperBound = (data.data[i].SMSSubdepartments.upperBound);
+                            };
 
-                                // Turn bounds into random weight UPC bounds.
-                                lowerUPCBound = '002' + tempLowerBound + '00000';
-                                upperUPCBound = '002' + tempUpperBound + '00000';
+                            // Turn bounds into random weight UPC bounds.
+                            lowerUPCBound = '002' + tempLowerBound + '00000';
+                            upperUPCBound = '002' + tempUpperBound + '00000';
 
-                                // Turn bounds into PLU bounds.
-                                lowerPLUBound = '00000000' + tempLowerBound;
-                                upperPLUBound = '00000000' + tempUpperBound;
+                            // Turn bounds into PLU bounds.
+                            lowerPLUBound = '00000000' + tempLowerBound;
+                            upperPLUBound = '00000000' + tempUpperBound;
 
-                                // Start and end ranges for UPC's to check for availability.
-                                startRange = tempLowerBound;
-                                endRange = tempUpperBound;
+                            // Start and end ranges for UPC's to check for availability.
+                            startRange = tempLowerBound;
+                            endRange = tempUpperBound;
 
-                                // Return all UPC's within specified range.
-                                return $.ajax({
-                                    url: "/api/GetPLUUPCs",
-                                    type: "GET",
-                                    dataType: "json",
-                                    data: {
-                                        'lowerBound': lowerUPCBound,
-                                        'upperBound': upperUPCBound,
-                                        'lowerBound2': lowerPLUBound,
-                                        'upperBound2': upperPLUBound
-                                    },
-                                    error: function (error) {
-                                        console.log(`Error ${error}`);
-                                    }
-                                });
-                            }),
-                                // Then sort all used SMS UPCs and create their PLU or random weight UPC counterpart.
-                                sortUsedSMSUPCs = GetUsedSMSUPCs.then(function (data) {
+                            // Return all UPC's within specified range.
+                            return $.ajax({
+                                url: "/api/GetPLUUPCs",
+                                type: "GET",
+                                dataType: "json",
+                                data: {
+                                    'lowerBound': lowerUPCBound,
+                                    'upperBound': upperUPCBound,
+                                    'lowerBound2': lowerPLUBound,
+                                    'upperBound2': upperPLUBound
+                                },
+                                error: function (error) {
+                                    console.log(`Error ${error}`);
+                                }
+                            });
+                        }),
+                        // Then sort all used SMS UPCs and create their PLU or random weight UPC counterpart.
+                        sortUsedSMSUPCs = GetUsedSMSUPCs.then(function (data) {
 
-                                    // Creates an array of all used random weight UPC's in SMS.
-                                    usedSMSUPCs = [];
-                                    for (i = 0; i < data.data.length; i++) {
-                                        // If PLU push and convert to UPC.
-                                        if (data.data[i].OBJ_TAB.F01[2] == 0) {
-                                            usedSMSUPCs.push(data.data[i].OBJ_TAB.F01);
-                                            usedSMSUPCs.push(convertPLUtoUPC(data.data[i].OBJ_TAB.F01, subdepartment));
+                            // Creates an array of all used random weight UPC's in SMS.
+                            usedSMSUPCs = [];
+                            for (i = 0; i < data.data.length; i++) {
+                                // If PLU push and convert to UPC.
+                                if (data.data[i].OBJ_TAB.F01[2] == 0) {
+                                    usedSMSUPCs.push(data.data[i].OBJ_TAB.F01);
+                                    usedSMSUPCs.push(convertPLUtoUPC(data.data[i].OBJ_TAB.F01, subdepartment));
+                                }
+
+                                // If random weight UPC push and convert to PLU.
+                                if (data.data[i].OBJ_TAB.F01[2] == 2) {
+                                    usedSMSUPCs.push(data.data[i].OBJ_TAB.F01);
+                                    usedSMSUPCs.push(convertUPCtoPLU(data.data[i].OBJ_TAB.F01, subdepartment));
+                                }
+                            };
+
+                            // Sort usedSMSUPCs in ascending order
+                            usedSMSUPCs.sort(function (a, b) { return a - b });
+                        }),
+                        // Update reference UPC's table and get all unusued SMS UPC's.
+                        getAllOpenUPCs = sortUsedSMSUPCs.then(function () {
+
+                            // Creates an array of all used random weight UPC's that exist in SMS and not Toolbox.
+                            updateReferenceUPCs = _.difference(usedSMSUPCs, usedToolboxUPCs);
+
+                            // Recursive function to Update ReferenceUPCs table with any random weight UPC and its according PLU.
+                            function processItem() {
+                                // Check length, if 0 quit loop...
+                                if (updateReferenceUPCs.length) {
+                                    // Make a call always referencing results[0] since we're shfiting the array results...
+                                    $.ajax({
+                                        url: "/api/CreateReferenceUPC",
+                                        type: 'POST',
+                                        data: {
+                                            action: 'create',
+                                            'data[0][ReferenceUPCs][F01]': updateReferenceUPCs[0]
+                                        },
+                                        error: function (error) {
+                                            console.log(`Error ${error}`);
+                                        },
+                                        success: function () {
+                                            updateReferenceUPCs.shift();
+                                            processItem();
                                         }
-
-                                        // If random weight UPC push and convert to PLU.
-                                        if (data.data[i].OBJ_TAB.F01[2] == 2) {
-                                            usedSMSUPCs.push(data.data[i].OBJ_TAB.F01);
-                                            usedSMSUPCs.push(convertUPCtoPLU(data.data[i].OBJ_TAB.F01, subdepartment));
-                                        }
-                                    };
-
-                                    // Sort usedSMSUPCs in ascending order
-                                    usedSMSUPCs.sort(function (a, b) { return a - b });
-                                }),
-                                    // Update reference UPC's table and get all unusued SMS UPC's.
-                                    getAllOpenUPCs = sortUsedSMSUPCs.then(function () {
-
-                                        // Creates an array of all used random weight UPC's that exist in SMS and not Toolbox.
-                                        updateReferenceUPCs = _.difference(usedSMSUPCs, usedToolboxUPCs);
-
-                                        // Recursive function to Update ReferenceUPCs table with any random weight UPC and its according PLU.
-                                        function processItem() {
-                                            // Check length, if 0 quit loop...
-                                            if (updateReferenceUPCs.length) {
-                                                // Make a call always referencing results[0] since we're shfiting the array results...
-                                                $.ajax({
-                                                    url: "/api/CreateReferenceUPC",
-                                                    type: 'POST',
-                                                    data: {
-                                                        action: 'create',
-                                                        'data[0][ReferenceUPCs][F01]': updateReferenceUPCs[0]
-                                                    },
-                                                    error: function (error) {
-                                                        console.log(`Error ${error}`);
-                                                    },
-                                                    success: function () {
-                                                        updateReferenceUPCs.shift();
-                                                        processItem();
-                                                    }
-                                                });
-                                            }
-                                        };
-
-                                        // Call to the processItem() function.
-                                        processItem();
-
-                                        // Generates array of all numbers between range.
-                                        var range = [];
-                                        for (i = startRange; i < endRange; i++) {
-                                            range.push('002' + i + '00000');
-                                        };
-
-                                        // Creates an array of all unused random weight UPCs in SMS
-                                        unusedSMSUPCs = _.difference(range, usedSMSUPCs);
                                     });
+                                }
+                            };
+
+                            // Call to the processItem() function.
+                            processItem();
+
+                            // Generates array of all numbers between range.
+                            var range = [];
+                            for (i = startRange; i < endRange; i++) {
+                                range.push('002' + i + '00000');
+                            };
+
+                            // Creates an array of all unused random weight UPCs in SMS
+                            unusedSMSUPCs = _.difference(range, usedSMSUPCs);
+                        });
 
                     // Execute chained AJAX requests to get all open SMS UPC's within range and set fields in form.
                     getAllOpenUPCs.done(function () {
@@ -960,106 +837,106 @@
                                 }
                             })
                         }),
-                            // Then get all used UPC's within subdepartment range in SMS.
-                            GetUsedSMSUPCs = GetSubdepartmentBounds.then(function (data) {
+                        // Then get all used UPC's within subdepartment range in SMS.
+                        GetUsedSMSUPCs = GetSubdepartmentBounds.then(function (data) {
 
-                                // Loops through Subdepartment's attributes to find the correct bounds.
-                                for (i = 0; i < data.data.length; i++) {
-                                    var tempLowerBound = (data.data[i].SMSSubdepartments.lowerBound);
-                                    var tempUpperBound = (data.data[i].SMSSubdepartments.upperBound);
-                                };
+                            // Loops through Subdepartment's attributes to find the correct bounds.
+                            for (i = 0; i < data.data.length; i++) {
+                                var tempLowerBound = (data.data[i].SMSSubdepartments.lowerBound);
+                                var tempUpperBound = (data.data[i].SMSSubdepartments.upperBound);
+                            };
 
-                                // Turn bounds into random weight UPC bounds.
-                                lowerUPCBound = '002' + tempLowerBound + '00000';
-                                upperUPCBound = '002' + tempUpperBound + '00000';
+                            // Turn bounds into random weight UPC bounds.
+                            lowerUPCBound = '002' + tempLowerBound + '00000';
+                            upperUPCBound = '002' + tempUpperBound + '00000';
 
-                                // Turn bounds into PLU bounds.
-                                lowerPLUBound = '00000000' + tempLowerBound;
-                                upperPLUBound = '00000000' + tempUpperBound;
+                            // Turn bounds into PLU bounds.
+                            lowerPLUBound = '00000000' + tempLowerBound;
+                            upperPLUBound = '00000000' + tempUpperBound;
 
-                                // Start and end ranges for UPC's to check for availability.
-                                startRange = tempLowerBound;
-                                endRange = tempUpperBound;
+                            // Start and end ranges for UPC's to check for availability.
+                            startRange = tempLowerBound;
+                            endRange = tempUpperBound;
 
-                                // Return all UPC's within specified range.
-                                return $.ajax({
-                                    url: "/api/GetPLUUPCs",
-                                    type: "GET",
-                                    dataType: "json",
-                                    data: {
-                                        'lowerBound': lowerUPCBound,
-                                        'upperBound': upperUPCBound,
-                                        'lowerBound2': lowerPLUBound,
-                                        'upperBound2': upperPLUBound
-                                    },
-                                    error: function (error) {
-                                        console.log(`Error ${error}`);
-                                    }
-                                });
-                            }),
-                                // Then sort all used SMS UPCs and create their PLU or random weight UPC counterpart.
-                                sortUsedSMSUPCs = GetUsedSMSUPCs.then(function (data) {
+                            // Return all UPC's within specified range.
+                            return $.ajax({
+                                url: "/api/GetPLUUPCs",
+                                type: "GET",
+                                dataType: "json",
+                                data: {
+                                    'lowerBound': lowerUPCBound,
+                                    'upperBound': upperUPCBound,
+                                    'lowerBound2': lowerPLUBound,
+                                    'upperBound2': upperPLUBound
+                                },
+                                error: function (error) {
+                                    console.log(`Error ${error}`);
+                                }
+                            });
+                        }),
+                        // Then sort all used SMS UPCs and create their PLU or random weight UPC counterpart.
+                        sortUsedSMSUPCs = GetUsedSMSUPCs.then(function (data) {
 
-                                    // Creates an array of all used random weight UPC's in SMS.
-                                    usedSMSUPCs = [];
-                                    for (i = 0; i < data.data.length; i++) {
-                                        // If PLU push and convert to UPC.
-                                        if (data.data[i].OBJ_TAB.F01[2] == 0) {
-                                            usedSMSUPCs.push(data.data[i].OBJ_TAB.F01);
-                                            usedSMSUPCs.push(convertPLUtoUPC(data.data[i].OBJ_TAB.F01, subdepartment));
+                            // Creates an array of all used random weight UPC's in SMS.
+                            usedSMSUPCs = [];
+                            for (i = 0; i < data.data.length; i++) {
+                                // If PLU push and convert to UPC.
+                                if (data.data[i].OBJ_TAB.F01[2] == 0) {
+                                    usedSMSUPCs.push(data.data[i].OBJ_TAB.F01);
+                                    usedSMSUPCs.push(convertPLUtoUPC(data.data[i].OBJ_TAB.F01, subdepartment));
+                                }
+
+                                // If random weight UPC push and convert to PLU.
+                                if (data.data[i].OBJ_TAB.F01[2] == 2) {
+                                    usedSMSUPCs.push(data.data[i].OBJ_TAB.F01);
+                                    usedSMSUPCs.push(convertUPCtoPLU(data.data[i].OBJ_TAB.F01, subdepartment));
+                                }
+                            };
+
+                            // Sort usedSMSUPCs in ascending order
+                            usedSMSUPCs.sort(function (a, b) { return a - b });
+                        }),
+                        // Update reference UPC's table and get all unusued SMS UPC's.
+                        getAllOpenUPCs = sortUsedSMSUPCs.then(function () {
+
+                            // Creates an array of all used random weight UPC's that exist in SMS and not Toolbox.
+                            updateReferenceUPCs = _.difference(usedSMSUPCs, usedToolboxUPCs);
+
+                            // Recursive function to Update ReferenceUPCs table with any random weight UPC and its according PLU.
+                            function processItem() {
+                                // Check length, if 0 quit loop...
+                                if (updateReferenceUPCs.length) {
+                                    // Make a call always referencing results[0] since we're shfiting the array results...
+                                    $.ajax({
+                                        url: "/api/CreateReferenceUPC",
+                                        type: 'POST',
+                                        data: {
+                                            action: 'create',
+                                            'data[0][ReferenceUPCs][F01]': updateReferenceUPCs[0]
+                                        },
+                                        error: function (error) {
+                                            console.log(`Error ${error}`);
+                                        },
+                                        success: function () {
+                                            updateReferenceUPCs.shift();
+                                            processItem();
                                         }
-
-                                        // If random weight UPC push and convert to PLU.
-                                        if (data.data[i].OBJ_TAB.F01[2] == 2) {
-                                            usedSMSUPCs.push(data.data[i].OBJ_TAB.F01);
-                                            usedSMSUPCs.push(convertUPCtoPLU(data.data[i].OBJ_TAB.F01, subdepartment));
-                                        }
-                                    };
-
-                                    // Sort usedSMSUPCs in ascending order
-                                    usedSMSUPCs.sort(function (a, b) { return a - b });
-                                }),
-                                    // Update reference UPC's table and get all unusued SMS UPC's.
-                                    getAllOpenUPCs = sortUsedSMSUPCs.then(function () {
-
-                                        // Creates an array of all used random weight UPC's that exist in SMS and not Toolbox.
-                                        updateReferenceUPCs = _.difference(usedSMSUPCs, usedToolboxUPCs);
-
-                                        // Recursive function to Update ReferenceUPCs table with any random weight UPC and its according PLU.
-                                        function processItem() {
-                                            // Check length, if 0 quit loop...
-                                            if (updateReferenceUPCs.length) {
-                                                // Make a call always referencing results[0] since we're shfiting the array results...
-                                                $.ajax({
-                                                    url: "/api/CreateReferenceUPC",
-                                                    type: 'POST',
-                                                    data: {
-                                                        action: 'create',
-                                                        'data[0][ReferenceUPCs][F01]': updateReferenceUPCs[0]
-                                                    },
-                                                    error: function (error) {
-                                                        console.log(`Error ${error}`);
-                                                    },
-                                                    success: function () {
-                                                        updateReferenceUPCs.shift();
-                                                        processItem();
-                                                    }
-                                                });
-                                            }
-                                        };
-
-                                        // Call to the processItem() function.
-                                        processItem();
-
-                                        // Generates array of all numbers between range.
-                                        var range = [];
-                                        for (i = startRange; i < endRange; i++) {
-                                            range.push('00000000' + i);
-                                        };
-
-                                        // Creates an array of all unused random weight UPCs in SMS
-                                        unusedSMSUPCs = _.difference(range, usedSMSUPCs);
                                     });
+                                }
+                            };
+
+                            // Call to the processItem() function.
+                            processItem();
+
+                            // Generates array of all numbers between range.
+                            var range = [];
+                            for (i = startRange; i < endRange; i++) {
+                                range.push('00000000' + i);
+                            };
+
+                            // Creates an array of all unused random weight UPCs in SMS
+                            unusedSMSUPCs = _.difference(range, usedSMSUPCs);
+                        });
 
                     // Execute chained AJAX requests to get all open SMS UPC's within range and set fields in form.
                     getAllOpenUPCs.done(function () {
@@ -1093,18 +970,181 @@
                 }
             });
 
-            // New Product Form: field validation
+            // New Product Form: SRP button
+            $('<button title="Click here to calculate the suggested retail price." id="srpNP" style="position:absolute;top:20%;right:12.5%">SRP</button>').insertAfter(
+                editorNP.field('ProductUpdates.price_tab_f30').input()
+            );
+
+            // New Product Form: SRP calculator
+            $(document).on('click', '#srpNP', function () {
+
+                // If margin is empty, alert user; else, get value
+                if (editorNP.field('ProductUpdates.PRICE_TAB_F49').val() == null || editorNP.field('ProductUpdates.PRICE_TAB_F49').val() == "") {
+                    alert('Please enter the target margin in the Retail Margin field.');
+                    editorNP.field('ProductUpdates.PRICE_TAB_F49').focus();
+                } else {
+                    var targetMargin = editorNP.field('ProductUpdates.PRICE_TAB_F49').val();
+
+                    // If items per case is empty, alert user; else, get value
+                    if (editorNP.field('ProductUpdates.COST_TAB_F19').val() == null || editorNP.field('ProductUpdates.COST_TAB_F19').val() == "") {
+                        alert('Please enter the number of items per case in the Items Per Case field.');
+                        editorNP.field('ProductUpdates.COST_TAB_F19').focus();
+                    } else {
+                        var itemsPerCase = editorNP.field('ProductUpdates.COST_TAB_F19').val();
+
+                        // If case cost is empty, alert user; else, get value
+                        if (editorNP.field('ProductUpdates.COST_TAB_F38').val() == null || editorNP.field('ProductUpdates.COST_TAB_F38').val() == "") {
+                            alert('Please enter a cost per case.');
+                            editorNP.field('ProductUpdates.COST_TAB_F38').focus();
+                        } else {
+                            var costPerCase = editorNP.field('ProductUpdates.COST_TAB_F38').val();
+
+                            // Calculate suggested retail price
+                            var srp = ((Math.round(((costPerCase / itemsPerCase) / (1 - (targetMargin / 100))) * 10) / 10) - .01);
+
+                            // Set suggested retail price
+                            editorNP.field('ProductUpdates.price_tab_f30').val(toFixed(srp, 2));
+                        }
+                    }
+                }
+            });
+
+            // New Product Form: New Brand button
+            $('<button title="Click here to add a new brand." id="newbrand" style="position:absolute;top:20%;right:7.25%">New Brand</button>').insertAfter(
+                editorNP.field('ProductUpdates.OBJ_TAB_F155').input()
+            );
+
+            // New Product Form: add new brand
+            $(document).on('click', '#newbrand', function () {
+
+                // Prompt user for brand
+                var newbrand = prompt("Please enter the new brand without special characters:");
+
+                // Continuously prompt user for brand until entered without special characters
+                var format = /[^a-zA-Z0-9- ]/g;
+                while (format.test(newbrand)) {
+                    newbrand = prompt("No special characters...");
+                }
+
+                // If prompt canceled, display message
+                if (newbrand == null || newbrand == "") {
+                    txt = "User canceled the prompt.";
+                } else {
+
+                    // Convert brand to all caps
+                    brand = newbrand.toUpperCase().replace(/[^a-zA-Z0-9- ]/g, "");
+
+                    // AJAX request to create new brand in SQL Server and update brand select
+                    var CreateNewBrand = $.ajax({
+                        url: "/api/CreateNewBrand",
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            action: 'create',
+                            'data[0][Brands][Brand]': brand
+                        },
+                        error: function (error) {
+                            console.log(`Error ${error}`);
+                        }
+                    }),
+                        SetNewBrand = CreateNewBrand.then(function (data) {
+                            return $.ajax({
+                                url: "/api/GetBrands",
+                                type: "GET",
+                                dataType: "json",
+                                error: function (error) {
+                                    console.log(`Error ${error}`);
+                                }
+                            });
+                        });
+
+                    // Update brand select in form
+                    var optionsA = [];
+                    SetNewBrand.done(function (data) {
+                        var option = {};
+                        for (i = 0; i < data.data.length; i++) {
+                            option.label = data.data[i].Brands.Brand
+                            optionsA.push(option);
+                            option = {};
+                        };
+                        editorNP.field('ProductUpdates.OBJ_TAB_F155').update(optionsA);
+
+                    });
+
+                    // Set new brand
+                    editorNP.field('ProductUpdates.OBJ_TAB_F155').set(brand);
+                }
+            });
+
+            // New Product Form: Like code x button
+            $('<i id="clearLikeCode" class="fa fa-close"></i>').insertAfter(
+                editorNP.field('ProductUpdates.LIKE_TAB_F122').input()
+            );
+
+            // New Product Form: clear like code select field with x button click
+            $(document).on('click', '#clearLikeCode', function () {
+                editorNP.field('ProductUpdates.LIKE_TAB_F122').val(null);
+            });
+
+            // New Product Form: clear like code select field with backspace or delete key
+            $(document).on('keydown', '#likecodeNP', function (event) {
+                if (event.keyCode == 8 || event.keyCode == 46) {
+                    editorNP.field('ProductUpdates.LIKE_TAB_F122').val(null);
+                }
+            });
+
+            /***********************************************************/
+            // Form functions
+
+            // New Product Form: code to be executed on form open
+            editorNP.on('open', function () {
+
+                // Get updated time each time new product form is opened
+                editorNP.field('ProductUpdates.datecreated').val(getDate());
+
+                // Filter available categories on subdepartment selection
+                editorNP.dependent('ProductUpdates.POS_TAB_F04', '/api/Categories');
+
+                // Set default POS attributes
+                editorNP.dependent('ProductUpdates.POS_TAB_F04', function () {
+                    var subdepartment = editorNP.field('ProductUpdates.POS_TAB_F04').val();
+
+                    var GetSubdepartmentAttributes = $.ajax({
+                        url: "api/GetSubdepartmentBounds",
+                        type: "GET",
+                        dataType: "json",
+                        data: { 'F04': subdepartment },
+                        error: function (error) {
+                            console.log(`Error ${error}`);
+                        }
+                    });
+
+                    GetSubdepartmentAttributes.then(function (data) {
+                        editorNP.field('ProductUpdates.POS_TAB_F79').val(data.data[0].SMSSubdepartments.F79);
+                        editorNP.field('ProductUpdates.POS_TAB_F178').val(data.data[0].SMSSubdepartments.F178);
+                        editorNP.field('ProductUpdates.POS_TAB_F81').val(data.data[0].SMSSubdepartments.F81);
+                        editorNP.field('ProductUpdates.POS_TAB_F171').val(data.data[0].SMSSubdepartments.F171);
+                        editorNP.field('ProductUpdates.POS_TAB_F150').val(data.data[0].SMSSubdepartments.F150);
+                    });
+                });
+            });
+
+            // New Product Form: field validation on submit
             editorNP.on('preSubmit', function (e, o, action) {
                 if (action !== 'remove') {
 
+                    /*** Product Info Update required fields ***/
+                    // Location - required
                     if (!editorNP.field('ProductUpdates.locationID').val()) {
                         editorNP.field('ProductUpdates.locationID').error('Required');
                     }
 
+                    // Mettler Product - required
                     if (!editorNP.field('ProductUpdates.ismettlerrequired').val()) {
                         editorNP.field('ProductUpdates.ismettlerrequired').error('Required');
                     }
 
+                    // UPC - required
                     if (!editorNP.field('ProductUpdates.F01').val()) {
                         editorNP.field('ProductUpdates.F01').error('Required');
                     } else {
@@ -1156,52 +1196,64 @@
                         });
                     }
 
+                    // Label - required
                     if (!editorNP.field('ProductUpdates.labelID').val()) {
                         editorNP.field('ProductUpdates.labelID').error('Required');
                     }
 
+                    // Brand - required
                     if (!editorNP.field('ProductUpdates.OBJ_TAB_F155').val()) {
                         editorNP.field('ProductUpdates.OBJ_TAB_F155').error('Required');
                     }
 
+                    // Short Description - required
                     if (!editorNP.field('ProductUpdates.OBJ_TAB_F29').val()) {
                         editorNP.field('ProductUpdates.OBJ_TAB_F29').error('Required');
                     }
 
+                    // Size - required
                     if (!editorNP.field('ProductUpdates.OBJ_TAB_F22').val()) {
                         editorNP.field('ProductUpdates.OBJ_TAB_F22').error('Required');
                     }
 
+                    // Long Description - required
                     if (!editorNP.field('ProductUpdates.OBJ_TAB_F255').val()) {
                         editorNP.field('ProductUpdates.OBJ_TAB_F255').error('Required');
                     }
 
+                    // Subdepartment - required
                     if (!editorNP.field('ProductUpdates.POS_TAB_F04').val()) {
                         editorNP.field('ProductUpdates.POS_TAB_F04').error('Required');
                     }
 
+                    // Category - required
                     if (!editorNP.field('ProductUpdates.OBJ_TAB_F17').val()) {
                         editorNP.field('ProductUpdates.OBJ_TAB_F17').error('Required');
                     }
 
+                    // Report Code - required
                     if (!editorNP.field('ProductUpdates.OBJ_TAB_F18').val()) {
                         editorNP.field('ProductUpdates.OBJ_TAB_F18').error('Required');
                     }
 
+                    // Retail Price - required
                     if (!editorNP.field('ProductUpdates.price_tab_f30').val()) {
                         editorNP.field('ProductUpdates.price_tab_f30').error('Required');
                     }
 
+                    // Vendor - required
                     if (!editorNP.field('ProductUpdates.COST_TAB_F27').val()) {
                         editorNP.field('ProductUpdates.COST_TAB_F27').error('Required');
                     }
 
+                    // Items Per Case - required
                     if (!editorNP.field('ProductUpdates.COST_TAB_F19').val()) {
                         editorNP.field('ProductUpdates.COST_TAB_F19').error('Required');
                     } else if (!integerCheck(editorNP.field('ProductUpdates.COST_TAB_F19').val())) {
                         editorNP.field('ProductUpdates.COST_TAB_F19').error('Please enter a whole number.');
                     }
 
+                    // Cost - required
                     if (!editorNP.field('ProductUpdates.COST_TAB_F38').val()) {
                         editorNP.field('ProductUpdates.COST_TAB_F38').error('Required');
                     }
@@ -1238,28 +1290,11 @@
                 }
             });
 
-            // New Product Form: clear like code select field
-            $(document).on('keydown', '#likecodeNP', function (event) {
-                if (event.keyCode == 8 || event.keyCode == 46) {
-                    editorNP.field('ProductUpdates.LIKE_TAB_F122').val(null);
-                }
-            });
-
-            // New Product Form: clear like code select field
-            $(document).on('click', '#clearLikeCode', function () {
-                    editorNP.field('ProductUpdates.LIKE_TAB_F122').val(null);
-            });
-
-            // New Product Form: get updated time
-            editorNP.on('open', function () {
-                editorNP.field('ProductUpdates.datecreated').val(getDate());
-            });
-
 
             /***********************************************************************************************************************/
 
 
-            // Update An Existing Product Form
+            // DataTables Update An Existing Product Form
             var editor = new $.fn.dataTable.Editor({
                 ajax: '/api/ProductMaintenance',
                 table: '#ProductMaintenance',
@@ -1583,6 +1618,9 @@
             $(editor.field('ProductUpdates.ShelfLife').node()).attr("data-toggle", "tooltip").attr("title", 'Shelf life of the product in days.');
             $(editor.field('ProductUpdates.IngredientList').node()).attr("data-toggle", "tooltip").attr("title", 'Ingredients, allergens, or country of origins.');
 
+            /***********************************************************/
+            // Field formatting and filtering
+
             // Update An Existing Product Form: converts receipt description to title case
             editor.field('ProductUpdates.OBJ_TAB_F29').input().on('blur', function () {
                 var productName = editor.field('ProductUpdates.OBJ_TAB_F29').val();
@@ -1605,13 +1643,6 @@
                 productName = titleCase(productName);
                 productName = limitLength(productName, 64)
                 editor.field('ProductUpdates.OBJ_TAB_F255').val(productName);
-            });
-
-            // Update An Existing Product Form: removes all charactesr from case cost field
-            editor.field('ProductUpdates.COST_TAB_F38').input().on('blur', function () {
-                var caseCost = editor.field('ProductUpdates.COST_TAB_F38').val();
-                caseCost = caseCostFormatter(caseCost);
-                editor.field('ProductUpdates.COST_TAB_F38').val(caseCost);
             });
 
             // Update An Existing Product Form: only numbers, letters, commas, and spaces allowed
@@ -1647,32 +1678,6 @@
                 var ingredients = editor.field('ProductUpdates.IngredientList').val();
                 ingredients = removeSpecials(ingredients);
                 editor.field('ProductUpdates.IngredientList').val(ingredients);
-            });
-
-            // Update An Existing Product Form: shows completed by info if product is marked as complete
-            editor.on('open', function () {
-
-                // Hides cost info on load
-                editor.field('ProductUpdates.COST_TAB_F27').hide();
-                editor.field('ProductUpdates.COST_TAB_F26').hide();
-                editor.field('ProductUpdates.PRICE_TAB_F49').hide();
-                editor.field('ProductUpdates.COST_TAB_F19').hide();
-
-                // Hide calculate button
-                $("#calculate").hide();
-
-                // Get current time each time form is opened
-                editor.field('ProductUpdates.datecreated').val(getDate());
-
-                // If request is complete show completed date and created by; else, hide
-                if (editor.field('ProductUpdates.productstatusID').val() == 4) {
-                    editor.field('ProductUpdates.completeddate').show();
-                    editor.field('ProductUpdates.completedby').show();
-                }
-                else {
-                    editor.field('ProductUpdates.completeddate').hide();
-                    editor.field('ProductUpdates.completedby').hide();
-                }
             });
 
             // Update An Existing Product Form: on request type change
@@ -1748,31 +1753,60 @@
                 }
             });
 
-            // Update An Existing Product Form: filter available categories on subdepartment selection
-            editor.dependent('ProductUpdates.POS_TAB_F04', '/api/Categories');
+            /***********************************************************/
+            // Buttons
 
-            // Update An Existing Product Form: set default POS attributes
-            editor.dependent('ProductUpdates.POS_TAB_F04', function () {
-                var subdepartment = editor.field('ProductUpdates.POS_TAB_F04').val();
+            // Update An Existing Product Form: SRP button
+            $('<button title="Click here to calculate the suggested retail price." id="srpPU" style="position:absolute;top:20%;right:12.5%">SRP</button>').insertAfter(
+                editor.field('ProductUpdates.price_tab_f30').input()
+            );
 
-                var GetSubdepartmentAttributes = $.ajax({
-                    url: "api/GetSubdepartmentBounds",
-                    type: "GET",
-                    dataType: "json",
-                    data: { 'F04': subdepartment },
-                    error: function (error) {
-                        console.log(`Error ${error}`);
+            // Update An Existing Product Form: SRP calculator
+            $(document).on('click', '#srpPU', function () {
+
+                // If cost fields aren't displayed, display them
+                if (editor.displayed().indexOf('ProductUpdates.COST_TAB_F27') == -1) {
+                    editor.field('ProductUpdates.COST_TAB_F27').show();
+                    editor.field('ProductUpdates.COST_TAB_F26').show();
+                    editor.field('ProductUpdates.PRICE_TAB_F49').show();
+                    editor.field('ProductUpdates.COST_TAB_F19').show();
+                }
+
+                // If margin is empty, alert user; else, get value
+                if (editor.field('ProductUpdates.PRICE_TAB_F49').val() == null || editor.field('ProductUpdates.PRICE_TAB_F49').val() == "") {
+                    alert('Please enter the target margin in the Retail Margin field.');
+                    editor.field('ProductUpdates.PRICE_TAB_F49').focus();
+                } else {
+                    var targetMargin = editor.field('ProductUpdates.PRICE_TAB_F49').val();
+
+                    // If items per case is empty, alert user; else, get value
+                    if (editor.field('ProductUpdates.COST_TAB_F19').val() == null || editor.field('ProductUpdates.COST_TAB_F19').val() == "") {
+                        alert('Please enter the number of items per case in the Items Per Case field.');
+                        editor.field('ProductUpdates.COST_TAB_F19').focus();
+                    } else {
+                        var itemsPerCase = editor.field('ProductUpdates.COST_TAB_F19').val();
+
+                        // If case cost is empty, alert user; else, get value
+                        if (editor.field('ProductUpdates.COST_TAB_F38').val() == null || editor.field('ProductUpdates.COST_TAB_F38').val() == "") {
+                            alert('Please enter a cost per case.');
+                            editor.field('ProductUpdates.COST_TAB_F38').focus();
+                        } else {
+                            var costPerCase = editor.field('ProductUpdates.COST_TAB_F38').val();
+
+                            // Calculate suggested retail price
+                            var srp = ((Math.round(((costPerCase / itemsPerCase) / (1 - (targetMargin / 100))) * 10) / 10) - .01);
+
+                            // Set suggested retail price
+                            editor.field('ProductUpdates.price_tab_f30').val(toFixed(srp, 2));
+                        }
                     }
-                });
-
-                GetSubdepartmentAttributes.then(function (data) {
-                    editor.field('ProductUpdates.POS_TAB_F79').val(data.data[0].SMSSubdepartments.F79);
-                    editor.field('ProductUpdates.POS_TAB_F178').val(data.data[0].SMSSubdepartments.F178);
-                    editor.field('ProductUpdates.POS_TAB_F81').val(data.data[0].SMSSubdepartments.F81);
-                    editor.field('ProductUpdates.POS_TAB_F171').val(data.data[0].SMSSubdepartments.F171);
-                    editor.field('ProductUpdates.POS_TAB_F150').val(data.data[0].SMSSubdepartments.F150);
-                });
+                }
             });
+
+            // Update An Existing Product Form: Cost button
+            $('<button title="Click here to display all cost fields." id="cost" style="position:absolute;top:20%;right:12.5%">Cost</button>').insertAfter(
+                editor.field('ProductUpdates.COST_TAB_F38').input()
+            );
 
             // Update An Existing Product Form: display cost info when cost button is clicked
             $(document).on('click', '#cost', function () {
@@ -1780,81 +1814,142 @@
                 $(editor.node('ProductUpdates.COST_TAB_F26')).toggle();
                 $(editor.node('ProductUpdates.PRICE_TAB_F49')).toggle();
                 $(editor.node('ProductUpdates.COST_TAB_F19')).toggle();
-                $('#calculate').toggle();
             });
-
-            // Update An Existing Product Form: SRP Calculator
-            $(document).on('click', '#calculate', function () {
-                var srp;
-
-                if (editor.field('ProductUpdates.PRICE_TAB_F49').val() == null || editor.field('ProductUpdates.PRICE_TAB_F49').val() == "") {
-                    alert('Please enter the target margin.');
-                }
-                else {
-                    var targetMargin = editor.field('ProductUpdates.PRICE_TAB_F49').val();
-
-                    if (editor.field('ProductUpdates.COST_TAB_F19').val() == null || editor.field('ProductUpdates.COST_TAB_F19').val() == "") {
-                        alert('Please enter the number of items per case or a 1.');
-                    }
-                    else {
-                        var itemsPerCase = editor.field('ProductUpdates.COST_TAB_F19').val();
-
-                        if (editor.field('ProductUpdates.COST_TAB_F38').val() == null || editor.field('ProductUpdates.COST_TAB_F38').val() == "") {
-                            alert('Please enter a cost per case.');
-                        }
-                        else {
-                            var costPerCase = editor.field('ProductUpdates.COST_TAB_F38').val();
-
-                            srp = ((Math.round(((costPerCase / itemsPerCase) / (1 - (targetMargin / 100))) * 10) / 10) - .01);
-
-                            editor.field('ProductUpdates.price_tab_f30').val(toFixed(srp,2));
-                        }
-                    }
-                }
-            });
-
-            // Update An Existing Product Form: % TRP Calculator
-            $(document).on('click', '#calculatePTPR', function () {
-
-                if (editor.field('ProductUpdates.price_tab_f30').val() == null || editor.field('ProductUpdates.price_tab_f30').val() == "") {
-                    alert('Please enter the regular retail.');
-                }
-                else {
-
-                    percentage = prompt("Please enter the percent discount...");
-
-                    regRetail = editor.field('ProductUpdates.price_tab_f30').val();
-
-                    ptpr = regRetail * (1 - (percentage / 100));
-
-                    editor.field('ProductUpdates.promotprprice').val(toFixed(ptpr,2));
-                }
-            });
-
-            // Update An Existing Product Form: Cost button
-            $('<button title="Click here to display all cost fields." id="cost" style="position:absolute;top:20%;right:12.5%">Cost</button>').insertAfter(
-                editor.field('ProductUpdates.price_tab_f30').input()
-            );
-
-            // Update An Existing Product Form: SRP button
-            $('<button title="Click here to calculate the suggested retail price." id="srpcalculator" style="position:absolute;top:20%;right:5%">SRP</button>').insertAfter(
-                editor.field('ProductUpdates.price_tab_f30').input()
-            );
-
-            // Update An Existing Product Form: Calculate button
-            $('<button title="Click here to calculate unit cost." id="calculate" style="position:absolute;top:20%;right:8.5%">Calculate</button>').insertAfter(
-                editor.field('ProductUpdates.COST_TAB_F38').input()
-            );
 
             // Update An Existing Product Form: Calculate % TPR button
             $('<button title="Click here to calculate TPR by percentage." id="calculatePTPR" style="position:absolute;top:20%;right:10.5%">% TPR</button>').insertAfter(
                 editor.field('ProductUpdates.promotprprice').input()
             );
 
+            // Update An Existing Product Form: % TRP Calculator
+            $(document).on('click', '#calculatePTPR', function () {
+
+                // If retail field is empty, alert user
+                if (editor.field('ProductUpdates.price_tab_f30').val() == null || editor.field('ProductUpdates.price_tab_f30').val() == "") {
+                    alert('Please enter the regular retail in the Retail Price field.');
+                    editor.field('ProductUpdates.price_tab_f30').focus();
+                } else {
+
+                    // Prompt user for percent discount
+                    percentage = prompt("Please enter the percent discount...");
+
+                    // Get regular retail value
+                    regRetail = editor.field('ProductUpdates.price_tab_f30').val();
+
+                    // Calculate percent temporary reduced price
+                    ptpr = regRetail * (1 - (percentage / 100));
+
+                    // Set percent discount
+                    editor.field('ProductUpdates.promotprprice').val(toFixed(ptpr, 2));
+                }
+            });
+
             // Update An Existing Product Form: Like code x button
             $('<i id="clearLikeCode" class="fa fa-close"></i>').insertAfter(
                 editor.field('ProductUpdates.LIKE_TAB_F122').input()
             );
+
+            // Update An Existing Product Form: clear like code select field on button press
+            $(document).on('click', '#clearLikeCode', function () {
+                editor.field('ProductUpdates.LIKE_TAB_F122').val(null);
+            });
+
+            /***********************************************************/
+            // Clear fields on backspace or delete key press
+
+            // Update An Existing Product Form: clear brand select field on backspace or delete
+            $(document).on('keydown', '#brandPU', function (event) {
+                if (event.keyCode == 8 || event.keyCode == 46) {
+                    editor.field('ProductUpdates.OBJ_TAB_F155').val(null);
+                }
+            });
+
+            // Update An Existing Product Form: clear subdepartment select field on backspace or delete
+            $(document).on('keydown', '#subdepartmentPU', function (event) {
+                if (event.keyCode == 8 || event.keyCode == 46) {
+                    editor.field('ProductUpdates.POS_TAB_F04').val(null);
+                }
+            });
+
+            // Update An Existing Product Form: clear category select field on backspace or delete
+            $(document).on('keydown', '#categoryPU', function (event) {
+                if (event.keyCode == 8 || event.keyCode == 46) {
+                    editor.field('ProductUpdates.OBJ_TAB_F17').val(null);
+                }
+            });
+
+            // Update An Existing Product Form: clear report select field on backspace or delete
+            $(document).on('keydown', '#reportPU', function (event) {
+                if (event.keyCode == 8 || event.keyCode == 46) {
+                    editor.field('ProductUpdates.OBJ_TAB_F18').val(null);
+                }
+            });
+
+            // Update An Existing Product Form: clear family select field on backspace or delete
+            $(document).on('keydown', '#familyPU', function (event) {
+                if (event.keyCode == 8 || event.keyCode == 46) {
+                    editor.field('ProductUpdates.OBJ_TAB_F16').val(null);
+                }
+            });
+
+            // Update An Existing Product Form: clear like code select field on backspace or delete
+            $(document).on('keydown', '#likecodePU', function (event) {
+                if (event.keyCode == 8 || event.keyCode == 46) {
+                    editor.field('ProductUpdates.LIKE_TAB_F122').val(null);
+                }
+            });
+
+            /***********************************************************/
+            // Form functions
+
+            // Update An Existing Product Form: shows completed by info if product is marked as complete
+            editor.on('open', function () {
+
+                // Hides cost info on load
+                editor.field('ProductUpdates.COST_TAB_F27').hide();
+                editor.field('ProductUpdates.COST_TAB_F26').hide();
+                editor.field('ProductUpdates.PRICE_TAB_F49').hide();
+                editor.field('ProductUpdates.COST_TAB_F19').hide();
+
+                // Get current time each time form is opened
+                editor.field('ProductUpdates.datecreated').val(getDate());
+
+                // If request is complete show completed date and created by; else, hide
+                if (editor.field('ProductUpdates.productstatusID').val() == 4) {
+                    editor.field('ProductUpdates.completeddate').show();
+                    editor.field('ProductUpdates.completedby').show();
+                }
+                else {
+                    editor.field('ProductUpdates.completeddate').hide();
+                    editor.field('ProductUpdates.completedby').hide();
+                }
+
+                // Filter available categories on subdepartment selection
+                editor.dependent('ProductUpdates.POS_TAB_F04', '/api/Categories');
+
+                // Set default POS attributes
+                editor.dependent('ProductUpdates.POS_TAB_F04', function () {
+                    var subdepartment = editor.field('ProductUpdates.POS_TAB_F04').val();
+
+                    var GetSubdepartmentAttributes = $.ajax({
+                        url: "api/GetSubdepartmentBounds",
+                        type: "GET",
+                        dataType: "json",
+                        data: { 'F04': subdepartment },
+                        error: function (error) {
+                            console.log(`Error ${error}`);
+                        }
+                    });
+
+                    GetSubdepartmentAttributes.then(function (data) {
+                        editor.field('ProductUpdates.POS_TAB_F79').val(data.data[0].SMSSubdepartments.F79);
+                        editor.field('ProductUpdates.POS_TAB_F178').val(data.data[0].SMSSubdepartments.F178);
+                        editor.field('ProductUpdates.POS_TAB_F81').val(data.data[0].SMSSubdepartments.F81);
+                        editor.field('ProductUpdates.POS_TAB_F171').val(data.data[0].SMSSubdepartments.F171);
+                        editor.field('ProductUpdates.POS_TAB_F150').val(data.data[0].SMSSubdepartments.F150);
+                    });
+                });
+            });
 
             // Update An Existing Product Form: field validation
             editor.on('preSubmit', function (e, o, action) {
@@ -1995,68 +2090,28 @@
                 }
             });
 
-            // Update An Existing Product Form: clear brand select field on backspace or delete
-            $(document).on('keydown', '#brandPU', function (event) {
-                if (event.keyCode == 8 || event.keyCode == 46) {
-                    editor.field('ProductUpdates.OBJ_TAB_F155').val(null);
-                }
-            });
-
-            // Update An Existing Product Form: clear subdepartment select field on backspace or delete
-            $(document).on('keydown', '#subdepartmentPU', function (event) {
-                if (event.keyCode == 8 || event.keyCode == 46) {
-                    editor.field('ProductUpdates.POS_TAB_F04').val(null);
-                }
-            });
-
-            // Update An Existing Product Form: clear category select field on backspace or delete
-            $(document).on('keydown', '#categoryPU', function (event) {
-                if (event.keyCode == 8 || event.keyCode == 46) {
-                    editor.field('ProductUpdates.OBJ_TAB_F17').val(null);
-                }
-            });
-
-            // Update An Existing Product Form: clear report select field on backspace or delete
-            $(document).on('keydown', '#reportPU', function (event) {
-                if (event.keyCode == 8 || event.keyCode == 46) {
-                    editor.field('ProductUpdates.OBJ_TAB_F18').val(null);
-                }
-            });
-
-            // Update An Existing Product Form: clear family select field on backspace or delete
-            $(document).on('keydown', '#familyPU', function (event) {
-                if (event.keyCode == 8 || event.keyCode == 46) {
-                    editor.field('ProductUpdates.OBJ_TAB_F16').val(null);
-                }
-            });
-
-            // Update An Existing Product Form: clear like code select field on backspace or delete
-            $(document).on('keydown', '#likecodePU', function (event) {
-                if (event.keyCode == 8 || event.keyCode == 46) {
-                    editor.field('ProductUpdates.LIKE_TAB_F122').val(null);
-                }
-            });
-
-            // Update An Existing Product Form: clear like code select field on button press
-            $(document).on('click', '#clearLikeCode', function () {
-                editor.field('ProductUpdates.LIKE_TAB_F122').val(null);
-            });
-
 
             /***********************************************************************************************************************/
 
 
-            // Create the DataTables table
+            // DataTables table initilazation
             var table = $('#ProductMaintenance').DataTable({
+                // Enable or disable rendering of only necessary HTML elements
                 deferRender: true,
+                // Enable or disable automatic column width calculation.
                 autoWidth: true,
+                // Enable or disable the ability to select a row
                 select: true,
-                // Default view showing incomplete requests
+                // Default view showing only incomplete requests
                 initComplete: function (e, dt, node, config) {
                     table.column(2).search('^1 - Waiting for Manager Review$|^2 - More Info Needed$|^3 - Manager Review Completed$', true, false).draw()
                 },
+                // Column default settings
                 columnDefs: [
-                    { orderable: false, targets: 1 },
+                    {
+                        // Disable sorting on column 1 ( 0-indexed )
+                        orderable: false, targets: 1
+                    },
                     {
                         // Show up to 16 characters in UPC field then hide with ellipses
                         targets: 3,
@@ -2068,8 +2123,15 @@
                         render: $.fn.dataTable.render.ellipsis(17)
                     }
                 ],
+                // Change New Products request type background green
+                rowCallback: function (row, data, index) {
+                    if (data.RequestTypes.requestname == "New Product") { $(row).find('td:eq(0)').css('background-color', '#FAC090'); }
+                    if (data.RequestTypes.requestname !== "New Product") { $(row).find('td:eq(0)').css('background-color', '#E6EDD7'); }
+                },
                 // Default table lengths
                 lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "All"]],
+                // Default table order
+                order: [[8, "desc"]],
                 // Table data source
                 ajax: {
                     url: '/api/ProductMaintenance'
@@ -2097,15 +2159,9 @@
                     },
                     { data: "ProductUpdates.completeddate", visible: false }
                 ],
-                // Change New Products request type background green
-                rowCallback: function (row, data, index) {
-                    if (data.RequestTypes.requestname == "New Product") { $(row).find('td:eq(0)').css('background-color', '#FAC090'); }
-                    if (data.RequestTypes.requestname !== "New Product") { $(row).find('td:eq(0)').css('background-color', '#E6EDD7'); }
-                },
                 // Control button layout
                 dom: '<"floatRight"B><"clear">lfrtip',
-                // Default table order
-                order: [[8, "desc"]],
+                // Buttons
                 buttons: [
                     // New Product Form: opens the New Product form
                     { text: 'New Product', formTitle: 'Add A New Product', extend: 'create', editor: editorNP,
@@ -2304,12 +2360,14 @@
                                 .column(2).search('^1 - Waiting for Manager Review$|^2 - More Info Needed$|^3 - Manager Review Completed$|^4 - Completed$', true, false).column(8).order('desc').draw()
                         }
                     },
-
-                    // Redirects user to New Products page
-                    { text: 'Manage New Products (Export)', attr: { id: 'ManageNewProducts' }, action: function () { window.location = 'NewProducts' } },
-
-                    // Redirects user to Product Updates page
-                    { text: 'Manage Update Requests', action: function () { window.location = 'ProductUpdates' } }
+                    {
+                        // Redirects user to New Products page
+                        text: 'Manage New Products (Export)', attr: { id: 'ManageNewProducts' }, action: function () { window.location = 'NewProducts' }
+                    },
+                    {
+                        // Redirects user to Product Updates page
+                        text: 'Manage Update Requests', action: function () { window.location = 'ProductUpdates' }
+                    }
                 ]
             });
 

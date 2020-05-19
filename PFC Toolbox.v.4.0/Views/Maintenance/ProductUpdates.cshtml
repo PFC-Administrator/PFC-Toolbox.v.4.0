@@ -65,19 +65,13 @@
 
     <script>
 
-        // Reference ~/Content/Functions.js for custom functions
-        // Function to format case cost field
-        function caseCostFormatter(string) {
-            return string.replace(/[^0-9.]/g, "")
-                .replace("NA", "")
-                .replace("na", "");
-        };
-
+        // Current logged in user's name
         var currentUser = "@CreatedBy";
-        var editorPR;
-        var editor;
+
+        // Activates all code inside when DOM of page is loaded
         $(document).ready(function () {
 
+            // Moment date format
             $.fn.dataTable.moment('M/D/YYYY h:mm:ss A');
 
             // Disable autocomplete on form fields
@@ -417,6 +411,9 @@
                 ]
             });
 
+            /***********************************************************/
+            // Field formatting and filtering
+
             // Update An Existing Product Form: converts receipt description to title case
             editor.field('ProductUpdates.OBJ_TAB_F29').input().on('blur', function () {
                 var productName = editor.field('ProductUpdates.OBJ_TAB_F29').val();
@@ -481,32 +478,6 @@
                 var ingredients = editor.field('ProductUpdates.IngredientList').val();
                 ingredients = removeSpecials(ingredients);
                 editor.field('ProductUpdates.IngredientList').val(ingredients);
-            });
-
-            // Update An Existing Product Form: shows completed by info if product is marked as complete
-            editor.on('open', function () {
-
-                // Hides cost info on load
-                editor.field('ProductUpdates.COST_TAB_F27').hide();
-                editor.field('ProductUpdates.COST_TAB_F26').hide();
-                editor.field('ProductUpdates.PRICE_TAB_F49').hide();
-                editor.field('ProductUpdates.COST_TAB_F19').hide();
-
-                // Hide calculate button
-                $("#calculate").hide();
-
-                // Get current time each time form is opened
-                editor.field('ProductUpdates.datecreated').val(getDate());
-
-                // If request is complete show completed date and created by; else, hide
-                if (editor.field('ProductUpdates.productstatusID').val() == 4) {
-                    editor.field('ProductUpdates.completeddate').show();
-                    editor.field('ProductUpdates.completedby').show();
-                }
-                else {
-                    editor.field('ProductUpdates.completeddate').hide();
-                    editor.field('ProductUpdates.completedby').hide();
-                }
             });
 
             // Update An Existing Product Form: on request type change
@@ -608,53 +579,51 @@
                 });
             });
 
-            // Update An Existing Product Form: display cost info when cost button is clicked
-            $(document).on('click', '#cost', function () {
-                $(editor.node('ProductUpdates.COST_TAB_F27')).toggle();
-                $(editor.node('ProductUpdates.COST_TAB_F26')).toggle();
-                $(editor.node('ProductUpdates.PRICE_TAB_F49')).toggle();
-                $(editor.node('ProductUpdates.COST_TAB_F19')).toggle();
+            /***********************************************************/
+            // Buttons
 
-                if (editor.displayed().indexOf('myFieldName') !== -1) {
-                    editor.field('ProductUpdates.COST_TAB_F38').hide();
-                    $('#calculate').show();
-                } else {
+            // Update An Existing Product Form: SRP button
+            $('<button title="Click here to calculate the suggested retail price." id="srpPU" style="position:absolute;top:20%;right:12.5%">SRP</button>').insertAfter(
+                editor.field('ProductUpdates.price_tab_f30').input()
+            );
+
+            // Update An Existing Product Form: SRP calculator
+            $(document).on('click', '#srpPU', function () {
+
+                // If cost fields aren't displayed, display them
+                if (editor.displayed().indexOf('ProductUpdates.COST_TAB_F27') == -1) {
+                    editor.field('ProductUpdates.COST_TAB_F27').show();
+                    editor.field('ProductUpdates.COST_TAB_F26').show();
+                    editor.field('ProductUpdates.PRICE_TAB_F49').show();
+                    editor.field('ProductUpdates.COST_TAB_F19').show();
                     editor.field('ProductUpdates.COST_TAB_F38').show();
                 }
 
-                $('#calculate').toggle();
-            });
-
-            // Update An Existing Product Form: SRP Calculator
-            $(document).on('click', '#calculate', function () {
-                var srp;
-
-                if (editor.field('ProductUpdates.PRICE_TAB_F49').val() == null || editor.field('ProductUpdates.PRICE_TAB_F49').val() == "")
-                {
-                    alert('Please enter the target margin.');
-                }
-                else
-                {
+                // If margin is empty, alert user; else, get value
+                if (editor.field('ProductUpdates.PRICE_TAB_F49').val() == null || editor.field('ProductUpdates.PRICE_TAB_F49').val() == "") {
+                    alert('Please enter the target margin in the Retail Margin field.');
+                    editor.field('ProductUpdates.PRICE_TAB_F49').focus();
+                } else {
                     var targetMargin = editor.field('ProductUpdates.PRICE_TAB_F49').val();
 
-                    if (editor.field('ProductUpdates.COST_TAB_F19').val() == null || editor.field('ProductUpdates.COST_TAB_F19').val() == "")
-                    {
-                        alert('Please enter the number of items per case or a 1.');
-                    }
-                    else
-                    {
+                    // If items per case is empty, alert user; else, get value
+                    if (editor.field('ProductUpdates.COST_TAB_F19').val() == null || editor.field('ProductUpdates.COST_TAB_F19').val() == "") {
+                        alert('Please enter the number of items per case in the Items Per Case field.');
+                        editor.field('ProductUpdates.COST_TAB_F19').focus();
+                    } else {
                         var itemsPerCase = editor.field('ProductUpdates.COST_TAB_F19').val();
 
-                        if (editor.field('ProductUpdates.COST_TAB_F38').val() == null || editor.field('ProductUpdates.COST_TAB_F38').val() == "")
-                        {
+                        // If case cost is empty, alert user; else, get value
+                        if (editor.field('ProductUpdates.COST_TAB_F38').val() == null || editor.field('ProductUpdates.COST_TAB_F38').val() == "") {
                             alert('Please enter a cost per case.');
-                        }
-                        else
-                        {
+                            editor.field('ProductUpdates.COST_TAB_F38').focus();
+                        } else {
                             var costPerCase = editor.field('ProductUpdates.COST_TAB_F38').val();
 
-                            srp = ( ( Math.round( ( ( costPerCase / itemsPerCase ) / ( 1 - ( targetMargin / 100 ) ) ) * 10 ) / 10 ) - .01 );
+                            // Calculate suggested retail price
+                            var srp = ((Math.round(((costPerCase / itemsPerCase) / (1 - (targetMargin / 100))) * 10) / 10) - .01);
 
+                            // Set suggested retail price
                             editor.field('ProductUpdates.price_tab_f30').val(toFixed(srp, 2));
                         }
                     }
@@ -663,23 +632,203 @@
 
             // Update An Existing Product Form: Cost button
             $('<button title="Click here to display all cost fields." id="cost" style="position:absolute;top:20%;right:12.5%">Cost</button>').insertAfter(
-                editor.field('ProductUpdates.price_tab_f30').input()
-            );
-
-            // Update An Existing Product Form: SRP button
-            $('<button title="Click here to calculate the suggested retail price." id="srpcalculator" style="position:absolute;top:20%;right:5%">SRP</button>').insertAfter(
-                editor.field('ProductUpdates.price_tab_f30').input()
-            );
-
-            // Update An Existing Product Form: Calculate button
-            $('<button title="Click here to calculate unit cost." id="calculate" style="position:absolute;top:20%;right:8.5%">Calculate</button>').insertAfter(
                 editor.field('ProductUpdates.COST_TAB_F38').input()
             );
+
+            // Update An Existing Product Form: display cost info when cost button is clicked
+            $(document).on('click', '#cost', function () {
+                $(editor.node('ProductUpdates.COST_TAB_F27')).toggle();
+                $(editor.node('ProductUpdates.COST_TAB_F26')).toggle();
+                $(editor.node('ProductUpdates.PRICE_TAB_F49')).toggle();
+                $(editor.node('ProductUpdates.COST_TAB_F19')).toggle();
+            });
+
+            // Update An Existing Product Form: Calculate % TPR button
+            $('<button title="Click here to calculate TPR by percentage." id="calculatePTPR" style="position:absolute;top:20%;right:10.5%">% TPR</button>').insertAfter(
+                editor.field('ProductUpdates.promotprprice').input()
+            );
+
+            // Update An Existing Product Form: % TRP Calculator
+            $(document).on('click', '#calculatePTPR', function () {
+
+                // If retail field is empty, alert user
+                if (editor.field('ProductUpdates.price_tab_f30').val() == null || editor.field('ProductUpdates.price_tab_f30').val() == "") {
+                    alert('Please enter the regular retail in the Retail Price field.');
+                    editor.field('ProductUpdates.price_tab_f30').focus();
+                } else {
+
+                    // Prompt user for percent discount
+                    percentage = prompt("Please enter the percent discount...");
+
+                    // Get regular retail value
+                    regRetail = editor.field('ProductUpdates.price_tab_f30').val();
+
+                    // Calculate percent temporary reduced price
+                    ptpr = regRetail * (1 - (percentage / 100));
+
+                    // Set percent discount
+                    editor.field('ProductUpdates.promotprprice').val(toFixed(ptpr, 2));
+                }
+            });
 
             // Update An Existing Product Form: Like code x button
             $('<i id="clearLikeCode" class="fa fa-close"></i>').insertAfter(
                 editor.field('ProductUpdates.LIKE_TAB_F122').input()
             );
+
+            // Update An Existing Product Form: clear like code select field on button press
+            $(document).on('click', '#clearLikeCode', function () {
+                editor.field('ProductUpdates.LIKE_TAB_F122').val(null);
+            });
+
+            /***********************************************************/
+            // Clear fields on backspace or delete key press
+
+            // Update An Existing Product Form: clear brand select field
+            $(document).on('keydown', '#brandPU', function (event) {
+                if (event.keyCode == 8 || event.keyCode == 46) {
+                    editor.field('ProductUpdates.OBJ_TAB_F155').val(null);
+                }
+            });
+
+            // Update An Existing Product Form: clear subdepartment select field
+            $(document).on('keydown', '#subdepartmentPU', function (event) {
+                if (event.keyCode == 8 || event.keyCode == 46) {
+                    editor.field('ProductUpdates.POS_TAB_F04').val(null);
+                }
+            });
+
+            // Update An Existing Product Form: clear category select field
+            $(document).on('keydown', '#categoryPU', function (event) {
+                if (event.keyCode == 8 || event.keyCode == 46) {
+                    editor.field('ProductUpdates.OBJ_TAB_F17').val(null);
+                }
+            });
+
+            // Update An Existing Product Form: clear report select field
+            $(document).on('keydown', '#reportPU', function (event) {
+                if (event.keyCode == 8 || event.keyCode == 46) {
+                    editor.field('ProductUpdates.OBJ_TAB_F18').val(null);
+                }
+            });
+
+            // Update An Existing Product Form: clear family select field
+            $(document).on('keydown', '#familyPU', function (event) {
+                if (event.keyCode == 8 || event.keyCode == 46) {
+                    editor.field('ProductUpdates.OBJ_TAB_F16').val(null);
+                }
+            });
+
+            // Update An Existing Product Form: clear like code select field
+            $(document).on('keydown', '#likecodePU', function (event) {
+                if (event.keyCode == 8 || event.keyCode == 46) {
+                    editor.field('ProductUpdates.LIKE_TAB_F122').val(null);
+                }
+            });
+
+            /***********************************************************/
+            // Form functions
+
+            // Update An Existing Product Form: activate an inline edit on click of a table cell that has the className attribute "editable" set to it
+            $('#ProductUpdates').on('click', 'tbody td.editable', function (e) {
+                editor.inline(this, {
+                    onBlur: 'submit'
+                });
+            });
+
+            // Update An Existing Product Form: set last updated date and last updated by upon edit
+            editor.field('ProductUpdates.productstatusID').input().on('edit', function () {
+                editor.field('ProductUpdates.lastupdatedon').val(getDate());
+                editor.field('ProductUpdates.lastupdatedby').val(currentUser);
+            });
+
+            // Update An Existing Product Form: set completed date and completed by upon record completion
+            editor.field('ProductUpdates.productstatusID').input().on('change', function (e, d) {
+                if (editor.field('ProductUpdates.productstatusID').val() == '4' && (editor.field('ProductUpdates.completeddate').val() == null || editor.field('ProductUpdates.completeddate').val() == "") && (editor.field('ProductUpdates.completedby').val() == null || editor.field('ProductUpdates.completedby').val() == "")) {
+                    editor.field('ProductUpdates.completeddate').val(getDate());
+                    editor.field('ProductUpdates.completedby').val(currentUser);
+                }
+            });
+
+            // Update An Existing Product Form: send email to user's with requests marked as more info needed
+            editor.field('ProductUpdates.productstatusID').input().on('blur', function () {
+                if (editor.field('ProductUpdates.productstatusID').val() == '2') {
+
+                    // Gather data from each selected row
+                    var data = table.rows({ selected: true }).data();
+
+                    var CreatedBy = data[0].createdby;
+
+                    if (confirm('Send email?')) {
+                        var subject = "More Info Needed";
+                        var body = "Hi " + CreatedBy + ", ";
+                        window.open('mailto:?subject=' + subject + '&body=' + body);
+                    }
+                };
+            });
+
+            // Product Maintenance: adds a drop down arrow next to the product status select list
+            var dropDownArrow = function (data, type, row) {
+                if (type === 'display') {
+                    return data + '<i class="fa fa-toggle-down" style="font-size:15px;color:black;float:right;padding-right:7%;"/>';
+                }
+                return data;
+            };
+
+
+            // Update An Existing Product Form: shows completed by info if product is marked as complete
+            editor.on('open', function () {
+
+                // Hides cost info on load
+                editor.field('ProductUpdates.COST_TAB_F27').hide();
+                editor.field('ProductUpdates.COST_TAB_F26').hide();
+                editor.field('ProductUpdates.PRICE_TAB_F49').hide();
+                editor.field('ProductUpdates.COST_TAB_F19').hide();
+
+                // Hide calculate button
+                $("#calculate").hide();
+
+                // Get current time each time form is opened
+                editor.field('ProductUpdates.datecreated').val(getDate());
+
+                // If request is complete show completed date and created by; else, hide
+                if (editor.field('ProductUpdates.productstatusID').val() == 4) {
+                    editor.field('ProductUpdates.completeddate').show();
+                    editor.field('ProductUpdates.completedby').show();
+                }
+                else {
+                    editor.field('ProductUpdates.completeddate').hide();
+                    editor.field('ProductUpdates.completedby').hide();
+                }
+            });
+
+            // Update An Existing Product Form: show fields with values or hide fields with nothing
+            editor.on('initEdit', function () {
+                for (i = 0; i < editor.fields().length; i++) {
+
+                    // If fields contain a value, show them
+                    if (editor.field(editor.fields()[i]).val()) {
+                        editor.field(editor.fields()[i]).show();
+
+                        // Never show these fields!
+                        editor.field('ProductUpdates.POS_TAB_F96').hide();
+                        editor.field('ProductUpdates.POS_TAB_F150').hide();
+                        editor.field('ProductUpdates.POS_TAB_F83').hide();
+                        editor.field('ProductUpdates.POS_TAB_F171').hide();
+                        editor.field('ProductUpdates.createdby').hide();
+                        editor.field('ProductUpdates.datecreated').hide();
+                        editor.field('ProductUpdates.completeddate').hide();
+                        editor.field('ProductUpdates.completedby').hide();
+                        editor.field('ProductUpdates.lastupdatedon').hide();
+                        editor.field('ProductUpdates.lastupdatedby').hide();
+                    }
+
+                    // If fields are null, empty, or undefined; hide them
+                    if (!editor.field(editor.fields()[i]).val()) {
+                        editor.field(editor.fields()[i]).hide();
+                    }
+                }
+            });
 
             // Update An Existing Product Form: field validation
             editor.on('preSubmit', function (e, o, action) {
@@ -820,140 +969,30 @@
                 }
             });
 
-            // Update An Existing Product Form: activate an inline edit on click of a table cell that has the className attribute "editable" set to it
-            $('#ProductUpdates').on('click', 'tbody td.editable', function (e) {
-                editor.inline(this, {
-                    onBlur: 'submit'
-                });
-            });
 
-            // Update An Existing Product Form: set last updated date and last updated by upon edit
-            editor.field('ProductUpdates.productstatusID').input().on('edit', function () {
-                editor.field('ProductUpdates.lastupdatedon').val(getDate());
-                editor.field('ProductUpdates.lastupdatedby').val(currentUser);
-            });
+            /***********************************************************************************************************************/
 
-            // Update An Existing Product Form: set completed date and completed by upon record completion
-            editor.field('ProductUpdates.productstatusID').input().on('change', function (e, d) {
-                if (editor.field('ProductUpdates.productstatusID').val() == '4' && (editor.field('ProductUpdates.completeddate').val() == null || editor.field('ProductUpdates.completeddate').val() == "") && (editor.field('ProductUpdates.completedby').val() == null || editor.field('ProductUpdates.completedby').val() == "")){
-                    editor.field('ProductUpdates.completeddate').val(getDate());
-                    editor.field('ProductUpdates.completedby').val(currentUser);
-                }
-            });
 
-            // Update An Existing Product Form: send email to user's with requests marked as more info needed
-            editor.field('ProductUpdates.productstatusID').input().on('blur', function () {
-                if (editor.field('ProductUpdates.productstatusID').val() == '2') {
-
-                    // Gather data from each selected row
-                    var data = table.rows({ selected: true }).data();
-
-                    var CreatedBy = data[0].createdby;
-
-                    if (confirm('Send email?')) {
-                        var subject = "More Info Needed";
-                        var body = "Hi " + CreatedBy + ", ";
-                        window.open('mailto:?subject=' + subject + '&body=' + body);
-                    }
-                };
-            });
-
-            // Product Maintenance: adds a drop down arrow next to the product status select list
-            var dropDownArrow = function (data, type, row) {
-                if (type === 'display') {
-                    return data + '<i class="fa fa-toggle-down" style="font-size:15px;color:black;float:right;padding-right:7%;"/>';
-                }
-                return data;
-            };
-
-            // Update An Existing Product Form: clear brand select field
-            $(document).on('keydown', '#brandPU', function (event) {
-                if (event.keyCode == 8 || event.keyCode == 46) {
-                    editor.field('ProductUpdates.OBJ_TAB_F155').val(null);
-                }
-            });
-
-            // Update An Existing Product Form: clear subdepartment select field
-            $(document).on('keydown', '#subdepartmentPU', function (event) {
-                if (event.keyCode == 8 || event.keyCode == 46) {
-                    editor.field('ProductUpdates.POS_TAB_F04').val(null);
-                }
-            });
-
-            // Update An Existing Product Form: clear category select field
-            $(document).on('keydown', '#categoryPU', function (event) {
-                if (event.keyCode == 8 || event.keyCode == 46) {
-                    editor.field('ProductUpdates.OBJ_TAB_F17').val(null);
-                }
-            });
-
-            // Update An Existing Product Form: clear report select field
-            $(document).on('keydown', '#reportPU', function (event) {
-                if (event.keyCode == 8 || event.keyCode == 46) {
-                    editor.field('ProductUpdates.OBJ_TAB_F18').val(null);
-                }
-            });
-
-            // Update An Existing Product Form: clear family select field
-            $(document).on('keydown', '#familyPU', function (event) {
-                if (event.keyCode == 8 || event.keyCode == 46) {
-                    editor.field('ProductUpdates.OBJ_TAB_F16').val(null);
-                }
-            });
-
-            // Update An Existing Product Form: clear like code select field
-            $(document).on('keydown', '#likecodePU', function (event) {
-                if (event.keyCode == 8 || event.keyCode == 46) {
-                    editor.field('ProductUpdates.LIKE_TAB_F122').val(null);
-                }
-            });
-
-            // Update An Existing Product Form: clear like code select field
-            $(document).on('click', '#clearLikeCode', function () {
-                editor.field('ProductUpdates.LIKE_TAB_F122').val(null);
-            });
-
-            // Update An Existing Product Form: show fields with values or hide fields with nothing
-            editor.on('initEdit', function () {
-                for (i = 0; i < editor.fields().length; i++) {
-
-                    // If fields contain a value, show them
-                    if (editor.field(editor.fields()[i]).val()) {
-                        editor.field(editor.fields()[i]).show();
-
-                        // Never show these fields!
-                        editor.field('ProductUpdates.POS_TAB_F96').hide();
-                        editor.field('ProductUpdates.POS_TAB_F150').hide();
-                        editor.field('ProductUpdates.POS_TAB_F83').hide();
-                        editor.field('ProductUpdates.POS_TAB_F171').hide();
-                        editor.field('ProductUpdates.createdby').hide();
-                        editor.field('ProductUpdates.datecreated').hide();
-                        editor.field('ProductUpdates.completeddate').hide();
-                        editor.field('ProductUpdates.completedby').hide();
-                        editor.field('ProductUpdates.lastupdatedon').hide();
-                        editor.field('ProductUpdates.lastupdatedby').hide();
-                    }
-
-                    // If fields are null, empty, or undefined; hide them
-                    if (!editor.field(editor.fields()[i]).val()) {
-                        editor.field(editor.fields()[i]).hide();
-                    }
-                }
-            });
-
-            // Create the DataTables table
+            // DataTables table initilazation
             var table = $('#ProductUpdates').DataTable({
-                select: true,
+                // Enable or disable rendering of only necessary HTML elements
                 deferRender: true,
+                // Enable or disable automatic column width calculation.
                 autoWidth: true,
-                // This is the default view showing uncompleted requests
+                // Enable or disable the ability to select a row
+                select: true,
+                // Default view showing only incomplete requests
                 initComplete: function (e, dt, node, config) {
                     table
                         .column(0).search('^((?!(New Product)).)*$', true, false)
                         .column(2).search('^((?!(4 - Completed)).)*$', true, false).draw()
                 },
+                // Column default settings
                 columnDefs: [
-                    { orderable: false, targets: 1 },
+                    {
+                        // Disable sorting on column 1 ( 0-indexed )
+                        orderable: false, targets: 1
+                    },
                     {
                         // Show up to 14 characters in UPC field then hide with ellipses
                         targets: 3,
@@ -965,8 +1004,15 @@
                         render: $.fn.dataTable.render.ellipsis(17)
                     }
                 ],
+                // Change New Products request type background green
+                rowCallback: function (row, data, index) {
+                    if (data.RequestTypes.requestname == "New Product") { $(row).find('td:eq(0)').css('background-color', '#FAC090'); }
+                    if (data.RequestTypes.requestname !== "New Product") { $(row).find('td:eq(0)').css('background-color', '#E6EDD7'); }
+                },
                 // Default table lengths
                 lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "All"]],
+                // Default table order
+                order: [[12, "desc"]],
                 // Table data source
                 ajax: {
                     url: '/api/ProductUpdates'
@@ -1010,14 +1056,8 @@
                     { data: "ProductUpdates.IngredientList", visible: false },
                     { data: "ProductUpdates.PRICE_TAB_F49", visible: false }
                 ],
-                // Change New Products request type background green
-                rowCallback: function (row, data, index) {
-                    if (data.RequestTypes.requestname == "New Product") { $(row).find('td:eq(0)').css('background-color', '#FAC090'); }
-                    if (data.RequestTypes.requestname !== "New Product") { $(row).find('td:eq(0)').css('background-color', '#E6EDD7'); }
-                },
                 // Control button layout
                 dom: '<"floatRight"B><"clear">lfrtip',
-                order: [[12, "desc"]],
                 // Default table order
                 buttons: [
                     { extend: 'remove', editor: editor },
@@ -1154,9 +1194,10 @@
                             document.getElementById("exportButton").style.display = "none";
                         }
                     },
-
-                    // Redirects user back to main Product Maintenance page
-                    { text: 'Back', action: function () { window.location = 'ProductMaintenance' } }
+                    {
+                        // Redirects user back to main Product Maintenance page
+                        text: 'Back', action: function () { window.location = 'ProductMaintenance' }
+                    }
                 ]
             });
 
