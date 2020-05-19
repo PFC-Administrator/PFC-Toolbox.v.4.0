@@ -1096,11 +1096,14 @@
             /***********************************************************/
             // Form functions
 
+            // New Product Form: code to be executed on create form open
+            editorNP.on('initCreate', function () {
+                // Get current time each time create form is opened
+                editorNP.field('ProductUpdates.datecreated').val(getDate());
+            });
+
             // New Product Form: code to be executed on form open
             editorNP.on('open', function () {
-
-                // Get updated time each time new product form is opened
-                editorNP.field('ProductUpdates.datecreated').val(getDate());
 
                 // Filter available categories on subdepartment selection
                 editorNP.dependent('ProductUpdates.POS_TAB_F04', '/api/Categories');
@@ -1903,6 +1906,12 @@
             // Form functions
 
             // Update An Existing Product Form: shows completed by info if product is marked as complete
+            editor.on('initCreate', function () {
+                // Get current time each time form is opened
+                editor.field('ProductUpdates.datecreated').val(getDate());
+            });
+
+            // Update An Existing Product Form: shows completed by info if product is marked as complete
             editor.on('open', function () {
 
                 // Hides cost info on load
@@ -1912,7 +1921,7 @@
                 editor.field('ProductUpdates.COST_TAB_F19').hide();
 
                 // Get current time each time form is opened
-                editor.field('ProductUpdates.datecreated').val(getDate());
+                //editor.field('ProductUpdates.datecreated').val(getDate());
 
                 // If request is complete show completed date and created by; else, hide
                 if (editor.field('ProductUpdates.productstatusID').val() == 4) {
