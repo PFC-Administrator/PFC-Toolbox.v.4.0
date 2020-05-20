@@ -736,20 +736,6 @@
                 });
             });
 
-            // Update An Existing Product Form: set last updated date and last updated by upon edit
-            editor.field('ProductUpdates.productstatusID').input().on('edit', function () {
-                editor.field('ProductUpdates.lastupdatedon').val(getDate());
-                editor.field('ProductUpdates.lastupdatedby').val(currentUser);
-            });
-
-            // Update An Existing Product Form: set completed date and completed by upon record completion
-            editor.field('ProductUpdates.productstatusID').input().on('change', function (e, d) {
-                if (editor.field('ProductUpdates.productstatusID').val() == '4' && (editor.field('ProductUpdates.completeddate').val() == null || editor.field('ProductUpdates.completeddate').val() == "") && (editor.field('ProductUpdates.completedby').val() == null || editor.field('ProductUpdates.completedby').val() == "")) {
-                    editor.field('ProductUpdates.completeddate').val(getDate());
-                    editor.field('ProductUpdates.completedby').val(currentUser);
-                }
-            });
-
             // Update An Existing Product Form: send email to user's with requests marked as more info needed
             editor.field('ProductUpdates.productstatusID').input().on('blur', function () {
                 if (editor.field('ProductUpdates.productstatusID').val() == '2') {
@@ -795,8 +781,14 @@
                 }
             });
 
-            // Update An Existing Product Form: show fields with values or hide fields with nothing
+            // Update An Existing Product Form: on product edit
             editor.on('initEdit', function () {
+
+                // Set last updated date and last updated by upon edit
+                editor.field('ProductUpdates.lastupdatedon').val(getDate());
+                editor.field('ProductUpdates.lastupdatedby').val(currentUser);
+
+                // Show fields with values or hide fields with nothing
                 for (i = 0; i < editor.fields().length; i++) {
 
                     // If fields contain a value, show them
@@ -959,6 +951,14 @@
                     if (this.inError()) {
                         return false;
                     }
+                }
+            });
+
+            // Update An Existing Product Form: set completed date and completed by upon record completion
+            editor.on('initSubmit', function () {
+                if (editor.field('ProductUpdates.productstatusID').val() == 4) {
+                    editor.field('ProductUpdates.completeddate').val(getDate());
+                    editor.field('ProductUpdates.completedby').val(currentUser);
                 }
             });
 
