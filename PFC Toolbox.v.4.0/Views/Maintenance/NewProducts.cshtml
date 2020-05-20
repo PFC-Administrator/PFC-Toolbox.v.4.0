@@ -677,6 +677,13 @@
                         // Creates an Export New Products button and executes AJAX requests
                         text: 'Export', action: function (e, dt, node, config) {
 
+                            // If no rows selected, display message
+                            if (table.rows('.selected').count() == 0) {
+                                alert("Please select a product to export.");
+                                return;
+                            }
+
+                            // Confirm and begin export of new product(s) selected
                             if ( confirm( 'Export ' + table.rows('.selected').count() + ' product(s)?' ) ) {
 
                                 // Gather data from each selected row
@@ -979,19 +986,39 @@
                                 // Call to the processItem() function.
                                 exportItem();
 
-                                // Update all selected rows to completed.
+                                // Gather all selected rows.
                                 var rows = table.rows({ selected: true }).indexes();
-                                editorNP.edit(rows, false);
-                                $.each(rows, function (i, rowIdx) {
-                                    var row = table.row(rowIdx);
 
-                                    editorNP.field('ProductUpdates.completeddate').multiSet(row.id(), getDate());
-                                    editorNP.field('ProductUpdates.completedby').multiSet(row.id(), currentUser);
-                                    editorNP.field('ProductUpdates.productstatusID').multiSet(row.id(), 4);
-                                });
+                                // If exporting 1 product, use DataTables set method; else, use DataTables multiSet method.
+                                if (rows.length == 1) {
 
-                                // Submit all updated rows.
-                                editorNP.submit();
+                                    // Get selected row's id.
+                                    var row = table.row(rows);
+
+                                    // Open hidden edit form and update fields.
+                                    editorNP.edit(row, false)
+                                        .set('ProductUpdates.completeddate', getDate())
+                                        .set('ProductUpdates.completedby', currentUser)
+                                        .set('ProductUpdates.productstatusID', 4);
+
+                                    // Pause execution long enough to let dependent category field load.
+                                    setTimeout(() => { editorNP.submit(); }, 2000);
+                                } else {
+                                    // Open hidden edit form and update fields for multiple products.
+                                    editorNP.edit(rows, false);
+
+                                    // Loop through each product updating fields.
+                                    $.each(rows, function (i, rowIdx) {
+                                        var row = table.row(rowIdx);
+
+                                        editorNP.field('ProductUpdates.completeddate').multiSet(row.id(), getDate());
+                                        editorNP.field('ProductUpdates.completedby').multiSet(row.id(), currentUser);
+                                        editorNP.field('ProductUpdates.productstatusID').multiSet(row.id(), 4);
+                                    });
+
+                                    // Submit all updated rows.
+                                    editorNP.submit();
+                                }
 
                                 // Display how many records were exported.
                                 alert('Exported ' + table.rows('.selected').count() + ' products!');
