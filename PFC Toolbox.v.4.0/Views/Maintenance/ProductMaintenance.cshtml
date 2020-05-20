@@ -1150,54 +1150,55 @@
                     // UPC - required
                     if (!editorNP.field('ProductUpdates.F01').val()) {
                         editorNP.field('ProductUpdates.F01').error('Required');
-                    } else {
-
-                        // Pad UPC to 13 digits with 0's.
-                        var UPC = pad(editorNP.field('ProductUpdates.F01').val(), 13, 0);
-
-                        // Asynchronous AJAX request, will freeze the page until request is complete.
-                        var CheckUPC = $.ajax({
-                            url: "api/CheckUPC",
-                            type: "GET",
-                            dataType: "json",
-                            beforeSend: function () {
-                                // Show loading icon next to UPC field.
-                                editorNP.field('ProductUpdates.F01').processing(true);
-                            },
-                            error: function (error) {
-                                console.log(`Error ${error}`);
-                            },
-                            complete: function () {
-                                // Show loading icon next to UPC field.
-                                editorNP.field('ProductUpdates.F01').processing(false);
-                            }
-                        });
-
-                        // Execute the AJAX request.
-                        CheckUPC.done(function (data) {
-
-                            // Gather all used UPC's in SMS.
-                            var used = [];
-                            for (i = 0; i < data.data.length; i++) {
-                                used.push(data.data[i].OBJ_TAB.F01);
-                            }
-
-                            // Count how many UPC's match entered UPC.
-                            var count = 0;
-                            for (i = 0; i < used.length; i++) {
-                                if (UPC == used[i]) {
-                                    editorNP.field('ProductUpdates.F01').val('');
-                                    editorNP.field('ProductUpdates.F01').error("UPC/PLU already exists in SMS");
-                                    return count++;
-                                }
-                            }
-
-                            // If there is at least 1 match, clear field and display error; else, success!
-                            if (count == 0) {
-                                editorNP.field('ProductUpdates.F01').val(UPC);
-                            }
-                        });
                     }
+                    //else {
+
+                    //    // Pad UPC to 13 digits with 0's.
+                    //    var UPC = pad(editorNP.field('ProductUpdates.F01').val(), 13, 0);
+
+                    //    // Asynchronous AJAX request, will freeze the page until request is complete.
+                    //    var CheckUPC = $.ajax({
+                    //        url: "api/CheckUPC",
+                    //        type: "GET",
+                    //        dataType: "json",
+                    //        beforeSend: function () {
+                    //            // Show loading icon next to UPC field.
+                    //            editorNP.field('ProductUpdates.F01').processing(true);
+                    //        },
+                    //        error: function (error) {
+                    //            console.log(`Error ${error}`);
+                    //        },
+                    //        complete: function () {
+                    //            // Show loading icon next to UPC field.
+                    //            editorNP.field('ProductUpdates.F01').processing(false);
+                    //        }
+                    //    });
+
+                    //    // Execute the AJAX request.
+                    //    CheckUPC.done(function (data) {
+
+                    //        // Gather all used UPC's in SMS.
+                    //        var used = [];
+                    //        for (i = 0; i < data.data.length; i++) {
+                    //            used.push(data.data[i].OBJ_TAB.F01);
+                    //        }
+
+                    //        // Count how many UPC's match entered UPC.
+                    //        var count = 0;
+                    //        for (i = 0; i < used.length; i++) {
+                    //            if (UPC == used[i]) {
+                    //                editorNP.field('ProductUpdates.F01').val('');
+                    //                editorNP.field('ProductUpdates.F01').error("UPC/PLU already exists in SMS");
+                    //                return count++;
+                    //            }
+                    //        }
+
+                    //        // If there is at least 1 match, clear field and display error; else, success!
+                    //        if (count == 0) {
+                    //            editorNP.field('ProductUpdates.F01').val(UPC);
+                    //        }
+                    //    });
+                    //}
 
                     // Label - required
                     if (!editorNP.field('ProductUpdates.labelID').val()) {
