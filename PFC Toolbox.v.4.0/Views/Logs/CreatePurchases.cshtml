@@ -589,8 +589,14 @@
 
                                     // Retrieve the object from storage
                                     lastNIRetrieved = localStorage.getItem('lastNewInvoice');
+
+                                    // Submit current form
                                     this.submit();
-                                    editor.create();
+
+                                    // Only open new form, if previous form is successfully submitted
+                                    editor.on('submitSuccess', function () {
+                                        editor.create();
+                                    });
                                 }
                             },
                             {

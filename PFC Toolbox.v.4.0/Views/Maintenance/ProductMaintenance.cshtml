@@ -2211,8 +2211,13 @@
                                         // Retrieve the object from storage
                                         lastNPRetrieved = localStorage.getItem('lastNewProduct');
 
+                                        // Submit current form
                                         this.submit();
-                                        editorNP.create();
+
+                                        // Only open new form, if previous form is successfully submitted
+                                        editorNP.on('submitSuccess', function () {
+                                            editorNP.create();
+                                        });
                                     }
                                 },
                                 { text: 'Clear', action: function () { fields = editorNP.displayed(); for (field in fields) { editorNP.field(fields[field]).val(''); }; } },
@@ -2295,8 +2300,13 @@
                                         // Retrieve the object from storage
                                         lastPURetrieved = localStorage.getItem('lastProductUpdate');
 
+                                        // Submit current form
                                         this.submit();
-                                        editor.create();
+
+                                        // Only open new form, if previous form is successfully submitted
+                                        editor.on('submitSuccess', function () {
+                                            editor.create();
+                                        });
                                     }
                                 },
                                 { text: 'Clear', action: function () { fields = editor.displayed(); for (field in fields) { editor.field(fields[field]).val(''); }; } },
