@@ -494,6 +494,12 @@
                     editor.field('ProductUpdates.promotprstartdate').hide();
                     editor.field('ProductUpdates.promotprenddate').hide();
                     editor.field('ProductUpdates.promotprprice').hide();
+
+                    // Clear values when hidden
+                    editor.field('ProductUpdates.signID').val('');
+                    editor.field('ProductUpdates.promotprstartdate').val('');
+                    editor.field('ProductUpdates.promotprenddate').val('');
+                    editor.field('ProductUpdates.promotprprice').val('');
                 }
 
                 // Hides Family Button unless Hackberry's Brand is selected
@@ -501,6 +507,9 @@
                     editor.field('ProductUpdates.OBJ_TAB_F16').show();
                 } else {
                     editor.field('ProductUpdates.OBJ_TAB_F16').hide();
+
+                    // Clear values when hidden
+                    editor.field('ProductUpdates.OBJ_TAB_F16').val();
                 }
             });
 
@@ -510,6 +519,7 @@
                     editor.field('ProductUpdates.LIKE_TAB_F122').show();
                 } else {
                     editor.field('ProductUpdates.LIKE_TAB_F122').hide();
+                    editor.field('ProductUpdates.LIKE_TAB_F122').val('');
                 }
             });
 
@@ -533,6 +543,14 @@
                     editor.field('ProductUpdates.ShelfLife').hide();
                     editor.field('ProductUpdates.IngredientList').hide();
 
+                    // Clear values when hidden
+                    editor.field('ProductUpdates.ScalePLU').val('');
+                    editor.field('ProductUpdates.ScaleItemTypeID').val('');
+                    editor.field('ProductUpdates.TareNetWeight').val('');
+                    editor.field('ProductUpdates.PRICE_TAB_F31').val('');
+                    editor.field('ProductUpdates.ShelfLife').val('');
+                    editor.field('ProductUpdates.IngredientList').val('');
+
                     // Force price
                     editor.field('ProductUpdates.POS_TAB_F83').val(0);
                 }
@@ -547,8 +565,7 @@
                 } else if (editor.field('ProductUpdates.ScaleItemTypeID').val() == '2') {
                     editor.field('ProductUpdates.POS_TAB_F82').val(0);
                     editor.field('ProductUpdates.PRICE_TAB_F31').show();
-                }
-                else {
+                } else {
                     editor.field('ProductUpdates.POS_TAB_F82').val(0);
                 }
             });
