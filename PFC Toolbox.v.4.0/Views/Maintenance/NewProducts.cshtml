@@ -1009,7 +1009,7 @@
                                         .set('ProductUpdates.completedby', currentUser)
                                         .set('ProductUpdates.productstatusID', 4);
 
-                                    // Pause execution long enough to let dependent category field load.
+                                    // Pause execution long enough to let dependent category field load then submit.
                                     setTimeout(() => { editorNP.submit(); }, 2000);
                                 } else {
                                     // Open hidden edit form and update fields for multiple products.
@@ -1025,7 +1025,10 @@
                                     });
 
                                     // Submit all updated rows.
-                                    editorNP.submit();
+                                    //editorNP.submit();
+
+                                    // Pause execution long enough to let dependent category field load then submit.
+                                    setTimeout(() => { editorNP.submit(); }, 3000);
                                 }
 
                                 // Display how many records were exported.
