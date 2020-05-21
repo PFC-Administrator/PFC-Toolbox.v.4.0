@@ -1921,9 +1921,6 @@
                 editor.field('ProductUpdates.PRICE_TAB_F49').hide();
                 editor.field('ProductUpdates.COST_TAB_F19').hide();
 
-                // Get current time each time form is opened
-                //editor.field('ProductUpdates.datecreated').val(getDate());
-
                 // If request is complete show completed date and created by; else, hide
                 if (editor.field('ProductUpdates.productstatusID').val() == 4) {
                     editor.field('ProductUpdates.completeddate').show();
