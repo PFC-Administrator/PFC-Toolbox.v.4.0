@@ -118,6 +118,11 @@
             // Date picker
             var startDate_input = $('input[name="startDate"]');
             var endDate_input = $('input[name="endDate"]');
+            var startDate2_input = $('input[name="startDate2"]');
+            var endDate2_input = $('input[name="endDate2"]');
+            var startDate3_input = $('input[name="startDate3"]');
+            var endDate3_input = $('input[name="endDate3"]');
+
             var options = {
                 format: 'm/dd/yyyy',
                 container: '#custom-pos',
@@ -125,8 +130,13 @@
                 orientation: "left top",
                 autoclose: true,
             };
+
             startDate_input.datepicker(options);
             endDate_input.datepicker(options);
+            startDate2_input.datepicker(options);
+            endDate2_input.datepicker(options);
+            startDate3_input.datepicker(options);
+            endDate3_input.datepicker(options);
 
             // Populate subdepartment select list
             $.ajax({
