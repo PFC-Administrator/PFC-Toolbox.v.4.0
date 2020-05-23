@@ -281,67 +281,67 @@
                         name: "ProductUpdates.POS_TAB_F79",
                         type: "checkbox",
                         options: [
-                            { label: "", "value": 1 }
+                            { label: "", "value": "True" }
                         ],
                         separator: "|",
-                        unselectedValue: 0
+                        unselectedValue: "False"
                     }, {
                         label: "Scalable:",
                         name: "ProductUpdates.POS_TAB_F82",
                         type: "checkbox",
                         options: [
-                            { label: "", "value": 1 }
+                            { label: "", "value": "True" }
                         ],
                         separator: "|",
-                        unselectedValue: 0
+                        unselectedValue: "False"
                     }, {
                         label: "Taxable:",
                         name: "ProductUpdates.POS_TAB_F81",
                         type: "checkbox",
                         options: [
-                            { label: "", "value": 1 }
+                            { label: "", "value": "True" }
                         ],
                         separator: "|",
-                        unselectedValue: 0
+                        unselectedValue: "False"
                     }, {
                         label: "Taxable 2:",
                         name: "ProductUpdates.POS_TAB_F96",
-                        options: [
-                            { label: "", "value": 1 }
-                        ],
                         type: "checkbox",
                         type: "hidden",
-                        unselectedValue: 0,
-                        separator: "|"
+                        options: [
+                            { label: "", "value": "True" }
+                        ],
+                        separator: "|",
+                        unselectedValue: "False"
                     }, {
                         label: "Stop Discount:",
                         name: "ProductUpdates.POS_TAB_F150",
                         type: "checkbox",
+                        type: "hidden",
                         options: [
-                            { label: "", "value": 1 }
+                            { label: "", "value": "True" }
                         ],
                         separator: "|",
-                        unselectedValue: 0,
-                        type: "hidden"
+                        unselectedValue: "False"
                     }, {
                         label: "Force Price:",
                         name: "ProductUpdates.POS_TAB_F83",
                         type: "checkbox",
+                        type: "hidden",
                         options: [
-                            { label: "", "value": 1 }
+                            { label: "", "value": "True" }
                         ],
                         separator: "|",
-                        unselectedValue: 0,
-                        type: "hidden"
+                        unselectedValue: "False"
                     }, {
                         label: "WIC:",
                         name: "ProductUpdates.POS_TAB_F178",
                         type: "checkbox",
                         options: [
-                            { label: "", "value": 1 }
+                            { label: "", "value": "True" }
                         ],
                         separator: "|",
-                        unselectedValue: 0
+                        unselectedValue: "False"
                     }, {
                         label: "Client Age:",
                         name: "ProductUpdates.POS_TAB_F171",
@@ -438,13 +438,6 @@
                 editor.field('ProductUpdates.OBJ_TAB_F255').val(productName);
             });
 
-            // Update An Existing Product Form: removes all characters from case cost field
-            editor.field('ProductUpdates.COST_TAB_F38').input().on('blur', function () {
-                var caseCost = editor.field('ProductUpdates.COST_TAB_F38').val();
-                caseCost = caseCostFormatter(caseCost);
-                editor.field('ProductUpdates.COST_TAB_F38').val(caseCost);
-            });
-
             // Update An Existing Product Form: only numbers, letters, commas, and spaces allowed
             editor.field('ProductUpdates.F01').input().on('blur', function () {
                 var UPC = editor.field('ProductUpdates.F01').val();
@@ -523,19 +516,34 @@
                 }
             });
 
-            // Update An Existing Product Form: hides Mettler Ingredients unless Yes to Mettler Product option is selected
+            // Update An Existing Product Form: on selection of is Mettler required?
             editor.field('ProductUpdates.ismettlerrequired').input().on('change', function () {
                 if (editor.field('ProductUpdates.ismettlerrequired').val() == 'Yes') {
 
+                    // Show Mettler fields
                     editor.field('ProductUpdates.ScalePLU').show();
                     editor.field('ProductUpdates.ScaleItemTypeID').show();
                     editor.field('ProductUpdates.TareNetWeight').show();
                     editor.field('ProductUpdates.ShelfLife').show();
                     editor.field('ProductUpdates.IngredientList').show();
 
-                    // Force price
-                    editor.field('ProductUpdates.POS_TAB_F83').val(1);
+                    // Set Force price to checked
+                    editor.field('ProductUpdates.POS_TAB_F83').val("True");
+
+                    // Update An Existing Product Form: set scalable checkbox on Scale Item Type selection
+                    editor.field('ProductUpdates.ScaleItemTypeID').input().on('change', function () {
+                        if (editor.field('ProductUpdates.ScaleItemTypeID').val() == '1') {
+                            editor.field('ProductUpdates.POS_TAB_F82').val("True");
+                            editor.field('ProductUpdates.OBJ_TAB_F22').val("per lb.")
+                            editor.field('ProductUpdates.PRICE_TAB_F31').hide();
+                        } else if (editor.field('ProductUpdates.ScaleItemTypeID').val() == '2') {
+                            editor.field('ProductUpdates.POS_TAB_F82').val("False");
+                            editor.field('ProductUpdates.PRICE_TAB_F31').show();
+                        }
+                    });
                 } else {
+
+                    // Hide Mettler fields
                     editor.field('ProductUpdates.ScalePLU').hide();
                     editor.field('ProductUpdates.ScaleItemTypeID').hide();
                     editor.field('ProductUpdates.TareNetWeight').hide();
@@ -551,49 +559,9 @@
                     editor.field('ProductUpdates.ShelfLife').val('');
                     editor.field('ProductUpdates.IngredientList').val('');
 
-                    // Force price
-                    editor.field('ProductUpdates.POS_TAB_F83').val(0);
+                    // Set Force price to unchecked
+                    editor.field('ProductUpdates.POS_TAB_F83').val("False");
                 }
-            });
-
-            // Update An Existing Product Form: set scalable checkbox on Item Type selection.
-            editor.field('ProductUpdates.ScaleItemTypeID').input().on('change', function () {
-                if (editor.field('ProductUpdates.ScaleItemTypeID').val() == '1') {
-                    editor.field('ProductUpdates.POS_TAB_F82').val(1);
-                    editor.field('ProductUpdates.OBJ_TAB_F22').val("per lb.")
-                    editor.field('ProductUpdates.PRICE_TAB_F31').hide();
-                } else if (editor.field('ProductUpdates.ScaleItemTypeID').val() == '2') {
-                    editor.field('ProductUpdates.POS_TAB_F82').val(0);
-                    editor.field('ProductUpdates.PRICE_TAB_F31').show();
-                } else {
-                    editor.field('ProductUpdates.POS_TAB_F82').val(0);
-                }
-            });
-
-            // Update An Existing Product Form: filter available categories on subdepartment selection
-            editor.dependent('ProductUpdates.POS_TAB_F04', '/api/Categories');
-
-            // Update An Existing Product Form: set default POS attributes
-            editor.dependent('ProductUpdates.POS_TAB_F04', function () {
-                var subdepartment = editor.field('ProductUpdates.POS_TAB_F04').val();
-
-                var GetSubdepartmentAttributes = $.ajax({
-                    url: "api/GetSubdepartmentBounds",
-                    type: "GET",
-                    dataType: "json",
-                    data: { 'F04': subdepartment },
-                    error: function (error) {
-                        console.log(`Error ${error}`);
-                    }
-                });
-
-                GetSubdepartmentAttributes.then(function (data) {
-                    editor.field('ProductUpdates.POS_TAB_F79').val(data.data[0].SMSSubdepartments.F79);
-                    editor.field('ProductUpdates.POS_TAB_F178').val(data.data[0].SMSSubdepartments.F178);
-                    editor.field('ProductUpdates.POS_TAB_F81').val(data.data[0].SMSSubdepartments.F81);
-                    editor.field('ProductUpdates.POS_TAB_F171').val(data.data[0].SMSSubdepartments.F171);
-                    editor.field('ProductUpdates.POS_TAB_F150').val(data.data[0].SMSSubdepartments.F150);
-                });
             });
 
             /***********************************************************/
@@ -796,6 +764,59 @@
                     editor.field('ProductUpdates.completeddate').hide();
                     editor.field('ProductUpdates.completedby').hide();
                 }
+
+                // Filter available categories on subdepartment selection
+                editor.dependent('ProductUpdates.POS_TAB_F04', '/api/Categories');
+
+                // Set default POS attributes
+                editor.dependent('ProductUpdates.POS_TAB_F04', function () {
+                    var subdepartment = editor.field('ProductUpdates.POS_TAB_F04').val();
+
+                    // Get default subdepartment attributes from SMS
+                    var GetSubdepartmentAttributes = $.ajax({
+                        url: "api/GetSubdepartmentBounds",
+                        type: "GET",
+                        dataType: "json",
+                        data: { 'F04': subdepartment },
+                        error: function (error) {
+                            console.log(`Error ${error}`);
+                        }
+                    });
+
+                    // Apply default subdepartment attributes to fields
+                    GetSubdepartmentAttributes.then(function (data) {
+
+                        // SNAP
+                        if (data.data[0].SMSSubdepartments.F79 == 1) {
+                            editor.field('ProductUpdates.POS_TAB_F79').val("True");
+                        } else {
+                            editor.field('ProductUpdates.POS_TAB_F79').val("False");
+                        }
+
+                        // WIC
+                        if (data.data[0].SMSSubdepartments.F178 == 1) {
+                            editor.field('ProductUpdates.POS_TAB_F178').val("True");
+                        } else {
+                            editor.field('ProductUpdates.POS_TAB_F178').val("False");
+                        }
+
+                        // Taxable 1
+                        if (data.data[0].SMSSubdepartments.F81 == 1) {
+                            editor.field('ProductUpdates.POS_TAB_F81').val("True");
+                        } else {
+                            editor.field('ProductUpdates.POS_TAB_F81').val("False");
+                        }
+
+                        // Stop discount
+                        if (data.data[0].SMSSubdepartments.F150 == 1) {
+                            editor.field('ProductUpdates.POS_TAB_F150').val("True");
+                        } else {
+                            editor.field('ProductUpdates.POS_TAB_F150').val("False");
+                        }
+
+                        editor.field('ProductUpdates.POS_TAB_F171').val(data.data[0].SMSSubdepartments.F171);
+                    });
+                });
             });
 
             // Update An Existing Product Form: on product edit

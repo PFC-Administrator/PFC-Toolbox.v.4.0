@@ -115,9 +115,78 @@ namespace PFC_Toolbox.v._4._0.Controllers
                 }
             }
 
-            // Executes Toolbox-Add-ScaleInfo stored procedure located on Host SMS SQL Server and provides parameters
+            // Executes Toolbox-Add-ScaleInfo stored procedure on all 3 SMS servers if Mettler argument given is equal to "Yes"
             if (Mettler.Equals("Yes"))
             {
+                // Executes Toolbox-Add-ScaleInfo stored procedure located on La Crosse SMS SQL Server and provides parameters
+                using (SqlConnection con = new SqlConnection { ConnectionString = ConfigurationManager.ConnectionStrings["SMSLaxConnection"].ConnectionString })
+                {
+                    using (SqlCommand cmd = new SqlCommand("[Toolbox-Add-ScaleInfo]", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.Add("@F01", SqlDbType.VarChar).Value = UPC;
+                        cmd.Parameters.Add("@F155", SqlDbType.VarChar).Value = Brand;
+                        cmd.Parameters.Add("@F256", SqlDbType.VarChar).Value = LongDescription;
+                        cmd.Parameters.Add("@F258", SqlDbType.Float).Value = Tare * 1000;
+                        cmd.Parameters.Add("@F264", SqlDbType.Int).Value = ProdLife;
+                        cmd.Parameters.Add("@F267", SqlDbType.Int).Value = TextLink;
+                        cmd.Parameters.Add("@F04", SqlDbType.Int).Value = Subdepartment;
+                        cmd.Parameters.Add("@F1836", SqlDbType.VarChar).Value = LongDescription;
+                        cmd.Parameters.Add("@F297", SqlDbType.VarChar).Value = Ingredients1;
+                        cmd.Parameters.Add("@F1837", SqlDbType.VarChar).Value = Ingredients2;
+                        cmd.Parameters.Add("@F1838", SqlDbType.VarChar).Value = Ingredients3;
+                        cmd.Parameters.Add("@F1839", SqlDbType.VarChar).Value = Ingredients4;
+                        cmd.Parameters.Add("@F1853", SqlDbType.VarChar).Value = Ingredients5;
+                        cmd.Parameters.Add("@F1854", SqlDbType.VarChar).Value = Ingredients6;
+                        cmd.Parameters.Add("@F1855", SqlDbType.VarChar).Value = Ingredients7;
+                        cmd.Parameters.Add("@F1856", SqlDbType.VarChar).Value = Ingredients8;
+                        cmd.Parameters.Add("@F1968", SqlDbType.VarChar).Value = Ingredients9;
+                        cmd.Parameters.Add("@F1969", SqlDbType.VarChar).Value = Ingredients10;
+                        cmd.Parameters.Add("@F1970", SqlDbType.VarChar).Value = Ingredients11;
+                        cmd.Parameters.Add("@F1971", SqlDbType.VarChar).Value = Ingredients12;
+                        cmd.Parameters.Add("@F1972", SqlDbType.VarChar).Value = Ingredients12;
+
+                        con.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                // Executes Toolbox-Add-ScaleInfo stored procedure located on Rochester SMS SQL Server and provides parameters
+                using (SqlConnection con = new SqlConnection { ConnectionString = ConfigurationManager.ConnectionStrings["SMSRochConnection"].ConnectionString })
+                {
+                    using (SqlCommand cmd = new SqlCommand("[Toolbox-Add-ScaleInfo]", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.Add("@F01", SqlDbType.VarChar).Value = UPC;
+                        cmd.Parameters.Add("@F155", SqlDbType.VarChar).Value = Brand;
+                        cmd.Parameters.Add("@F256", SqlDbType.VarChar).Value = LongDescription;
+                        cmd.Parameters.Add("@F258", SqlDbType.Float).Value = Tare * 1000;
+                        cmd.Parameters.Add("@F264", SqlDbType.Int).Value = ProdLife;
+                        cmd.Parameters.Add("@F267", SqlDbType.Int).Value = TextLink;
+                        cmd.Parameters.Add("@F04", SqlDbType.Int).Value = Subdepartment;
+                        cmd.Parameters.Add("@F1836", SqlDbType.VarChar).Value = LongDescription;
+                        cmd.Parameters.Add("@F297", SqlDbType.VarChar).Value = Ingredients1;
+                        cmd.Parameters.Add("@F1837", SqlDbType.VarChar).Value = Ingredients2;
+                        cmd.Parameters.Add("@F1838", SqlDbType.VarChar).Value = Ingredients3;
+                        cmd.Parameters.Add("@F1839", SqlDbType.VarChar).Value = Ingredients4;
+                        cmd.Parameters.Add("@F1853", SqlDbType.VarChar).Value = Ingredients5;
+                        cmd.Parameters.Add("@F1854", SqlDbType.VarChar).Value = Ingredients6;
+                        cmd.Parameters.Add("@F1855", SqlDbType.VarChar).Value = Ingredients7;
+                        cmd.Parameters.Add("@F1856", SqlDbType.VarChar).Value = Ingredients8;
+                        cmd.Parameters.Add("@F1968", SqlDbType.VarChar).Value = Ingredients9;
+                        cmd.Parameters.Add("@F1969", SqlDbType.VarChar).Value = Ingredients10;
+                        cmd.Parameters.Add("@F1970", SqlDbType.VarChar).Value = Ingredients11;
+                        cmd.Parameters.Add("@F1971", SqlDbType.VarChar).Value = Ingredients12;
+                        cmd.Parameters.Add("@F1972", SqlDbType.VarChar).Value = Ingredients12;
+
+                        con.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                // Executes Toolbox-Add-ScaleInfo stored procedure located on Host SMS SQL Server and provides parameters
                 using (SqlConnection con = new SqlConnection { ConnectionString = ConfigurationManager.ConnectionStrings["SMSHostConnection"].ConnectionString })
                 {
                     using (SqlCommand cmd = new SqlCommand("[Toolbox-Add-ScaleInfo]", con))
