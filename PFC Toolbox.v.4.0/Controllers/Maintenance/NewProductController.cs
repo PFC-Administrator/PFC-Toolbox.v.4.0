@@ -89,7 +89,14 @@ namespace PFC_Toolbox.v._4._0.Controllers
                     cmd.Parameters.Add("@F83", SqlDbType.VarChar).Value = ForcePrice;
                     cmd.Parameters.Add("@F82", SqlDbType.VarChar).Value = Scalable;
                     cmd.Parameters.Add("@F81", SqlDbType.VarChar).Value = Tax1;
-                    cmd.Parameters.Add("@F96", SqlDbType.VarChar).Value = Tax2;
+                    if (Subdepartment == 7 || Subdepartment == 51 || Subdepartment == 52)
+                    {
+                        cmd.Parameters.Add("@F96", SqlDbType.VarChar).Value = "True";
+                    }
+                    else
+                    {
+                        cmd.Parameters.Add("@F96", SqlDbType.VarChar).Value = Tax2;
+                    }
                     cmd.Parameters.Add("@F171", SqlDbType.Int).Value = ClientAge;
                     cmd.Parameters.Add("@F123", SqlDbType.VarChar).Value = PLU;
                     cmd.Parameters.Add("@F150", SqlDbType.VarChar).Value = StopDiscount;
