@@ -506,8 +506,12 @@
                 });
             });
 
-            // New Product Form: code to be executed on form open
-            editorNP.on('open', function () {
+            // New Product Form: on row edit
+            editorNP.on('initEdit', function () {
+
+                // Set last updated date and last updated by upon edit
+                editorNP.field('ProductUpdates.lastupdatedon').val(getDate());
+                editorNP.field('ProductUpdates.lastupdatedby').val(currentUser);
 
                 // Shows completed by info if product is marked as complete
                 if (editorNP.field('ProductUpdates.productstatusID').val() == 4) {
@@ -571,12 +575,6 @@
                         editorNP.field('ProductUpdates.POS_TAB_F171').val(data.data[0].SMSSubdepartments.F171);
                     });
                 });
-            });
-
-            // New Product Form: set last updated date and last updated by upon edit
-            editorNP.on('initEdit', function () {
-                editorNP.field('ProductUpdates.lastupdatedon').val(getDate());
-                editorNP.field('ProductUpdates.lastupdatedby').val(currentUser);
             });
 
             // New Product Form: set completed date and completed by upon submit if status is set to complete.
@@ -940,11 +938,11 @@
                                     tempArray = {};
                                 };
 
-                                // Recursive function to Update ReferenceUPCs table with any random weight UPC and its according PLU.
+                                // Recursive function to export selected new products.
                                 function exportItem() {
-                                    // Check length, if 0 quit loop...
+                                    // Check length, if 0 quit loop.
                                     if (newProductArray.length) {
-                                        // Make a call always referencing results[0] since we're shfiting the array results...
+                                        // Make a call always referencing the first element in the array.
                                         $.ajax({
                                         url: '@Url.Action("CreateNewProduct", "NewProduct")',
                                         type: "POST",
@@ -1016,6 +1014,7 @@
                                             },
                                             success: function () {
 
+                                                // Remove first element in array and call exportItem again to deal with the next element.
                                                 newProductArray.shift();
                                                 exportItem();
                                             }
@@ -1023,25 +1022,39 @@
                                     }
                                 };
 
-                                // Call to the processItem() function.
+                                // Call to the recurisve exportItem() function.
                                 exportItem();
 
-                                // Function to repeat a function a certain amount of times
-                                function setIntervalX(callback, delay, repetitions) {
+                                // Repeating function to check for proper loading of category field before submitting field.
+                                function checkForCategory(callback, delay, repetitions) {
                                     var x = 0;
                                     var intervalID = window.setInterval(function () {
 
                                         callback();
 
-                                        if (++x === repetitions) {
-                                            window.clearInterval(intervalID);
+                                        // If category field is loaded, submit form and clear interval; else, keep looping
+                                        if (editorNP.field('ProductUpdates.OBJ_TAB_F17').val()) {
 
-                                            // Close edtior form
+                                            // Submit form
+                                            editorNP.submit();
+
+                                            // Stop timer
+                                            window.clearInterval(intervalID);
+                                        }
+
+                                        // If function loops repitition times, alert user and cancel function loop
+                                        if (++x === repetitions) {
+
+                                            // Alert user export has failed, because the category didn't load in time.
+                                            alert("Export failed!");
+
+                                            // Close form
                                             editorNP.close();
 
-                                            // Display message and close form
-                                            alert("Export failed!");
+                                            // Stop timer
+                                            window.clearInterval(intervalID);
                                         }
+
                                     }, delay);
                                 }
 
@@ -1060,40 +1073,30 @@
                                         .set('ProductUpdates.completedby', currentUser)
                                         .set('ProductUpdates.productstatusID', 4);
 
+                                    // Function to check if category has loaded every half a second for 30 seconds.
+                                    checkForCategory(function () {}, 500, 60);
+
                                     // Pause execution long enough to let dependent category field load then submit.
-                                    setTimeout(() => { editorNP.submit(); }, 2000);
-
-                                    // Repeatedly check if category field has loaded, once loaded submit form.
-                                    //setIntervalX(function () {
-                                    //    if (editorNP.field('ProductUpdates.OBJ_TAB_F17').val()) {
-                                    //        editorNP.submit();
-                                    //        clearInterval(checkExist);
-                                    //    }
-                                    //}, 500, 30);
-
+                                    //setTimeout(() => { editorNP.submit(); }, 2000);
                                 } else {
                                     // Open hidden edit form and update fields for multiple products.
                                     editorNP.edit(rows, false);
 
                                     // Loop through each product updating fields.
-                                    $.each(rows, function (i, rowIdx) {
-                                        var row = table.row(rowIdx);
+                                    var loop = function () {
+                                        $.each(rows, function (i, rowIdx) {
+                                            var row = table.row(rowIdx);
 
-                                        editorNP.field('ProductUpdates.completeddate').multiSet(row.id(), getDate());
-                                        editorNP.field('ProductUpdates.completedby').multiSet(row.id(), currentUser);
-                                        editorNP.field('ProductUpdates.productstatusID').multiSet(row.id(), 4);
+                                            editorNP.field('ProductUpdates.completeddate').multiSet(row.id(), getDate());
+                                            editorNP.field('ProductUpdates.completedby').multiSet(row.id(), currentUser);
+                                            editorNP.field('ProductUpdates.productstatusID').multiSet(row.id(), 4);
+                                        });
+                                    };
+
+                                    // Loop is complete, submit form.
+                                    $.when(loop()).done(function () {
+                                        editorNP.submit();
                                     });
-
-                                    // Pause execution long enough to let dependent category field load then submit.
-                                    setTimeout(() => { editorNP.submit(); }, 2000);
-
-                                    // Repeatedly check if category field has loaded, once loaded submit form.
-                                    //setIntervalX(function () {
-                                    //    if (editorNP.field('ProductUpdates.OBJ_TAB_F17').val()) {
-                                    //        editorNP.submit();
-                                    //        clearInterval(checkExist);
-                                    //    }
-                                    //}, 500, 30);
                                 }
 
                                 // Display how many records were exported.
