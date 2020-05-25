@@ -245,27 +245,197 @@ else
                         {
                             extend: 'copy',
                             filename: 'ISTBPSubdepartment-"@startDate"-"@endDate"',
-                            footer: true
+                            footer: true,
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 6, 7, 8, 10, 11, 12, 14, 15, 16, 18]
+                            }
                         },
                         {
                             extend: 'excelHtml5',
                             filename: 'ISTBPSubdepartment-"@startDate"-"@endDate"',
-                            footer: true
+                            footer: true,
+                            title: '',
+                            exportOptions: {
+                                rows: ':visible'
+                            },
+                            customize: function (xlsx) {
+                                var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                                var sheetStyle = xlsx.xl['styles.xml'];
+                                var rowsDisplayed = table.page.info().length;
+                                var rowsReturned = table.rows().count();
+                                var clR = $('row', sheet);
+                                var lastXfIndex = $('cellXfs xf', sheetStyle).length - 1;
+                                var lastFontIndex = $('fonts font', sheetStyle).length - 1;
+                                var lastBorderIndex = $('borders border', sheetStyle).length - 1;
+
+                                // Determines how to calculate how many rows are displayed
+                                var rows = 0;
+                                if (rowsDisplayed == -1) {
+                                    rows = rowsReturned;
+                                }
+                                else if (rowsDisplayed < rowsReturned) {
+                                    rows = rowsDisplayed;
+                                }
+                                else {
+                                    rows = rowsReturned;
+                                }
+
+                                // Fonts
+                                var f12 = '<font><sz val="12" /><name val="Calibri" /></font>';
+                                var f14 = '<font><sz val="14" /><name val="Calibri" /></font>';
+                                var f18 = '<font><sz val="18" /><name val="Calibri" /></font>';
+
+                                // Borders
+                                var bb = '<border><left/><right/><top/><bottom style="thin"><color indexed="64"/></bottom><diagonal/></border>';
+                                var tb = '<border><left/><right/><top style="thin"><color indexed="64"/></top><bottom/><diagonal/></border>';
+
+                                // Number formats
+                                var nf$ = '<numFmt numFmtId="164" formatCode="_(&quot;$&quot;* #,##0.00_);_(&quot;$&quot;* \[Red](#,##0.00\);_(&quot;$&quot;* &quot;-&quot;??_);"/>';
+                                var nfperc = '<numFmt numFmtId="167" formatCode="#,##0.0%;[Red](#,##0.0%);"/>';
+
+                                // Styles
+                                var xfFont12 = '<xf numFmtId="0" fontId="' + (lastFontIndex + 1) + '" fillId="0" borderId="0" applyFont="1" applyFill = "1" applyBorder = "1" xfId = "0" applyAlignment = "1"/>';
+                                var xfFont14 = '<xf numFmtId="0" fontId="' + (lastFontIndex + 2) + '" fillId="0" borderId="0" applyFont="1" applyFill = "1" applyBorder = "1" xfId = "0" applyAlignment = "1"/>';
+                                var xfFont18 = '<xf numFmtId="0" fontId="' + (lastFontIndex + 3) + '" fillId="0" borderId="0" applyFont="1" applyFill = "1" applyBorder = "1" xfId = "0" applyAlignment = "1"/>';
+                                var xfbB = '<xf numFmtId="0" fontId="0" fillId="0" borderId="' + (lastBorderIndex + 1) + '" xfId="0" applyBorder="1"/>';
+                                var xftB = '<xf numFmtId="0" fontId="0" fillId="0" borderId="' + (lastBorderIndex + 2) + '" xfId="0" applyBorder="1"/>';
+                                var xftB$ = '<xf numFmtId="164" fontId="0" fillId="0" borderId="' + (lastBorderIndex + 2) + '" xfId="0" applyBorder="1"/>';
+                                var xftBPerc = '<xf numFmtId="167" fontId="0" fillId="0" borderId="' + (lastBorderIndex + 2) + '" xfId="0" applyBorder="1"/>';
+                                var xfPerc = '<xf numFmtId="167" fontId="0" fillId="0" borderId="0" applyFont="1" applyFill="1" applyBorder="1" xfId="0" applyNumberFormat="1"/>';
+
+                                // Adding the styles
+                                sheetStyle.childNodes[0].childNodes[0].innerHTML += nf$ + nfperc;
+                                sheetStyle.childNodes[0].childNodes[1].innerHTML += f12 + f14 + f18;
+                                sheetStyle.childNodes[0].childNodes[3].innerHTML += bb + tb;
+                                sheetStyle.childNodes[0].childNodes[5].innerHTML += xfFont12 + xfFont14 + xfFont18 + xfbB + xftB + xftB$ + xftBPerc + xfPerc;
+
+                                // Creating varaibles withe the styles assigned to them
+                                var font12 = lastXfIndex + 1;
+                                var font14 = lastXfIndex + 2;
+                                var font18 = lastXfIndex + 3;
+                                var bottomBorder = lastXfIndex + 4;
+                                var topBorder = lastXfIndex + 5;
+                                var topBorder$ = lastXfIndex + 6;
+                                var topBorderPerc = lastXfIndex + 7;
+                                var negativePercent = lastXfIndex + 8;
+
+                                // Updating font sizes, so they're not overwritten
+                                var tagName = sheetStyle.getElementsByTagName('sz');
+                                tagName[5].setAttribute("val", "12");
+                                tagName[6].setAttribute("val", "14");
+                                tagName[7].setAttribute("val", "18");
+
+                                // Number of header rows to add
+                                var numrows = 6;
+                                var clR = $('row', sheet);
+                                clR.each(function () {
+                                    var attr = $(this).attr('r');
+                                    var ind = parseInt(attr);
+                                    ind = ind + numrows;
+                                    $(this).attr("r", ind);
+                                });
+
+                                // Create row before data
+                                $('row c ', sheet).each(function () {
+                                    var attr = $(this).attr('r');
+                                    var pre = attr.substring(0, 1);
+                                    var ind = parseInt(attr.substring(1, attr.length));
+                                    ind = ind + numrows;
+                                    $(this).attr("r", pre + ind);
+                                });
+
+                                // Add header rows
+                                function Addrow(index, data) {
+                                    var msg = '<row r="' + index + '">'
+                                    for (var i = 0; i < data.length; i++) {
+                                        var key = data[i].key;
+                                        var value = data[i].value;
+                                        msg += '<c t="inlineStr" r="' + key + index + '">';
+                                        msg += '<is>';
+                                        msg += '<t>' + value + '</t>';
+                                        msg += '</is>';
+                                        msg += '</c>';
+                                    }
+                                    msg += '</row>';
+                                    return msg;
+                                }
+
+                                // Footer rows
+                                var footerColumns = ['B', 'C', 'D', 'E', 'F', 'J', 'N', 'R', 'S', 'T'];
+                                var footer = '<row r="' + (rows + (numrows + 2)) + '">';
+                                for (var i = 0; i < footerColumns.length; i++) {
+                                    footer += '<c r="' + footerColumns[i] + (rows + (numrows + 2)) + '" s="2"><v></v></c>';
+                                }
+                                footer += '</row>';
+
+                                // Insert header rows
+                                var r1 = Addrow(1, [{ key: 'A', value: 'Item Single Total by Sub-department by Period: @(ViewBag.Store)' }]);
+                                var r2 = Addrow(2, [{ key: 'A', value: '@subdepartmentCode - @subdepartmentDescription' }]);
+                                var r3 = Addrow(3, [{ key: 'A', value: 'Period 1: @startDate   to   @endDate' }]);
+                                var r4 = Addrow(4, [{ key: 'A', value: 'Period 2: @startDate2   to   @endDate2' }]);
+                                var r5 = Addrow(5, [{ key: 'A', value: 'Period 3: @startDate3   to   @endDate3' }]);
+                                var r6 = Addrow(6, [{ key: 'H', value: 'Period 1' }]);
+                                var r7 = Addrow(6, [{ key: 'L', value: 'Period 2' }]);
+                                var r8 = Addrow(6, [{ key: 'P', value: 'Period 3' }]);
+                                var r9 = Addrow(7, [{ key: 'F', value: '' }]);
+                                var r10 = Addrow(7, [{ key: 'J', value: '' }]);
+                                var r11 = Addrow(7, [{ key: 'N', value: '' }]);
+                                var r12 = Addrow(7, [{ key: 'R', value: '' }]);
+                                var r13 = Addrow(7, [{ key: 'T', value: '' }]);
+
+                                sheet.childNodes[0].childNodes[1].innerHTML = r1 + r2 + r3 + r4 + r5 + r6 + r7 + r8 + r9 + r10 + r11 + r12 + r13 + sheet.childNodes[0].childNodes[1].innerHTML + footer;
+
+                                // Styles report information
+                                $('row c[r="A1"]', sheet).attr('s', font18);
+                                $('row c[r="A2"]', sheet).attr('s', font14);
+                                $('row c[r="A3"]', sheet).attr('s', font12);
+                                $('row c[r="A4"]', sheet).attr('s', font12);
+                                $('row c[r="A5"]', sheet).attr('s', font12);
+
+                                // Applies the bottom and top borders to the header and footer rows
+                                var headerColumns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'];
+                                for (var i = 0; i < headerColumns.length; i++) {
+                                    $('row c[r="' + headerColumns[i] + (numrows + 1) + '"]', sheet).attr('s', bottomBorder);
+                                    $('row c[r="' + headerColumns[i] + (rows + (numrows + 2)) + '"]', sheet).attr('s', topBorder);
+                                }
+
+                                // Format $ footer
+                                var $footers = ['H', 'L', 'P'];
+                                for (var i = 0; i < $footers.length; i++) {
+                                    $('row c[r="' + $footers[i] + (rows + (numrows + 2)) + '"]', sheet).attr('s', topBorder$);
+                                }
+
+                                // Format UPC column
+                                //var percentColumns = ['A'];
+                                //for (var i = 0; i < percentColumns.length; i++) {
+                                //    // Loop over the cells in column `A`
+                                //    $('row c[r^="' + percentColumns[i] + '"]', sheet).each(function () {
+                                //        // Get the value
+                                //        if ($('is t', this).prevObject[0].textContent < 0) {
+                                //            $(this).attr('s', topBorder$);
+                                //        }
+                                //    });
+                                //}
+
+                                // Format percent columns
+                                var percentColumns = ['S'];
+                                for (var i = 0; i < percentColumns.length; i++) {
+                                    // Loop over the cells in column `C`
+                                    $('row c[r^="' + percentColumns[i] + '"]', sheet).each(function () {
+                                        // Get the value
+                                        if ($('is t', this).prevObject[0].textContent < 0) {
+                                            $(this).attr('s', negativePercent);
+                                        }
+                                    });
+                                }
+                            }
                         },
                         {
                             extend: 'csv',
                             filename: 'ISTBPSubdepartment-"@startDate"-"@endDate"',
-                            footer: true
-                        },
-                        {
-                            extend: 'pdf',
-                            filename: 'ISTBPSubdepartment-"@startDate"-"@endDate"',
-                            footer: true
-                        },
-                        {
-                            extend: 'print',
-                            filename: 'ISTBPSubdepartment-"@startDate"-"@endDate"',
-                            footer: true
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 6, 7, 8, 10, 11, 12, 14, 15, 16, 18]
+                            }
                         }
                     ]
                 }],

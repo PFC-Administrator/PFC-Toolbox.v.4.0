@@ -253,6 +253,7 @@
                                 var lastFontIndex = $('fonts font', sheetStyle).length - 1;
                                 var lastBorderIndex = $('borders border', sheetStyle).length - 1;
 
+                                // Determines how to calculate how many rows are displayed
                                 var rows = 0;
                                 if (rowsDisplayed == -1) {
                                     rows = rowsReturned;
@@ -283,13 +284,15 @@
                                 var xfFont18 = '<xf numFmtId="0" fontId="' + (lastFontIndex + 3) + '" fillId="0" borderId="0" applyFont="1" applyFill = "1" applyBorder = "1" xfId = "0" applyAlignment = "1"/>';
                                 var xfbB = '<xf numFmtId="0" fontId="0" fillId="0" borderId="' + (lastBorderIndex + 1) + '" xfId="0" applyBorder="1"/>';
                                 var xftB = '<xf numFmtId="0" fontId="0" fillId="0" borderId="' + (lastBorderIndex + 2) + '" xfId="0" applyBorder="1"/>';
+                                var xftB$ = '<xf numFmtId="164" fontId="0" fillId="0" borderId="' + (lastBorderIndex + 2) + '" xfId="0" applyBorder="1"/>';
+                                var xftBPerc = '<xf numFmtId="167" fontId="0" fillId="0" borderId="' + (lastBorderIndex + 2) + '" xfId="0" applyBorder="1"/>';
                                 var xfPerc = '<xf numFmtId="167" fontId="0" fillId="0" borderId="0" applyFont="1" applyFill="1" applyBorder="1" xfId="0" applyNumberFormat="1"/>';
 
                                 // Adding the styles
                                 sheetStyle.childNodes[0].childNodes[0].innerHTML += nf$ + nfperc;
                                 sheetStyle.childNodes[0].childNodes[1].innerHTML += f12 + f14 + f18;
                                 sheetStyle.childNodes[0].childNodes[3].innerHTML += bb + tb;
-                                sheetStyle.childNodes[0].childNodes[5].innerHTML += xfFont12 + xfFont14 + xfFont18 + xfbB + xftB + xfPerc;
+                                sheetStyle.childNodes[0].childNodes[5].innerHTML += xfFont12 + xfFont14 + xfFont18 + xfbB + xftB + xftB$ + xftBPerc + xfPerc;
 
                                 // Creating varaibles withe the styles assigned to them
                                 var font12 = lastXfIndex + 1;
@@ -297,7 +300,9 @@
                                 var font18 = lastXfIndex + 3;
                                 var bottomBorder = lastXfIndex + 4;
                                 var topBorder = lastXfIndex + 5;
-                                var negativePercent = lastXfIndex + 6;
+                                var topBorder$ = lastXfIndex + 6;
+                                var topBorderPerc = lastXfIndex + 7;
+                                var negativePercent = lastXfIndex + 8;
 
                                 // Updating font sizes, so they're not overwritten
                                 var tagName = sheetStyle.getElementsByTagName('sz');
@@ -366,10 +371,24 @@
                                     $('row c[r="' + headerColumns[i] + (rows + 6) + '"]', sheet).attr('s', topBorder);
                                 }
 
+                                // Format $ footer
+                                var $footers = ['F'];
+                                for (var i = 0; i < $footers.length; i++) {
+                                    $('row c[r="' + $footers[i] + (rows + (numrows + 2)) + '"]', sheet).attr('s', topBorder$);
+                                }
+
+                                // Format percent footer
+                                var $footers = ['M'];
+                                for (var i = 0; i < $footers.length; i++) {
+                                    $('row c[r="' + $footers[i] + (rows + (numrows + 2)) + '"]', sheet).attr('s', topBorderPerc);
+                                }
+
+                                // Format column widths on 6 and 7
                                 var col = $('col', sheet);
                                 $(col[6]).attr('width', 10);
                                 $(col[7]).attr('width', 10);
 
+                                // Format percent columns
                                 var percentColumns = ['K', 'L', 'M'];
                                 for (var i = 0; i < percentColumns.length; i++) {
                                     // Loop over the cells in column `C`
@@ -384,18 +403,7 @@
                         },
                         {
                             extend: 'csv',
-                            filename: 'CTM-"@startDate"-"@endDate"',
-                            footer: true
-                        },
-                        {
-                            extend: 'pdf',
-                            filename: 'CTM-"@startDate"-"@endDate"',
-                            footer: true
-                        },
-                        {
-                            extend: 'print',
-                            filename: 'CTM-"@startDate"-"@endDate"',
-                            footer: true
+                            filename: 'CTM-"@startDate"-"@endDate"'
                         }
                     ]
                 }],
