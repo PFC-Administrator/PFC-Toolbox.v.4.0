@@ -115,6 +115,22 @@
                 // Default table lengths
                 lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
                 dom: '<"floatRight"B><"clear">lfrtip',
+                columns: [
+                    {
+                        data: "ItemCode", render: function (data, type, row) {
+                            return type === 'export' ?
+                                parseInt(data, 10) :
+                                data;
+                        }
+                    },
+                    { data: "Subdept" },
+                    { data: "ItemBrand" },
+                    { data: "ItemDescription" },
+                    { data: "ItemSize" },
+                    { data: "SalesWeight" },
+                    { data: "SalesTotal" },
+                    { data: "SalesQuantity" }
+                ],
                 buttons: [{
                     extend: 'collection',
                     text: 'Export',
@@ -131,7 +147,8 @@
                             footer: true,
                             title: '',
                             exportOptions: {
-                                rows: ':visible'
+                                rows: ':visible',
+                                orthogonal: 'export'
                             },
                             customize: function (xlsx) {
                                 var sheet = xlsx.xl.worksheets['sheet1.xml'];
@@ -167,6 +184,7 @@
                                 // Number formats
                                 var nf$ = '<numFmt numFmtId="164" formatCode="_(&quot;$&quot;* #,##0.00_);_(&quot;$&quot;* \[Red](#,##0.00\);_(&quot;$&quot;* &quot;-&quot;??_);"/>';
                                 var nfperc = '<numFmt numFmtId="167" formatCode="#,##0.0%;[Red](#,##0.0%);"/>';
+                                var nfUPC = '<numFmt numFmtId="172" formatCode="0000000000000"/>';
 
                                 // Styles
                                 var xfFont12 = '<xf numFmtId="0" fontId="' + (lastFontIndex + 1) + '" fillId="0" borderId="0" applyFont="1" applyFill = "1" applyBorder = "1" xfId = "0" applyAlignment = "1"/>';
@@ -177,14 +195,15 @@
                                 var xftB$ = '<xf numFmtId="164" fontId="0" fillId="0" borderId="' + (lastBorderIndex + 2) + '" xfId="0" applyBorder="1"/>';
                                 var xftBPerc = '<xf numFmtId="167" fontId="0" fillId="0" borderId="' + (lastBorderIndex + 2) + '" xfId="0" applyBorder="1"/>';
                                 var xfPerc = '<xf numFmtId="167" fontId="0" fillId="0" borderId="0" applyFont="1" applyFill="1" applyBorder="1" xfId="0" applyNumberFormat="1"/>';
+                                var xfUPC = '<xf numFmtId="172" fontId="0" fillId="0" borderId="0" applyFont="1" applyFill="1" applyBorder="1" xfId="0" applyNumberFormat="1"/>';
 
                                 // Adding the styles
-                                sheetStyle.childNodes[0].childNodes[0].innerHTML += nf$ + nfperc;
+                                sheetStyle.childNodes[0].childNodes[0].innerHTML += nf$ + nfperc + nfUPC;
                                 sheetStyle.childNodes[0].childNodes[1].innerHTML += f12 + f14 + f18;
                                 sheetStyle.childNodes[0].childNodes[3].innerHTML += bb + tb;
-                                sheetStyle.childNodes[0].childNodes[5].innerHTML += xfFont12 + xfFont14 + xfFont18 + xfbB + xftB + xftB$ + xftBPerc + xfPerc;
+                                sheetStyle.childNodes[0].childNodes[5].innerHTML += xfFont12 + xfFont14 + xfFont18 + xfbB + xftB + xftB$ + xftBPerc + xfPerc + xfUPC;
 
-                                // Creating varaibles withe the styles assigned to them
+                                // Creating variables withe the styles assigned to them
                                 var font12 = lastXfIndex + 1;
                                 var font14 = lastXfIndex + 2;
                                 var font18 = lastXfIndex + 3;
@@ -193,6 +212,7 @@
                                 var topBorder$ = lastXfIndex + 6;
                                 var topBorderPerc = lastXfIndex + 7;
                                 var negativePercent = lastXfIndex + 8;
+                                var UPC = lastXfIndex + 9;
 
                                 // Updating font sizes, so they're not overwritten
                                 var tagName = sheetStyle.getElementsByTagName('sz');
@@ -219,6 +239,7 @@
                                     $(this).attr("r", pre + ind);
                                 });
 
+                                // Add header rows
                                 function Addrow(index, data) {
                                     var msg = '<row r="' + index + '">'
                                     for (var i = 0; i < data.length; i++) {
@@ -234,6 +255,7 @@
                                     return msg;
                                 }
 
+                                // Footer rows
                                 var footerColumns = ['B', 'C', 'D', 'E', 'I'];
                                 var footer = '<row r="' + (rows + 6) + '">';
                                 for (var i = 0; i < footerColumns.length; i++) {
@@ -241,22 +263,37 @@
                                 }
                                 footer += '</row>';
 
-                                // Insert
+                                // Insert header rows
                                 var r1 = Addrow(1, [{ key: 'A', value: 'Item Single Total by Category: @(ViewBag.Store)' }]);
                                 var r2 = Addrow(2, [{ key: 'A', value: '@(ViewBag.categoryCode) - @(ViewBag.categoryDescription)' }]);
                                 var r3 = Addrow(3, [{ key: 'A', value: '@startDate   to   @endDate' }]);
                                 var r4 = Addrow(5, [{ key: 'I', value: '' }]);
 
+                                // Add to sheet
                                 sheet.childNodes[0].childNodes[1].innerHTML = r1 + r2 + r3 + r4 + sheet.childNodes[0].childNodes[1].innerHTML + footer;
 
+                                // Styles report information
                                 $('row c[r="A1"]', sheet).attr('s', font18);
                                 $('row c[r="A2"]', sheet).attr('s', font14);
                                 $('row c[r="A3"]', sheet).attr('s', font12);
 
+                                // Applies the bottom and top borders to the header and footer rows
                                 var headerColumns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
                                 for (var i = 0; i < headerColumns.length; i++) {
                                     $('row c[r="' + headerColumns[i] + '5"]', sheet).attr('s', bottomBorder);
                                     $('row c[r="' + headerColumns[i] + (rows + 6) + '"]', sheet).attr('s', topBorder);
+                                }
+
+                                // Format UPC column
+                                var upcColumns = ['A'];
+                                for (var i = 0; i < upcColumns.length; i++) {
+                                    // Loop over the cells in the upcColumns array
+                                    $('row c[r^="' + upcColumns[i] + '"]', sheet).each(function () {
+                                        // If value is a number, apply UPC format
+                                        if (!isNaN($('is t', this).prevObject[0].textContent)) {
+                                            $(this).attr('s', UPC);
+                                        }
+                                    });
                                 }
 
                                 // Format $ footer
