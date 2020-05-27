@@ -19,14 +19,7 @@
 </head>
 <body class="dataTables">
     <div class="container">
-        <h1 style="display: inline-block"><img src="~/Content/PFC_Logo_128px.png" width="100" height="100">        Product Maintenance</h1>
-        <button name="add" id="getHelp" class="btn btn-default blueButton" style="float:right;margin-top:1%;padding:1%;">Help</button>
-        <button name="add" id="getMNTaxDetails" class="btn btn-default redButton" style="float:right;margin-top:1%;margin-right:2%;padding:1%;">Minnesota Tax Details</button>
-        <button name="add" id="getWITaxDetails" class="btn btn-default redButton" style="float:right;margin-top:1%;margin-right:0.5%;padding:1%;">Wisconsin Tax Details</button>
-        <button name="add" id="getProductUpdates" class="btn btn-default" style="float:right;margin-top:1%;margin-right:2%;padding:1%">Manage Update Requests</button>
-        <button name="add" id="getNewProducts" class="btn btn-default" style="float:right;margin-top:1%;margin-right:0.5%;padding:1%">Manage New Products (Export)</button>
-        <button name="add" id="createProductUpdate" class="btn btn-default" style="float:right;margin-top:1%;margin-right:2%;padding:1%">Update Product</button>
-        <button name="add" id="createNewProduct" class="btn btn-default" style="float:right;margin-top:1%;margin-right:0.5%;padding:1%">New Product</button>
+        <h1><img src="~/Content/PFC_Logo_128px.png" width="100" height="100">        Product Maintenance</h1>
         <br />
         <table id="ProductMaintenance" class="display text-nowrap compact" style="width:100%">
             <thead>
@@ -1123,9 +1116,6 @@
             // New Product Form: code to be executed on form open
             editorNP.on('open', function () {
 
-                // Assign id to Submit Another button
-                document.getElementsByClassName('btn submitAnotherNP')[0].setAttribute("id", "submitAnotherNP");
-
                 // Filter available categories on subdepartment selection
                 editorNP.dependent('ProductUpdates.POS_TAB_F04', '/api/Categories');
 
@@ -1981,9 +1971,6 @@
             // Update An Existing Product Form: shows completed by info if product is marked as complete
             editor.on('open', function () {
 
-                // Assign id to Submit Another button
-                document.getElementsByClassName('btn submitAnotherPU')[0].setAttribute("id", "submitAnotherPU");
-
                 // Hides cost info on load
                 editor.field('ProductUpdates.COST_TAB_F27').hide();
                 editor.field('ProductUpdates.COST_TAB_F26').hide();
@@ -2267,183 +2254,183 @@
                 // Buttons
                 buttons: [
                     // New Product Form: opens the New Product form
-                    //{ text: 'New Product', formTitle: 'Add A New Product', extend: 'create', editor: editorNP,
-                    //    formButtons:
-                    //        [
-                    //            { text: 'Cancel', action: function () { this.close(); } },
-                    //            'Create',
-                    //            {
-                    //                text: 'Submit Another', action: function () {
+                    { text: 'New Product', formTitle: 'Add A New Product', extend: 'create', editor: editorNP,
+                        formButtons:
+                            [
+                                { text: 'Cancel', action: function () { this.close(); } },
+                                'Create',
+                                {
+                                    text: 'Submit Another', action: function () {
 
-                    //                    // Creates lastNewProduct object to store current forms data to be called later
-                    //                    var lastNewProduct = {
-                    //                        'requesttypeID': editorNP.field('ProductUpdates.requesttypeID').val(),
-                    //                        'locationID': editorNP.field('ProductUpdates.locationID').val(),
-                    //                        'ismettlerrequired': editorNP.field('ProductUpdates.ismettlerrequired').val(),
-                    //                        'labelID': editorNP.field('ProductUpdates.labelID').val(),
-                    //                        'COST_TAB_F27': editorNP.field('ProductUpdates.COST_TAB_F27').val(),
-                    //                        'OBJ_TAB_F155': editorNP.field('ProductUpdates.OBJ_TAB_F155').val(),
-                    //                        'OBJ_TAB_F29': editorNP.field('ProductUpdates.OBJ_TAB_F29').val(),
-                    //                        'OBJ_TAB_F22': editorNP.field('ProductUpdates.OBJ_TAB_F22').val(),
-                    //                        'OBJ_TAB_F255': editorNP.field('ProductUpdates.OBJ_TAB_F255').val(),
-                    //                        'POS_TAB_F04': editorNP.field('ProductUpdates.POS_TAB_F04').val(),
-                    //                        'OBJ_TAB_F17': editorNP.field('ProductUpdates.OBJ_TAB_F17').val(),
-                    //                        'OBJ_TAB_F18': editorNP.field('ProductUpdates.OBJ_TAB_F18').val(),
-                    //                        'POS_TAB_F79': editorNP.field('ProductUpdates.POS_TAB_F79').val(),
-                    //                        'POS_TAB_F82': editorNP.field('ProductUpdates.POS_TAB_F82').val(),
-                    //                        'POS_TAB_F81': editorNP.field('ProductUpdates.POS_TAB_F81').val(),
-                    //                        'POS_TAB_F178': editorNP.field('ProductUpdates.POS_TAB_F178').val(),
-                    //                        'AdditionalRequestNotes': editorNP.field('ProductUpdates.AdditionalRequestNotes').val(),
-                    //                        'ScaleItemTypeID': editorNP.field('ProductUpdates.ScaleItemTypeID').val(),
-                    //                        'TareNetWeight': editorNP.field('ProductUpdates.TareNetWeight').val(),
-                    //                        'ShelfLife': editorNP.field('ProductUpdates.ShelfLife').val(),
-                    //                        'IngredientList': editorNP.field('ProductUpdates.IngredientList').val(),
-                    //                        'createdby': editorNP.field('ProductUpdates.createdby').val()
-                    //                    };
+                                        // Creates lastNewProduct object to store current forms data to be called later
+                                        var lastNewProduct = {
+                                            'requesttypeID': editorNP.field('ProductUpdates.requesttypeID').val(),
+                                            'locationID': editorNP.field('ProductUpdates.locationID').val(),
+                                            'ismettlerrequired': editorNP.field('ProductUpdates.ismettlerrequired').val(),
+                                            'labelID': editorNP.field('ProductUpdates.labelID').val(),
+                                            'COST_TAB_F27': editorNP.field('ProductUpdates.COST_TAB_F27').val(),
+                                            'OBJ_TAB_F155': editorNP.field('ProductUpdates.OBJ_TAB_F155').val(),
+                                            'OBJ_TAB_F29': editorNP.field('ProductUpdates.OBJ_TAB_F29').val(),
+                                            'OBJ_TAB_F22': editorNP.field('ProductUpdates.OBJ_TAB_F22').val(),
+                                            'OBJ_TAB_F255': editorNP.field('ProductUpdates.OBJ_TAB_F255').val(),
+                                            'POS_TAB_F04': editorNP.field('ProductUpdates.POS_TAB_F04').val(),
+                                            'OBJ_TAB_F17': editorNP.field('ProductUpdates.OBJ_TAB_F17').val(),
+                                            'OBJ_TAB_F18': editorNP.field('ProductUpdates.OBJ_TAB_F18').val(),
+                                            'POS_TAB_F79': editorNP.field('ProductUpdates.POS_TAB_F79').val(),
+                                            'POS_TAB_F82': editorNP.field('ProductUpdates.POS_TAB_F82').val(),
+                                            'POS_TAB_F81': editorNP.field('ProductUpdates.POS_TAB_F81').val(),
+                                            'POS_TAB_F178': editorNP.field('ProductUpdates.POS_TAB_F178').val(),
+                                            'AdditionalRequestNotes': editorNP.field('ProductUpdates.AdditionalRequestNotes').val(),
+                                            'ScaleItemTypeID': editorNP.field('ProductUpdates.ScaleItemTypeID').val(),
+                                            'TareNetWeight': editorNP.field('ProductUpdates.TareNetWeight').val(),
+                                            'ShelfLife': editorNP.field('ProductUpdates.ShelfLife').val(),
+                                            'IngredientList': editorNP.field('ProductUpdates.IngredientList').val(),
+                                            'createdby': editorNP.field('ProductUpdates.createdby').val()
+                                        };
 
-                    //                    // Puts the object into local storage
-                    //                    localStorage.setItem('lastNewProduct', JSON.stringify(lastNewProduct));
+                                        // Puts the object into local storage
+                                        localStorage.setItem('lastNewProduct', JSON.stringify(lastNewProduct));
 
-                    //                    // Retrieve the object from storage
-                    //                    lastNPRetrieved = localStorage.getItem('lastNewProduct');
+                                        // Retrieve the object from storage
+                                        lastNPRetrieved = localStorage.getItem('lastNewProduct');
 
-                    //                    // Submit current form
-                    //                    this.submit();
+                                        // Submit current form
+                                        this.submit();
 
-                    //                    // Only open new form, if previous form is successfully submitted
-                    //                    editorNP.on('submitSuccess', function () {
-                    //                        editorNP.create();
-                    //                    });
-                    //                }
-                    //            },
-                    //            { text: 'Clear', action: function () { fields = editorNP.displayed(); for (field in fields) { editorNP.field(fields[field]).val(''); }; } },
-                    //            {
-                    //                text: 'Copy', action: function () {
+                                        // Only open new form, if previous form is successfully submitted
+                                        editorNP.on('submitSuccess', function () {
+                                            editorNP.create();
+                                        });
+                                    }
+                                },
+                                { text: 'Clear', action: function () { fields = editorNP.displayed(); for (field in fields) { editorNP.field(fields[field]).val(''); }; } },
+                                {
+                                    text: 'Copy', action: function () {
 
-                    //                    // Initialize lastProduct variable with object retrieved from storage
-                    //                    var lastNewProduct = JSON.parse(lastNPRetrieved)
+                                        // Initialize lastProduct variable with object retrieved from storage
+                                        var lastNewProduct = JSON.parse(lastNPRetrieved)
 
-                    //                    // Assign lastProduct values to their respective fields
-                    //                    editorNP.field('ProductUpdates.requesttypeID').val(lastNewProduct.requesttypeID);
-                    //                    editorNP.field('ProductUpdates.locationID').val(lastNewProduct.locationID);
-                    //                    editorNP.field('ProductUpdates.ismettlerrequired').val(lastNewProduct.ismettlerrequired);
-                    //                    editorNP.field('ProductUpdates.labelID').val(lastNewProduct.labelID);
-                    //                    editorNP.field('ProductUpdates.COST_TAB_F27').val(lastNewProduct.COST_TAB_F27);
-                    //                    editorNP.field('ProductUpdates.OBJ_TAB_F155').val(lastNewProduct.OBJ_TAB_F155);
-                    //                    editorNP.field('ProductUpdates.OBJ_TAB_F29').val(lastNewProduct.OBJ_TAB_F29);
-                    //                    editorNP.field('ProductUpdates.OBJ_TAB_F22').val(lastNewProduct.OBJ_TAB_F22);
-                    //                    editorNP.field('ProductUpdates.OBJ_TAB_F255').val(lastNewProduct.OBJ_TAB_F255);
-                    //                    editorNP.field('ProductUpdates.POS_TAB_F04').val(lastNewProduct.POS_TAB_F04);
-                    //                    editorNP.field('ProductUpdates.OBJ_TAB_F17').val(lastNewProduct.OBJ_TAB_F17);
-                    //                    editorNP.field('ProductUpdates.OBJ_TAB_F18').val(lastNewProduct.OBJ_TAB_F18);
-                    //                    editorNP.field('ProductUpdates.POS_TAB_F79').val(lastNewProduct.POS_TAB_F79);
-                    //                    editorNP.field('ProductUpdates.POS_TAB_F82').val(lastNewProduct.POS_TAB_F82);
-                    //                    editorNP.field('ProductUpdates.POS_TAB_F81').val(lastNewProduct.POS_TAB_F81);
-                    //                    editorNP.field('ProductUpdates.POS_TAB_F178').val(lastNewProduct.POS_TAB_F178);
-                    //                    editorNP.field('ProductUpdates.AdditionalRequestNotes').val(lastNewProduct.AdditionalRequestNotes);
-                    //                    editorNP.field('ProductUpdates.ScaleItemTypeID').val(lastNewProduct.ScaleItemTypeID);
-                    //                    editorNP.field('ProductUpdates.TareNetWeight').val(lastNewProduct.TareNetWeight);
-                    //                    editorNP.field('ProductUpdates.ShelfLife').val(lastNewProduct.ShelfLife);
-                    //                    editorNP.field('ProductUpdates.IngredientList').val(lastNewProduct.IngredientList);
-                    //                    editorNP.field('ProductUpdates.createdby').val(lastNewProduct.createdby);
-                    //                    editorNP.field('ProductUpdates.datecreated').val(getDate());
-                    //                }
-                    //            }
-                    //        ]
-                    //},
+                                        // Assign lastProduct values to their respective fields
+                                        editorNP.field('ProductUpdates.requesttypeID').val(lastNewProduct.requesttypeID);
+                                        editorNP.field('ProductUpdates.locationID').val(lastNewProduct.locationID);
+                                        editorNP.field('ProductUpdates.ismettlerrequired').val(lastNewProduct.ismettlerrequired);
+                                        editorNP.field('ProductUpdates.labelID').val(lastNewProduct.labelID);
+                                        editorNP.field('ProductUpdates.COST_TAB_F27').val(lastNewProduct.COST_TAB_F27);
+                                        editorNP.field('ProductUpdates.OBJ_TAB_F155').val(lastNewProduct.OBJ_TAB_F155);
+                                        editorNP.field('ProductUpdates.OBJ_TAB_F29').val(lastNewProduct.OBJ_TAB_F29);
+                                        editorNP.field('ProductUpdates.OBJ_TAB_F22').val(lastNewProduct.OBJ_TAB_F22);
+                                        editorNP.field('ProductUpdates.OBJ_TAB_F255').val(lastNewProduct.OBJ_TAB_F255);
+                                        editorNP.field('ProductUpdates.POS_TAB_F04').val(lastNewProduct.POS_TAB_F04);
+                                        editorNP.field('ProductUpdates.OBJ_TAB_F17').val(lastNewProduct.OBJ_TAB_F17);
+                                        editorNP.field('ProductUpdates.OBJ_TAB_F18').val(lastNewProduct.OBJ_TAB_F18);
+                                        editorNP.field('ProductUpdates.POS_TAB_F79').val(lastNewProduct.POS_TAB_F79);
+                                        editorNP.field('ProductUpdates.POS_TAB_F82').val(lastNewProduct.POS_TAB_F82);
+                                        editorNP.field('ProductUpdates.POS_TAB_F81').val(lastNewProduct.POS_TAB_F81);
+                                        editorNP.field('ProductUpdates.POS_TAB_F178').val(lastNewProduct.POS_TAB_F178);
+                                        editorNP.field('ProductUpdates.AdditionalRequestNotes').val(lastNewProduct.AdditionalRequestNotes);
+                                        editorNP.field('ProductUpdates.ScaleItemTypeID').val(lastNewProduct.ScaleItemTypeID);
+                                        editorNP.field('ProductUpdates.TareNetWeight').val(lastNewProduct.TareNetWeight);
+                                        editorNP.field('ProductUpdates.ShelfLife').val(lastNewProduct.ShelfLife);
+                                        editorNP.field('ProductUpdates.IngredientList').val(lastNewProduct.IngredientList);
+                                        editorNP.field('ProductUpdates.createdby').val(lastNewProduct.createdby);
+                                        editorNP.field('ProductUpdates.datecreated').val(getDate());
+                                    }
+                                }
+                            ]
+                    },
                     // Update An Existing Product Form: opens the Update an Existing Product Form
-                    //{ text: 'Update Product', formTitle: 'Update An Existing Product', extend: 'create', editor: editor,
-                    //    formButtons:
-                    //        [
-                    //            { text: 'Cancel', action: function () { this.close(); } },
-                    //            'Create',
-                    //            {
-                    //                text: 'Submit Another', action: function () {
+                    { text: 'Update Product', formTitle: 'Update An Existing Product', extend: 'create', editor: editor,
+                        formButtons:
+                            [
+                                { text: 'Cancel', action: function () { this.close(); } },
+                                'Create',
+                                {
+                                    text: 'Submit Another', action: function () {
 
-                    //                    // Creates lastProduct object to store current forms data to be called later
-                    //                    var lastProductUpdate = {
-                    //                        'requesttypeID': editor.field('ProductUpdates.requesttypeID').val(),
-                    //                        'locationID': editor.field('ProductUpdates.locationID').val(),
-                    //                        'ismettlerrequired': editor.field('ProductUpdates.ismettlerrequired').val(),
-                    //                        'labelID': editor.field('ProductUpdates.labelID').val(),
-                    //                        'COST_TAB_F27': editor.field('ProductUpdates.COST_TAB_F27').val(),
-                    //                        'promotprprice': editor.field('ProductUpdates.promotprprice').val(),
-                    //                        'promotprstartdate': editor.field('ProductUpdates.promotprstartdate').val(),
-                    //                        'promotprenddate': editor.field('ProductUpdates.promotprenddate').val(),
-                    //                        'signID': editor.field('ProductUpdates.signID').val(),
-                    //                        'OBJ_TAB_F155': editor.field('ProductUpdates.OBJ_TAB_F155').val(),
-                    //                        'OBJ_TAB_F29': editor.field('ProductUpdates.OBJ_TAB_F29').val(),
-                    //                        'OBJ_TAB_F22': editor.field('ProductUpdates.OBJ_TAB_F22').val(),
-                    //                        'OBJ_TAB_F255': editor.field('ProductUpdates.OBJ_TAB_F255').val(),
-                    //                        'POS_TAB_F04': editor.field('ProductUpdates.POS_TAB_F04').val(),
-                    //                        'OBJ_TAB_F17': editor.field('ProductUpdates.OBJ_TAB_F17').val(),
-                    //                        'OBJ_TAB_F18': editor.field('ProductUpdates.OBJ_TAB_F18').val(),
-                    //                        'POS_TAB_F79': editor.field('ProductUpdates.POS_TAB_F79').val(),
-                    //                        'POS_TAB_F82': editor.field('ProductUpdates.POS_TAB_F82').val(),
-                    //                        'POS_TAB_F81': editor.field('ProductUpdates.POS_TAB_F81').val(),
-                    //                        'POS_TAB_F178': editor.field('ProductUpdates.POS_TAB_F178').val(),
-                    //                        'AdditionalRequestNotes': editor.field('ProductUpdates.AdditionalRequestNotes').val(),
-                    //                        'ScaleItemTypeID': editor.field('ProductUpdates.ScaleItemTypeID').val(),
-                    //                        'TareNetWeight': editor.field('ProductUpdates.TareNetWeight').val(),
-                    //                        'ShelfLife': editor.field('ProductUpdates.ShelfLife').val(),
-                    //                        'IngredientList': editor.field('ProductUpdates.IngredientList').val(),
-                    //                        'createdby': editor.field('ProductUpdates.createdby').val()
-                    //                    };
+                                        // Creates lastProduct object to store current forms data to be called later
+                                        var lastProductUpdate = {
+                                            'requesttypeID': editor.field('ProductUpdates.requesttypeID').val(),
+                                            'locationID': editor.field('ProductUpdates.locationID').val(),
+                                            'ismettlerrequired': editor.field('ProductUpdates.ismettlerrequired').val(),
+                                            'labelID': editor.field('ProductUpdates.labelID').val(),
+                                            'COST_TAB_F27': editor.field('ProductUpdates.COST_TAB_F27').val(),
+                                            'promotprprice': editor.field('ProductUpdates.promotprprice').val(),
+                                            'promotprstartdate': editor.field('ProductUpdates.promotprstartdate').val(),
+                                            'promotprenddate': editor.field('ProductUpdates.promotprenddate').val(),
+                                            'signID': editor.field('ProductUpdates.signID').val(),
+                                            'OBJ_TAB_F155': editor.field('ProductUpdates.OBJ_TAB_F155').val(),
+                                            'OBJ_TAB_F29': editor.field('ProductUpdates.OBJ_TAB_F29').val(),
+                                            'OBJ_TAB_F22': editor.field('ProductUpdates.OBJ_TAB_F22').val(),
+                                            'OBJ_TAB_F255': editor.field('ProductUpdates.OBJ_TAB_F255').val(),
+                                            'POS_TAB_F04': editor.field('ProductUpdates.POS_TAB_F04').val(),
+                                            'OBJ_TAB_F17': editor.field('ProductUpdates.OBJ_TAB_F17').val(),
+                                            'OBJ_TAB_F18': editor.field('ProductUpdates.OBJ_TAB_F18').val(),
+                                            'POS_TAB_F79': editor.field('ProductUpdates.POS_TAB_F79').val(),
+                                            'POS_TAB_F82': editor.field('ProductUpdates.POS_TAB_F82').val(),
+                                            'POS_TAB_F81': editor.field('ProductUpdates.POS_TAB_F81').val(),
+                                            'POS_TAB_F178': editor.field('ProductUpdates.POS_TAB_F178').val(),
+                                            'AdditionalRequestNotes': editor.field('ProductUpdates.AdditionalRequestNotes').val(),
+                                            'ScaleItemTypeID': editor.field('ProductUpdates.ScaleItemTypeID').val(),
+                                            'TareNetWeight': editor.field('ProductUpdates.TareNetWeight').val(),
+                                            'ShelfLife': editor.field('ProductUpdates.ShelfLife').val(),
+                                            'IngredientList': editor.field('ProductUpdates.IngredientList').val(),
+                                            'createdby': editor.field('ProductUpdates.createdby').val()
+                                        };
 
-                    //                    // Puts the object into local storage
-                    //                    localStorage.setItem('lastProductUpdate', JSON.stringify(lastProductUpdate));
+                                        // Puts the object into local storage
+                                        localStorage.setItem('lastProductUpdate', JSON.stringify(lastProductUpdate));
 
-                    //                    // Retrieve the object from storage
-                    //                    lastPURetrieved = localStorage.getItem('lastProductUpdate');
+                                        // Retrieve the object from storage
+                                        lastPURetrieved = localStorage.getItem('lastProductUpdate');
 
-                    //                    // Submit current form
-                    //                    this.submit();
+                                        // Submit current form
+                                        this.submit();
 
-                    //                    // Only open new form, if previous form is successfully submitted
-                    //                    editor.on('submitSuccess', function () {
-                    //                        editor.create();
-                    //                    });
-                    //                }
-                    //            },
-                    //            { text: 'Clear', action: function () { fields = editor.displayed(); for (field in fields) { editor.field(fields[field]).val(''); }; } },
-                    //            {
-                    //                text: 'Copy', action: function () {
+                                        // Only open new form, if previous form is successfully submitted
+                                        editor.on('submitSuccess', function () {
+                                            editor.create();
+                                        });
+                                    }
+                                },
+                                { text: 'Clear', action: function () { fields = editor.displayed(); for (field in fields) { editor.field(fields[field]).val(''); }; } },
+                                {
+                                    text: 'Copy', action: function () {
 
-                    //                    // Initialize lastProduct variable with object retrieved from storage
-                    //                    var lastProductUpdate = JSON.parse(lastPURetrieved)
+                                        // Initialize lastProduct variable with object retrieved from storage
+                                        var lastProductUpdate = JSON.parse(lastPURetrieved)
 
-                    //                    // Assign lastProductUpdate values to their respective fields
-                    //                    editor.field('ProductUpdates.requesttypeID').val(lastProductUpdate.requesttypeID);
-                    //                    editor.field('ProductUpdates.locationID').val(lastProductUpdate.locationID);
-                    //                    editor.field('ProductUpdates.ismettlerrequired').val(lastProductUpdate.ismettlerrequired);
-                    //                    editor.field('ProductUpdates.labelID').val(lastProductUpdate.labelID);
-                    //                    editor.field('ProductUpdates.COST_TAB_F27').val(lastProductUpdate.COST_TAB_F27);
-                    //                    editor.field('ProductUpdates.promotprprice').val(lastProductUpdate.promotprprice);
-                    //                    editor.field('ProductUpdates.promotprstartdate').val(lastProductUpdate.promotprstartdate);
-                    //                    editor.field('ProductUpdates.promotprenddate').val(lastProductUpdate.promotprenddate);
-                    //                    editor.field('ProductUpdates.signID').val(lastProductUpdate.signID);
-                    //                    editor.field('ProductUpdates.OBJ_TAB_F155').val(lastProductUpdate.OBJ_TAB_F155);
-                    //                    editor.field('ProductUpdates.OBJ_TAB_F29').val(lastProductUpdate.OBJ_TAB_F29);
-                    //                    editor.field('ProductUpdates.OBJ_TAB_F22').val(lastProductUpdate.OBJ_TAB_F22);
-                    //                    editor.field('ProductUpdates.OBJ_TAB_F255').val(lastProductUpdate.OBJ_TAB_F255);
-                    //                    editor.field('ProductUpdates.POS_TAB_F04').val(lastProductUpdate.POS_TAB_F04);
-                    //                    editor.field('ProductUpdates.OBJ_TAB_F17').val(lastProductUpdate.OBJ_TAB_F17);
-                    //                    editor.field('ProductUpdates.OBJ_TAB_F18').val(lastProductUpdate.OBJ_TAB_F18);
-                    //                    editor.field('ProductUpdates.POS_TAB_F79').val(lastProductUpdate.POS_TAB_F79);
-                    //                    editor.field('ProductUpdates.POS_TAB_F82').val(lastProductUpdate.POS_TAB_F82);
-                    //                    editor.field('ProductUpdates.POS_TAB_F81').val(lastProductUpdate.POS_TAB_F81);
-                    //                    editor.field('ProductUpdates.POS_TAB_F178').val(lastProductUpdate.POS_TAB_F178);
-                    //                    editor.field('ProductUpdates.AdditionalRequestNotes').val(lastProductUpdate.AdditionalRequestNotes);
-                    //                    editor.field('ProductUpdates.ScaleItemTypeID').val(lastProductUpdate.ScaleItemTypeID);
-                    //                    editor.field('ProductUpdates.TareNetWeight').val(lastProductUpdate.TareNetWeight);
-                    //                    editor.field('ProductUpdates.ShelfLife').val(lastProductUpdate.ShelfLife);
-                    //                    editor.field('ProductUpdates.IngredientList').val(lastProductUpdate.IngredientList);
-                    //                    editor.field('ProductUpdates.createdby').val(lastProductUpdate.createdby);
-                    //                    editor.field('ProductUpdates.datecreated').val(getDate());
-                    //                }
-                    //            }
-                    //        ]
-                    //},
+                                        // Assign lastProductUpdate values to their respective fields
+                                        editor.field('ProductUpdates.requesttypeID').val(lastProductUpdate.requesttypeID);
+                                        editor.field('ProductUpdates.locationID').val(lastProductUpdate.locationID);
+                                        editor.field('ProductUpdates.ismettlerrequired').val(lastProductUpdate.ismettlerrequired);
+                                        editor.field('ProductUpdates.labelID').val(lastProductUpdate.labelID);
+                                        editor.field('ProductUpdates.COST_TAB_F27').val(lastProductUpdate.COST_TAB_F27);
+                                        editor.field('ProductUpdates.promotprprice').val(lastProductUpdate.promotprprice);
+                                        editor.field('ProductUpdates.promotprstartdate').val(lastProductUpdate.promotprstartdate);
+                                        editor.field('ProductUpdates.promotprenddate').val(lastProductUpdate.promotprenddate);
+                                        editor.field('ProductUpdates.signID').val(lastProductUpdate.signID);
+                                        editor.field('ProductUpdates.OBJ_TAB_F155').val(lastProductUpdate.OBJ_TAB_F155);
+                                        editor.field('ProductUpdates.OBJ_TAB_F29').val(lastProductUpdate.OBJ_TAB_F29);
+                                        editor.field('ProductUpdates.OBJ_TAB_F22').val(lastProductUpdate.OBJ_TAB_F22);
+                                        editor.field('ProductUpdates.OBJ_TAB_F255').val(lastProductUpdate.OBJ_TAB_F255);
+                                        editor.field('ProductUpdates.POS_TAB_F04').val(lastProductUpdate.POS_TAB_F04);
+                                        editor.field('ProductUpdates.OBJ_TAB_F17').val(lastProductUpdate.OBJ_TAB_F17);
+                                        editor.field('ProductUpdates.OBJ_TAB_F18').val(lastProductUpdate.OBJ_TAB_F18);
+                                        editor.field('ProductUpdates.POS_TAB_F79').val(lastProductUpdate.POS_TAB_F79);
+                                        editor.field('ProductUpdates.POS_TAB_F82').val(lastProductUpdate.POS_TAB_F82);
+                                        editor.field('ProductUpdates.POS_TAB_F81').val(lastProductUpdate.POS_TAB_F81);
+                                        editor.field('ProductUpdates.POS_TAB_F178').val(lastProductUpdate.POS_TAB_F178);
+                                        editor.field('ProductUpdates.AdditionalRequestNotes').val(lastProductUpdate.AdditionalRequestNotes);
+                                        editor.field('ProductUpdates.ScaleItemTypeID').val(lastProductUpdate.ScaleItemTypeID);
+                                        editor.field('ProductUpdates.TareNetWeight').val(lastProductUpdate.TareNetWeight);
+                                        editor.field('ProductUpdates.ShelfLife').val(lastProductUpdate.ShelfLife);
+                                        editor.field('ProductUpdates.IngredientList').val(lastProductUpdate.IngredientList);
+                                        editor.field('ProductUpdates.createdby').val(lastProductUpdate.createdby);
+                                        editor.field('ProductUpdates.datecreated').val(getDate());
+                                    }
+                                }
+                            ]
+                    },
                     {
                         // Show completed today filter button
                         text: 'Show Completed Today', action: function (e, dt, node, config) {
@@ -2472,254 +2459,17 @@
                                 .columns().order('')
                                 .column(2).search('^1 - Waiting for Manager Review$|^2 - More Info Needed$|^3 - Manager Review Completed$|^4 - Completed$', true, false).column(8).order('desc').draw()
                         }
+                    },
+                    {
+                        // Redirects user to New Products page
+                        text: 'Manage New Products (Export)', attr: { id: 'ManageNewProducts' }, action: function () { window.location = 'NewProducts' }
+                    },
+                    {
+                        // Redirects user to Product Updates page
+                        text: 'Manage Update Requests', action: function () { window.location = 'ProductUpdates' }
                     }
-                    //,
-                    //{
-                    //    // Redirects user to New Products page
-                    //    text: 'Manage New Products (Export)', attr: { id: 'ManageNewProducts' }, action: function () { window.location = 'NewProducts' }
-                    //},
-                    //{
-                    //    // Redirects user to Product Updates page
-                    //    text: 'Manage Update Requests', action: function () { window.location = 'ProductUpdates' }
-                    //}
                 ]
             });
-
-            // Opens DataTables Editor New Product form
-            $('#createNewProduct').click(function () {
-                editorNP
-                    .create({
-                        title: 'Add A New Product',
-                        buttons: [
-                            { text: 'Cancel', action: function () { this.close(); } },
-                            'Create',
-                            {
-                                text: 'Submit Another', className: 'submitAnotherNP', action: function () {
-
-                                    // Creates lastNewProduct object to store current forms data to be called later
-                                    var lastNewProduct = {
-                                        'requesttypeID': editorNP.field('ProductUpdates.requesttypeID').val(),
-                                        'locationID': editorNP.field('ProductUpdates.locationID').val(),
-                                        'ismettlerrequired': editorNP.field('ProductUpdates.ismettlerrequired').val(),
-                                        'labelID': editorNP.field('ProductUpdates.labelID').val(),
-                                        'COST_TAB_F27': editorNP.field('ProductUpdates.COST_TAB_F27').val(),
-                                        'OBJ_TAB_F155': editorNP.field('ProductUpdates.OBJ_TAB_F155').val(),
-                                        'OBJ_TAB_F29': editorNP.field('ProductUpdates.OBJ_TAB_F29').val(),
-                                        'OBJ_TAB_F22': editorNP.field('ProductUpdates.OBJ_TAB_F22').val(),
-                                        'OBJ_TAB_F255': editorNP.field('ProductUpdates.OBJ_TAB_F255').val(),
-                                        'POS_TAB_F04': editorNP.field('ProductUpdates.POS_TAB_F04').val(),
-                                        'OBJ_TAB_F17': editorNP.field('ProductUpdates.OBJ_TAB_F17').val(),
-                                        'OBJ_TAB_F18': editorNP.field('ProductUpdates.OBJ_TAB_F18').val(),
-                                        'POS_TAB_F79': editorNP.field('ProductUpdates.POS_TAB_F79').val(),
-                                        'POS_TAB_F82': editorNP.field('ProductUpdates.POS_TAB_F82').val(),
-                                        'POS_TAB_F81': editorNP.field('ProductUpdates.POS_TAB_F81').val(),
-                                        'POS_TAB_F178': editorNP.field('ProductUpdates.POS_TAB_F178').val(),
-                                        'AdditionalRequestNotes': editorNP.field('ProductUpdates.AdditionalRequestNotes').val(),
-                                        'ScaleItemTypeID': editorNP.field('ProductUpdates.ScaleItemTypeID').val(),
-                                        'TareNetWeight': editorNP.field('ProductUpdates.TareNetWeight').val(),
-                                        'ShelfLife': editorNP.field('ProductUpdates.ShelfLife').val(),
-                                        'IngredientList': editorNP.field('ProductUpdates.IngredientList').val(),
-                                        'createdby': editorNP.field('ProductUpdates.createdby').val()
-                                    };
-
-                                    // Puts the object into local storage
-                                    localStorage.setItem('lastNewProduct', JSON.stringify(lastNewProduct));
-
-                                    // Retrieve the object from storage
-                                    lastNPRetrieved = localStorage.getItem('lastNewProduct');
-
-                                    // Submit current form
-                                    this.submit();
-
-                                    // Get last clicked button's id
-                                    lc = event.target.id;
-
-                                    // On successfull submission of previous form
-                                    editorNP.on('submitSuccess', function () {
-                                        // If last clicked button is submitAnotherNP, then clear last clicked variable and open another create form
-                                        if (lc == "submitAnotherNP") {
-                                            lc = null;
-                                            editorNP.create();
-                                        }
-                                    });
-                                }
-                            },
-                            { text: 'Clear', action: function () { fields = editorNP.displayed(); for (field in fields) { editorNP.field(fields[field]).val(''); }; } },
-                            {
-                                text: 'Copy', action: function () {
-
-                                    // Initialize lastProduct variable with object retrieved from storage
-                                    var lastNewProduct = JSON.parse(lastNPRetrieved)
-
-                                    // Assign lastProduct values to their respective fields
-                                    editorNP.field('ProductUpdates.requesttypeID').val(lastNewProduct.requesttypeID);
-                                    editorNP.field('ProductUpdates.locationID').val(lastNewProduct.locationID);
-                                    editorNP.field('ProductUpdates.ismettlerrequired').val(lastNewProduct.ismettlerrequired);
-                                    editorNP.field('ProductUpdates.labelID').val(lastNewProduct.labelID);
-                                    editorNP.field('ProductUpdates.COST_TAB_F27').val(lastNewProduct.COST_TAB_F27);
-                                    editorNP.field('ProductUpdates.OBJ_TAB_F155').val(lastNewProduct.OBJ_TAB_F155);
-                                    editorNP.field('ProductUpdates.OBJ_TAB_F29').val(lastNewProduct.OBJ_TAB_F29);
-                                    editorNP.field('ProductUpdates.OBJ_TAB_F22').val(lastNewProduct.OBJ_TAB_F22);
-                                    editorNP.field('ProductUpdates.OBJ_TAB_F255').val(lastNewProduct.OBJ_TAB_F255);
-                                    editorNP.field('ProductUpdates.POS_TAB_F04').val(lastNewProduct.POS_TAB_F04);
-                                    editorNP.field('ProductUpdates.OBJ_TAB_F17').val(lastNewProduct.OBJ_TAB_F17);
-                                    editorNP.field('ProductUpdates.OBJ_TAB_F18').val(lastNewProduct.OBJ_TAB_F18);
-                                    editorNP.field('ProductUpdates.POS_TAB_F79').val(lastNewProduct.POS_TAB_F79);
-                                    editorNP.field('ProductUpdates.POS_TAB_F82').val(lastNewProduct.POS_TAB_F82);
-                                    editorNP.field('ProductUpdates.POS_TAB_F81').val(lastNewProduct.POS_TAB_F81);
-                                    editorNP.field('ProductUpdates.POS_TAB_F178').val(lastNewProduct.POS_TAB_F178);
-                                    editorNP.field('ProductUpdates.AdditionalRequestNotes').val(lastNewProduct.AdditionalRequestNotes);
-                                    editorNP.field('ProductUpdates.ScaleItemTypeID').val(lastNewProduct.ScaleItemTypeID);
-                                    editorNP.field('ProductUpdates.TareNetWeight').val(lastNewProduct.TareNetWeight);
-                                    editorNP.field('ProductUpdates.ShelfLife').val(lastNewProduct.ShelfLife);
-                                    editorNP.field('ProductUpdates.IngredientList').val(lastNewProduct.IngredientList);
-                                    editorNP.field('ProductUpdates.createdby').val(lastNewProduct.createdby);
-                                    editorNP.field('ProductUpdates.datecreated').val(getDate());
-                                }
-                            }
-                        ]
-                    });
-            });
-
-            // Opens DataTables Editor Product Update form
-            $('#createProductUpdate').click(function () {
-                editor.create({
-                    title: 'Update An Existing Product',
-                    buttons: [
-                        { text: 'Cancel', action: function () { this.close(); } },
-                        'Create',
-                        {
-                            text: 'Submit Another', className: 'submitAnotherPU', action: function () {
-
-                                // Creates lastProduct object to store current forms data to be called later
-                                var lastProductUpdate = {
-                                    'requesttypeID': editor.field('ProductUpdates.requesttypeID').val(),
-                                    'locationID': editor.field('ProductUpdates.locationID').val(),
-                                    'ismettlerrequired': editor.field('ProductUpdates.ismettlerrequired').val(),
-                                    'labelID': editor.field('ProductUpdates.labelID').val(),
-                                    'COST_TAB_F27': editor.field('ProductUpdates.COST_TAB_F27').val(),
-                                    'promotprprice': editor.field('ProductUpdates.promotprprice').val(),
-                                    'promotprstartdate': editor.field('ProductUpdates.promotprstartdate').val(),
-                                    'promotprenddate': editor.field('ProductUpdates.promotprenddate').val(),
-                                    'signID': editor.field('ProductUpdates.signID').val(),
-                                    'OBJ_TAB_F155': editor.field('ProductUpdates.OBJ_TAB_F155').val(),
-                                    'OBJ_TAB_F29': editor.field('ProductUpdates.OBJ_TAB_F29').val(),
-                                    'OBJ_TAB_F22': editor.field('ProductUpdates.OBJ_TAB_F22').val(),
-                                    'OBJ_TAB_F255': editor.field('ProductUpdates.OBJ_TAB_F255').val(),
-                                    'POS_TAB_F04': editor.field('ProductUpdates.POS_TAB_F04').val(),
-                                    'OBJ_TAB_F17': editor.field('ProductUpdates.OBJ_TAB_F17').val(),
-                                    'OBJ_TAB_F18': editor.field('ProductUpdates.OBJ_TAB_F18').val(),
-                                    'POS_TAB_F79': editor.field('ProductUpdates.POS_TAB_F79').val(),
-                                    'POS_TAB_F82': editor.field('ProductUpdates.POS_TAB_F82').val(),
-                                    'POS_TAB_F81': editor.field('ProductUpdates.POS_TAB_F81').val(),
-                                    'POS_TAB_F178': editor.field('ProductUpdates.POS_TAB_F178').val(),
-                                    'AdditionalRequestNotes': editor.field('ProductUpdates.AdditionalRequestNotes').val(),
-                                    'ScaleItemTypeID': editor.field('ProductUpdates.ScaleItemTypeID').val(),
-                                    'TareNetWeight': editor.field('ProductUpdates.TareNetWeight').val(),
-                                    'ShelfLife': editor.field('ProductUpdates.ShelfLife').val(),
-                                    'IngredientList': editor.field('ProductUpdates.IngredientList').val(),
-                                    'createdby': editor.field('ProductUpdates.createdby').val()
-                                };
-
-                                // Puts the object into local storage
-                                localStorage.setItem('lastProductUpdate', JSON.stringify(lastProductUpdate));
-
-                                // Retrieve the object from storage
-                                lastPURetrieved = localStorage.getItem('lastProductUpdate');
-
-
-                                // Submit current form
-                                this.submit();
-
-                                // Get last clicked button's id
-                                lc = event.target.id;
-
-                                // On successfull submission of previous form
-                                editor.on('submitSuccess', function () {
-                                    // If last clicked button is submitAnotherPU, then clear last clicked variable and open another create form
-                                    if (lc == "submitAnotherPU") {
-                                        lc = null;
-                                        editor.create();
-                                    }
-                                });
-                            }
-                        },
-                        { text: 'Clear', action: function () { fields = editor.displayed(); for (field in fields) { editor.field(fields[field]).val(''); }; } },
-                        {
-                            text: 'Copy', action: function () {
-
-                                // Initialize lastProduct variable with object retrieved from storage
-                                var lastProductUpdate = JSON.parse(lastPURetrieved)
-
-                                // Assign lastProductUpdate values to their respective fields
-                                editor.field('ProductUpdates.requesttypeID').val(lastProductUpdate.requesttypeID);
-                                editor.field('ProductUpdates.locationID').val(lastProductUpdate.locationID);
-                                editor.field('ProductUpdates.ismettlerrequired').val(lastProductUpdate.ismettlerrequired);
-                                editor.field('ProductUpdates.labelID').val(lastProductUpdate.labelID);
-                                editor.field('ProductUpdates.COST_TAB_F27').val(lastProductUpdate.COST_TAB_F27);
-                                editor.field('ProductUpdates.promotprprice').val(lastProductUpdate.promotprprice);
-                                editor.field('ProductUpdates.promotprstartdate').val(lastProductUpdate.promotprstartdate);
-                                editor.field('ProductUpdates.promotprenddate').val(lastProductUpdate.promotprenddate);
-                                editor.field('ProductUpdates.signID').val(lastProductUpdate.signID);
-                                editor.field('ProductUpdates.OBJ_TAB_F155').val(lastProductUpdate.OBJ_TAB_F155);
-                                editor.field('ProductUpdates.OBJ_TAB_F29').val(lastProductUpdate.OBJ_TAB_F29);
-                                editor.field('ProductUpdates.OBJ_TAB_F22').val(lastProductUpdate.OBJ_TAB_F22);
-                                editor.field('ProductUpdates.OBJ_TAB_F255').val(lastProductUpdate.OBJ_TAB_F255);
-                                editor.field('ProductUpdates.POS_TAB_F04').val(lastProductUpdate.POS_TAB_F04);
-                                editor.field('ProductUpdates.OBJ_TAB_F17').val(lastProductUpdate.OBJ_TAB_F17);
-                                editor.field('ProductUpdates.OBJ_TAB_F18').val(lastProductUpdate.OBJ_TAB_F18);
-                                editor.field('ProductUpdates.POS_TAB_F79').val(lastProductUpdate.POS_TAB_F79);
-                                editor.field('ProductUpdates.POS_TAB_F82').val(lastProductUpdate.POS_TAB_F82);
-                                editor.field('ProductUpdates.POS_TAB_F81').val(lastProductUpdate.POS_TAB_F81);
-                                editor.field('ProductUpdates.POS_TAB_F178').val(lastProductUpdate.POS_TAB_F178);
-                                editor.field('ProductUpdates.AdditionalRequestNotes').val(lastProductUpdate.AdditionalRequestNotes);
-                                editor.field('ProductUpdates.ScaleItemTypeID').val(lastProductUpdate.ScaleItemTypeID);
-                                editor.field('ProductUpdates.TareNetWeight').val(lastProductUpdate.TareNetWeight);
-                                editor.field('ProductUpdates.ShelfLife').val(lastProductUpdate.ShelfLife);
-                                editor.field('ProductUpdates.IngredientList').val(lastProductUpdate.IngredientList);
-                                editor.field('ProductUpdates.createdby').val(lastProductUpdate.createdby);
-                                editor.field('ProductUpdates.datecreated').val(getDate());
-                            }
-                        }
-                    ]
-                });
-            });
-
-            // Go to New Products page
-            $('#getNewProducts').click(function () {
-                window.location = 'NewProducts'
-            });
-
-            // Go to Product Updates page
-            $('#getProductUpdates').click(function () {
-                window.location = 'ProductUpdates'
-            });
-
-            // Open Wisconsin tax details
-            $('#getWITaxDetails').click(function () {
-
-                window.open('@Url.Content("~/Content/Documentation/taxdetailsWI.pdf")');
-            });
-
-            // Open Minnesota tax details
-            $('#getMNTaxDetails').click(function () {
-                window.open('@Url.Content("~/Content/Documentation/taxdetailsMN.pdf")');
-            });
-
-            // Go to Documentation page
-            $('#getHelp').click(function () {
-                window.open('@Url.Action("Index", "Documentation")');
-            });
-
-            // Product Maintenance: disable Manage New Products (Export) button unless current user has manager or admin status
-            if (!(role >= 4)) {
-                $('#getNewProducts').prop("disabled", true);
-            }
-
-            // Reload table every 5 minutes.
-            setInterval(function () {
-                table.ajax.reload();
-            }, 300000);
 
             // Product Maintenance: adds edit pencil in each cell
             $('#ProductMaintenance').on('click', 'a.editor_edit', function (e) {
@@ -2739,6 +2489,17 @@
                         ]
                 });
             });
+
+            // Product Maintenance: disable Manage New Products (Export) button unless current user has manager or admin status
+            if (!(role >= 4)) {
+                table.button('#ManageNewProducts').disable();
+            }
+
+            // Reload table every 5 minutes.
+            setInterval(function () {
+                table.ajax.reload();
+            }, 300000);
+
         });
     </script>
 }

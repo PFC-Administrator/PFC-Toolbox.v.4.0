@@ -9,7 +9,6 @@
 
     <title>Product Maintenance</title>
 
-    @*Imported CSS libraries*@
     <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css" />
@@ -18,12 +17,7 @@
 </head>
 <body class="dataTables">
     <div class="productUpdatesContainer">
-        <h1 style="display: inline-block"><img src="~/Content/PFC_Logo_128px.png" width="100" height="100">        Product Updates</h1>
-        <button name="add" id="getProductMaintenance" class="btn btn-default blueButton" style="float:right;margin-top:2%;margin-right:0.5%;padding:1%">Back</button>
-        <button name="add" id="deleteProductUpdates" class="btn btn-default redButton" style="float:right;margin-top:2%;margin-right:0.5%;padding:1%">Delete</button>
-        <button name="add" id="getNewProducts" class="btn btn-default" style="float:right;margin-top:2%;margin-right:0.5%;padding:1%">Manage New Products (Export)</button>
-        <button name="add" id="runPromotionReport" class="btn btn-default yellowButton" style="float:right;margin-top:2%;margin-right:0.5%;padding:1%">Promotion Report</button>
-        <br />
+        <h1><img src="~/Content/PFC_Logo_128px.png" width="100" height="100">        Product Updates</h1>
         <br />
         <table id="ProductUpdates" class="display text-nowrap compact" style="width:100%">
             <thead>
@@ -54,7 +48,6 @@
 </html>
 
 @section scripts{
-    @*Imported JavaScript libraries*@
     <script type="text/javascript" charset="utf-8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
@@ -1098,84 +1091,84 @@
                 dom: '<"floatRight"B><"clear">lfrtip',
                 // Default table order
                 buttons: [
-                    //{ extend: 'remove', editor: editor },
-                    //{
-                    //    // Custom Promotion Report button
-                    //    text: 'Promotion Report', formTitle: 'Run Promotion Report', extend: 'create', editor: editorPR,
-                    //    formButtons:
-                    //        [{ text: 'Cancel', action: function () { this.close(); } },
-                    //            {
-                    //                text: 'Run Report',
-                    //                action: function (e, dt, node, config) {
+                    { extend: 'remove', editor: editor },
+                    {
+                        // Custom Promotion Report button
+                        text: 'Promotion Report', formTitle: 'Run Promotion Report', extend: 'create', editor: editorPR,
+                        formButtons:
+                            [{ text: 'Cancel', action: function () { this.close(); } },
+                                {
+                                    text: 'Run Report',
+                                    action: function (e, dt, node, config) {
 
-                    //                    var promo;
-                    //                    var locale;
-                    //                    switch (editorPR.field('ProductUpdates.requesttypeID').val())
-                    //                    {
-                    //                        case 1:
-                    //                            promo = "Product Info Update";
-                    //                            break;
-                    //                        case 2:
-                    //                            promo = "Happy Hour";
-                    //                            break;
-                    //                        case 3:
-                    //                            promo = "Member Specials";
-                    //                            break;
-                    //                        case 4:
-                    //                            promo = "PFC Fresh Deals";
-                    //                            break;
-                    //                        case 5:
-                    //                            promo = "Ad Hoc Promo";
-                    //                            break;
-                    //                        case 6:
-                    //                            promo = "New Product";
-                    //                            break;
-                    //                        case 7:
-                    //                            promo = "Co-op Deals Correction";
-                    //                            break;
-                    //                        case 8:
-                    //                            promo = "Flash Sale";
-                    //                            break;
-                    //                        case 9:
-                    //                            promo = "NCG Fresh Deals";
-                    //                            break;
-                    //                        case 10:
-                    //                            promo = "Hackberry's Menu Item";
-                    //                            break;
-                    //                    };
+                                        var promo;
+                                        var locale;
+                                        switch (editorPR.field('ProductUpdates.requesttypeID').val())
+                                        {
+                                            case 1:
+                                                promo = "Product Info Update";
+                                                break;
+                                            case 2:
+                                                promo = "Happy Hour";
+                                                break;
+                                            case 3:
+                                                promo = "Member Specials";
+                                                break;
+                                            case 4:
+                                                promo = "PFC Fresh Deals";
+                                                break;
+                                            case 5:
+                                                promo = "Ad Hoc Promo";
+                                                break;
+                                            case 6:
+                                                promo = "New Product";
+                                                break;
+                                            case 7:
+                                                promo = "Co-op Deals Correction";
+                                                break;
+                                            case 8:
+                                                promo = "Flash Sale";
+                                                break;
+                                            case 9:
+                                                promo = "NCG Fresh Deals";
+                                                break;
+                                            case 10:
+                                                promo = "Hackberry's Menu Item";
+                                                break;
+                                        };
 
-                    //                    switch (editorPR.field('promolocations').val())
-                    //                    {
-                    //                        case 1:
-                    //                            locale = "La Crosse";
-                    //                            break;
-                    //                        case 2:
-                    //                            locale = "Rochester";
-                    //                            break;
-                    //                        case 3:
-                    //                            locale = "Both stores";
-                    //                            break;
-                    //                        case 4:
-                    //                            locale = "La Crosse$|^Rochester$|^Both stores";
-                    //                            break;
-                    //                    }
+                                        switch (editorPR.field('promolocations').val())
+                                        {
+                                            case 1:
+                                                locale = "La Crosse";
+                                                break;
+                                            case 2:
+                                                locale = "Rochester";
+                                                break;
+                                            case 3:
+                                                locale = "Both stores";
+                                                break;
+                                            case 4:
+                                                locale = "La Crosse$|^Rochester$|^Both stores";
+                                                break;
+                                        }
 
-                    //                    var startDate = editorPR.field('ProductUpdates.promotprstartdate').val();
-                    //                    var endDate = editorPR.field('ProductUpdates.promotprenddate').val();
+                                        var startDate = editorPR.field('ProductUpdates.promotprstartdate').val();
+                                        var endDate = editorPR.field('ProductUpdates.promotprenddate').val();
 
-                    //                    table.search('')
-                    //                        .columns().search('')
-                    //                        .column(0).search('^' + promo + '$', true, false)
-                    //                        .column(7).search('^' + startDate + '$', true, false)
-                    //                        .column(8).search('^' + endDate + '$', true, false)
-                    //                        .column(14).search('^' + locale + '$', true, false).draw()
-                    //                    this.close();
+                                        table.search('')
+                                            .columns().search('')
+                                            .column(0).search('^' + promo + '$', true, false)
+                                            .column(7).search('^' + startDate + '$', true, false)
+                                            .column(8).search('^' + endDate + '$', true, false)
+                                            .column(14).search('^' + locale + '$', true, false).draw()
+                                        this.close();
 
-                    //                    // Product Maintenance: display the export button
-                    //                    document.getElementById("exportButton").style.display = "unset";
-                    //                }
-                    //            }]
-                    //},
+                                        // Product Maintenance: display the export button
+                                        document.getElementById("exportButton").style.display = "unset";
+                                    }
+                                }]
+                    },
                     {
                         // Show completed today filter button
                         text: 'Show Completed Today', action: function (e, dt, node, config) {
@@ -1231,112 +1224,12 @@
                             // Product Maintenance: hide the export button
                             document.getElementById("exportButton").style.display = "none";
                         }
+                    },
+                    {
+                        // Redirects user back to main Product Maintenance page
+                        text: 'Back', action: function () { window.location = 'ProductMaintenance' }
                     }
-                    //,
-                    //{
-                    //    // Redirects user back to main Product Maintenance page
-                    //    text: 'Back', action: function () { window.location = 'ProductMaintenance' }
-                    //}
                 ]
-            });
-
-            // Opens DataTables Editor Promotion Report form
-            $('#runPromotionReport').click(function () {
-                editorPR
-                    .create({
-                        title: 'Run Promotion Report',
-                        buttons: [{ text: 'Cancel', action: function () { this.close(); } },
-                        {
-                            text: 'Run Report',
-                            action: function (e, dt, node, config) {
-
-                                var promo;
-                                var locale;
-                                switch (editorPR.field('ProductUpdates.requesttypeID').val()) {
-                                    case 1:
-                                        promo = "Product Info Update";
-                                        break;
-                                    case 2:
-                                        promo = "Happy Hour";
-                                        break;
-                                    case 3:
-                                        promo = "Member Specials";
-                                        break;
-                                    case 4:
-                                        promo = "PFC Fresh Deals";
-                                        break;
-                                    case 5:
-                                        promo = "Ad Hoc Promo";
-                                        break;
-                                    case 6:
-                                        promo = "New Product";
-                                        break;
-                                    case 7:
-                                        promo = "Co-op Deals Correction";
-                                        break;
-                                    case 8:
-                                        promo = "Flash Sale";
-                                        break;
-                                    case 9:
-                                        promo = "NCG Fresh Deals";
-                                        break;
-                                    case 10:
-                                        promo = "Hackberry's Menu Item";
-                                        break;
-                                };
-
-                                switch (editorPR.field('promolocations').val()) {
-                                    case 1:
-                                        locale = "La Crosse";
-                                        break;
-                                    case 2:
-                                        locale = "Rochester";
-                                        break;
-                                    case 3:
-                                        locale = "Both stores";
-                                        break;
-                                    case 4:
-                                        locale = "La Crosse$|^Rochester$|^Both stores";
-                                        break;
-                                }
-
-                                var startDate = editorPR.field('ProductUpdates.promotprstartdate').val();
-                                var endDate = editorPR.field('ProductUpdates.promotprenddate').val();
-
-                                table.search('')
-                                    .columns().search('')
-                                    .column(0).search('^' + promo + '$', true, false)
-                                    .column(7).search('^' + startDate + '$', true, false)
-                                    .column(8).search('^' + endDate + '$', true, false)
-                                    .column(14).search('^' + locale + '$', true, false).draw()
-                                this.close();
-
-                                // Product Maintenance: display the export button
-                                document.getElementById("exportButton").style.display = "unset";
-                            }
-                        }]
-                    });
-            });
-
-            // Delete selected products
-            $('#deleteProductUpdates').click(function () {
-                var rows = table.rows('.selected');
-                rows.delete({
-                    buttons: [
-                        { label: 'Cancel', fn: function () { this.close(); } },
-                        'Delete'
-                    ]
-                });
-            });
-
-            // Go to New Products page
-            $('#getNewProducts').click(function () {
-                window.location = 'NewProducts'
-            });
-
-            // Go to Product Maintenance page
-            $('#getProductMaintenance').click(function () {
-                window.location = 'ProductMaintenance'
             });
 
             // Product Maintenance: hide the export button
