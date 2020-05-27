@@ -129,29 +129,185 @@ div.DTE_Body div.DTE_Body_Content div.DTE_Field {
 }
 /**/
 
-/* Custom button colors -- LVHFA */
+/* Toolbox custom button colors -- LVHFA */
 .btn-primary, .btn-default {
     background-color: #3c763d;
-    border-color: #2a5f2b;
+    border-color: #111;
     color: white;
 }
 
     .btn-primary:focus, .btn-default:focus {
         background-color: #224f23;
-        border-color: #2a5f2b;
+        border-color: #111;
         color: white;
     }
 
     .btn-primary:hover, .btn-default:hover {
         background-color: #224f23;
-        border-color: #2a5f2b;
+        border-color: #111;
         color: white;
     }
 
-    .btn-primary:active, .btn-default:active {
-        background-color: #224f23 !important;
-        border-color: #2a5f2b !important;
-        color: white !important;
+    .btn-primary:active:focus, .btn-default:active:focus {
+        background-color: #224f23;
+        border-color: #111;
+        color: white;
+    }
+/**/
+
+/* Product Maintenance: New Product custom button colors -- LVHFA */
+#createNewProduct, #getNewProducts {
+    background-color: #FAC090;
+    border-color: #111;
+    color: black;
+}
+
+    #createNewProduct:focus, #getNewProducts:focus {
+        background-color: #ffae6b;
+        border-color: #111;
+        color: black;
+    }
+
+    #createNewProduct:hover, #getNewProducts:hover {
+        background-color: #ffae6b;
+        border-color: #111;
+        color: black;
+    }
+
+    #createNewProduct:active:focus, #getNewProducts:active:focus {
+        background-color: #ffae6b;
+        border-color: #111;
+        color: black;
+    }
+/**/
+
+/* Product Maintenance: Product Update button colors -- LVHFA */
+#createProductUpdate, #getProductUpdates {
+    background-color: #E6EDD7;
+    border-color: #111;
+    color: black;
+}
+
+    #createProductUpdate:focus, #getProductUpdates:focus {
+        background-color: #d4dac6;
+        border-color: #111;
+        color: black;
+    }
+
+    #createProductUpdate:hover, #getProductUpdates:hover {
+        background-color: #d4dac6;
+        border-color: #111;
+        color: black;
+    }
+
+    #createProductUpdate:active:focus, #getProductUpdates:active:focus {
+        background-color: #d4dac6;
+        border-color: #111;
+        color: black;
+    }
+/**/
+
+/* Product Maintenance: red button colors -- LVHFA */
+.redButton {
+    background-color: #F2DCDB;
+    border-color: #111;
+    color: black;
+}
+
+    .redButton:focus {
+        background-color: #f2a6a3;
+        border-color: #111;
+        color: black;
+    }
+
+    .redButton:hover {
+        background-color: #f2a6a3;
+        border-color: #111;
+        color: black;
+    }
+
+    .redButton:active:focus {
+        background-color: #f2a6a3;
+        border-color: #111;
+        color: black;
+    }
+/**/
+
+/* Product Maintenance: light orange button colors -- LVHFA */
+.lightOrangeButton {
+    background-color: #FDEADA;
+    border-color: #111;
+    color: black;
+}
+
+    .lightOrangeButton:focus {
+        background-color: #fdca9f;
+        border-color: #111;
+        color: black;
+    }
+
+    .lightOrangeButton:hover {
+        background-color: #fdca9f;
+        border-color: #111;
+        color: black;
+    }
+
+    .lightOrangeButton:active:focus {
+        background-color: #fdca9f;
+        border-color: #111;
+        color: black;
+    }
+/**/
+
+/* Product Maintenance: blue button colors -- LVHFA */
+.blueButton {
+    background-color: #B9CDE5;
+    border-color: #111;
+    color: black;
+}
+
+    .blueButton:focus {
+        background-color: #95B3D7;
+        border-color: #111;
+        color: black;
+    }
+
+    .blueButton:hover {
+        background-color: #95B3D7;
+        border-color: #111;
+        color: black;
+    }
+
+    .blueButton:active:focus {
+        background-color: #95B3D7;
+        border-color: #111;
+        color: black;
+    }
+/**/
+
+/* Product Maintenance: yellow button colors -- LVHFA */
+.yellowButton {
+    background-color: #fffaa6;
+    border-color: #111;
+    color: black;
+}
+
+    .yellowButton:focus {
+        background-color: #fff775;
+        border-color: #111;
+        color: black;
+    }
+
+    .yellowButton:hover {
+        background-color: #fff775;
+        border-color: #111;
+        color: black;
+    }
+
+    .yellowButton:active:focus {
+        background-color: #fff775;
+        border-color: #111;
+        color: black;
     }
 /**/
 
