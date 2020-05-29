@@ -1123,6 +1123,12 @@
             // New Product Form: code to be executed on form open
             editorNP.on('open', function () {
 
+                // If #submitAnotherNP ID doesn't exist in form, add it
+                if (!$('#submitAnotherNP').length) {
+                    // Assign id to Submit Another button
+                    document.getElementsByClassName('btn submitAnotherNP')[0].setAttribute("id", "submitAnotherNP");
+                }
+
                 // Filter available categories on subdepartment selection
                 editorNP.dependent('ProductUpdates.POS_TAB_F04', '/api/Categories');
 
@@ -1978,6 +1984,12 @@
             // Update An Existing Product Form: shows completed by info if product is marked as complete
             editor.on('open', function () {
 
+                // If #submitAnotherPU ID doesn't exist in form, add it
+                if (!$('#submitAnotherPU').length) {
+                    // Assign id to Submit Another button
+                    document.getElementsByClassName('btn submitAnotherPU')[0].setAttribute("id", "submitAnotherPU");
+                }
+
                 // Hides cost info on load
                 editor.field('ProductUpdates.COST_TAB_F27').hide();
                 editor.field('ProductUpdates.COST_TAB_F26').hide();
@@ -2525,9 +2537,16 @@
                                     // Submit current form
                                     this.submit();
 
+                                    // Get last clicked button's id
+                                    lc = event.target.id;
+
                                     // On successfull submission of previous form
                                     editorNP.on('submitSuccess', function () {
-                                        editorNP.create();
+                                        // If last clicked button is submitAnotherNP, then clear last clicked variable and open another create form
+                                        if (lc == "submitAnotherPU") {
+                                            lc = null;
+                                            editorNP.create();
+                                        }
                                     });
                                 }
                             },
@@ -2618,10 +2637,16 @@
                                 // Submit current form
                                 this.submit();
 
+                                // Get last clicked button's id
+                                lc = event.target.id;
+
                                 // On successfull submission of previous form
                                 editor.on('submitSuccess', function () {
-                                    editor.create();
-
+                                    // If last clicked button is submitAnotherNP, then clear last clicked variable and open another create form
+                                    if (lc == "submitAnotherPU") {
+                                        lc = null;
+                                        editor.create();
+                                    }
                                 });
                             }
                         },
@@ -2706,7 +2731,7 @@
                     buttons:
                         [
                             {
-                                text: 'Update', action: function () {
+                                text: 'Update', className: 'submitAnotherPU', action: function () {
                                     editor.field('ProductUpdates.lastupdatedon').val(getDate());
                                     editor.field('ProductUpdates.lastupdatedby').val(currentUser);
                                     this.submit();
