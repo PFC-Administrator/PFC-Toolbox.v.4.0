@@ -2666,6 +2666,11 @@
                 });
             });
 
+            // Product Maintenance: disable Manage New Products (Export) button unless current user has manager or admin status
+            if (!(role >= 4)) {
+                $('#getNewProducts').prop('disabled', true);
+            }
+
             // Go to New Products page
             $('#getNewProducts').click(function () {
                 window.location = 'NewProducts'
@@ -2710,11 +2715,6 @@
                         ]
                 });
             });
-
-            // Product Maintenance: disable Manage New Products (Export) button unless current user has manager or admin status
-            if (!(role >= 4)) {
-                table.button('#ManageNewProducts').disable();
-            }
 
             // Reload table every 5 minutes.
             setInterval(function () {
