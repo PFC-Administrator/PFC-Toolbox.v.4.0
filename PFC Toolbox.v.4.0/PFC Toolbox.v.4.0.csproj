@@ -292,6 +292,7 @@
     <Content Include="Content\Documentation\exportanewproduct.mp4" />
     <Content Include="Content\Documentation\generateanewplu.mp4" />
     <Content Include="Content\Documentation\srpcalculator.mp4" />
+    <Content Include="Content\Documentation\submitanotherandcopy.mp4" />
     <Content Include="Content\Editor-1.8.1\css\editor.bootstrap.css" />
     <Content Include="Content\Editor-1.8.1\css\editor.bootstrap.min.css" />
     <Content Include="Content\Editor-1.8.1\css\editor.bootstrap4.css" />
