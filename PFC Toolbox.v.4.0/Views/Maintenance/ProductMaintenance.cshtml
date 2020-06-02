@@ -1766,6 +1766,48 @@
                     // Clear values when hidden
                     editor.field('ProductUpdates.OBJ_TAB_F16').val('');
                 }
+
+                // Fresh Deals functions - show certain fields and which are required
+                if (editor.field('ProductUpdates.requesttypeID').val() == '4' || editor.field('ProductUpdates.requesttypeID').val() == '9') {
+                    editor.field('ProductUpdates.signID').show();
+                    editor.field('ProductUpdates.promotprstartdate').show();
+                    editor.field('ProductUpdates.promotprenddate').show();
+                    editor.field('ProductUpdates.promotprprice').show();
+                    editor.field('ProductUpdates.PRICE_TAB_F49').show();
+
+                    // Show required message on specific fields
+                    editor.field('ProductUpdates.locationID').error('Required');
+                    editor.field('ProductUpdates.ismettlerrequired').error('Required');
+                    editor.field('ProductUpdates.F01').error('Required');
+                    editor.field('ProductUpdates.price_tab_f30').error('Required');
+                    editor.field('ProductUpdates.PRICE_TAB_F49').error('Required');
+                    editor.field('ProductUpdates.promotprprice').error('Required');
+                    editor.field('ProductUpdates.promotprstartdate').error('Required');
+                    editor.field('ProductUpdates.promotprenddate').error('Required');
+                    editor.field('ProductUpdates.OBJ_TAB_F155').error('Required');
+                    editor.field('ProductUpdates.OBJ_TAB_F29').error('Required');
+                    editor.field('ProductUpdates.OBJ_TAB_F22').error('Required');
+                } else {
+                    // Clear required message
+                    editor.field('ProductUpdates.locationID').error('');
+                    editor.field('ProductUpdates.ismettlerrequired').error('');
+                    editor.field('ProductUpdates.F01').error('');
+                    editor.field('ProductUpdates.price_tab_f30').error('');
+                    editor.field('ProductUpdates.PRICE_TAB_F49').error('');
+                    editor.field('ProductUpdates.promotprprice').error('');
+                    editor.field('ProductUpdates.promotprstartdate').error('');
+                    editor.field('ProductUpdates.promotprenddate').error('');
+                    editor.field('ProductUpdates.OBJ_TAB_F155').error('');
+                    editor.field('ProductUpdates.OBJ_TAB_F29').error('');
+                    editor.field('ProductUpdates.OBJ_TAB_F22').error('');
+
+                    // Clear values when hidden
+                    editor.field('ProductUpdates.signID').val('');
+                    editor.field('ProductUpdates.promotprstartdate').val('');
+                    editor.field('ProductUpdates.promotprenddate').val('');
+                    editor.field('ProductUpdates.promotprprice').val('');
+                    editor.field('ProductUpdates.PRICE_TAB_F49').val('');
+                }
             });
 
             // Update An Existing Product Form: hides Like code unless Produce is selected
