@@ -1757,22 +1757,8 @@
                     editor.field('ProductUpdates.promotprprice').val('');
                 }
 
-                // Hides Family Button unless Hackberry's Brand is selected
-                if (editor.field('ProductUpdates.requesttypeID').val() == '10') {
-                    editor.field('ProductUpdates.OBJ_TAB_F16').show();
-                } else {
-                    editor.field('ProductUpdates.OBJ_TAB_F16').hide();
-
-                    // Clear values when hidden
-                    editor.field('ProductUpdates.OBJ_TAB_F16').val('');
-                }
-
-                // Fresh Deals functions - show certain fields and which are required
+                // Fresh Deals - show retail margin and required message
                 if (editor.field('ProductUpdates.requesttypeID').val() == '4' || editor.field('ProductUpdates.requesttypeID').val() == '9') {
-                    editor.field('ProductUpdates.signID').show();
-                    editor.field('ProductUpdates.promotprstartdate').show();
-                    editor.field('ProductUpdates.promotprenddate').show();
-                    editor.field('ProductUpdates.promotprprice').show();
                     editor.field('ProductUpdates.PRICE_TAB_F49').show();
 
                     // Show required message on specific fields
@@ -1788,6 +1774,11 @@
                     editor.field('ProductUpdates.OBJ_TAB_F29').error('Required');
                     editor.field('ProductUpdates.OBJ_TAB_F22').error('Required');
                 } else {
+                    editor.field('ProductUpdates.PRICE_TAB_F49').hide();
+
+                    // Clear values when hidden
+                    editor.field('ProductUpdates.PRICE_TAB_F49').val('');
+
                     // Clear required message
                     editor.field('ProductUpdates.locationID').error('');
                     editor.field('ProductUpdates.ismettlerrequired').error('');
@@ -1800,13 +1791,16 @@
                     editor.field('ProductUpdates.OBJ_TAB_F155').error('');
                     editor.field('ProductUpdates.OBJ_TAB_F29').error('');
                     editor.field('ProductUpdates.OBJ_TAB_F22').error('');
+                }
+
+                // Hides Family Button unless Hackberry's Brand is selected
+                if (editor.field('ProductUpdates.requesttypeID').val() == '10') {
+                    editor.field('ProductUpdates.OBJ_TAB_F16').show();
+                } else {
+                    editor.field('ProductUpdates.OBJ_TAB_F16').hide();
 
                     // Clear values when hidden
-                    editor.field('ProductUpdates.signID').val('');
-                    editor.field('ProductUpdates.promotprstartdate').val('');
-                    editor.field('ProductUpdates.promotprenddate').val('');
-                    editor.field('ProductUpdates.promotprprice').val('');
-                    editor.field('ProductUpdates.PRICE_TAB_F49').val('');
+                    editor.field('ProductUpdates.OBJ_TAB_F16').val('');
                 }
             });
 
