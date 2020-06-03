@@ -1638,6 +1638,7 @@
             });
 
             // Update An Existing Product Form: tooltips that appear when a form field is hovered over.
+            $(editor.field('ProductUpdates.requesttypeID').node()).attr("data-toggle", "tooltip").attr("title", 'Type of product update request.');
             $(editor.field('ProductUpdates.locationID').node()).attr("data-toggle", "tooltip").attr("title", 'Location of where this update request should be applied.');
             $(editor.field('ProductUpdates.ismettlerrequired').node()).attr("data-toggle", "tooltip").attr("title", 'Is the product weighed or labeled at a Mettler Toledo scale?');
             $(editor.field('ProductUpdates.labelID').node()).attr("data-toggle", "tooltip").attr("title", 'Shelf tag to be queued up on SMS.');
@@ -2019,6 +2020,42 @@
 
             // Update An Existing Product Form: shows completed by info if product is marked as complete
             editor.on('open', function () {
+
+                // Add tooltips to each request type
+                for (i = 1; i < editor.field('ProductUpdates.requesttypeID').input()[0].length; i++) {
+
+                    if (editor.field('ProductUpdates.requesttypeID').input()[0][i].value == 5) {
+                        // Ad Hoc Promo
+                        editor.field('ProductUpdates.requesttypeID').input()[0][i].title = 'Default sale request with no established promotional program attached to it.'
+                    } else if (editor.field('ProductUpdates.requesttypeID').input()[0][i].value == 7) {
+                        // Co-op Deals Correciton
+                        editor.field('ProductUpdates.requesttypeID').input()[0][i].title = 'Request to fix an incorrect Co-op Deals TPR or for Co-op Deals signage.'
+                    } else if (editor.field('ProductUpdates.requesttypeID').input()[0][i].value == 8) {
+                        // Flash Sale
+                        editor.field('ProductUpdates.requesttypeID').input()[0][i].title = 'Request to put products on sale for a Flash Sale promotion.'
+                    } else if (editor.field('ProductUpdates.requesttypeID').input()[0][i].value == 10) {
+                        // Hackberrys Menu Item
+                        editor.field('ProductUpdates.requesttypeID').input()[0][i].title = 'Request to update a Hackberrys menu item.'
+                    } else if (editor.field('ProductUpdates.requesttypeID').input()[0][i].value == 2) {
+                        // Happy Hour
+                        editor.field('ProductUpdates.requesttypeID').input()[0][i].title = 'Request to put products on sale for a Happy Hour promotion.'
+                    } else if (editor.field('ProductUpdates.requesttypeID').input()[0][i].value == 3) {
+                        // Member Owner Specials
+                        editor.field('ProductUpdates.requesttypeID').input()[0][i].title = 'Request to put products on sale for the monthly Member Owner specials promotion.'
+                    } else if (editor.field('ProductUpdates.requesttypeID').input()[0][i].value == 9) {
+                        // NCG Fresh Deals
+                        editor.field('ProductUpdates.requesttypeID').input()[0][i].title = 'Request to put National Co-op Grocers suggested products on sale for Fresh Deals.'
+                    } else if (editor.field('ProductUpdates.requesttypeID').input()[0][i].value == 6) {
+                        // New Product
+                        editor.field('ProductUpdates.requesttypeID').input()[0][i].remove()
+                    } else if (editor.field('ProductUpdates.requesttypeID').input()[0][i].value == 4) {
+                        // PFC Fresh Deals
+                        editor.field('ProductUpdates.requesttypeID').input()[0][i].title = 'Request to put Co-ops Own suggested products on sale for Fresh Deals.'
+                    } else if (editor.field('ProductUpdates.requesttypeID').input()[0][i].value == 1) {
+                        // Product Update
+                        editor.field('ProductUpdates.requesttypeID').input()[0][i].title = 'Default request to update any product that already exists in SMS.'
+                    }
+                }
 
                 // If #submitAnotherPU ID doesn't exist in form, add it
                 if (!$('#submitAnotherPU').length) {
