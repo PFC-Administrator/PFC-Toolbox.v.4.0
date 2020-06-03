@@ -1123,6 +1123,45 @@
             // New Product Form: code to be executed on form open
             editorNP.on('open', function () {
 
+                // Add tooltips to each Report code
+                for (i = 1; i < editorNP.field('ProductUpdates.OBJ_TAB_F18').input()[0].length; i++) {
+
+                    if (editorNP.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].value == 1) {
+                        // Conventional
+                        editorNP.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].title = 'Product is not organic, local, or produced at Peoples Food Co-op.'
+                    } else if (editorNP.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].value == 29) {
+                        // Hackberrys Produced
+                        editorNP.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].title = 'Product is produced in Hackberrys Bistro.'
+                    } else if (editorNP.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].value == 31) {
+                        // Local Combined
+                        editorNP.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].title = 'Product is produced within 200 miles of both stores and is not organic.'
+                    } else if (editorNP.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].value == 21) {
+                        // Local La Crosse Only
+                        editorNP.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].title = 'Product is produced within 200 miles of La Crosse only and is not organic.'
+                    } else if (editorNP.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].value == 41) {
+                        // Local Rochester Only
+                        editorNP.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].title = 'Product is produced within 200 miles of Rochester only and is not organic.'
+                    } else if (editorNP.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].value == 32) {
+                        // Local Combined Organic
+                        editorNP.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].title = 'Product is organic and produced within 200 miles of both stores.'
+                    } else if (editorNP.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].value == 25) {
+                        // Local Organic La Crosse Only
+                        editorNP.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].title = 'Product is organic and produced within 200 miles of La Crosse only.'
+                    } else if (editorNP.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].value == 42) {
+                        // Local Organic Rochester Only
+                        editorNP.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].title = 'Product is organic and produced within 200 miles of Rochester only.'
+                    } else if (editorNP.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].value == 26) {
+                        // Organic
+                        editorNP.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].title = 'Product is organic, but not local or produced at Peoples Food Co-op.'
+                    } else if (editorNP.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].value == 27) {
+                        // Produced In-house
+                        editorNP.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].title = 'Product is produced at Peoples Food Co-op and is not organic.'
+                    } else if (editorNP.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].value == 28) {
+                        // Produced In-house Organic
+                        editorNP.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].title = 'Product is organic and produced at Peoples Food Co-op.'
+                    }
+                }
+
                 // If #submitAnotherNP ID doesn't exist in form, add it
                 if (!$('#submitAnotherNP').length) {
                     // Assign id to Submit Another button
@@ -2054,6 +2093,45 @@
                     } else if (editor.field('ProductUpdates.requesttypeID').input()[0][i].value == 1) {
                         // Product Update
                         editor.field('ProductUpdates.requesttypeID').input()[0][i].title = 'Default request to update any product that already exists in SMS.'
+                    }
+                }
+
+                // Add tooltips to each Report code
+                for (i = 1; i < editor.field('ProductUpdates.OBJ_TAB_F18').input()[0].length; i++) {
+
+                    if (editor.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].value == 1) {
+                        // Conventional
+                        editor.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].title = 'Product is not organic, local, or produced at Peoples Food Co-op.'
+                    } else if (editor.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].value == 29) {
+                        // Hackberrys Produced
+                        editor.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].title = 'Product is produced in Hackberrys Bistro.'
+                    } else if (editor.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].value == 31) {
+                        // Local Combined
+                        editor.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].title = 'Product is produced within 200 miles of both stores and is not organic.'
+                    } else if (editor.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].value == 21) {
+                        // Local La Crosse Only
+                        editor.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].title = 'Product is produced within 200 miles of La Crosse only and is not organic.'
+                    } else if (editor.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].value == 41) {
+                        // Local Rochester Only
+                        editor.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].title = 'Product is produced within 200 miles of Rochester only and is not organic.'
+                    } else if (editor.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].value == 32) {
+                        // Local Combined Organic
+                        editor.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].title = 'Product is organic and produced within 200 miles of both stores.'
+                    } else if (editor.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].value == 25) {
+                        // Local Organic La Crosse Only
+                        editor.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].title = 'Product is organic and produced within 200 miles of La Crosse only.'
+                    } else if (editor.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].value == 42) {
+                        // Local Organic Rochester Only
+                        editor.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].title = 'Product is organic and produced within 200 miles of Rochester only.'
+                    } else if (editor.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].value == 26) {
+                        // Organic
+                        editor.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].title = 'Product is organic, but not local or produced at Peoples Food Co-op.'
+                    } else if (editor.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].value == 27) {
+                        // Produced In-house
+                        editor.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].title = 'Product is produced at Peoples Food Co-op and is not organic.'
+                    } else if (editor.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].value == 28) {
+                        // Produced In-house Organic
+                        editor.field('ProductUpdates.OBJ_TAB_F18').input()[0][i].title = 'Product is organic and produced at Peoples Food Co-op.'
                     }
                 }
 
