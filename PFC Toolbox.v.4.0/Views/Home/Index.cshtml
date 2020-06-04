@@ -43,9 +43,18 @@
                                         <td align="center" style="font-size: 30px" ;>@Html.DisplayFor(modelItem => item.SalesQuantity)</td>
                                         <td align="center" style="font-size: 30px" ;>@Html.DisplayFor(modelItem => item.SalesTransactions)</td>
                                     </tr>
-                                    }
                                 }
                             }
+                            else
+                            {
+                                <tr>
+                                    <td align="center" style="font-size: 30px" ;>--</td>
+                                    <td align="center" style="font-size: 30px" ;>--</td>
+                                    <td align="center" style="font-size: 30px" ;>--</td>
+                                    <td align="center" style="font-size: 30px" ;>--</td>
+                                </tr>
+                            }
+                        }
                     </tbody>
                 </table>
             </div>
@@ -76,9 +85,18 @@
                                             <td align="center" style="font-size: 30px" ;>@Html.DisplayFor(modelItem => item.SalesQuantity)</td>
                                             <td align="center" style="font-size: 30px" ;>@Html.DisplayFor(modelItem => item.SalesTransactions)</td>
                                         </tr>
-                                        }
                                     }
                                 }
+                                else
+                                {
+                                    <tr>
+                                        <td align="center" style="font-size: 30px" ;>--</td>
+                                        <td align="center" style="font-size: 30px" ;>--</td>
+                                        <td align="center" style="font-size: 30px" ;>--</td>
+                                        <td align="center" style="font-size: 30px" ;>--</td>
+                                    </tr>
+                                }
+                            }
                         </tbody>
                     </table>
                 </div>
@@ -112,7 +130,7 @@
 
     <script>
         $(document).ready(function () {
-            refresh();
+            @*refresh();
 
             function refresh() {
                 $.ajax({
@@ -138,7 +156,7 @@
                         }, 30000);
                     }
                 });
-            }
+            }*@
         });
     </script>
 }
