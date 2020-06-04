@@ -27,6 +27,11 @@ table.dataTable thead th.select-checkbox {
     }
 /**/
 
+div.DTED_Lightbox_Wrapper div.DTE_Footer {
+    display: block !important;
+    justify-content: end;
+}
+
 /* Export button tweak */
 .floatRight {
     padding-left: .5%;
