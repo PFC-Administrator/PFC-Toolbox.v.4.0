@@ -2012,6 +2012,13 @@
             // Update An Existing Product Form: shows completed by info if product is marked as complete
             editor.on('open', function () {
 
+                for (i = 1; i < editor.field('ProductUpdates.requesttypeID').input()[0].length; i++) {
+                    if (editor.field('ProductUpdates.requesttypeID').input()[0][i].value == 6) {
+                        // New Product
+                        editor.field('ProductUpdates.requesttypeID').input()[0][i].remove()
+                    }
+                }
+
                 // Add tooltips to each request type
                 for (i = 1; i < editor.field('ProductUpdates.requesttypeID').input()[0].length; i++) {
 
@@ -2036,9 +2043,6 @@
                     } else if (editor.field('ProductUpdates.requesttypeID').input()[0][i].value == 9) {
                         // NCG Fresh Deals
                         editor.field('ProductUpdates.requesttypeID').input()[0][i].title = 'Request to put National Co-op Grocers suggested products on sale for Fresh Deals.'
-                    } else if (editor.field('ProductUpdates.requesttypeID').input()[0][i].value == 6) {
-                        // New Product
-                        editor.field('ProductUpdates.requesttypeID').input()[0][i].remove()
                     } else if (editor.field('ProductUpdates.requesttypeID').input()[0][i].value == 4) {
                         // PFC Fresh Deals
                         editor.field('ProductUpdates.requesttypeID').input()[0][i].title = 'Request to put Co-ops Own suggested products on sale for Fresh Deals.'
