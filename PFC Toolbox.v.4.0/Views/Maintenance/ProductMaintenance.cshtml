@@ -2015,7 +2015,7 @@
                 for (i = 1; i < editor.field('ProductUpdates.requesttypeID').input()[0].length; i++) {
                     if (editor.field('ProductUpdates.requesttypeID').input()[0][i].value == 6) {
                         // New Product
-                        editor.field('ProductUpdates.requesttypeID').input()[0][i].remove()
+                        editor.field('ProductUpdates.requesttypeID').input()[0][i].disabled = true;
                     }
                 }
 
