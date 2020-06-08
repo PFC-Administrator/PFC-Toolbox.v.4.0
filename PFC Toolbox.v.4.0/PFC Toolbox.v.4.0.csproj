@@ -290,7 +290,9 @@
     <Content Include="Content\Documentation\addanewinvoice.mp4" />
     <Content Include="Content\Documentation\enteranewbrand.mp4" />
     <Content Include="Content\Documentation\exportanewproduct.mp4" />
+    <Content Include="Content\Documentation\freshdealsrequest.mp4" />
     <Content Include="Content\Documentation\generateanewplu.mp4" />
+    <Content Include="Content\Documentation\howtochangeyourpassword.mp4" />
     <Content Include="Content\Documentation\promotionreport.mp4" />
     <Content Include="Content\Documentation\srpcalculator.mp4" />
     <Content Include="Content\Documentation\submitanotherandcopy.mp4" />
