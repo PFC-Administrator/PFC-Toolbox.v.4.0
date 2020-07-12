@@ -2012,13 +2012,6 @@
             // Update An Existing Product Form: shows completed by info if product is marked as complete
             editor.on('open', function () {
 
-                for (i = 1; i < editor.field('ProductUpdates.requesttypeID').input()[0].length; i++) {
-                    if (editor.field('ProductUpdates.requesttypeID').input()[0][i].value == 6) {
-                        // New Product
-                        editor.field('ProductUpdates.requesttypeID').input()[0][i].disabled = true;
-                    }
-                }
-
                 // Add tooltips to each request type
                 for (i = 1; i < editor.field('ProductUpdates.requesttypeID').input()[0].length; i++) {
 
